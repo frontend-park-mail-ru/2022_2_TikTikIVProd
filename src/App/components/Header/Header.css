@@ -3,11 +3,21 @@
     margin: 0;
     background: #21CF7A;
     grid-area: header;
+    position: relative;
 }
 
-.logo {
+.header__logo {
     color: white;
     font-size: 30px;
     padding-left: 20px;
     font-weight: bold;
+
+    margin-right: none;
+    margin-left: 5%;
+    display: block;
+
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
 }

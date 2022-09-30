@@ -2,7 +2,6 @@ export default function renderFeed() {
     const mainElement = document.createElement('div');
     const div = document.createElement('div');
     mainElement.appendChild(div);
-    div.innerText = "FEED!";
     // ajax.get({
     //     url: '/feed',
     //     callback: (status, responseString) => {
@@ -25,5 +24,8 @@ export default function renderFeed() {
     //         }
     //     }
     // })
+    for (let index = 0; index < 5; index++) {
+        div.innerHTML += `<img width="400" src="../src/img/img-worlds-of-adventure.jpg"/><div>${10} лайков</div>`;
+    }
     return mainElement;
 }

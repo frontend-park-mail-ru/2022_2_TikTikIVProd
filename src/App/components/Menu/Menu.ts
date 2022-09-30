@@ -1,8 +1,8 @@
 export default class Menu {
     private data: any;
-    private parent: any;
+    private parent: HTMLElement;
 
-    constructor(parent) {
+    constructor(parent: HTMLElement) {
         this.parent = parent;
     }
 
@@ -15,7 +15,7 @@ export default class Menu {
     }
 
     render() {
-        this.items.map(([key, { href, name }], index) => {
+        this.items.map(([key, { href, name }]: any, index: number) => {
             const menuElement = document.createElement('a');
             menuElement.href = href;
             menuElement.textContent = name;
@@ -28,7 +28,7 @@ export default class Menu {
 
             return menuElement;
         })
-            .forEach((a) => {
+            .forEach((a: any) => {
                 this.parent.appendChild(a);
             });
     }

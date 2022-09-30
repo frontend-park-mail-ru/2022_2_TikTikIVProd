@@ -7,7 +7,7 @@ class Header {
         headerElement.classList.add('header');
         this.parent.appendChild(headerElement);
         const logo = document.createElement('a');
-        logo.classList.add('logo');
+        logo.classList.add('header__logo');
         logo.innerText = "WS";
         headerElement.appendChild(logo);
     }

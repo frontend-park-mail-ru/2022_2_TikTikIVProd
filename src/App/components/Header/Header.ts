@@ -1,7 +1,7 @@
 class Header {
-    private parent: any;
+    private parent: HTMLElement;
 
-    constructor(parent: any) {
+    constructor(parent: HTMLElement) {
         this.parent = parent;
     }
 
@@ -11,7 +11,7 @@ class Header {
         this.parent.appendChild(headerElement);
 
         const logo = document.createElement('a');
-        logo.classList.add('logo');
+        logo.classList.add('header__logo');
         logo.innerText = "WS";
         headerElement.appendChild(logo);
     }
