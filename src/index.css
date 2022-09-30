@@ -1,14 +1,50 @@
 @import url('./App/components/Header/Header.css');
+@import url('./App/components/Menu/Menu.css');
 
-.body{
-    width: 100%;
-    height: 100%;
+body {
+	font-family: Helvetica, Arial, sans-serif;
 }
 
-/* #root {
+#root {
 	display: grid;
 	grid-template-areas:
-            "header header";
+		"header header"
+		"menu content";
 	grid-template-rows: 100px 1fr;
 	grid-template-columns: min-content 1fr;
-} */
+}
+
+aside {
+	grid-area: menu;
+	font-size: 30px;
+	padding-left: 20px;
+}
+
+.active {
+	font-weight: bold;
+}
+
+main {
+	grid-area: content;
+	padding: 0 40px 40px;
+}
+
+h1 {
+	font-size: 64px;
+	color: #8e5dff;
+	transition: color 600ms;
+}
+
+a {
+	color: #333333;
+	display: block;
+	padding-bottom: 10px;
+	text-decoration: none;
+}
+
+input {
+	display: block;
+	height: 60px;
+	font-size: 40px;
+	margin-bottom: 15px;
+}

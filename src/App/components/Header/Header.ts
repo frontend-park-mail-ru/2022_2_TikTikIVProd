@@ -1,17 +1,19 @@
-// import './Header.css'
-
 class Header {
     private parent: any;
-    private classNames: string = "header";
 
     constructor(parent: any) {
         this.parent = parent;
     }
 
     render() {
-        const headerElement = document.createElement('header');
+        const headerElement = document.createElement('div');
         headerElement.classList.add('header');
         this.parent.appendChild(headerElement);
+
+        const logo = document.createElement('a');
+        logo.classList.add('logo');
+        logo.innerText = "WS";
+        headerElement.appendChild(logo);
     }
 }
 

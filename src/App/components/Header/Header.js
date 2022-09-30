@@ -1,14 +1,15 @@
-// import './Header.css'
 class Header {
     constructor(parent) {
-        this.classNames = "header";
         this.parent = parent;
     }
     render() {
-        const headerElement = document.createElement('header');
+        const headerElement = document.createElement('div');
         headerElement.classList.add('header');
-        
         this.parent.appendChild(headerElement);
+        const logo = document.createElement('a');
+        logo.classList.add('logo');
+        logo.innerText = "WS";
+        headerElement.appendChild(logo);
     }
 }
 export default Header;
