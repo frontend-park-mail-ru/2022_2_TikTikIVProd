@@ -1,6 +1,10 @@
 import IComponent from '../IComponent/IComponent.js';
-import { createButton, createDiv, createInput, createLink } from '../Basics/Basics.js';
 import FooterView from '../FooterView/FooterView.js';
+import createDiv from '../Basics/CreateDiv/CreateDiv.js';
+import createButton from '../Basics/CreateButton/CreateButton.js';
+import createLink from '../Basics/CreateLink/CreateLink.js';
+import createInput from '../Basics/CreateInput/CreateInput.js';
+import createForm from '../Basics/CreateForm/CreateForm.js';
 
 export default class SignupView extends IComponent {
 
@@ -13,13 +17,13 @@ export default class SignupView extends IComponent {
 
         const formHeader = createDiv({
             text: 'Welcome! Please, tell a little about you',
-            styles: ['form-title'],
+            styles: ['form__title'],
         });
 
         // email
         const emailTitle = createDiv({
             text: 'Email',
-            styles: ['input-title']
+            styles: ['input__title']
         });
         const emailInput = createInput({
             type: 'email',
@@ -28,7 +32,7 @@ export default class SignupView extends IComponent {
             styles: ['input'],
         });
         const groupBoxEmail = createDiv({
-            styles: ['group-box']
+            styles: ['groupbox']
         })
             .appendChildren(
                 emailTitle,
@@ -38,7 +42,7 @@ export default class SignupView extends IComponent {
         // password
         const passwordTitle = createDiv({
             text: 'Password:',
-            styles: ['input-title'],
+            styles: ['input__title'],
         });
         const passwordInput = createInput({
             type: 'password',
@@ -47,7 +51,7 @@ export default class SignupView extends IComponent {
             styles: ['input'],
         });
         const groupBoxPassword = createDiv({
-            styles: ['group-box']
+            styles: ['groupbox']
         })
             .appendChildren(
                 passwordTitle,
@@ -57,7 +61,7 @@ export default class SignupView extends IComponent {
         // repeat password
         const repeatPasswordTitle = createDiv({
             text: 'Repeat password:',
-            styles: ['input-title'],
+            styles: ['input__title'],
         });
         const repeatPasswordInput = createInput({
             type: 'password',
@@ -66,7 +70,7 @@ export default class SignupView extends IComponent {
             styles: ['input'],
         });
         const groupBoxRepeatPassword = createDiv({
-            styles: ['group-box']
+            styles: ['groupbox']
         })
             .appendChildren(
                 repeatPasswordTitle,
@@ -76,7 +80,7 @@ export default class SignupView extends IComponent {
         // First name
         const firstNameTitle = createDiv({
             text: 'First Name:',
-            styles: ['input-title'],
+            styles: ['input__title'],
         });
         const firstNameInput = createInput({
             type: 'text',
@@ -85,7 +89,7 @@ export default class SignupView extends IComponent {
             styles: ['input'],
         });
         const groupBoxFirstName = createDiv({
-            styles: ['group-box']
+            styles: ['groupbox']
         })
             .appendChildren(
                 firstNameTitle,
@@ -95,7 +99,7 @@ export default class SignupView extends IComponent {
         // Last name
         const lastNameTitle = createDiv({
             text: 'Last name:',
-            styles: ['input-title'],
+            styles: ['input__title'],
         });
         const lastNameInput = createInput({
             type: 'text',
@@ -104,7 +108,7 @@ export default class SignupView extends IComponent {
             styles: ['input'],
         });
         const groupBoxLastName = createDiv({
-            styles: ['group-box']
+            styles: ['groupbox']
         })
             .appendChildren(
                 lastNameTitle,
@@ -118,7 +122,7 @@ export default class SignupView extends IComponent {
             createButton({
                 id: 'signup-submit-btn',
                 text: 'Signup',
-                styles: ['btn--submit'],
+                styles: ['btn--submit-form'],
             })
         );
 
@@ -126,24 +130,24 @@ export default class SignupView extends IComponent {
             styles: ['wrapper']
         }).appendChildren(
             createDiv({
-                styles: ['form-footer']
+                styles: ['form__footer']
             })
                 .appendChildren(
                     createLink({
                         id: 'signin',
                         text: 'Have an account?',
-                        styles: ['link']
+                        styles: ['form__footer__link']
                     }),
                     createLink({
                         id: 'reset-password',
                         text: 'Forgot password?',
-                        styles: ['form-footer-link']
+                        styles: ['form__footer__link']
                     })
                 )
         );
 
-        const form = createDiv({
-            styles: ['form-container']
+        const form = createForm({
+            styles: ['form']
         })
             .appendChildren(
                 formHeader,
@@ -157,8 +161,5 @@ export default class SignupView extends IComponent {
             );
 
         this.parent.appendChild(form);
-        const footer = new FooterView(this.parent);
-        footer.render();
-
     }
 }

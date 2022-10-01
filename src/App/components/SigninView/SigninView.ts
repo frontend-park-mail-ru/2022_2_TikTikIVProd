@@ -1,5 +1,9 @@
 import IComponent from '../IComponent/IComponent.js';
-import { createButton, createDiv, createInput, createLink } from '../Basics/Basics.js';
+import createDiv from '../Basics/CreateDiv/CreateDiv.js';
+import createButton from '../Basics/CreateButton/CreateButton.js';
+import createLink from '../Basics/CreateLink/CreateLink.js';
+import createInput from '../Basics/CreateInput/CreateInput.js';
+import createForm from '../Basics/CreateForm/CreateForm.js';
 
 export default class SigninView extends IComponent {
 
@@ -12,13 +16,13 @@ export default class SigninView extends IComponent {
 
         const formHeader = createDiv({
             text: 'Welcome back! Please login',
-            styles: ['form-title'],
+            styles: ['form__title'],
         });
 
         // email
         const emailTitle = createDiv({
             text: 'Email',
-            styles: ['input-title']
+            styles: ['input__title']
         });
         const emailInput = createInput({
             type: 'email',
@@ -27,7 +31,7 @@ export default class SigninView extends IComponent {
             styles: ['input'],
         });
         const groupBoxEmail = createDiv({
-            styles: ['group-box']
+            styles: ['groupbox']
         })
             .appendChildren(
                 emailTitle,
@@ -37,7 +41,7 @@ export default class SigninView extends IComponent {
         // password
         const passwordTitle = createDiv({
             text: 'Password:',
-            styles: ['input-title'],
+            styles: ['input__title'],
         });
         const passwordInput = createInput({
             type: 'password',
@@ -46,7 +50,7 @@ export default class SigninView extends IComponent {
             styles: ['input'],
         });
         const groupBoxPassword = createDiv({
-            styles: ['group-box']
+            styles: ['groupbox']
         })
             .appendChildren(
                 passwordTitle,
@@ -61,7 +65,7 @@ export default class SigninView extends IComponent {
             createButton({
                 id: 'auth-submit-btn',
                 text: 'Login',
-                styles: ['btn--submit'],
+                styles: ['btn--submit-form'],
             })
         );
 
@@ -69,25 +73,26 @@ export default class SigninView extends IComponent {
             styles: ['wrapper']
         }).appendChildren(
             createDiv({
-                styles: ['form-footer']
+                styles: ['form__footer']
             })
                 .appendChildren(
                     createLink({
                         id: 'reset-password',
                         text: 'Forgot password',
-                        styles: ['form-footer-link']
+                        styles: ['form__footer__link']
                     }),
                     createLink({
                         id: 'signup',
                         text: 'Do not have an account?',
-                        styles: ['link']
+                        styles: ['form__footer__link']
                     })
                 )
         );
 
-        const form = createDiv({
-            styles: ['form-container']
-        })
+        const form = createForm({
+            styles: ['form']
+        });
+        form
             .appendChildren(
                 formHeader,
                 groupBoxEmail,

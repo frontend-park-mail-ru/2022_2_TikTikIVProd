@@ -1,5 +1,9 @@
 import IComponent from '../IComponent/IComponent.js';
-import { createButton, createDiv, createImg, createInput, createLink, createText } from '../Basics/Basics.js';
+
+import createDiv from '../Basics/CreateDiv/CreateDiv.js';
+import createLink from '../Basics/CreateLink/CreateLink.js';
+import createImg from '../Basics/CreateImg/CreateImg.js';
+import createText from '../Basics/CreateText/CreateText.js';
 
 export default class FooterView extends IComponent {
 
@@ -11,13 +15,13 @@ export default class FooterView extends IComponent {
     render() {
         const footer = createDiv({ styles: ['footer'] });
 
-        const content = createDiv({ styles: ['footer-container'] });
-        const logo = createImg({ src: '#', styles: ['logo--medium'] })
+        const content = createDiv({ styles: ['footer__container'] });
+        const logo = createImg({ src: '#', styles: ['logo--company'] })
         const contacts = createDiv({ text: 'Contacts:', styles: ['contacts'] })
             .appendChildren(
                 createLink({ href: 'https://t.me/george007361', styles: ['contacts--item'] })
                     .appendChildren(
-                        createImg({ src: '#', styles: ['icon'] }),
+                        createImg({ src: '#', styles: ['contacts__item__icon'] }),
                         createText({ text: '@George007361' })
                     )
             );
@@ -29,7 +33,7 @@ export default class FooterView extends IComponent {
             description
         );
 
-        const companyName = createDiv({ text: 'TikTikAndVProd2022', styles: ['footer-container'] });
+        const companyName = createDiv({ text: 'TikTikAndVProd2022', styles: ['footer__container', 'company-name'] });
 
         footer.appendChildren(
             content,
