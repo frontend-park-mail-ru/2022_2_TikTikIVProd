@@ -4,6 +4,8 @@ import createButton from '../Basics/CreateButton/CreateButton.js';
 import createLink from '../Basics/CreateLink/CreateLink.js';
 import createInput from '../Basics/CreateInput/CreateInput.js';
 import createForm from '../Basics/CreateForm/CreateForm.js';
+import router from '../../Router/Router.js';
+import paths from '../../Router/RouterPaths.js';
 export default class SigninView extends IComponent {
     // private onSubmitForm() ;
     constructor(parent) {
@@ -52,6 +54,10 @@ export default class SigninView extends IComponent {
             id: 'auth-submit-btn',
             text: 'Login',
             styles: ['btn--submit-form'],
+            callback: () => {
+                router.goToPath(paths.menu, true);
+                router.goToPath(paths.feedPage, false);
+            }
         }));
         const formFooter = createDiv({
             styles: ['wrapper']
@@ -68,10 +74,14 @@ export default class SigninView extends IComponent {
             styles: ['form__footer__link']
         })));
         const form = createForm({
+            id: 'signin-form',
             styles: ['form']
         });
         form
             .appendChildren(formHeader, groupBoxEmail, groupBoxPassword, submitBtn, formFooter);
         this.parent.appendChild(form);
     }
+}
+function goToPage(menu, arg1) {
+    throw new Error('Function not implemented.');
 }

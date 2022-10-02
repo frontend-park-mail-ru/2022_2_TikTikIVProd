@@ -4,8 +4,9 @@ import createButton from '../Basics/CreateButton/CreateButton.js';
 import createLink from '../Basics/CreateLink/CreateLink.js';
 import createInput from '../Basics/CreateInput/CreateInput.js';
 import createForm from '../Basics/CreateForm/CreateForm.js';
+import router from '../../Router/Router.js';
+import paths from '../../Router/RouterPaths.js';
 export default class SignupView extends IComponent {
-    // private onSubmitForm() ;
     constructor(parent) {
         super(parent);
     }
@@ -97,6 +98,10 @@ export default class SignupView extends IComponent {
             id: 'signup-submit-btn',
             text: 'Signup',
             styles: ['btn--submit-form'],
+            callback: () => {
+                router.goToPath(paths.menu, true);
+                router.goToPath(paths.feedPage, false);
+            }
         }));
         const formFooter = createDiv({
             styles: ['wrapper']

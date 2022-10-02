@@ -7,5 +7,9 @@ export default function createButton(props) {
             elem.classList.add(style);
         });
     }
+    elem.onclick = (event) => {
+        event.preventDefault();
+        props.callback();
+    };
     return elem;
 }

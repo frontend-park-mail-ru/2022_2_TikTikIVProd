@@ -2,6 +2,7 @@ interface IButtonProps {
     id?: string;
     text?: string;
     styles?: string[];
+    callback: () => void;
 }
 
 export default function createButton(props: IButtonProps): HTMLElement {
@@ -13,5 +14,9 @@ export default function createButton(props: IButtonProps): HTMLElement {
             elem.classList.add(style);
         });
     }
+    elem.onclick = (event) => {
+        event.preventDefault();
+        props.callback();
+    };
     return elem;
 }

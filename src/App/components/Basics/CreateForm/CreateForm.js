@@ -8,6 +8,7 @@ export default function createForm(props) {
     elem.name = props.name || '';
     elem.noValidate = props.novalidate ? true : false;
     elem.target = props.target || '';
+    elem.id = props.id || '';
     if (props.styles !== undefined) {
         props.styles.forEach((style) => {
             elem.classList.add(style);

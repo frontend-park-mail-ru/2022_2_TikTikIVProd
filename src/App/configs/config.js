@@ -1,11 +1,10 @@
-import renderFeed from "../components/Feed/Feed.js";
 import renderProfile from "../components/Profile/Profile.js";
 const config = {
     menu: {
         feed: {
             href: '/feed',
             name: 'Лента',
-            render: renderFeed,
+            // render: renderFeed,
         },
         // login: {
         //     href: '/login',

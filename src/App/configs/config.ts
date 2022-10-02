@@ -6,7 +6,7 @@ const config = {
         feed: {
             href: '/feed',
             name: 'Лента',
-            render: renderFeed,
+            // render: renderFeed,
         },
         // login: {
         //     href: '/login',

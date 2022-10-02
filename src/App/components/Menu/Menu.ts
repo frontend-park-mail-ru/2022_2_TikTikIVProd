@@ -1,9 +1,10 @@
-export default class Menu {
+import IComponent from "../IComponent/IComponent.js";
+
+export default class Menu extends IComponent {
     private data: any;
-    private parent: HTMLElement;
 
     constructor(parent: HTMLElement) {
-        this.parent = parent;
+        super(parent);
     }
 
     get items() {
@@ -21,6 +22,7 @@ export default class Menu {
             menuElement.textContent = name;
             menuElement.dataset.section = key;
             menuElement.classList.add('menu__item');
+            menuElement.id = "menu__item_" + String(index);
 
             if (index === 0) {
                 menuElement.classList.add('active');

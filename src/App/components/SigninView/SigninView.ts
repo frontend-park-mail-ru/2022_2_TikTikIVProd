@@ -69,6 +69,10 @@ export default class SigninView extends IComponent {
                 id: 'auth-submit-btn',
                 text: 'Login',
                 styles: ['btn--submit-form'],
+                callback: () => {
+                    router.goToPath(paths.menu, true);
+                    router.goToPath(paths.feedPage, false);
+                }
             })
         );
 
@@ -109,13 +113,10 @@ export default class SigninView extends IComponent {
         this.parent.appendChild(form);
 
 
-        // TODO: убрать отсюда
-        submitBtn.addEventListener('click', this.onSubmit);
     }
 
-    private onSubmit(event: Event) {
-        event.preventDefault();
-        router.goToPath(paths.feedPage);
+}
 
-    }
+function goToPage(menu: string, arg1: boolean) {
+    throw new Error('Function not implemented.');
 }

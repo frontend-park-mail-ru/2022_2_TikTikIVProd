@@ -4,6 +4,5 @@ const paths = {
     feedPage: '/feed',
     menu: '/menu',
     profile: '/profile',
-}
-
+};
 export default paths;

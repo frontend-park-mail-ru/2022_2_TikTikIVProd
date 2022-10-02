@@ -1,6 +1,7 @@
-export default class Menu {
+import IComponent from "../IComponent/IComponent.js";
+export default class Menu extends IComponent {
     constructor(parent) {
-        this.parent = parent;
+        super(parent);
     }
     get items() {
         return this.data;
@@ -15,6 +16,7 @@ export default class Menu {
             menuElement.textContent = name;
             menuElement.dataset.section = key;
             menuElement.classList.add('menu__item');
+            menuElement.id = "menu__item_" + String(index);
             if (index === 0) {
                 menuElement.classList.add('active');
             }

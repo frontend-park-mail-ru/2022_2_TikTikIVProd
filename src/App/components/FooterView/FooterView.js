@@ -4,7 +4,6 @@ import createLink from '../Basics/CreateLink/CreateLink.js';
 import createImg from '../Basics/CreateImg/CreateImg.js';
 import createText from '../Basics/CreateText/CreateText.js';
 export default class FooterView extends IComponent {
-    // private onSubmitForm() ;
     constructor(parent) {
         super(parent);
     }
