@@ -1,18 +1,43 @@
 @import url('./components/Header/Header.css');
 @import url('./components/Menu/Menu.css');
 @import url('./components/FooterView/FooterView.css');
+@import url('./components/SigninView/SigninView.css');
 
 body {
     font-family: Helvetica, Arial, sans-serif;
+    padding: 0;
+    border: 0;
+    margin: 0;
+}
+
+:root {
+    --color-white: white;
+    --color-light-gray: #f0f2f5;
+    /* #f5f5f5;*/
+    --color-lighter-gray: #e5e7eb;
+    /*#f0f2f5;*/
+    --color-gray: #b5b5b5;
+    --color-darker-gray: #6f6f6f;
+    --color-green: #21cf7a;
+    --color-light-green: #48f4a0;
 }
 
 #root {
     display: grid;
     grid-template-areas:
-        "header header"
-        "menu content"
-        "footer footer";
-    grid-template-rows: 50px 1fr 150px;
+        "header"
+        "content"
+        "footer";
+    grid-template-rows: 20px 1fr 100px;
+    grid-template-columns: 1fr;
+
+}
+
+.content {
+    display: grid;
+    grid-template-areas:
+        "menu main";
+    grid-template-rows: 1fr;
     grid-template-columns: min-content 1fr;
 }
 
@@ -27,10 +52,12 @@ aside {
 }
 
 main {
-    grid-area: content;
+    grid-area: main;
     padding: 0 40px 40px;
-    /* height: 200px; */
-    overflow-y: scroll;
+    /* height: 300px; */
+    /* overflow-y: scroll; */
+    display: flex;
+    justify-content: center;
 }
 
 h1 {
