@@ -1,0 +1,52 @@
+.footer {
+  /* margin-top: auto; */
+  /* transform: translateY(100%); */
+  width: 100%;
+  padding-top: 10px;
+  background-color: var(--color-lighter-gray);
+  color: var(--color-gray);
+  font-size: 12px;
+  grid-area: footer;
+
+}
+
+.footer__container {
+  display: flex;
+  justify-content: center;
+}
+
+.logo--company {
+  max-width: 210px;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+  text-align: center;
+}
+
+.contacts__item {
+  display: flex;
+  align-items: center;
+}
+
+.contacts__item__icon {
+  width: 20px;
+  height: auto;
+  margin-right: 5px;
+}
+
+.description {
+  display: inline-block;
+  max-width: 200px;
+  margin-left: 10px;
+  padding: 0 10px;
+  word-wrap: normal;
+}
+
+.company-name {
+  margin-top: 10px;
+}
