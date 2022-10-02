@@ -50,11 +50,34 @@ class App {
         const profile = new Profile(this.mainContentElement);
         router.addPath({ path: paths.profile, view: profile });
         if (authorized) {
+<<<<<<< HEAD
             router.goToPath(paths.menu, false);
             router.goToPath(paths.feedPage, false);
         }
         else {
             router.goToPath(paths.siginPage, true);
+=======
+            const menuElement = document.createElement('aside');
+            menuElement.classList.add('menu');
+            this.content.appendChild(menuElement);
+            const menu = new Menu(menuElement);
+            menu.items = config.menu;
+            menu.render();
+            this.mainContentElement.appendChild(renderFeed());
+            this.root.addEventListener('click', (e) => {
+                const target = e.target;
+                if (target instanceof HTMLAnchorElement && target.dataset.section != undefined) {
+                    e.preventDefault();
+                    RenderMainContent(this.root, this.mainContentElement, config.menu[target.dataset.section]);
+                }
+            });
+        }
+        else {
+            const signinPage = new SigninView(this.mainContentElement);
+            signinPage.render();
+            // const signupPage = new SignupView(mainContentElement);
+            // signupPage.render();
+>>>>>>> 18fffb1f59e83392d8f571d4fd1ca1ae77651e61
         }
         this.footer.render();
         this.root.addEventListener('click', (event) => {
