@@ -16,6 +16,7 @@ class App {
 
     private header: Header;
     private content: HTMLElement;
+    private mainContentElement: HTMLElement;
     private footer: FooterView;
 
     constructor() {
@@ -31,10 +32,21 @@ class App {
         }
         this.content = content;
 
+        // header
         this.header = new Header(this.root);
+
+        //content
         this.content.classList.add("content");
         this.root.appendChild(this.content);
+
+        //main in content
+        this.mainContentElement = document.createElement('main');
+        this.mainContentElement.classList.add('main');
+        this.content.appendChild(this.mainContentElement);
+
+        //footer
         this.footer = new FooterView(this.root);
+
     }
 
     run(): void {
@@ -50,26 +62,20 @@ class App {
             menu.items = config.menu;
             menu.render();
 
-
-            const mainContentElement = document.createElement('main');
-            mainContentElement.classList.add('main');
-            this.content.appendChild(mainContentElement);
-            mainContentElement.appendChild(renderFeed());
+            this.mainContentElement.appendChild(renderFeed());
 
             this.root.addEventListener('click', (e) => {
                 const target = e.target;
 
                 if (target instanceof HTMLAnchorElement && target.dataset.section != undefined) {
                     e.preventDefault();
-                    RenderMainContent(this.root, mainContentElement, config.menu[target.dataset.section]);
+                    RenderMainContent(this.root, this.mainContentElement, config.menu[target.dataset.section]);
                 }
             });
         }
         else {
-            const mainContentElement = document.createElement('main');
-            mainContentElement.classList.add('main');
-            this.content.appendChild(mainContentElement);
-            const signinPage = new SigninView(mainContentElement);
+
+            const signinPage = new SigninView(this.mainContentElement);
             signinPage.render();
             // const signupPage = new SignupView(mainContentElement);
             // signupPage.render();

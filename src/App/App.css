@@ -39,6 +39,7 @@ body {
         "menu main";
     grid-template-rows: 1fr;
     grid-template-columns: min-content 1fr;
+    margin-top: 10px;
 }
 
 aside {
