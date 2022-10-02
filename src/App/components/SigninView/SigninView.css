@@ -45,6 +45,11 @@
 }
 
 .input:focus {
+  outline: none;
+  color: var(--color-darker-gray);
+}
+
+.input:focus {
   border-color: var(--color-gray);
 }
 

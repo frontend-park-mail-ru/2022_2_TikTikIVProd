@@ -1,4 +1,5 @@
 import App from "./App/App.js"
+
 // TODO: move to module
 // Problem: Объявления "module" можно использовать только в файлах TypeScript.
 declare global {

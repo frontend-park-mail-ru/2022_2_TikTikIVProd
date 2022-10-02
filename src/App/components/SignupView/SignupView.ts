@@ -7,8 +7,6 @@ import createInput from '../Basics/CreateInput/CreateInput.js';
 import createForm from '../Basics/CreateForm/CreateForm.js';
 
 export default class SignupView extends IComponent {
-
-    // private onSubmitForm() ;
     constructor(parent: HTMLElement) {
         super(parent);
     }
@@ -161,5 +159,8 @@ export default class SignupView extends IComponent {
             );
 
         this.parent.appendChild(form);
+        submitBtn.addEventListener('submit', () => {
+
+        });
     }
 }
