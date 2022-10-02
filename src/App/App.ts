@@ -43,6 +43,7 @@ class App {
 
         //footer
         this.footer = new FooterView(this.root);
+
     }
     
     run(): void {
