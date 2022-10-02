@@ -1,3 +1,5 @@
+import router from "./Router/Router.js";
+import paths from "./Router/RouterPaths.js";
 import Header from './components/Header/Header.js';
 import Menu from './components/Menu/Menu.js';
 import renderFeed from './components/Feed/Feed.js';
@@ -6,11 +8,6 @@ import RenderMainContent from './utils/RenderMainContent.js';
 import config from './configs/config.js'
 import SigninView from './components/SigninView/SigninView.js';
 import SignupView from './components/SignupView/SignupView.js';
-
-// /feed
-// /signin
-// /signup
-
 class App {
     private root: HTMLElement;
 
@@ -48,7 +45,7 @@ class App {
         this.footer = new FooterView(this.root);
 
     }
-
+    
     run(): void {
         this.header.render();
 
@@ -74,11 +71,13 @@ class App {
             });
         }
         else {
+            const signinView = new SigninView(this.mainContentElement);
+            router.addPath({ path: paths.siginPage, view: signinView });
 
-            const signinPage = new SigninView(this.mainContentElement);
-            signinPage.render();
-            // const signupPage = new SignupView(mainContentElement);
-            // signupPage.render();
+            const signupView = new SignupView(this.mainContentElement);
+            router.addPath({ path: paths.sigupPage, view: signupView });
+
+            router.goToPath(paths.siginPage);
         }
 
 

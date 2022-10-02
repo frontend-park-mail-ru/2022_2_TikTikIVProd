@@ -1,10 +1,12 @@
-abstract class IComponent {
-    parent : HTMLElement;
-    constructor(parent : HTMLElement)
-    {
+export default abstract class IComponent {
+    parent: HTMLElement;
+    constructor(parent: HTMLElement) {
         this.parent = parent;
     }
-    abstract render() : void;
-}
+    abstract render(): void;
 
-export default IComponent;
+    // TODO: Более умный 
+    unmount(): void {
+        this.parent.innerHTML = '';
+    }
+}

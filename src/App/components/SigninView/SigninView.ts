@@ -5,6 +5,9 @@ import createLink from '../Basics/CreateLink/CreateLink.js';
 import createInput from '../Basics/CreateInput/CreateInput.js';
 import createForm from '../Basics/CreateForm/CreateForm.js';
 
+import router from '../../Router/Router.js';
+import paths from '../../Router/RouterPaths.js';
+
 export default class SigninView extends IComponent {
 
     // private onSubmitForm() ;
@@ -90,6 +93,8 @@ export default class SigninView extends IComponent {
         );
 
         const form = createForm({
+            id: 'signin-form',
+
             styles: ['form']
         });
         form
@@ -102,6 +107,15 @@ export default class SigninView extends IComponent {
             );
 
         this.parent.appendChild(form);
+
+
+        // TODO: убрать отсюда
+        submitBtn.addEventListener('click', this.onSubmit);
+    }
+
+    private onSubmit(event: Event) {
+        event.preventDefault();
+        router.goToPath(paths.feedPage);
 
     }
 }
