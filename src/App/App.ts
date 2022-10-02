@@ -1,3 +1,5 @@
+import router from "./Router/Router.js";
+import paths from "./Router/RouterPaths.js";
 import Header from './components/Header/Header.js';
 import Menu from './components/Menu/Menu.js';
 import renderFeed from './components/Feed/Feed.js';
@@ -6,16 +8,12 @@ import RenderMainContent from './utils/RenderMainContent.js';
 import config from './configs/config.js'
 import SigninView from './components/SigninView/SigninView.js';
 import SignupView from './components/SignupView/SignupView.js';
-
-// /feed
-// /signin
-// /signup
-
 class App {
     private root: HTMLElement;
 
     private header: Header;
     private content: HTMLElement;
+    private mainContentElement: HTMLElement;
     private footer: FooterView;
 
     constructor() {
@@ -31,12 +29,22 @@ class App {
         }
         this.content = content;
 
+        // header
         this.header = new Header(this.root);
+
+        //content
         this.content.classList.add("content");
         this.root.appendChild(this.content);
+
+        //main in content
+        this.mainContentElement = document.createElement('main');
+        this.mainContentElement.classList.add('main');
+        this.content.appendChild(this.mainContentElement);
+
+        //footer
         this.footer = new FooterView(this.root);
     }
-
+    
     run(): void {
         this.header.render();
 
@@ -50,29 +58,25 @@ class App {
             menu.items = config.menu;
             menu.render();
 
-
-            const mainContentElement = document.createElement('main');
-            mainContentElement.classList.add('main');
-            this.content.appendChild(mainContentElement);
-            mainContentElement.appendChild(renderFeed());
+            this.mainContentElement.appendChild(renderFeed());
 
             this.root.addEventListener('click', (e) => {
                 const target = e.target;
 
                 if (target instanceof HTMLAnchorElement && target.dataset.section != undefined) {
                     e.preventDefault();
-                    RenderMainContent(this.root, mainContentElement, config.menu[target.dataset.section]);
+                    RenderMainContent(this.root, this.mainContentElement, config.menu[target.dataset.section]);
                 }
             });
         }
         else {
-            const mainContentElement = document.createElement('main');
-            mainContentElement.classList.add('main');
-            this.content.appendChild(mainContentElement);
-            const signinPage = new SigninView(mainContentElement);
-            signinPage.render();
-            // const signupPage = new SignupView(mainContentElement);
-            // signupPage.render();
+            const signinView = new SigninView(this.mainContentElement);
+            router.addPath({ path: paths.siginPage, view: signinView });
+
+            const signupView = new SignupView(this.mainContentElement);
+            router.addPath({ path: paths.sigupPage, view: signupView });
+
+            router.goToPath(paths.siginPage);
         }
 
 

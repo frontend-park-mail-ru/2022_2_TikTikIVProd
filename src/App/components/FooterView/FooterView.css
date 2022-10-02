@@ -1,13 +1,14 @@
 .footer {
-  /* margin-top: auto; */
-  /* transform: translateY(100%); */
+  margin-top: 10px;
+  transform: translateY(100%);
+
   width: 100%;
   padding-top: 10px;
   background-color: var(--color-lighter-gray);
   color: var(--color-gray);
   font-size: 12px;
-  grid-area: footer;
 
+  grid-area: footer;
 }
 
 .footer__container {
@@ -50,3 +51,4 @@
 .company-name {
   margin-top: 10px;
 }
+
