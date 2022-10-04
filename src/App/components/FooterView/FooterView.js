@@ -1,8 +1,8 @@
 import IComponent from '../IComponent/IComponent.js';
-import createDiv from '../Basics/CreateDiv/CreateDiv.js';
-import createLink from '../Basics/CreateLink/CreateLink.js';
-import createImg from '../Basics/CreateImg/CreateImg.js';
-import createText from '../Basics/CreateText/CreateText.js';
+import createDiv from '../BasicComponentsCreators/CreateDiv/CreateDiv.js';
+import createLink from '../BasicComponentsCreators/CreateLink/CreateLink.js';
+import createImg from '../BasicComponentsCreators/CreateImg/CreateImg.js';
+import createText from '../BasicComponentsCreators/CreateText/CreateText.js';
 export default class FooterView extends IComponent {
     constructor(parent) {
         super(parent);
@@ -13,7 +13,7 @@ export default class FooterView extends IComponent {
         const logo = createImg({ src: '#', styles: ['logo--company'] });
         const contacts = createDiv({ text: 'Contacts:', styles: ['contacts'] })
             .appendChildren(createLink({ href: 'https://t.me/george007361', styles: ['contacts--item'] })
-            .appendChildren(createImg({ src: '#', styles: ['contacts__item__icon'] }), createText({ text: '@George007361' })));
+                .appendChildren(createImg({ src: '#', styles: ['contacts__item__icon'] }), createText({ text: '@George007361' })));
         const description = createDiv({ text: '«WS» позволяет пользователям отправлять друг другу сообщения, делиться новостями и многое другое...', styles: ['description'] });
         content.appendChildren(logo, contacts, description);
         const companyName = createDiv({ text: 'TikTikAndVProd2022', styles: ['footer__container', 'company-name'] });

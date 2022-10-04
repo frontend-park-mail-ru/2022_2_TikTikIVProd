@@ -1,9 +1,9 @@
 import IComponent from '../IComponent/IComponent.js';
 
-import createDiv from '../Basics/CreateDiv/CreateDiv.js';
-import createLink from '../Basics/CreateLink/CreateLink.js';
-import createImg from '../Basics/CreateImg/CreateImg.js';
-import createText from '../Basics/CreateText/CreateText.js';
+import createDiv from '../BasicComponentsCreators/CreateDiv/CreateDiv.js';
+import createLink from '../BasicComponentsCreators/CreateLink/CreateLink.js';
+import createImg from '../BasicComponentsCreators/CreateImg/CreateImg.js';
+import createText from '../BasicComponentsCreators/CreateText/CreateText.js';
 
 export default class FooterView extends IComponent {
     constructor(parent: HTMLElement) {

@@ -1,7 +1,8 @@
 @import url('./components/Header/Header.css');
 @import url('./components/Menu/Menu.css');
 @import url('./components/FooterView/FooterView.css');
-@import url('./components/SigninView/SigninView.css');
+@import url('./components/SigninFormView/SigninFormView.css');
+@import url('./components/SignupFormView/SignupFormView.css');
 
 body {
     font-family: Helvetica, Arial, sans-serif;
