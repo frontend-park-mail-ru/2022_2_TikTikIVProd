@@ -1,6 +1,8 @@
 import SigninFormView from "../../components/SigninFormView/SigninFormView.js";
 import signinFormConfig from "../../components/SigninFormView/SigninFormViewConfig.js";
+import signupFormConfig from "../../components/SignupFormView/SignupFormViewConfig.js";
 import UserModel from "../../models/UserModel/UserModel.js";
+import router from "../../Router/Router.js";
 import IController from "../IController/IController.js";
 
 export default class SigninFormController extends IController<SigninFormView, UserModel> {
@@ -42,7 +44,7 @@ export default class SigninFormController extends IController<SigninFormView, Us
                 // TODO Вынести в функцию 
                 // Обработать нажания
                 // Вызвать роутер на footerItem.href
-                return;
+                router.goToPath(footerItem.href || '', false);
             }
             console.log(`Not handeled ${target.id}`);
         }

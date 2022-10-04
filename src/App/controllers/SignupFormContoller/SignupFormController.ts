@@ -1,6 +1,7 @@
 import SignupView from "../../components/SignupFormView/SignupFormView.js";
 import signupFormConfig from "../../components/SignupFormView/SignupFormViewConfig.js";
 import UserModel from "../../models/UserModel/UserModel.js";
+import router from "../../Router/Router.js";
 import IController from "../IController/IController.js";
 
 export default class SignupFormController extends IController<SignupView, UserModel> {
@@ -42,6 +43,7 @@ export default class SignupFormController extends IController<SignupView, UserMo
                 // TODO Вынести в функцию 
                 // Обработать нажания
                 // Вызвать роутер на footerItem.href
+                router.goToPath(footerItem.href || '', false);
                 return;
             }
             console.log(`Not handeled ${target.id}`);

@@ -1,5 +1,5 @@
-// import router from "./Router/Router.js";
-// import paths from "./Router/RouterPaths.js";
+import router from "./Router/Router.js";
+import paths from "./Router/RouterPaths.js";
 // import Header from './components/Header/Header.js';
 // import Menu from './components/Menu/Menu.js';
 // import Feed from './components/Feed/Feed.js';
@@ -18,6 +18,15 @@ import SignupFormController from "./controllers/SignupFormContoller/SignupFormCo
 
 class App {
     private root: HTMLElement;
+
+    private userModel: UserModel;
+    // Auth
+    private signinView: SigninFormView;
+    private signinController: SigninFormController;
+    // Reg
+    private signupView: SignupFormView;
+    private signupController: SignupFormController;
+
     constructor() {
         const possiblRoot = document.getElementById('root');
         if (possiblRoot == undefined) {
@@ -28,12 +37,36 @@ class App {
     }
 
     run() {
-        const signinView = new SignupFormView(this.root);
-        const userModel = new UserModel();
-        const signinContrl = new SignupFormController(signinView, userModel);
 
+        this.userModel = new UserModel();
+
+        //Auth
+        this.signinView = new SigninFormView(this.root);
+        this.signinController = new SigninFormController(this.signinView, this.userModel);
+        router.addPath({ path: paths.siginPage, handler: this.handleRedirectToSigninPage.bind(this) });
+
+        //Reg
+        this.signupView = new SignupFormView(this.root);
+        this.signupController = new SignupFormController(this.signupView, this.userModel);
+        router.addPath({ path: paths.sigupPage, handler: this.handleRedirectToSignupPage.bind(this) });
+
+
+
+
+        // TODO перенести
+        this.signinView.render();
         // TODO обращение через контроллер
-        signinView.render();
+        this.signinView.render();
+    }
+
+    private handleRedirectToSignupPage() {
+        this.root.innerHTML = '';
+        this.signupView.render();
+    }
+
+    private handleRedirectToSigninPage() {
+        this.root.innerHTML = '';
+        this.signinView.render();
     }
 }
 

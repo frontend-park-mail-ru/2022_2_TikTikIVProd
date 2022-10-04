@@ -1,4 +1,5 @@
 import signupFormConfig from "../../components/SignupFormView/SignupFormViewConfig.js";
+import router from "../../Router/Router.js";
 import IController from "../IController/IController.js";
 export default class SignupFormController extends IController {
     constructor(view, model) {
@@ -32,6 +33,7 @@ export default class SignupFormController extends IController {
                 // TODO Вынести в функцию 
                 // Обработать нажания
                 // Вызвать роутер на footerItem.href
+                router.goToPath(footerItem.href || '', false);
                 return;
             }
             console.log(`Not handeled ${target.id}`);

@@ -1,4 +1,5 @@
 import signinFormConfig from "../../components/SigninFormView/SigninFormViewConfig.js";
+import router from "../../Router/Router.js";
 import IController from "../IController/IController.js";
 export default class SigninFormController extends IController {
     constructor(view, model) {
@@ -32,7 +33,7 @@ export default class SigninFormController extends IController {
                 // TODO Вынести в функцию 
                 // Обработать нажания
                 // Вызвать роутер на footerItem.href
-                return;
+                router.goToPath(footerItem.href || '', false);
             }
             console.log(`Not handeled ${target.id}`);
         }
