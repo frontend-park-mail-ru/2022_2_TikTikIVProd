@@ -6,11 +6,15 @@
 // import FooterView from './components/FooterView/FooterView.js';
 // import RenderMainContent from './utils/RenderMainContent.js';
 // import config from './configs/config.js'
-import SigninView from './components/SigninFormView/SigninFormView.js';
+import SigninFormView from './components/SigninFormView/SigninFormView.js';
 // import SignupView from './components/SignupView/SignupView.js';
 // import Profile from "./components/Profile/Profile.js";
 import SigninFormController from "./controllers/SigninFormContoller/SigninFormController.js";
 import UserModel from "./models/UserModel/UserModel.js";
+
+
+import SignupFormView from "./components/SignupFormView/SignupFormView.js"
+import SignupFormController from "./controllers/SignupFormContoller/SignupFormController.js"
 
 class App {
     private root: HTMLElement;
@@ -24,9 +28,9 @@ class App {
     }
 
     run() {
-        const signinView = new SigninView(this.root);
+        const signinView = new SignupFormView(this.root);
         const userModel = new UserModel();
-        const signinContrl = new SigninFormController(signinView, userModel);
+        const signinContrl = new SignupFormController(signinView, userModel);
 
         // TODO обращение через контроллер
         signinView.render();

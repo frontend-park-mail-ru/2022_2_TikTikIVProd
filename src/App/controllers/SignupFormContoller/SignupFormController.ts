@@ -1,5 +1,5 @@
 import SignupView from "../../components/SignupFormView/SignupFormView.js";
-import signupConfig from "../../components/SignupFormView/SignupFormViewConfig";
+import signupFormConfig from "../../components/SignupFormView/SignupFormViewConfig.js";
 import UserModel from "../../models/UserModel/UserModel.js";
 import IController from "../IController/IController.js";
 
@@ -15,8 +15,8 @@ export default class SignupFormController extends IController<SignupView, UserMo
 
         const target = <HTMLElement>event.target;
         if (target !== null) {
-            if (signupConfig.submit.id === target.id) {
-                console.log('Submitting auth form');
+            if (signupFormConfig.submit.id === target.id) {
+                console.log('Submitting signup form');
                 // TODO вынести в функицию
                 // Get data from view
                 // Validate 
@@ -35,7 +35,7 @@ export default class SignupFormController extends IController<SignupView, UserMo
                 return;
             }
 
-            const footerItem = signupConfig.footer.find((item) => item.id === target.id);
+            const footerItem = signupFormConfig.footer.find((item) => item.id === target.id);
             if (footerItem !== undefined) {
                 console.log(`Found link ${target.id}`);
 

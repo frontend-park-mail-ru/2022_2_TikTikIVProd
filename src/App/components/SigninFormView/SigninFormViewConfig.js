@@ -1,4 +1,4 @@
-const signinConfig = {
+const signinFormConfig = {
     title: 'Добро пожаловать!',
     fields: [
         {
@@ -31,4 +31,4 @@ const signinConfig = {
         }
     ],
 };
-export default signinConfig;
+export default signinFormConfig;

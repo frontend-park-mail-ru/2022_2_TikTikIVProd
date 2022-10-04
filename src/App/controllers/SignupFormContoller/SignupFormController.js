@@ -1,6 +1,6 @@
-import signinConfig from "../../components/SigninView/SigninViewConfig.js";
+import signupFormConfig from "../../components/SignupFormView/SignupFormViewConfig.js";
 import IController from "../IController/IController.js";
-export default class SigninFormController extends IController {
+export default class SignupFormController extends IController {
     constructor(view, model) {
         super(view, model);
         (this.view.getParent()).addEventListener('click', this.clickHandler.bind(this));
@@ -10,8 +10,8 @@ export default class SigninFormController extends IController {
         console.log(this.model);
         const target = event.target;
         if (target !== null) {
-            if (signinConfig.submit.id === target.id) {
-                console.log('Submitting auth form');
+            if (signupFormConfig.submit.id === target.id) {
+                console.log('Submitting signup form');
                 // TODO вынести в функицию
                 // Get data from view
                 // Validate 
@@ -26,7 +26,7 @@ export default class SigninFormController extends IController {
                 }
                 return;
             }
-            const footerItem = signinConfig.footer.find((item) => item.id === target.id);
+            const footerItem = signupFormConfig.footer.find((item) => item.id === target.id);
             if (footerItem !== undefined) {
                 console.log(`Found link ${target.id}`);
                 // TODO Вынести в функцию 

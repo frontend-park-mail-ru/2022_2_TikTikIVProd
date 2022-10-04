@@ -4,8 +4,8 @@ import createButton from '../BasicComponentsCreators/CreateButton/CreateButton.j
 import createLink from '../BasicComponentsCreators/CreateLink/CreateLink.js';
 import createInput from '../BasicComponentsCreators/CreateInput/CreateInput.js';
 import createForm from '../BasicComponentsCreators/CreateForm/CreateForm.js';
-import signinConfig from './SigninFormViewConfig.js';
-export default class SigninView extends IComponent {
+import signinFormConfig from './SigninFormViewConfig.js';
+export default class SigninFormView extends IComponent {
     constructor(parent) {
         super(parent);
         this.isShowing = false;
@@ -16,11 +16,11 @@ export default class SigninView extends IComponent {
             styles: ['form']
         });
         const formHeader = createDiv({
-            text: signinConfig.title,
+            text: signinFormConfig.title,
             styles: ['form__title'],
         });
         const formContent = createDiv({});
-        signinConfig.fields.forEach((field) => {
+        signinFormConfig.fields.forEach((field) => {
             const title = createDiv({
                 text: field.title,
                 styles: ['input__title']
@@ -43,8 +43,8 @@ export default class SigninView extends IComponent {
             styles: ['wrapper']
         });
         submitBtn.appendChild(createButton({
-            id: signinConfig.submit.id,
-            text: signinConfig.submit.text,
+            id: signinFormConfig.submit.id,
+            text: signinFormConfig.submit.text,
             styles: ['btn--submit-form'],
         }));
         const formFooterWrapper = createDiv({
@@ -53,7 +53,7 @@ export default class SigninView extends IComponent {
         const formFooter = createDiv({
             styles: ['form__footer']
         });
-        signinConfig.footer.forEach((link) => {
+        signinFormConfig.footer.forEach((link) => {
             formFooter.appendChild(createLink({
                 id: link.id,
                 text: link.text,

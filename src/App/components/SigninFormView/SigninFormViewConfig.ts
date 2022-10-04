@@ -6,7 +6,7 @@ interface IInputWithTitle extends IInputProps {
     title: string;
 }
 
-interface ISigninForm {
+interface ISigninFormView {
     title: string;
     fields: IInputWithTitle[];
     submit: IButtonProps;
@@ -14,7 +14,7 @@ interface ISigninForm {
 }
 
 
-const signinConfig: ISigninForm = {
+const signinFormConfig: ISigninFormView = {
     title: 'Добро пожаловать!',
     fields: [
         {
@@ -49,4 +49,4 @@ const signinConfig: ISigninForm = {
 }
 
 
-export default signinConfig;
+export default signinFormConfig;

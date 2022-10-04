@@ -1,16 +1,6 @@
-// import router from "./Router/Router.js";
-// import paths from "./Router/RouterPaths.js";
-// import Header from './components/Header/Header.js';
-// import Menu from './components/Menu/Menu.js';
-// import Feed from './components/Feed/Feed.js';
-// import FooterView from './components/FooterView/FooterView.js';
-// import RenderMainContent from './utils/RenderMainContent.js';
-// import config from './configs/config.js'
-import SigninView from './components/SigninFormView/SigninFormView.js';
-// import SignupView from './components/SignupView/SignupView.js';
-// import Profile from "./components/Profile/Profile.js";
-import SigninFormController from "./controllers/SigninFormContoller/SigninFormController.js";
 import UserModel from "./models/UserModel/UserModel.js";
+import SignupFormView from "./components/SignupFormView/SignupFormView.js";
+import SignupFormController from "./controllers/SignupFormContoller/SignupFormController.js";
 class App {
     constructor() {
         const possiblRoot = document.getElementById('root');
@@ -20,9 +10,9 @@ class App {
         this.root = possiblRoot;
     }
     run() {
-        const signinView = new SigninView(this.root);
+        const signinView = new SignupFormView(this.root);
         const userModel = new UserModel();
-        const signinContrl = new SigninFormController(signinView, userModel);
+        const signinContrl = new SignupFormController(signinView, userModel);
         // TODO обращение через контроллер
         signinView.render();
     }

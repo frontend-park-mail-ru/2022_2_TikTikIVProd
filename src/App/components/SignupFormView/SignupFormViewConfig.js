@@ -1,20 +1,4 @@
-import { IButtonProps } from "../BasicComponentsCreators/CreateButton/CreateButton.js";
-import { IInputProps } from "../BasicComponentsCreators/CreateInput/CreateInput.js";
-import { ILinkProps } from "../BasicComponentsCreators/CreateLink/CreateLink.js";
-
-interface IInputWithTitle extends IInputProps {
-    title: string;
-}
-
-interface ISignupFormView {
-    title: string;
-    fields: IInputWithTitle[];
-    submit: IButtonProps;
-    footer: ILinkProps[];
-}
-
-
-const signupFormConfig: ISignupFormView = {
+const signupFormConfig = {
     title: 'Рады вас приветствовать!',
     fields: [
         {
@@ -70,7 +54,5 @@ const signupFormConfig: ISignupFormView = {
             text: 'Забыли пароль?'
         }
     ],
-}
-
-
+};
 export default signupFormConfig;
