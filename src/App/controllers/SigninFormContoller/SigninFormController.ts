@@ -8,6 +8,7 @@ import IController from "../IController/IController.js";
 export default class SigninFormController extends IController<SigninFormView, UserModel> {
     constructor(view: SigninFormView, model: UserModel) {
         super(view, model);
+        // TODO: Листенер на контент, а не на родителя
         (this.view.getParent()).addEventListener('click', this.clickHandler.bind(this));
     }
 

@@ -1,52 +1,81 @@
+:root {
+  /* New palette */
+  --color-root-background: #F0F2F5;
+
+  --color-footer-background: #EAECF0;
+  --color-footer-text: #B5B5B5;
+
+  --color-form-title: #6F6F6F;
+  --color-form-background: #FFFFFF;
+  --color-form-border: #EBEBEB;
+  --color-input-title: #6F6F6F;
+  --color-input-placeholder: #D8D8D8;
+  --color-input-border: #D8D8D8;
+  --color-input-border-focus: #6F6F6F;
+  --color-input-value: #767676;
+  --color-input-value-error: #f66363;
+  --color-input-border-error: #f66363;
+  --color-input-border-focus-error: #b04c4c;
+  --color-button-background: #21CF7A;
+  --color-button-value: #FFFFFF;
+  --color-button-background-pressed: #24B66F;
+  --color-button-border-focus: #24B66F;
+  --color-link-value: #B5B5B5;
+  --color-link-underline-hover: #B5B5B5;
+  --color-link-value-pressed: #D8D8D8;
+  --color-limk-underline-pressed: #D8D8D8;
+
+}
+
+
 .footer {
-  margin-top: 10px;
-  transform: translateY(100%);
+  /* margin-top: 10px; */
+  transform: translateY(200%);
   width: 100%;
-  padding-top: 10px;
-  background-color: var(--color-lighter-gray);
-  color: var(--color-gray);
+  height: 40px;
+  padding: 10px 0;
+  background-color: var(--color-footer-background);
+  color: var(--color-footer-text);
   font-size: 12px;
-  grid-area: footer;
 }
 
 .footer__container {
   display: flex;
   justify-content: center;
+  align-items: center;
+  padding: 0 10px;
 }
 
-.logo--company {
-  max-width: 210px;
-  height: 100%;
+.footer__logo {
+  max-width: 100%;
+  max-height: 30px;
   object-fit: cover;
+  padding: 5px 15px;
 }
 
 .contacts {
   display: flex;
-  flex-direction: column;
-  margin-left: 8px;
-  text-align: center;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0 15px;
 }
 
 .contacts__item {
   display: flex;
+  flex-direction: row;
   align-items: center;
 }
 
 .contacts__item__icon {
-  width: 20px;
-  height: auto;
-  margin-right: 5px;
-}
-
-.description {
-  display: inline-block;
-  max-width: 200px;
-  margin-left: 10px;
-  padding: 0 10px;
-  word-wrap: normal;
+  height: 20px;
+  width: 100%;
+  object-fit: cover;
+  margin: 0px 5px;
 }
 
 .company-name {
-  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  padding: 0 15px;
 }
-

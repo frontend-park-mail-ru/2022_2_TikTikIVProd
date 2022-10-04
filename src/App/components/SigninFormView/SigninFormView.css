@@ -1,60 +1,63 @@
 .form {
     display: flex;
     flex-direction: column;
-    padding: 20px 30px;
-    border: 2px solid var(--color-light-gray);
-    background-color: var(--color-white);
+    width: min-content;
+    height: min-content;
+    padding: 30px 50px;
+    outline: 2px solid var(--color-form-border);
+    outline-offset: -2px;
     border-radius: 10px;
-
-    grid-area: menu;
-    width: 300px;
+    background-color: var(--color-form-background);
 }
 
 .form__title {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     font-size: 24px;
     font-weight: bold;
     text-align: center;
+    color: var(--color-form-title);
 }
 
 .form__footer {
-    padding: 8px 0;
+    padding-top: 20px;
 }
 
 .form__footer__link {
     display: flex;
     flex-direction: column;
-    margin: 5px 0;
+    margin-bottom: 10px;
     text-decoration: none;
-    color: var(--color-gray);
+    text-align: center;
+    color: var(--color-link-value);
 }
 
 .form__footer__link:hover {
-    text-decoration: underline var(--color-gray);
+    text-decoration: underline var(--color-link-underline-hover);
 }
 
 .form__footer__link:active {
-    color: var(--color-lighter-gray);
-    text-decoration: underline var(--color-lighter-gray);
+    color: var(--color-link-value-pressed);
+    text-decoration: underline var(--color-limk-underline-pressed);
 }
 
-.input {
+.form__input {
     display: block;
     padding: 10px 20px;
-    border-style: none;
-    border: 2px;
-    outline-color: 2px solid var(--color-light-gray);
+    border: none;
+    outline: 2px solid var(--color-input-border);
+    outline-offset: -2px;
     border-radius: 8px;
     font-size: 14px;
     color: inherit;
 }
 
-.input:focus {
+.form__input:focus {
     border-style: none;
-    outline-color: var(--color-gray);
+    outline-color: var(--color-input-border-focus);
 }
 
-.input__title {
+.form__input__title {
+    color: var(--color-input-title);
     margin-bottom: 2px;
     font-size: 16px;
 }
@@ -71,24 +74,33 @@
     justify-content: center;
 }
 
-.btn--submit-form {
-    margin-top: 5px;
+.form__button {
+    margin-top: 15px;
+    width: 100%;
     cursor: pointer;
     border: none;
+    outline: none;
     border-radius: 8px;
     padding: 10px 20px;
-    background-color: var(--color-green);
-    color: var(--color-white);
+    background-color: var(--color-button-background);
+    color: var(--color-button-value);
     font-weight: bolder;
 }
 
-.btn--submit-form:hover {
-    background-color: var(--color-light-green);
+.form__button:hover {
+    border: none;
+    outline: none;
     box-shadow: 0 5px 5px 1px var(--color-light-gray);
 }
 
-.btn--submit-form:focus {
-    color: var(--color-white);
-    outline: 2px solid var(--color-green);
+.form__button:focus {
+    outline: 2px solid var(--color-button-border-focus);
+    outline-offset: -2px;
     box-shadow: 0 3px 5px 1px var(--color-lighter-gray);
+}
+
+.form__button:active {
+    outline: none;
+    border-style: none;
+    background-color: var(--color-button-background-pressed);
 }

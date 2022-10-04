@@ -31,13 +31,13 @@ export default class SignupFormView extends IComponent {
         signupFormConfig.fields.forEach((field) => {
             const title = createDiv({
                 text: field.title,
-                styles: ['input__title']
+                styles: ['form__input__title']
             });
             const input = createInput({
                 type: field.type,
                 id: field.id,
                 placeholder: field.placeholder,
-                styles: ['input'],
+                styles: ['form__input'],
             });
             const groupbox = createDiv({
                 styles: ['groupbox']
@@ -48,16 +48,11 @@ export default class SignupFormView extends IComponent {
         });
 
         //btn submit 
-        const submitBtn = createDiv({
-            styles: ['wrapper']
+        const submitBtn = createButton({
+            id: signupFormConfig.submit.id,
+            text: signupFormConfig.submit.text,
+            styles: ['form__button'],
         });
-        submitBtn.appendChild(
-            createButton({
-                id: signupFormConfig.submit.id,
-                text: signupFormConfig.submit.text,
-                styles: ['btn--submit-form'],
-            })
-        );
 
         const formFooterWrapper = createDiv({
             styles: ['wrapper']
