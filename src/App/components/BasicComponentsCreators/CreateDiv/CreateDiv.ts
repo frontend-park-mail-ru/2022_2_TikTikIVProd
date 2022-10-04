@@ -6,6 +6,9 @@ export interface IDivProps {
 
 export default function createDiv(props: IDivProps): HTMLElement {
     const elem = document.createElement('div');
+    if (props.id !== undefined) {
+        elem.id = props.id;
+    }
     elem.textContent = props.text || '';
     if (props.styles !== undefined) {
         props.styles.forEach((style) => {

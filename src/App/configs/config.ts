@@ -21,7 +21,7 @@ const config = {
         profile: {
             href: '/profile',
             name: 'Профиль',//safe('Профиль'),
-            render: renderProfile,
+            // render: renderProfile,
         },
     },
 };

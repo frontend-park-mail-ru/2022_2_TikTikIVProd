@@ -1,12 +1,15 @@
 .header {
+    display: block;
     width: 100%;
-    background: #21CF7A;
-    grid-area: header;
+    background: #FFFFFF;
     position: relative;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
+    opacity: 0.7;
+    height: 30px;
 }
 
 .header__logo {
-    color: white;
+    color: #21CF7A;
     font-size: 20px;
     padding-left: 20px;
     font-weight: bold;
@@ -20,4 +23,25 @@
     top: 50%;
     transform: translateY(-50%);
     left: 0;
+}
+
+.header__link {
+    position: absolute;
+    right: 0;
+    margin-right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+
+    width: 100px;
+    height: 14px;
+
+    border: 2px solid #24B66F;
+    border-radius: 5px;
+    gap: 8px;
+
 }

@@ -1,4 +1,3 @@
-import renderProfile from "../components/Profile/Profile.js";
 const config = {
     menu: {
         feed: {
@@ -18,8 +17,8 @@ const config = {
         // },
         profile: {
             href: '/profile',
-            name: 'Профиль',
-            render: renderProfile,
+            name: 'Профиль', //safe('Профиль'),
+            // render: renderProfile,
         },
     },
 };

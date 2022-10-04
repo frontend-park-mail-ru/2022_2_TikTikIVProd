@@ -6,7 +6,11 @@
   background-color: var(--color-lighter-gray);
   color: var(--color-gray);
   font-size: 12px;
-  grid-area: footer;
+  
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
 }
 
 .footer__container {

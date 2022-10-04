@@ -24,13 +24,9 @@ body {
 }
 
 #root {
-    display: grid;
-    grid-template-areas:
-        "header"
-        "content"
-        "footer";
-    grid-template-rows: 20px 1fr 100px;
-    grid-template-columns: 1fr;
+    display: block;
+
+    background: var(--background-color);
 
 }
 
