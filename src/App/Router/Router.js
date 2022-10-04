@@ -12,12 +12,7 @@ class Router {
             console.log('No path');
             return;
         }
-        if (this.current !== undefined && clearLastView) {
-            this.current.view.unmount();
-        }
-        // window.history.pushState(null, 'null', path);
-        this.current = item;
-        item.view.render();
+        item.handler();
     }
 }
 const router = new Router();

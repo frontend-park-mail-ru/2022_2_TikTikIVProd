@@ -4,29 +4,21 @@ import createButton from '../BasicComponentsCreators/CreateButton/CreateButton.j
 import createLink from '../BasicComponentsCreators/CreateLink/CreateLink.js';
 import createInput from '../BasicComponentsCreators/CreateInput/CreateInput.js';
 import createForm from '../BasicComponentsCreators/CreateForm/CreateForm.js';
-
 import signupFormConfig from './SignupFormViewConfig.js';
-
 export default class SignupFormView extends IComponent {
-
-    private isShowing: boolean;
-
-    constructor(parent: HTMLElement) {
+    constructor(parent) {
         super(parent);
         this.isShowing = false;
     }
-
     render() {
         const form = createForm({
             id: 'signup-form',
             styles: ['form']
         });
-
         const formHeader = createDiv({
             text: signupFormConfig.title,
             styles: ['form__title'],
         });
-
         const formContent = createDiv({});
         signupFormConfig.fields.forEach((field) => {
             const title = createDiv({
@@ -46,19 +38,15 @@ export default class SignupFormView extends IComponent {
             groupbox.appendChild(input);
             formContent.appendChild(groupbox);
         });
-
         //btn submit 
         const submitBtn = createDiv({
             styles: ['wrapper']
         });
-        submitBtn.appendChild(
-            createButton({
-                id: signupFormConfig.submit.id,
-                text: signupFormConfig.submit.text,
-                styles: ['btn--submit-form'],
-            })
-        );
-
+        submitBtn.appendChild(createButton({
+            id: signupFormConfig.submit.id,
+            text: signupFormConfig.submit.text,
+            styles: ['btn--submit-form'],
+        }));
         const formFooterWrapper = createDiv({
             styles: ['wrapper']
         });
@@ -74,14 +62,11 @@ export default class SignupFormView extends IComponent {
             }));
         });
         formFooterWrapper.appendChild(formFooter);
-
         form.appendChild(formHeader);
         form.appendChild(formContent);
         form.appendChild(submitBtn);
         form.appendChild(formFooterWrapper);
-
         this.parent.appendChild(form);
-
         this.isShowing = true;
     }
 }

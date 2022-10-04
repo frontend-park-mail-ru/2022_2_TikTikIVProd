@@ -3,11 +3,12 @@ import IComponent from "../components/IComponent/IComponent";
 
 interface IRoute {
     path: string;
-    view: IComponent;
+    handler: () => void;
 }
 
 class Router {
     private routes: IRoute[];
+
     private current: IRoute | undefined;
 
     constructor() {
@@ -26,13 +27,8 @@ class Router {
             return;
         }
 
-        if (this.current !== undefined && clearLastView) {
-            this.current.view.unmount();
-        }
 
-        // window.history.pushState(null, 'null', path);
-        this.current = item;
-        item.view.render();
+        item.handler();
     }
 
 

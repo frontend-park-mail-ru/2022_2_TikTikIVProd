@@ -1,10 +1,12 @@
-import SigninView from "../../components/SigninFormView/SigninFormView.js";
-import signinConfig from "../../components/SigninFormView/SigninFormViewConfig.js";
+import SigninFormView from "../../components/SigninFormView/SigninFormView.js";
+import signinFormConfig from "../../components/SigninFormView/SigninFormViewConfig.js";
+import signupFormConfig from "../../components/SignupFormView/SignupFormViewConfig.js";
 import UserModel from "../../models/UserModel/UserModel.js";
+import router from "../../Router/Router.js";
 import IController from "../IController/IController.js";
 
-export default class SigninFormController extends IController<SigninView, UserModel> {
-    constructor(view: SigninView, model: UserModel) {
+export default class SigninFormController extends IController<SigninFormView, UserModel> {
+    constructor(view: SigninFormView, model: UserModel) {
         super(view, model);
         (this.view.getParent()).addEventListener('click', this.clickHandler.bind(this));
     }
@@ -15,7 +17,7 @@ export default class SigninFormController extends IController<SigninView, UserMo
 
         const target = <HTMLElement>event.target;
         if (target !== null) {
-            if (signinConfig.submit.id === target.id) {
+            if (signinFormConfig.submit.id === target.id) {
                 console.log('Submitting auth form');
                 // TODO вынести в функицию
                 // Get data from view
@@ -35,14 +37,14 @@ export default class SigninFormController extends IController<SigninView, UserMo
                 return;
             }
 
-            const footerItem = signinConfig.footer.find((item) => item.id === target.id);
+            const footerItem = signinFormConfig.footer.find((item) => item.id === target.id);
             if (footerItem !== undefined) {
                 console.log(`Found link ${target.id}`);
 
                 // TODO Вынести в функцию 
                 // Обработать нажания
                 // Вызвать роутер на footerItem.href
-                return;
+                router.goToPath(footerItem.href || '', false);
             }
             console.log(`Not handeled ${target.id}`);
         }
