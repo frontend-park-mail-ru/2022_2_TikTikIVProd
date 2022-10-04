@@ -1,55 +1,48 @@
+interface IParamsProps {
+    url: string;
+    method: string;
+    body?: string;
+};
+
+
 (function () {
     const REQUEST_TYPE = {
         GET: 'GET',
-        POST: 'POST'
+        POST: 'POST',
+        PUT: 'PUT',
     };
 
-    const noop = () => { };
 
     class Ajax {
-        get({ url, callback }) {
-            this._ajax({
-                method: REQUEST_TYPE.GET,
-                url,
-                callback,
-            })
-        }
-
-        post({ url, body, callback }) {
-            this._ajax({
-                method: REQUEST_TYPE.POST,
-                url,
-                body,
-                callback
-            })
-        }
-
-        _ajax({
-            method,
-            url,
-            body = null,
-            callback = noop
-        }) {
-
-            const xhr = new XMLHttpRequest();
-            xhr.open(method, url, true);
-            xhr.withCredentials = true;
-
-            xhr.addEventListener('readystatechange', function () {
-                if (xhr.readyState !== XMLHttpRequest.DONE) return;
-
-                callback(xhr.status, xhr.responseText);
+        private async asyncFetch(params: IParamsProps) {
+            const response = await fetch(params.url, {
+                method: params.method,
+                body: params.body,
             });
 
-            if (body) {
-                xhr.setRequestHeader('Content-type', 'application/json; charset=utf8');
-                xhr.send(JSON.stringify(body));
-                return;
-            }
+            const parsedBody = await response.json();
 
-            xhr.send();
+            return {
+                status: response.status,
+                parsedBody
+            };
         }
+
+        async get(url: string) {
+            return this.asyncFetch({ url: url, method: REQUEST_TYPE.GET });
+        };
+
+        async post(url: string, body: string) {
+            return this.asyncFetch({ url: url, method: REQUEST_TYPE.POST, body: body });
+        };
+
+        async put(url: string, body: string) {
+            return this.asyncFetch({ url: url, method: REQUEST_TYPE.PUT, body: body });
+        };
+
     }
 
-    window.ajax = new Ajax();
+
+
+    (window as any).ajax = new Ajax();
 })();
