@@ -1,13 +1,9 @@
 import Header from './components/Header/Header.js';
-import FooterView from './components/FooterView/FooterView.js';
-import SigninFormController from "./controllers/SigninFormContoller/SigninFormController.js";
-import UserModel from "./models/UserModel/UserModel.js";
 import createDiv from './components/BasicComponentsCreators/CreateDiv/CreateDiv.js';
 import ajax from './modules/ajax.js'
-import renderStartPage from './utils/RenderStartPage.js';
-import SigninFormView from './components/SigninFormView/SigninFormView.js';
 import Menu from './components/Menu/Menu.js';
 import MenuController from './controllers/MenuController/MenuController.js';
+import router from './Router/Router.js';
 
 const root = createDiv({ id: 'root' });
 document.body.appendChild(root);
@@ -37,16 +33,16 @@ class App {
     run() {
         // TODO обращение через контроллер
         ajax.getTest('/auth').then(({ status, parsedBody }) => {
-            renderStartPage('Павел');
+            const username = ' Павел';
+            router.renderStartPage(username);
 
         }).catch(({ status, parsedBody }) => {
 
-            const signinView = new SigninFormView(mainContentElement);
-            const userModel = new UserModel();
-            const footer = new FooterView(root);
-            signinView.render();
-            footer.render();
+            router.renderSignIn();
+            router.renderFooter();
         })
+
+        
 
     }
 };

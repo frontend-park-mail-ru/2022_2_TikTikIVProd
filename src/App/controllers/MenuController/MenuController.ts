@@ -2,8 +2,6 @@ import Menu from "../../components/Menu/Menu.js";
 import signupFormConfig from "../../components/SignupFormView/SignupFormViewConfig.js";
 import config from "../../configs/config.js";
 import router from "../../Router/Router.js";
-import renderFeed from "../../utils/RenderFeed.js";
-import renderProfile from "../../utils/RenderProfile.js";
 
 export default class MenuController {
     private view: Menu;
@@ -19,12 +17,17 @@ export default class MenuController {
         if (target !== null) {
             if (target.id === config.menu.feed.id) {
                 this.view.changeActiveLink(0);
-                renderFeed('Pavel');
+                router.renderFeed('Pavel');
                 return;
             }
             if (target.id === config.menu.profile.id) {
                 this.view.changeActiveLink(1);
-                renderProfile('Pavel');
+                router.renderProfile('Pavel');
+                return;
+            }
+            if (target.id === config.menu.logout.id) {
+                router.renderSignIn();
+                router.renderFooter();
                 return;
             }
 
@@ -35,7 +38,7 @@ export default class MenuController {
                 // TODO Вынести в функцию 
                 // Обработать нажания
                 // Вызвать роутер на footerItem.href
-                router.goToPath(footerItem.href || '', false);
+                router.goToPath(footerItem.href || '');
                 return;
             }
             console.log(`Not handeled ${target.id}`);

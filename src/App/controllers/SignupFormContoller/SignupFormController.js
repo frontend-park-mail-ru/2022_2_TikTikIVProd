@@ -33,7 +33,8 @@ export default class SignupFormController extends IController {
                 // TODO Вынести в функцию 
                 // Обработать нажания
                 // Вызвать роутер на footerItem.href
-                router.goToPath(footerItem.href || '', false);
+                // router.goToPath(footerItem.href || '');
+                router.renderSignIn();
                 return;
             }
             console.log(`Not handeled ${target.id}`);

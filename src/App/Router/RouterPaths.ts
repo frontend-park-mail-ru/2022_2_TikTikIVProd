@@ -1,6 +1,6 @@
 const paths = {
-    siginPage: '/signin',
-    sigupPage: '/signup',
+    signinPage: '/signin',
+    signupPage: '/signup',
     feedPage: '/feed',
     menu: '/menu',
     profile: '/profile',
