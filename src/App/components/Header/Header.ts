@@ -1,6 +1,11 @@
 import { IUser } from "../../models/UserModel/UserModel.js";
 import createDiv from "../BasicComponentsCreators/CreateDiv/CreateDiv.js";
 import createLink from "../BasicComponentsCreators/CreateLink/CreateLink.js";
+import createImg from "../BasicComponentsCreators/CreateImg/CreateImg.js"
+import createText from "../BasicComponentsCreators/CreateText/CreateText.js"
+import paths from "../../Router/RouterPaths.js"
+import createButton from "../BasicComponentsCreators/CreateButton/CreateButton.js"
+import router from "../../Router/Router.js";
 
 class Header {
     private parent: HTMLElement;
@@ -10,20 +15,13 @@ class Header {
         this.parent = parent;
     }
 
-    // setLink(text: string, href?: string) {
-    //     this.link.innerText = text;
-    //     if (href !== undefined) {
-    //         this.link.setAttribute('href', href);
-    //     }
-    // }
-
     render() {
         const headerElement = createDiv({ styles: ['header'] });
 
         const logo = createLink({ text: 'WS', styles: ['header__logo'] });
         headerElement.appendChild(logo);
 
-        this.link = createLink({ id: 'header__link', styles: ['header__link'], text: '', href: '' });
+        this.link = createDiv({ id: 'header__item', styles: ['header__item'], text: '' });
         headerElement.appendChild(this.link);
 
         this.parent.appendChild(headerElement);
@@ -45,25 +43,44 @@ class Header {
     }
 
     public setSignupButton(): void {
-        // TODO
         this.link.innerHTML = '';
-        this.link.textContent = 'Кнопка рег';
+        this.renderButtonItem('Зарегистрироваться', paths.signupPage);
     }
 
     public setSigninButton(): void {
-        // TODO
         this.link.innerHTML = '';
-        this.link.textContent = 'Кнопка авт';
+        this.renderButtonItem('Войти', paths.signinPage);
     }
 
     public setProfile(user: IUser | null): void {
-        // TODO
         if (user === null) {
             return;
         }
 
         this.link.innerHTML = '';
-        this.link.textContent = user.firstName;
+        this.renderProfileItem(user);
+    }
+
+    private renderProfileItem(user: IUser): void {
+
+        const profile = createLink({ event: { eventType: 'click', callback: () => { router.goToPath(paths.profile); } }, styles: ['header__profile'] });
+        const avatar = createImg({ src: '../src/img/avatar_pavel.jpg', styles: ['header__profile__avatar'] });
+        const name = createText({ text: user.firstName, styles: ['header__profile__name'] });
+        profile.appendChild(avatar);
+        profile.appendChild(name);
+
+        const settings = createLink({ href: paths.profile, styles: ['header__profile__settings'] });
+        const icon = createImg({ src: '../src/img/settings_icon.svg', styles: ['header__profile__settings__icon'] });
+        settings.appendChild(icon);
+
+        this.link.appendChild(profile);
+        this.link.appendChild(settings);
+
+    }
+    private renderButtonItem(text: string, path: string) {
+
+        //TODO убраь callback мб
+        this.link.appendChild(createButton({ id: 'header__link__profile', text: text, styles: ['header_button'], callback: () => { router.goToPath(path) } }));
     }
 }
 

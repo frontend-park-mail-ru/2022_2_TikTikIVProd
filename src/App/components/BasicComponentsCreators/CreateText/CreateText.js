@@ -1,9 +1,4 @@
-export interface ITextProps {
-    text?: string;
-    styles?: string[];
-}
-
-export default function createText(props: ITextProps): HTMLElement {
+export default function createText(props) {
     const elem = document.createElement('text');
     elem.textContent = props.text || '';
     if (props.styles !== undefined) {
