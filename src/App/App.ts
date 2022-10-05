@@ -3,7 +3,7 @@ import paths from "./Router/RouterPaths.js";
 // import Header from './components/Header/Header.js';
 // import Menu from './components/Menu/Menu.js';
 // import Feed from './components/Feed/Feed.js';
-// import FooterView from './components/FooterView/FooterView.js';
+import FooterView from './components/FooterView/FooterView.js';
 // import RenderMainContent from './utils/RenderMainContent.js';
 // import config from './configs/config.js'
 import SigninFormView from './components/SigninFormView/SigninFormView.js';
@@ -54,9 +54,11 @@ class App {
 
 
         // TODO перенести
-        this.signinView.render();
         // TODO обращение через контроллер
         this.signinView.render();
+
+        const footer = new FooterView(this.root);
+        footer.render();
     }
 
     private handleRedirectToSignupPage() {
