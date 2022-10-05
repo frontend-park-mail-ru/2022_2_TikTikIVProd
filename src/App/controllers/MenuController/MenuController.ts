@@ -26,7 +26,10 @@ export default class MenuController {
                 router.goToPath(paths.profile);
                 return;
             }
-            console.log(target.id);
+            if (target.id === config.menu.logout.id) {
+                router.goToPath(paths.signinPage);
+                return;
+            }
         }
     }
 }

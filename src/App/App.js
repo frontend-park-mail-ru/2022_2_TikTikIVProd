@@ -37,6 +37,7 @@ class App {
     }
     // Handlers 
     handleRedirectToSignin() {
+        this.menu.innerHTML = '';
         this.main.innerHTML = '';
         // Обновить хэдер
         this.headerView.setSignupButton();
@@ -45,6 +46,7 @@ class App {
         this.signinView.render();
     }
     handleRedirectToSignup() {
+        this.menu.innerHTML = '';
         this.main.innerHTML = '';
         // Обновить хэдер
         this.headerView.setSigninButton();

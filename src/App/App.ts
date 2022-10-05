@@ -76,6 +76,7 @@ class App {
 
     // Handlers 
     private handleRedirectToSignin(): void {
+        this.menu.innerHTML = '';
         this.main.innerHTML = '';
         // Обновить хэдер
         this.headerView.setSignupButton();
@@ -85,6 +86,7 @@ class App {
     }
 
     private handleRedirectToSignup(): void {
+        this.menu.innerHTML = '';
         this.main.innerHTML = '';
         // Обновить хэдер
         this.headerView.setSigninButton();
