@@ -1,6 +1,5 @@
 import Header from './components/Header/Header.js';
 import FooterView from './components/FooterView/FooterView.js';
-import SigninFormController from "./controllers/SigninFormContoller/SigninFormController.js";
 import UserModel from "./models/UserModel/UserModel.js";
 import createDiv from './components/BasicComponentsCreators/CreateDiv/CreateDiv.js';
 import ajax from './modules/ajax.js';
@@ -24,11 +23,10 @@ class App {
     run() {
         // TODO обращение через контроллер
         ajax.getTest('/auth').then(({ status, parsedBody }) => {
-            renderStartPage();
+            renderStartPage('Павел');
         }).catch(({ status, parsedBody }) => {
             const signinView = new SigninFormView(root);
             const userModel = new UserModel();
-            const signinContrl = new SigninFormController(signinView, userModel);
             const footer = new FooterView(root);
             signinView.render();
             footer.render();

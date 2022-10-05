@@ -1,16 +1,12 @@
+import config from "../../configs/config.js";
 import IComponent from "../IComponent/IComponent.js";
 export default class Menu extends IComponent {
     constructor(parent) {
         super(parent);
     }
-    get items() {
-        return this.data;
-    }
-    set items(value) {
-        this.data = Object.entries(value);
-    }
     render() {
-        this.items.map(([key, { href, name }], index) => {
+        const items = Object.entries(config.menu);
+        items.map(([key, { href, name }], index) => {
             const menuElement = document.createElement('a');
             menuElement.href = href;
             menuElement.textContent = name;

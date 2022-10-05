@@ -33,12 +33,11 @@ class App {
     run() {
         // TODO обращение через контроллер
         ajax.getTest('/auth').then(({ status, parsedBody }) => {
-            renderStartPage();
+            renderStartPage('Павел');
 
         }).catch(({ status, parsedBody }) => {
             const signinView = new SigninFormView(root);
             const userModel = new UserModel();
-            const signinContrl = new SigninFormController(signinView, userModel);
             const footer = new FooterView(root);
             signinView.render();
             footer.render();

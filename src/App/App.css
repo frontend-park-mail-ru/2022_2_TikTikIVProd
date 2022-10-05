@@ -3,6 +3,7 @@
 @import url('./components/FooterView/FooterView.css');
 @import url('./components/SigninFormView/SigninFormView.css');
 @import url('./components/SignupFormView/SignupFormView.css');
+@import url('./components/Feed/Feed.css');
 
 body {
     font-family: Helvetica, Arial, sans-serif;
@@ -24,7 +25,7 @@ body {
 }
 
 #root {
-    display: block;
+    /* display: block; */
 
     background: var(--background-color);
 
@@ -52,8 +53,10 @@ aside {
 main {
     grid-area: main;
     padding: 0 40px 40px;
-    /* height: 300px; */
-    /* overflow-y: scroll; */
+    height: 600px;
+    width: 600px;
+    overflow-y: scroll;
+    overflow-x: hidden;
     display: flex;
     justify-content: center;
 }

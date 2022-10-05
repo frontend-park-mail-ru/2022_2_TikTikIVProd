@@ -12,7 +12,7 @@ export default class Feed {
             author.appendChild(createDiv({ styles: ['feed__author__name'], text: e.author_name }));
             const dateEdit = createDiv({ styles: ['feed__date'], text: e.date.toString() });
             const img = createDiv({ styles: ['feed__photo__wrapper'] });
-            img.innerHTML = '<img src="../src/img/img-worlds-of-adventure.jpg"/><div';
+            img.innerHTML = '<img class=feed__photo__img src="../src/img/img-worlds-of-adventure.jpg"/><div';
             const description = createDiv({ styles: ['feed__description'], text: e.description });
             const bottom = createDiv({ styles: ['feed__bottom'] });
             const likes = createDiv({ styles: ['feed__bottom__likes'], text: `Likes · ${e.likes}` });
@@ -22,9 +22,9 @@ export default class Feed {
             post.appendChild(description);
             post.appendChild(img);
             post.appendChild(bottom);
-            this.parent.appendChild(post);
-            console.log(post);
+            feedView.appendChild(post);
         });
+        this.parent.appendChild(feedView);
     }
 }
 ;

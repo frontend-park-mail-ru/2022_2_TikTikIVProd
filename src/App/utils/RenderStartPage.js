@@ -1,14 +1,13 @@
-import { mainContentElement, menuElement } from "../App.js";
+import { header, mainContentElement, menuElement } from "../App.js";
 import Feed from "../components/Feed/Feed.js";
 import Menu from "../components/Menu/Menu.js";
-import config from "../configs/config.js";
 import FeedModel from "../models/FeedModel/FeedModel.js";
-export default function renderStartPage() {
+export default function renderStartPage(username) {
+    header.setLink(username);
     const menu = new Menu(menuElement);
     const feed = new Feed(mainContentElement);
     const feedModel = new FeedModel();
     const data = feedModel.getFeeds();
-    menu.items = config.menu;
     menu.render();
     feed.render(data);
 }
