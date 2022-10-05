@@ -7,6 +7,7 @@ import Feed from './components/Feed/Feed.js'
 
 import SigninFormController from './controllers/SigninFormContoller/SigninFormController.js'
 import SignupFormController from './controllers/SignupFormContoller/SignupFormController.js'
+import MenuController from './controllers/MenuController/MenuController.js'
 
 import createDiv from './components/BasicComponentsCreators/CreateDiv/CreateDiv.js';
 
@@ -17,6 +18,8 @@ import paths from './Router/RouterPaths.js'
 
 import ajax from './modules/ajax.js'
 import FeedModel from './models/FeedModel/FeedModel.js'
+import MenuModel from './models/MenuModel/MenuModel.js'
+import Profile from './components/Profile/Profile.js'
 
 // const root = createDiv({ id: 'root' });
 // document.body.appendChild(root);
@@ -54,10 +57,13 @@ class App {
     private headerView: Header;
     private menuView: Menu;
     private feedView: Feed;
+    private profileView: Profile;
 
     //Controllers 
     private signinController: SigninFormController;
     private signupController: SignupFormController;
+    private menuController: MenuController;
+
 
     //models
     private userModel: UserModel;
@@ -75,7 +81,7 @@ class App {
         this.footerView.render();
         this.headerView.render();
 
-        // this.userModel.authUser(); // Авторизация по куке
+        this.userModel.authUser(); // Авторизация по куке
 
         if (this.userModel.isAuthantificated()) {
             console.log('User authantificated');
@@ -130,6 +136,28 @@ class App {
         this.feedView.render(this.feedModel.getFeeds());
     }
 
+    private handleRedirectProfile(): void {
+        this.content.innerHTML = '';
+
+        this.headerView.show();
+
+        // скрыть футер
+        this.footerView.hide();
+
+        // Обновить хэдер
+        if (this.userModel.isAuthantificated()) {
+            this.headerView.setProfile(this.userModel.getCurrentUser());
+        } else {
+            this.headerView.setSigninButton();
+        }
+
+        // Показать меню
+        this.menuView.render();
+
+        // Показать меню
+        this.profileView.render();
+    }
+
 
     /// Initials 
 
@@ -152,6 +180,7 @@ class App {
         this.headerView = new Header(this.header);
         this.menuView = new Menu(this.content);
         this.feedView = new Feed(this.content);
+        this.profileView = new Profile(this.content);
     }
 
     private initModels(): void {
@@ -162,12 +191,14 @@ class App {
     private initControllers(): void {
         this.signinController = new SigninFormController(this.signinView, this.userModel);
         this.signupController = new SignupFormController(this.signupView, this.userModel);
+        this.menuController = new MenuController(this.menuView);
     }
 
     private initRouter(): void {
         router.addPath({ path: paths.signinPage, handler: this.handleRedirectToSignin.bind(this) });
         router.addPath({ path: paths.signupPage, handler: this.handleRedirectToSignup.bind(this) });
         router.addPath({ path: paths.feedPage, handler: this.handleRedirectToFeedPage.bind(this) });
+        router.addPath({ path: paths.profile, handler: this.handleRedirectProfile.bind(this) });
     }
 };
 
