@@ -9,6 +9,8 @@ class Ajax {
         const response = await fetch(params.url, {
             method: params.method,
             body: params.body,
+            credentials: 'same-origin',
+            mode: 'no-cors'
         });
         const parsedBody = await response.json();
         return {

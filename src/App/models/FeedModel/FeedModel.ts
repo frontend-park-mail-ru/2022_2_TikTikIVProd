@@ -1,3 +1,5 @@
+import config from "../../configs/config.js";
+import ajax from "../../modules/ajax.js";
 import IModel from "../IModel/IModel.js"
 
 export interface IFeedData {
@@ -15,6 +17,12 @@ export default class FeedModel extends IModel {
     }
 
     public getFeeds(): Array<IFeedData> {
+        const response = ajax.get(`${config.APIUrl}/feed`);
+        response.then(({ status, parsedBody }) => {
+
+        }).catch(({ status, parsedBody }) => {
+
+        });
         const obj: IFeedData = {
             photoLink: '',
             description: 'This is my First Post!',

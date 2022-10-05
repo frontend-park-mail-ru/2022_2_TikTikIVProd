@@ -2,6 +2,9 @@
     display: flex;
     flex-direction: column;
     width: 800px;
+    margin-left: 5%;
+    width: 60%;
+    margin-top: var(--header-height);
 }
 
 .feed__element {
@@ -12,7 +15,6 @@
     margin-bottom: 22px;
 
 
-    left: 2px;
     top: 0px;
 
     /* White / White */

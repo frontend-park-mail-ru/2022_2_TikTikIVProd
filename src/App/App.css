@@ -42,7 +42,11 @@ body {
     --color-link-value-pressed: #D8D8D8;
     --color-limk-underline-pressed: #D8D8D8;
 
-    --header-height: 40px;
+    --header-height: 20px;
+}
+
+#main {
+    margin-left: 100px;
 }
 
 #root {
@@ -73,20 +77,26 @@ body {
     align-items: center;
 }
 
-
 .aside {
-    position: fixed;
+    position: absolute;
     top: var(--header-height);
     left: 0;
-    font-size: 30px;
+    font-size: 20px;
     padding-left: 20px;
 
-    background-color: var(--color-form-background);
-    outline: 2px solid var(--color-form-border);
-    outline-offset: -2px;
-    border-radius: 10px;
+    /* background-color: var(--color-form-background); */
+    /* outline: 2px solid var(--color-form-border); */
+    /* outline-offset: -2px; */
+    /* border-radius: 10px; */
     margin: 20px;
     padding: 15px 10px;
+}
+
+@media screen and (max-device-width:799px) {
+    .aside {
+        font-size: 10px;
+
+    }
 }
 
 /* main {

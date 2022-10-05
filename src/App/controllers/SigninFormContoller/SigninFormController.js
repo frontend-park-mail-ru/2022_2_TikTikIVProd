@@ -19,13 +19,9 @@ export default class SigninFormController extends IController {
                 // Validate 
                 // Go to model
                 // show errors to view or redirect 
-                this.model.authUser();
-                if (false) {
-                    // Если успешно перейти в фид через роутер
-                }
-                else {
-                    // Если неуспешно показать ошибки
-                }
+                this.model.authUser().then(({ status, parsedBody }) => {
+                }).catch(({ status, parsedBody }) => {
+                });
                 return;
             }
             const footerItem = signinFormConfig.footer.find((item) => item.id === target.id);

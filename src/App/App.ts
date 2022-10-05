@@ -21,33 +21,13 @@ import FeedModel from './models/FeedModel/FeedModel.js'
 import MenuModel from './models/MenuModel/MenuModel.js'
 import Profile from './components/Profile/Profile.js'
 
-// const root = createDiv({ id: 'root' });
-// document.body.appendChild(root);
-
-// const header = new Header(root);
-// header.render();
-
-// const content = createDiv({ styles: ['content'] });
-// root.appendChild(content);
-
-// const menuElement = document.createElement('aside');
-// menuElement.classList.add('menu');
-// content.appendChild(menuElement);
-// const menu = new Menu(menuElement);
-// const menuController = new MenuController(menu);
-
-// const mainContentElement = document.createElement('main');
-// mainContentElement.classList.add('main');
-// content.appendChild(mainContentElement);
-
-// export { root, header, content, menu, mainContentElement };
-
-
 class App {
     // Elements
     private root: HTMLElement;
     private header: HTMLElement;
     private content: HTMLElement;
+    private menu: HTMLElement;
+    private main: HTMLElement;
     private footer: HTMLElement;
 
     //Views 
@@ -85,6 +65,7 @@ class App {
 
         if (this.userModel.isAuthantificated()) {
             console.log('User authantificated');
+            router.goToPath(paths.menu);
             router.goToPath(paths.feedPage);
         } else {
 
@@ -95,7 +76,7 @@ class App {
 
     // Handlers 
     private handleRedirectToSignin(): void {
-        this.content.innerHTML = '';
+        this.main.innerHTML = '';
         // Обновить хэдер
         this.headerView.setSignupButton();
         this.headerView.show();
@@ -104,7 +85,7 @@ class App {
     }
 
     private handleRedirectToSignup(): void {
-        this.content.innerHTML = '';
+        this.main.innerHTML = '';
         // Обновить хэдер
         this.headerView.setSigninButton();
         this.headerView.show();
@@ -114,8 +95,13 @@ class App {
         this.signupView.render();
     }
 
+    private handleRedirectMenu(): void {
+        this.menu.innerHTML = '';
+        this.menuView.render();
+    }
+
     private handleRedirectToFeedPage(): void {
-        this.content.innerHTML = '';
+        this.main.innerHTML = '';
 
         this.headerView.show();
 
@@ -129,15 +115,13 @@ class App {
             this.headerView.setSigninButton();
         }
 
-        // Показать меню
-        this.menuView.render();
 
         // показать фид
         this.feedView.render(this.feedModel.getFeeds());
     }
 
     private handleRedirectProfile(): void {
-        this.content.innerHTML = '';
+        this.main.innerHTML = '';
 
         this.headerView.show();
 
@@ -151,10 +135,6 @@ class App {
             this.headerView.setSigninButton();
         }
 
-        // Показать меню
-        this.menuView.render();
-
-        // Показать меню
         this.profileView.render();
     }
 
@@ -166,21 +146,25 @@ class App {
         this.root = createDiv({ id: 'root' });
         this.header = createDiv({ id: 'header' });
         this.content = createDiv({ id: 'content' });
+        this.menu = createDiv({ id: 'menu' });
+        this.main = createDiv({ id: 'main' });
         this.footer = createDiv({ id: 'footer' });
         this.root.appendChild(this.header);
         this.root.appendChild(this.content);
+        this.content.appendChild(this.menu);
+        this.content.appendChild(this.main);
         this.root.appendChild(this.footer);
         document.body.appendChild(this.root);
     }
 
     private initViews(): void {
-        this.signinView = new SigninFormView(this.content);
-        this.signupView = new SignupFormView(this.content);
+        this.signinView = new SigninFormView(this.main);
+        this.signupView = new SignupFormView(this.main);
         this.footerView = new FooterView(this.footer);
         this.headerView = new Header(this.header);
-        this.menuView = new Menu(this.content);
-        this.feedView = new Feed(this.content);
-        this.profileView = new Profile(this.content);
+        this.menuView = new Menu(this.menu);
+        this.feedView = new Feed(this.main);
+        this.profileView = new Profile(this.main);
     }
 
     private initModels(): void {
@@ -199,6 +183,7 @@ class App {
         router.addPath({ path: paths.signupPage, handler: this.handleRedirectToSignup.bind(this) });
         router.addPath({ path: paths.feedPage, handler: this.handleRedirectToFeedPage.bind(this) });
         router.addPath({ path: paths.profile, handler: this.handleRedirectProfile.bind(this) });
+        router.addPath({ path: paths.menu, handler: this.handleRedirectMenu.bind(this) });
     }
 };
 

@@ -1,3 +1,5 @@
+import config from "../../configs/config.js";
+import ajax from "../../modules/ajax.js";
 import IModel from "../IModel/IModel.js"
 
 interface IAuthUser {
@@ -17,10 +19,12 @@ export default class UserModel extends IModel {
         this.currentUser = null;
     }
 
-    public authUser() {
-        //TODO
-
+    public async authUser() {
+        //Remove in the future
         this.currentUser = { firstName: 'Павел' };
+
+        return ajax.post(`${config.APIUrl}/auth`, '');
+
     }
 
     public getCurrentUser() {

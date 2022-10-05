@@ -11,14 +11,11 @@ export default class Menu extends IComponent {
         super(parent);
     }
 
-    remove() {
-        this.parent.innerHTML = '';
-    }
-
     changeActiveLink(index: number) {
-        document.getElementById("menu__item_" + String(this.activeLinkId))?.classList.remove('menu__active__link');
+        document.getElementById(`menu__item_${this.activeLinkId}`)?.classList.remove('menu__active__link');
         this.activeLinkId = index;
-        document.getElementById("menu__item_" + String(this.activeLinkId))?.classList.add('menu__active__link');
+        document.getElementById(`menu__item_${this.activeLinkId}`)?.classList.add('menu__active__link');
+        console.log(this.activeLinkId);
     }
 
     render() {

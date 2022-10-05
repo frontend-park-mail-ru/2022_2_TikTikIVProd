@@ -26,18 +26,7 @@ export default class MenuController {
                 router.goToPath(paths.profile);
                 return;
             }
-
-            const footerItem = signupFormConfig.footer.find((item) => item.id === target.id);
-            if (footerItem !== undefined) {
-                console.log(`Found link ${target.id}`);
-
-                // TODO Вынести в функцию 
-                // Обработать нажания
-                // Вызвать роутер на footerItem.href
-                router.goToPath(footerItem.href || '');
-                return;
-            }
-            console.log(`Not handeled ${target.id}`);
+            console.log(target.id);
         }
     }
 }

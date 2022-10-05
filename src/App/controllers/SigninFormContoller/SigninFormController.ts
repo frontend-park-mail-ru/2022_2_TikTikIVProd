@@ -28,13 +28,12 @@ export default class SigninFormController extends IController<SigninFormView, Us
                 // Go to model
 
                 // show errors to view or redirect 
-                this.model.authUser();
-                if (false) {
-                    // Если успешно перейти в фид через роутер
+                this.model.authUser().then(({ status, parsedBody }) => {
 
-                } else {
-                    // Если неуспешно показать ошибки
-                }
+                }).catch(({ status, parsedBody }) => {
+
+                });
+
 
                 return;
             }
