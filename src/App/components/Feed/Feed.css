@@ -1,7 +1,7 @@
 .feed {
     display: flex;
     flex-direction: column;
-    width: 600px;
+    width: 800px;
 }
 
 .feed__element {

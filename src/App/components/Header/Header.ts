@@ -1,3 +1,4 @@
+import { IUser } from "../../models/UserModel/UserModel.js";
 import createDiv from "../BasicComponentsCreators/CreateDiv/CreateDiv.js";
 import createLink from "../BasicComponentsCreators/CreateLink/CreateLink.js";
 
@@ -9,12 +10,12 @@ class Header {
         this.parent = parent;
     }
 
-    setLink(text: string, href?: string) {
-        this.link.innerText = text;
-        if (href !== undefined) {
-            this.link.setAttribute('href', href);
-        }
-    }
+    // setLink(text: string, href?: string) {
+    //     this.link.innerText = text;
+    //     if (href !== undefined) {
+    //         this.link.setAttribute('href', href);
+    //     }
+    // }
 
     render() {
         const headerElement = createDiv({ styles: ['header'] });
@@ -26,6 +27,43 @@ class Header {
         headerElement.appendChild(this.link);
 
         this.parent.appendChild(headerElement);
+    }
+
+    hide(): void {
+        const header = <HTMLElement>this.parent.querySelector('.header');
+        if (header !== undefined) {
+            header.style.display = 'none';
+        }
+
+    }
+
+    show(): void {
+        const header = <HTMLElement>this.parent.querySelector('.header');
+        if (header !== undefined) {
+            header.style.display = 'visible';
+        }
+    }
+
+    public setSignupButton(): void {
+        // TODO
+        this.link.innerHTML = '';
+        this.link.textContent = 'Кнопка рег';
+    }
+
+    public setSigninButton(): void {
+        // TODO
+        this.link.innerHTML = '';
+        this.link.textContent = 'Кнопка авт';
+    }
+
+    public setProfile(user: IUser | null): void {
+        // TODO
+        if (user === null) {
+            return;
+        }
+
+        this.link.innerHTML = '';
+        this.link.textContent = user.firstName;
     }
 }
 

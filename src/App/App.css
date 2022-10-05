@@ -10,6 +10,7 @@ body {
     padding: 0;
     border: 0;
     margin: 0;
+    height: 100%;
 }
 
 :root {
@@ -40,32 +41,55 @@ body {
     --color-link-underline-hover: #B5B5B5;
     --color-link-value-pressed: #D8D8D8;
     --color-limk-underline-pressed: #D8D8D8;
+
+    --header-height: 40px;
 }
 
 #root {
-    /* display: block; */
-
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     background: var(--background-color);
-
 }
 
-.content {
-    display: grid;
-    grid-template-areas:
-        "menu main";
-    grid-template-rows: 1fr;
-    grid-template-columns: min-content 1fr;
-    margin-top: 10px;
-
+#header {
+    height: var(--header-height);
 }
 
-aside {
-    grid-area: menu;
+#content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex: 1 0 auto;
+    padding-top: 30px;
+    height: 100% - var(--header-height);
+}
+
+#footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.aside {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
     font-size: 30px;
     padding-left: 20px;
+
+    background-color: var(--color-form-background);
+    outline: 2px solid var(--color-form-border);
+    outline-offset: -2px;
+    border-radius: 10px;
+    margin: 20px;
+    padding: 15px 10px;
 }
 
-main {
+/* main {
     grid-area: main;
     padding: 0 40px 40px;
     height: 600px;
@@ -74,4 +98,4 @@ main {
     overflow-x: hidden;
     display: flex;
     justify-content: center;
-}
+} */

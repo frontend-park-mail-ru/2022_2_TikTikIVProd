@@ -1,4 +1,5 @@
 import config from "../../configs/config.js";
+import createDiv from "../BasicComponentsCreators/CreateDiv/CreateDiv.js";
 import createLink from "../BasicComponentsCreators/CreateLink/CreateLink.js";
 import IComponent from "../IComponent/IComponent.js";
 
@@ -18,10 +19,10 @@ export default class Menu extends IComponent {
         document.getElementById("menu__item_" + String(this.activeLinkId))?.classList.remove('menu__active__link');
         this.activeLinkId = index;
         document.getElementById("menu__item_" + String(this.activeLinkId))?.classList.add('menu__active__link');
-
     }
 
     render() {
+        const m = createDiv({ styles: ['aside'] });
         const items = Object.entries(config.menu);
         items.map(([key, { href, name, style }]: any, index: number) => {
             const menuElement = createLink({
@@ -40,7 +41,9 @@ export default class Menu extends IComponent {
             return menuElement;
         })
             .forEach((a: any) => {
-                this.parent.appendChild(a);
+                m.appendChild(a);
             });
+
+        this.parent.appendChild(m);
     }
 }

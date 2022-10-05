@@ -13,9 +13,11 @@ export default class SigninFormController extends IController<SigninFormView, Us
 
     private clickHandler(event: Event): void {
         //TODO нужен ли prevent default? 
-        console.log(this.model);
 
-        const target = <HTMLElement>event.target;
+        // TODO fix
+        const target = (<HTMLElement>event.target);
+        // const target = <HTMLElement>event.target;
+
         if (target !== null) {
             if (signinFormConfig.submit.id === target.id) {
                 console.log('Submitting auth form');
@@ -44,10 +46,8 @@ export default class SigninFormController extends IController<SigninFormView, Us
                 // TODO Вынести в функцию 
                 // Обработать нажания
                 // Вызвать роутер на footerItem.href
-                // router.goToPath(footerItem.href || '');
-                router.renderSignUp();
+                router.goToPath(footerItem.href || '');
             }
-
             console.log(`Not handeled ${target.id}`);
         }
     }

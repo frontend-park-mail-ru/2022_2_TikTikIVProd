@@ -8,8 +8,9 @@ export default class SignupFormController extends IController {
     }
     clickHandler(event) {
         //TODO нужен ли prevent default? 
-        console.log(this.model);
+        // TODO fix
         const target = event.target;
+        //
         if (target !== null) {
             if (signupFormConfig.submit.id === target.id) {
                 console.log('Submitting signup form');
@@ -33,8 +34,7 @@ export default class SignupFormController extends IController {
                 // TODO Вынести в функцию 
                 // Обработать нажания
                 // Вызвать роутер на footerItem.href
-                // router.goToPath(footerItem.href || '');
-                router.renderSignIn();
+                router.goToPath(footerItem.href || '');
                 return;
             }
             console.log(`Not handeled ${target.id}`);

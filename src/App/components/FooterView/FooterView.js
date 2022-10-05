@@ -22,4 +22,16 @@ export default class FooterView extends IComponent {
         footer.appendChild(content);
         this.parent.appendChild(footer);
     }
+    hide() {
+        const footer = this.parent.querySelector('.footer');
+        if (footer !== undefined) {
+            footer.style.visibility = 'hidden';
+        }
+    }
+    show() {
+        const footer = this.parent.querySelector('.footer');
+        if (footer !== undefined) {
+            footer.style.display = 'visible';
+        }
+    }
 }
