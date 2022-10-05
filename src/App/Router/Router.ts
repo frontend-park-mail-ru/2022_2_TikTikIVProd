@@ -1,4 +1,4 @@
-import { content, header, mainContentElement, menu, root } from '../App.js'
+import { signinView, signupView, content, header, mainContentElement, menu, root } from '../App.js'
 import Feed from '../components/Feed/Feed.js'
 import FooterView from '../components/FooterView/FooterView.js';
 import Profile from '../components/Profile/Profile.js';
@@ -9,6 +9,11 @@ import UserModel from '../models/UserModel/UserModel.js';
 import SigninFormController from '../controllers/SigninFormContoller/SigninFormController.js'
 import SignupFormController from '../controllers/SignupFormContoller/SignupFormController.js';
 import paths from './RouterPaths.js';
+
+
+
+const userModel = new UserModel();
+
 
 interface IRoute {
     path: string;
@@ -66,10 +71,9 @@ class Router {
         menu.remove();
         header.setLink('Sign up');
 
-        const signinView = new SigninFormView(mainContentElement);
-        const userModel = new UserModel();
-        const signinController = new SigninFormController(signinView, userModel);
-        this.addPath({ path: paths.signinPage, handler: () => console.log('123') });
+        // const signinView = new SigninFormView(mainContentElement);
+        // const signinController = new SigninFormController(signinView, userModel);
+        // this.addPath({ path: paths.signinPage, handler: () => console.log('123') });
 
         signinView.render();
 
@@ -80,10 +84,9 @@ class Router {
         menu.remove();
         header.setLink('Sign ip');
 
-        const signupView = new SignupFormView(mainContentElement);
-        const userModel = new UserModel();
-        const signupController = new SignupFormController(signupView, userModel);
-        this.addPath({ path: paths.signupPage, handler: () => console.log('123') });
+        // const signupView = new SignupFormView(mainContentElement);
+        // const signupController = new SignupFormController(signupView, userModel);
+        // this.addPath({ path: paths.signupPage, handler: () => console.log('123') });
         signupView.render();
 
 

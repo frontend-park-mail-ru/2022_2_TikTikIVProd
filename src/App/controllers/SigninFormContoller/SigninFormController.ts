@@ -45,7 +45,7 @@ export default class SigninFormController extends IController<SigninFormView, Us
                 // Обработать нажания
                 // Вызвать роутер на footerItem.href
                 // router.goToPath(footerItem.href || '');
-                router.renderSignUp;
+                router.renderSignUp();
             }
 
             console.log(`Not handeled ${target.id}`);

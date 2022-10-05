@@ -4,6 +4,12 @@ import ajax from './modules/ajax.js';
 import Menu from './components/Menu/Menu.js';
 import MenuController from './controllers/MenuController/MenuController.js';
 import router from './Router/Router.js';
+import UserModel from './models/UserModel/UserModel.js';
+import SignupFormView from './components/SignupFormView/SignupFormView.js';
+import SignupFormController from './controllers/SignupFormContoller/SignupFormController.js';
+import paths from './Router/RouterPaths.js';
+import SigninFormView from './components/SigninFormView/SigninFormView.js';
+import SigninFormController from './controllers/SigninFormContoller/SigninFormController.js';
 const root = createDiv({ id: 'root' });
 document.body.appendChild(root);
 const header = new Header(root);
@@ -18,7 +24,14 @@ const menuController = new MenuController(menu);
 const mainContentElement = document.createElement('main');
 mainContentElement.classList.add('main');
 content.appendChild(mainContentElement);
-export { root, header, content, menu, mainContentElement };
+const userModel = new UserModel();
+const signupView = new SignupFormView(mainContentElement);
+const signupController = new SignupFormController(signupView, userModel);
+router.addPath({ path: paths.signupPage, handler: () => console.log('123') });
+const signinView = new SigninFormView(mainContentElement);
+const signinController = new SigninFormController(signinView, userModel);
+router.addPath({ path: paths.signinPage, handler: () => console.log('123') });
+export { userModel, signinView, signupView, root, header, content, menu, mainContentElement };
 class App {
     constructor() { }
     run() {
