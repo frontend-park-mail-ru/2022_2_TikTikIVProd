@@ -38,16 +38,13 @@ body {
     grid-template-rows: 1fr;
     grid-template-columns: min-content 1fr;
     margin-top: 10px;
+
 }
 
 aside {
     grid-area: menu;
     font-size: 30px;
     padding-left: 20px;
-}
-
-.active {
-    font-weight: bold;
 }
 
 main {

@@ -1,7 +1,7 @@
 .header {
     display: block;
     width: 100%;
-    background: #FFFFFF;
+    background: rgba(255, 255, 255, 0.7);
     position: relative;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
     opacity: 0.7;

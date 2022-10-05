@@ -16,7 +16,9 @@ export default function createLink(props: ILinkProps): HTMLElement {
     elem.href = props.href || '';
     if (props.styles !== undefined) {
         props.styles.forEach((style) => {
-            elem.classList.add(style);
+            if (style !== '') {
+                elem.classList.add(style);
+            }
         });
     }
 

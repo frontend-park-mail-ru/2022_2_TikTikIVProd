@@ -3,6 +3,14 @@
 }
 
 .menu__item:hover {
-    background-color: #00ff844e;
+    background-color: rgba(0, 255, 132, 0.106);
     border-radius: 10px;
+}
+
+.menu__logout__link {
+    color: rgba(255, 0, 0, 0.4);
+}
+
+.menu__active__link {
+    font-weight: bold;
 }

@@ -5,6 +5,8 @@ import createDiv from './components/BasicComponentsCreators/CreateDiv/CreateDiv.
 import ajax from './modules/ajax.js';
 import renderStartPage from './utils/RenderStartPage.js';
 import SigninFormView from './components/SigninFormView/SigninFormView.js';
+import Menu from './components/Menu/Menu.js';
+import MenuController from './controllers/MenuController/MenuController.js';
 const root = createDiv({ id: 'root' });
 document.body.appendChild(root);
 const header = new Header(root);
@@ -14,10 +16,12 @@ root.appendChild(content);
 const menuElement = document.createElement('aside');
 menuElement.classList.add('menu');
 content.appendChild(menuElement);
+const menu = new Menu(menuElement);
+const menuController = new MenuController(menu);
 const mainContentElement = document.createElement('main');
 mainContentElement.classList.add('main');
 content.appendChild(mainContentElement);
-export { root, header, content, menuElement, mainContentElement };
+export { root, header, content, menu, mainContentElement };
 class App {
     constructor() { }
     run() {

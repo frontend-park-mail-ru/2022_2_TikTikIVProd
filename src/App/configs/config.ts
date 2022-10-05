@@ -6,6 +6,8 @@ const config = {
         feed: {
             href: '/feed',
             name: 'Лента',
+            style: '',
+            id: 'menu__item_0',
             // render: renderFeed,
         },
         // login: {
@@ -21,7 +23,18 @@ const config = {
         profile: {
             href: '/profile',
             name: 'Профиль',//safe('Профиль'),
+            style: '',
+            id: 'menu__item_1',
+
             // render: renderProfile,
+        },
+        logout: {
+            href: '/logout',
+            name: 'Выйти',//safe('Профиль'),
+            // render: renderProfile,
+            style: 'menu__logout__link',
+            id: 'menu__item_2',
+
         },
     },
 };

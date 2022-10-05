@@ -13,6 +13,6 @@ export default class Feed extends IComponent {
         mainElement.appendChild(div);
         div.innerText = "PROFILE WILL BE APPEND IN THE NEXT UPDATES!";
 
-        return mainElement;
+        this.parent.appendChild(mainElement);
     }
 };

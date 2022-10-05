@@ -14,7 +14,7 @@ class Header {
         const headerElement = createDiv({ styles: ['header'] });
         const logo = createLink({ text: 'WS', styles: ['header__logo'] });
         headerElement.appendChild(logo);
-        this.link = createLink({ id: 'header__link', styles: ['header__link'], text: this.linkText, href: this.href });
+        this.link = createLink({ id: 'header__link', styles: ['header__link'], text: '', href: '' });
         headerElement.appendChild(this.link);
         this.parent.appendChild(headerElement);
     }

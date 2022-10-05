@@ -1,23 +1,40 @@
 import config from "../../configs/config.js";
+import createLink from "../BasicComponentsCreators/CreateLink/CreateLink.js";
 import IComponent from "../IComponent/IComponent.js";
 
 export default class Menu extends IComponent {
+
+    private activeLinkId: number;
+
     constructor(parent: HTMLElement) {
         super(parent);
     }
 
+    remove() {
+        this.parent.innerHTML = '';
+    }
+
+    changeActiveLink(index: number) {
+        document.getElementById("menu__item_" + String(this.activeLinkId))?.classList.remove('menu__active__link');
+        this.activeLinkId = index;
+        document.getElementById("menu__item_" + String(this.activeLinkId))?.classList.add('menu__active__link');
+
+    }
+
     render() {
         const items = Object.entries(config.menu);
-        items.map(([key, { href, name }]: any, index: number) => {
-            const menuElement = document.createElement('a');
-            menuElement.href = href;
-            menuElement.textContent = name;
+        items.map(([key, { href, name, style }]: any, index: number) => {
+            const menuElement = createLink({
+                id: "menu__item_" + String(index),
+                href: href,
+                text: name,
+                styles: ['menu__item', style]
+            })
             menuElement.dataset.section = key;
-            menuElement.classList.add('menu__item');
-            menuElement.id = "menu__item_" + String(index);
 
             if (index === 0) {
-                menuElement.classList.add('active');
+                menuElement.classList.add('menu__active__link');
+                this.activeLinkId = index;
             }
 
             return menuElement;

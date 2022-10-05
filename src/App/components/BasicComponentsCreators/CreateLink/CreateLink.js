@@ -5,7 +5,9 @@ export default function createLink(props) {
     elem.href = props.href || '';
     if (props.styles !== undefined) {
         props.styles.forEach((style) => {
-            elem.classList.add(style);
+            if (style !== '') {
+                elem.classList.add(style);
+            }
         });
     }
     elem.addEventListener('click', (e) => {
