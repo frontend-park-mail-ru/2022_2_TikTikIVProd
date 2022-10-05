@@ -1,5 +1,9 @@
 .menu__item {
     color: #514770;
+    color: #333333;
+    display: block;
+    padding-bottom: 10px;
+    text-decoration: none;
 }
 
 .menu__item:hover {

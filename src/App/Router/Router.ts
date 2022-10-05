@@ -1,6 +1,3 @@
-import IComponent from "../components/IComponent/IComponent";
-
-
 interface IRoute {
     path: string;
     handler: () => void;

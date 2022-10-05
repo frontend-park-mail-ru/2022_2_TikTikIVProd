@@ -29,7 +29,7 @@ class App {
         ajax.getTest('/auth').then(({ status, parsedBody }) => {
             renderStartPage('Павел');
         }).catch(({ status, parsedBody }) => {
-            const signinView = new SigninFormView(root);
+            const signinView = new SigninFormView(mainContentElement);
             const userModel = new UserModel();
             const footer = new FooterView(root);
             signinView.render();

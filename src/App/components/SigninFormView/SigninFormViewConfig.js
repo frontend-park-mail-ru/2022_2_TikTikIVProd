@@ -24,11 +24,11 @@ const signinFormConfig = {
             id: 'link-signup',
             text: 'Нет аккаунта?',
         },
-        {
-            href: '#',
-            id: 'link-reset-password',
-            text: 'Забыли пароль?'
-        }
+        // {
+        //     href: '#',
+        //     id: 'link-reset-password',
+        //     text: 'Забыли пароль?'
+        // }
     ],
 };
 export default signinFormConfig;

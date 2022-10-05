@@ -2,7 +2,6 @@ import IComponent from '../IComponent/IComponent.js';
 import createDiv from '../BasicComponentsCreators/CreateDiv/CreateDiv.js';
 import createLink from '../BasicComponentsCreators/CreateLink/CreateLink.js';
 import createImg from '../BasicComponentsCreators/CreateImg/CreateImg.js';
-import createText from '../BasicComponentsCreators/CreateText/CreateText.js';
 export default class FooterView extends IComponent {
     constructor(parent) {
         super(parent);
@@ -10,14 +9,17 @@ export default class FooterView extends IComponent {
     render() {
         const footer = createDiv({ styles: ['footer'] });
         const content = createDiv({ styles: ['footer__container'] });
-        const logo = createImg({ src: '#', styles: ['logo--company'] });
-        const contacts = createDiv({ text: 'Contacts:', styles: ['contacts'] })
-            .appendChildren(createLink({ href: 'https://t.me/george007361', styles: ['contacts--item'] })
-            .appendChildren(createImg({ src: '#', styles: ['contacts__item__icon'] }), createText({ text: '@George007361' })));
-        const description = createDiv({ text: '«WS» позволяет пользователям отправлять друг другу сообщения, делиться новостями и многое другое...', styles: ['description'] });
-        content.appendChildren(logo, contacts, description);
-        const companyName = createDiv({ text: 'TikTikAndVProd2022', styles: ['footer__container', 'company-name'] });
-        footer.appendChildren(content, companyName);
+        const logo = createImg({ src: '../src/img/footer_logo.png', styles: ['footer__logo'] });
+        const contacts = createDiv({ text: 'Contacts:', styles: ['contacts'] });
+        const tgContact = createLink({ href: 'https://t.me/george007361', styles: ['contacts__item'] });
+        const tgContactLogo = createImg({ src: '../src/img/tg_icon.png', styles: ['contacts__item__icon'] });
+        tgContact.appendChild(tgContactLogo);
+        contacts.appendChild(tgContact);
+        const companyName = createDiv({ text: 'TikTikAndVProd2022', styles: ['company-name'] });
+        content.appendChild(logo);
+        content.appendChild(contacts);
+        content.appendChild(companyName);
+        footer.appendChild(content);
         this.parent.appendChild(footer);
     }
 }

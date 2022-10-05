@@ -13,15 +13,33 @@ body {
 }
 
 :root {
-    --color-white: white;
-    --color-light-gray: #f0f2f5;
-    /* #f5f5f5;*/
-    --color-lighter-gray: #e5e7eb;
-    /*#f0f2f5;*/
-    --color-gray: #b5b5b5;
-    --color-darker-gray: #6f6f6f;
-    --color-green: #21cf7a;
-    --color-light-green: #48f4a0;
+    --color-root-background: #F0F2F5;
+
+    --color-footer-background: #EAECF0;
+    --color-footer-text: #B5B5B5;
+
+    --color-form-title: #6F6F6F;
+    --color-form-background: #FFFFFF;
+    --color-form-border: #EBEBEB;
+
+    --color-input-title: #6F6F6F;
+    --color-input-placeholder: #D8D8D8;
+    --color-input-border: #D8D8D8;
+    --color-input-border-focus: #6F6F6F;
+    --color-input-value: #767676;
+    --color-input-value-error: #f66363;
+    --color-input-border-error: #f66363;
+    --color-input-border-focus-error: #b04c4c;
+
+    --color-button-background: #21CF7A;
+    --color-button-value: #FFFFFF;
+    --color-button-background-pressed: #24B66F;
+    --color-button-border-focus: #24B66F;
+
+    --color-link-value: #B5B5B5;
+    --color-link-underline-hover: #B5B5B5;
+    --color-link-value-pressed: #D8D8D8;
+    --color-limk-underline-pressed: #D8D8D8;
 }
 
 #root {
@@ -56,24 +74,4 @@ main {
     overflow-x: hidden;
     display: flex;
     justify-content: center;
-}
-
-h1 {
-    font-size: 64px;
-    color: #8e5dff;
-    transition: color 600ms;
-}
-
-a {
-    color: #333333;
-    display: block;
-    padding-bottom: 10px;
-    text-decoration: none;
-}
-
-input {
-    display: block;
-    height: 60px;
-    font-size: 40px;
-    margin-bottom: 15px;
 }

@@ -41,7 +41,7 @@ class Ajax {
     };
 
     async getTest(url: string) {
-        return Promise.resolve({ status: 400, parsedBody: 'none' });
+        return Promise.reject({ status: 400, parsedBody: 'none' });
     };
 
 }
