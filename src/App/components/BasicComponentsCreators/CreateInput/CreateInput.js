@@ -8,5 +8,8 @@ export default function createInput(props) {
             elem.classList.add(style);
         });
     }
+    if (props.dataset !== undefined) {
+        elem.setAttribute('model_field', props.dataset);
+    }
     return elem;
 }

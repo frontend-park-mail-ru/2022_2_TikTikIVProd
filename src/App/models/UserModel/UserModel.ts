@@ -2,13 +2,16 @@ import config from "../../configs/config.js";
 import ajax from "../../modules/ajax.js";
 import IModel from "../IModel/IModel.js"
 
-interface IAuthUser {
+export interface IAuthData {
     email: string;
     password: string;
 }
 
 export interface IUser {
     firstName: string;
+    lastName?: string;
+    nickname?: string;
+    email?: string;
 }
 
 export default class UserModel extends IModel {
@@ -19,10 +22,15 @@ export default class UserModel extends IModel {
         this.currentUser = null;
     }
 
-    public async authUser(email: string, password: string) {
+    public async authUser(authData: IAuthData) {
 
-        const response = await ajax.post(`${config.APIUrl}/signin`, JSON.stringify({ email: email, password: password }));
-        this.currentUser = { firstName: response.parsedBody.body.first_name };
+
+        console.log(authData);
+        return;
+        const response = await ajax.post(`${config.APIUrl}/signin`, JSON.stringify(authData));
+        this.currentUser = {
+            firstName: response.parsedBody.body.first_name
+        };
 
         if (response.status === 200) {
             return Promise.resolve({
@@ -49,7 +57,10 @@ export default class UserModel extends IModel {
             email: email,
             password: password
         }));
-        this.currentUser = { firstName: response.parsedBody.body.first_name };
+
+        this.currentUser = {
+            firstName: response.parsedBody.body.first_name
+        };
 
         if (response.status === 200) {
             return Promise.resolve({

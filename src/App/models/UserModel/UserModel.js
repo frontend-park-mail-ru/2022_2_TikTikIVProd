@@ -6,9 +6,13 @@ export default class UserModel extends IModel {
         super();
         this.currentUser = null;
     }
-    async authUser(email, password) {
-        const response = await ajax.post(`${config.APIUrl}/signin`, JSON.stringify({ email: email, password: password }));
-        this.currentUser = { firstName: response.parsedBody.body.first_name };
+    async authUser(authData) {
+        console.log(authData);
+        return;
+        const response = await ajax.post(`${config.APIUrl}/signin`, JSON.stringify(authData));
+        this.currentUser = {
+            firstName: response.parsedBody.body.first_name
+        };
         if (response.status === 200) {
             return Promise.resolve({
                 status: response.status,
@@ -30,7 +34,9 @@ export default class UserModel extends IModel {
             email: email,
             password: password
         }));
-        this.currentUser = { firstName: response.parsedBody.body.first_name };
+        this.currentUser = {
+            firstName: response.parsedBody.body.first_name
+        };
         if (response.status === 200) {
             return Promise.resolve({
                 status: response.status,

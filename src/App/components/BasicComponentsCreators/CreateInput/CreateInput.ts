@@ -3,6 +3,7 @@ export interface IInputProps {
     type?: string;
     placeholder?: string;
     styles?: string[];
+    dataset?: string;
 }
 
 export default function createInput(props: IInputProps): HTMLElement {
@@ -14,6 +15,9 @@ export default function createInput(props: IInputProps): HTMLElement {
         props.styles.forEach((style) => {
             elem.classList.add(style);
         });
+    }
+    if (props.dataset !== undefined) {
+        elem.setAttribute('model_field', props.dataset);
     }
     return elem;
 }

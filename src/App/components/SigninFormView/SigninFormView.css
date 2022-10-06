@@ -105,3 +105,13 @@
     border-style: none;
     background-color: var(--color-button-background-pressed);
 }
+
+.form__input__error { 
+    color: var(--color-input-value-error);
+    outline-color: var(--color-input-border-error);
+}
+
+.form__input__error:focus { 
+    color: var(--color-input-value-error);
+    outline-color: var(--color-input-border-focus-error);
+}

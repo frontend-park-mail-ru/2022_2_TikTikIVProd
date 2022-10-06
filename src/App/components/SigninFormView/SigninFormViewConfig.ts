@@ -21,12 +21,14 @@ const signinFormConfig: ISigninFormView = {
             title: 'E-mail:',
             type: 'email',
             id: 'email-input',
+            dataset: 'email',
             placeholder: 'George@domain.com',
         },
         {
             title: 'Пароль:',
             type: 'password',
             id: 'password-input',
+            dataset: 'password',
             placeholder: '*****',
         }
     ],

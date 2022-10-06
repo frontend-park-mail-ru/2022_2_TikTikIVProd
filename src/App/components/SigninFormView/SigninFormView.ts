@@ -37,6 +37,7 @@ export default class SigninFormView extends IComponent {
                 type: field.type,
                 id: field.id,
                 placeholder: field.placeholder,
+                dataset: field.dataset,
                 styles: ['form__input'],
             });
             const groupbox = createDiv({
