@@ -65,7 +65,7 @@ class Header {
 
         const profile = createLink({ event: { eventType: 'click', callback: () => { router.goToPath(paths.profile); } }, styles: ['header__profile'] });
         const avatar = createImg({ src: '../src/img/avatar_pavel.jpg', styles: ['header__profile__avatar'] });
-        const name = createText({ text: user.firstName, styles: ['header__profile__name'] });
+        const name = createText({ text: user.first_name, styles: ['header__profile__name'] });
         profile.appendChild(avatar);
         profile.appendChild(name);
 

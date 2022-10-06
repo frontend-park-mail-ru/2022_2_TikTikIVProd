@@ -7,11 +7,13 @@ export default class UserModel extends IModel {
         this.currentUser = null;
     }
     async authUser(authData) {
-        console.log(authData);
-        return;
         const response = await ajax.post(`${config.APIUrl}/signin`, JSON.stringify(authData));
         this.currentUser = {
-            firstName: response.parsedBody.body.first_name
+            first_name: response.parsedBody.body.first_name,
+            last_name: response.parsedBody.body.last_name,
+            nick_name: response.parsedBody.body.nick_name,
+            email: response.parsedBody.body.email,
+            id: response.parsedBody.body.id,
         };
         if (response.status === 200) {
             return Promise.resolve({
@@ -26,16 +28,14 @@ export default class UserModel extends IModel {
             });
         }
     }
-    async registerUser(email, password, first_name, last_name, nickname) {
-        const response = await ajax.post(`${config.APIUrl}/signup`, JSON.stringify({
-            first_name: first_name,
-            last_name: last_name,
-            nickname: nickname,
-            email: email,
-            password: password
-        }));
+    async registerUser(user) {
+        const response = await ajax.post(`${config.APIUrl}/signup`, JSON.stringify(user));
         this.currentUser = {
-            firstName: response.parsedBody.body.first_name
+            first_name: response.parsedBody.body.first_name,
+            last_name: response.parsedBody.body.last_name,
+            nick_name: response.parsedBody.body.nick_name,
+            email: response.parsedBody.body.email,
+            id: response.parsedBody.body.id,
         };
         if (response.status === 200) {
             return Promise.resolve({
@@ -55,7 +55,13 @@ export default class UserModel extends IModel {
     }
     async isAuthantificated() {
         const response = await ajax.get(`${config.APIUrl}/auth`);
-        this.currentUser = { firstName: response.parsedBody.body.first_name };
+        this.currentUser = {
+            first_name: response.parsedBody.body.first_name,
+            last_name: response.parsedBody.body.last_name,
+            nick_name: response.parsedBody.body.nick_name,
+            email: response.parsedBody.body.email,
+            id: response.parsedBody.body.id,
+        };
         if (response.status === 200) {
             return Promise.resolve({
                 status: response.status,

@@ -121,7 +121,7 @@ class App {
             .catch(({ status, body }) => {
                 router.goToPath(paths.signinPage);
             });
-        console.log(data);
+        // console.log(data);
     }
 
     private handleRedirectProfile(): void {

@@ -13,27 +13,23 @@ export default class SigninFormController extends IController {
         const target = event.target;
         if (target !== null) {
             if (signinFormConfig.submit.id === target.id) {
-                this.submitForm();
+                this.submitSigninForm();
                 return;
             }
             const footerItem = signinFormConfig.footer.find((item) => item.id === target.id);
             if (footerItem !== undefined) {
-                console.log(`Found link ${target.id}`);
                 router.goToPath(footerItem.href || '');
                 return;
             }
-            console.log(`Not handeled ${target.id}`);
         }
     }
-    submitForm() {
-        console.log('Submitting auth form');
+    submitSigninForm() {
         const data = new Map();
         let isCorrectForm = true;
         // Get data from view
         signinFormViewConfig.fields.forEach((item) => {
             const elem = (this.view.getParent().querySelector('#' + item.id));
             if (elem === null) {
-                console.log(`Incorrent form: no filed #${item.id}`);
                 isCorrectForm = false;
                 return;
             }
@@ -48,7 +44,6 @@ export default class SigninFormController extends IController {
             }
         });
         if (!isCorrectForm) {
-            console.log('Signin form invalid');
             return;
         }
         const user = {

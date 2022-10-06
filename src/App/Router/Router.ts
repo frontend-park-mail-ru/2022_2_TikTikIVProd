@@ -20,15 +20,11 @@ class Router {
     public goToPath(path: string) {
         const item = this.routes.find((item) => item.path == path);
         if (item === undefined) {
-            console.log('No path');
             return;
         }
 
-
         item.handler();
     }
-
-
 }
 
 const router = new Router();

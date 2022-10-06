@@ -9,7 +9,6 @@ class Router {
     goToPath(path) {
         const item = this.routes.find((item) => item.path == path);
         if (item === undefined) {
-            console.log('No path');
             return;
         }
         item.handler();

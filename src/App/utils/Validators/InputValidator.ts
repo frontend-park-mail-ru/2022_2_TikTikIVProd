@@ -9,6 +9,9 @@ export function validateInput(type: string, value: string): boolean {
             //TODO
             return true;
         }
+        case 'text': {
+            return true;
+        }
         default: {
             return false;
         }

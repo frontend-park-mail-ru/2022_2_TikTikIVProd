@@ -15,7 +15,7 @@ export default class Menu extends IComponent {
         document.getElementById(`menu__item_${this.activeLinkId}`)?.classList.remove('menu__active__link');
         this.activeLinkId = index;
         document.getElementById(`menu__item_${this.activeLinkId}`)?.classList.add('menu__active__link');
-        console.log(this.activeLinkId);
+        // console.log(this.activeLinkId);
     }
 
     render() {

@@ -8,6 +8,9 @@ export function validateInput(type, value) {
             //TODO
             return true;
         }
+        case 'text': {
+            return true;
+        }
         default: {
             return false;
         }

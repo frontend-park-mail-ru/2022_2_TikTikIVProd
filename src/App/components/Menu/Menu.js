@@ -11,7 +11,7 @@ export default class Menu extends IComponent {
         (_a = document.getElementById(`menu__item_${this.activeLinkId}`)) === null || _a === void 0 ? void 0 : _a.classList.remove('menu__active__link');
         this.activeLinkId = index;
         (_b = document.getElementById(`menu__item_${this.activeLinkId}`)) === null || _b === void 0 ? void 0 : _b.classList.add('menu__active__link');
-        console.log(this.activeLinkId);
+        // console.log(this.activeLinkId);
     }
     render() {
         const m = createDiv({ styles: ['aside'] });
