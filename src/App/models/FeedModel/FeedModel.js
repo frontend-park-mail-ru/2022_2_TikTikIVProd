@@ -13,7 +13,7 @@ export default class FeedModel extends IModel {
                 photoLinks: feedPost.image_links,
                 description: feedPost.description,
                 likes: 228,
-                date: new Date(feedPost.create_date),
+                date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
                 author_name: feedPost.user_first_name,
                 author_photo: ''
             };

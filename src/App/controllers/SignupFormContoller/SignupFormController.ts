@@ -72,6 +72,7 @@ export default class SignupFormController extends IController<SignupView, UserMo
             router.goToPath(paths.feedPage);
         }).catch(({ status, body }) => {
             // ПОКРАСИТЬ ПОЛЯ В КРАСНЫЙ
+            console.log('cant register');
         });
     }
 }
