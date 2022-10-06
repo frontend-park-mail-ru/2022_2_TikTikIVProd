@@ -38,6 +38,7 @@ export default class SignupFormView extends IComponent {
                 id: field.id,
                 placeholder: field.placeholder,
                 styles: ['form__input'],
+                dataset: field.dataset,
             });
             const groupbox = createDiv({
                 styles: ['groupbox']

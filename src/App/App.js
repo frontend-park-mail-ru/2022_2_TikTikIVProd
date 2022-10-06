@@ -60,14 +60,7 @@ class App {
         // скрыть футер
         this.footerView.hide();
         // Обновить хэдер
-        console.log(this.userModel.getCurrentUser());
         this.headerView.setProfile(this.userModel.getCurrentUser());
-        // this.userModel.isAuthantificated().then(({ status, body }) => {
-        //     console.log('1');
-        // }).catch(({ }) => {
-        //     console.log('2');
-        //     // this.headerView.setSigninButton();
-        // })
         // показать фид
         this.feedModel.getFeeds()
             .then(({ status, body }) => {

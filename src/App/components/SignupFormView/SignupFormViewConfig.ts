@@ -22,36 +22,42 @@ const signupFormConfig: ISignupFormView = {
             type: 'text',
             id: 'fist-name-input',
             placeholder: 'Георгий',
+            dataset: 'first_name',
         },
         {
             title: 'Ваша фамилия:',
             type: 'text',
             id: 'last-name-input',
             placeholder: 'Пупкин',
+            dataset: 'last_name',
         },
         {
             title: 'Придумайте псевдоним:',
             type: 'text',
             id: 'nickname-input',
             placeholder: 'GeorgePupkin123',
+            dataset: 'nick_name',
         },
         {
             title: 'E-mail:',
             type: 'email',
             id: 'email-input',
             placeholder: 'George@domain.com',
+            dataset: 'email',
         },
         {
             title: 'Пароль:',
             type: 'password',
             id: 'password-input',
             placeholder: '*****',
+            dataset: 'password',
         },
         {
             title: 'Введите пароль ещё раз:',
             type: 'password',
             id: 'repeat-password-input',
             placeholder: '*****',
+            dataset: 'repeat_password',
         }
     ],
     submit: {
