@@ -63,6 +63,12 @@
     font-size: 16px;
 }
 
+.form__input__error__msg{
+    color: var(--color-input-value-error);
+    font-size: 10px;
+    padding: 0 8px;
+}
+
 .groupbox {
     display: flex;
     flex-direction: column;
