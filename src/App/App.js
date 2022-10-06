@@ -24,16 +24,12 @@ class App {
     run() {
         this.footerView.render();
         this.headerView.render();
-        this.userModel.authUser(); // Авторизация по куке
-        if (this.userModel.isAuthantificated()) {
-            console.log('User authantificated');
+        this.userModel.isAuthantificated().then(({ status, body }) => {
             router.goToPath(paths.menu);
             router.goToPath(paths.feedPage);
-        }
-        else {
-            console.log('User is not authantificated');
+        }).catch(({ status, body }) => {
             router.goToPath(paths.signinPage);
-        }
+        }); // Авторизация по куке
     }
     // Handlers 
     handleRedirectToSignin() {
@@ -71,7 +67,14 @@ class App {
             this.headerView.setSigninButton();
         }
         // показать фид
-        this.feedView.render(this.feedModel.getFeeds());
+        const data = this.feedModel.getFeeds()
+            .then(({ status, body }) => {
+            this.feedView.render(body);
+        })
+            .catch(({ status, body }) => {
+            router.goToPath(paths.signinPage);
+        });
+        console.log(data);
     }
     handleRedirectProfile() {
         this.main.innerHTML = '';

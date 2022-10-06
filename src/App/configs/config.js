@@ -32,6 +32,6 @@ const config = {
             id: 'menu__item_2',
         },
     },
-    APIUrl: 'http://89.208.197.127:8080/'
+    APIUrl: 'http://89.208.197.127:8080'
 };
 export default config;

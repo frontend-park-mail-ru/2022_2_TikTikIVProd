@@ -37,7 +37,7 @@ const config = {
 
         },
     },
-    APIUrl: 'http://89.208.197.127:8080/'
+    APIUrl: 'http://89.208.197.127:8080'
 };
 
 export default config;

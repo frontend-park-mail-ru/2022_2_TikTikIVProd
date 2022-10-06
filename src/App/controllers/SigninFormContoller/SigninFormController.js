@@ -1,5 +1,6 @@
 import signinFormConfig from "../../components/SigninFormView/SigninFormViewConfig.js";
 import router from "../../Router/Router.js";
+import paths from "../../Router/RouterPaths.js";
 import IController from "../IController/IController.js";
 export default class SigninFormController extends IController {
     constructor(view, model) {
@@ -19,8 +20,12 @@ export default class SigninFormController extends IController {
                 // Validate 
                 // Go to model
                 // show errors to view or redirect 
-                this.model.authUser().then(({ status, parsedBody }) => {
-                }).catch(({ status, parsedBody }) => {
+                // ИЗМЕНИТЬ ХАРДКОД НА ТЕКСТ ИЗ ПОЛЕЙ
+                this.model.authUser('dkostev68@gmail.com', '12345').then(({ status, body }) => {
+                    router.goToPath(paths.menu);
+                    router.goToPath(paths.feedPage);
+                }).catch(({ status, body }) => {
+                    // ПОКРАСИТЬ ПОЛЯ В КРАСНЫЙ
                 });
                 return;
             }

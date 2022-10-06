@@ -61,17 +61,12 @@ class App {
         this.footerView.render();
         this.headerView.render();
 
-        this.userModel.authUser(); // Авторизация по куке
-
-        if (this.userModel.isAuthantificated()) {
-            console.log('User authantificated');
+        this.userModel.isAuthantificated().then(({ status, body }) => {
             router.goToPath(paths.menu);
             router.goToPath(paths.feedPage);
-        } else {
-
-            console.log('User is not authantificated');
-            router.goToPath(paths.signinPage);
-        }
+        }).catch(({ status, body }) => {
+            router.goToPath(paths.signinPage)
+        }); // Авторизация по куке
     }
 
     // Handlers 
@@ -119,7 +114,14 @@ class App {
 
 
         // показать фид
-        this.feedView.render(this.feedModel.getFeeds());
+        const data = this.feedModel.getFeeds()
+            .then(({ status, body }) => {
+                this.feedView.render(body);
+            })
+            .catch(({ status, body }) => {
+                router.goToPath(paths.signinPage);
+            });
+        console.log(data);
     }
 
     private handleRedirectProfile(): void {

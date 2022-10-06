@@ -27,7 +27,9 @@ export default class SignupFormController extends IController<SignupView, UserMo
                 // Go to model
 
                 // show errors to view or redirect 
-                this.model.authUser();
+
+                // ЗВРЕГИСТРИРОВАТЬ ПОЛЬЗОВАТЕЛя
+                // this.model.registerUser();
                 if (false) {
                     // Если успешно перейти в фид через роутер
 

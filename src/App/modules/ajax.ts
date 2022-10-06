@@ -15,12 +15,23 @@ const REQUEST_TYPE = {
 
 class Ajax {
     private async asyncFetch(params: IParamsProps) {
-        const response = await fetch(params.url, {
-            method: params.method,
-            body: params.body,
-            credentials: 'same-origin',
-            mode: 'no-cors'
-        });
+        // let headers = new Headers();
+        // headers.append('Content-Type', 'text/plain');
+        // headers.append('Accept', 'application/json');
+
+        // headers.append('Access-Control-Allow-Origin', '*');
+        // headers.append('Access-Control-Allow-Credentials', 'true');
+
+
+        const response = await fetch(params.url,
+            {
+                method: params.method,
+                //     // headers: headers,
+                body: params.body,
+                //     credentials: 'include',
+                //     mode: 'cors'
+            }
+        );
 
         const parsedBody = await response.json();
 
@@ -31,15 +42,15 @@ class Ajax {
     }
 
     async get(url: string) {
-        return this.asyncFetch({ url: url, method: REQUEST_TYPE.GET });
+        return await this.asyncFetch({ url: url, method: REQUEST_TYPE.GET });
     };
 
     async post(url: string, body: string) {
-        return this.asyncFetch({ url: url, method: REQUEST_TYPE.POST, body: body });
+        return await this.asyncFetch({ url: url, method: REQUEST_TYPE.POST, body: body });
     };
 
     async put(url: string, body: string) {
-        return this.asyncFetch({ url: url, method: REQUEST_TYPE.PUT, body: body });
+        return await this.asyncFetch({ url: url, method: REQUEST_TYPE.PUT, body: body });
     };
 
     async getTest(url: string) {

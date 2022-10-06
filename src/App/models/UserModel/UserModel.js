@@ -6,15 +6,61 @@ export default class UserModel extends IModel {
         super();
         this.currentUser = null;
     }
-    async authUser() {
-        //Remove in the future
-        this.currentUser = { firstName: 'Павел' };
-        return ajax.post(`${config.APIUrl}/auth`, '');
+    async authUser(email, password) {
+        const response = await ajax.post(`${config.APIUrl}/signin`, JSON.stringify({ email: email, password: password }));
+        this.currentUser = { firstName: response.parsedBody.body.first_name };
+        if (response.status === 200) {
+            return Promise.resolve({
+                status: response.status,
+                body: response.parsedBody
+            });
+        }
+        else {
+            return Promise.reject({
+                status: response.status,
+                body: response.parsedBody
+            });
+        }
+    }
+    async registerUser(email, password, first_name, last_name, nickname) {
+        const response = await ajax.post(`${config.APIUrl}/signup`, JSON.stringify({
+            first_name: first_name,
+            last_name: last_name,
+            nickname: nickname,
+            email: email,
+            password: password
+        }));
+        this.currentUser = { firstName: response.parsedBody.body.first_name };
+        if (response.status === 200) {
+            return Promise.resolve({
+                status: response.status,
+                body: response.parsedBody
+            });
+        }
+        else {
+            return Promise.reject({
+                status: response.status,
+                body: response.parsedBody
+            });
+        }
     }
     getCurrentUser() {
         return this.currentUser;
     }
-    isAuthantificated() {
-        return this.currentUser !== null ? true : false;
+    async isAuthantificated() {
+        const response = await ajax.get(`${config.APIUrl}/auth`);
+        this.currentUser = { firstName: response.parsedBody.body.first_name };
+        if (response.status === 200) {
+            return Promise.resolve({
+                status: response.status,
+                body: response.parsedBody
+            });
+        }
+        else {
+            return Promise.reject({
+                status: response.status,
+                body: response.parsedBody
+            });
+        }
     }
 }
