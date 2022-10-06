@@ -1,4 +1,5 @@
 import config from "../../configs/config.js";
+import ajax from "../../modules/ajax.js";
 import router from "../../Router/Router.js";
 import paths from "../../Router/RouterPaths.js";
 export default class MenuController {
@@ -21,6 +22,7 @@ export default class MenuController {
                 return;
             }
             if (target.id === config.menu.logout.id) {
+                ajax.get(`${config.APIUrl}/logout`);
                 router.goToPath(paths.signinPage);
                 return;
             }

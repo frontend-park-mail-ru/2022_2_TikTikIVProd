@@ -106,22 +106,16 @@ class App {
         this.footerView.hide();
 
         // Обновить хэдер
-        if (this.userModel.isAuthantificated()) {
-            this.headerView.setProfile(this.userModel.getCurrentUser());
-        } else {
-            this.headerView.setSigninButton();
-        }
-
+        this.headerView.setProfile(this.userModel.getCurrentUser())
 
         // показать фид
-        const data = this.feedModel.getFeeds()
+        this.feedModel.getFeeds()
             .then(({ status, body }) => {
                 this.feedView.render(body);
             })
             .catch(({ status, body }) => {
                 router.goToPath(paths.signinPage);
             });
-        // console.log(data);
     }
 
     private handleRedirectProfile(): void {
@@ -132,12 +126,6 @@ class App {
         // скрыть футер
         this.footerView.hide();
 
-        // Обновить хэдер
-        if (this.userModel.isAuthantificated()) {
-            this.headerView.setProfile(this.userModel.getCurrentUser());
-        } else {
-            this.headerView.setSigninButton();
-        }
 
         this.profileView.render();
     }

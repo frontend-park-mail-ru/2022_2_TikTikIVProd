@@ -60,34 +60,28 @@ class App {
         // скрыть футер
         this.footerView.hide();
         // Обновить хэдер
-        if (this.userModel.isAuthantificated()) {
-            this.headerView.setProfile(this.userModel.getCurrentUser());
-        }
-        else {
-            this.headerView.setSigninButton();
-        }
+        console.log(this.userModel.getCurrentUser());
+        this.headerView.setProfile(this.userModel.getCurrentUser());
+        // this.userModel.isAuthantificated().then(({ status, body }) => {
+        //     console.log('1');
+        // }).catch(({ }) => {
+        //     console.log('2');
+        //     // this.headerView.setSigninButton();
+        // })
         // показать фид
-        const data = this.feedModel.getFeeds()
+        this.feedModel.getFeeds()
             .then(({ status, body }) => {
             this.feedView.render(body);
         })
             .catch(({ status, body }) => {
             router.goToPath(paths.signinPage);
         });
-        // console.log(data);
     }
     handleRedirectProfile() {
         this.main.innerHTML = '';
         this.headerView.show();
         // скрыть футер
         this.footerView.hide();
-        // Обновить хэдер
-        if (this.userModel.isAuthantificated()) {
-            this.headerView.setProfile(this.userModel.getCurrentUser());
-        }
-        else {
-            this.headerView.setSigninButton();
-        }
         this.profileView.render();
     }
     /// Initials 

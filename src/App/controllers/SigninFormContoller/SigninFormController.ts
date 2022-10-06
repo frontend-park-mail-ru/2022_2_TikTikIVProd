@@ -64,6 +64,7 @@ export default class SigninFormController extends IController<SigninFormView, Us
         // Go to model
         // show errors to view or redirect 
         this.model.authUser(user).then(({ status, body }) => {
+            
             router.goToPath(paths.menu);
             router.goToPath(paths.feedPage);
         }).catch(({ status, body }) => {
