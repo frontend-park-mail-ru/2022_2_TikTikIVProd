@@ -89,7 +89,7 @@ export default class SigninFormView extends IComponent {
         signinFormViewConfig.footer.forEach((item) => {
             const link = this.form.querySelector('#' + item.id);
             if (link === null) {
-                console.log(`no link ${item.id}`);
+                // console.log(`no link ${item.id}`);
                 return;
             }
             link.addEventListener('click', (e) => {
@@ -102,7 +102,7 @@ export default class SigninFormView extends IComponent {
     public bindSubmitForm(handler: Function) {
         const submitButton = this.form.querySelector('#' + signinFormViewConfig.submit.id);
         if (submitButton === null) {
-            console.log('No submit btn');
+            // console.log('No submit btn');
             return;
         }
         submitButton.addEventListener('click', (e) => {

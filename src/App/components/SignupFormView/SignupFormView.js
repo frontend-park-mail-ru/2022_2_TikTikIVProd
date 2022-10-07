@@ -75,7 +75,7 @@ export default class SignupFormView extends IComponent {
     bindSubmitForm(handler) {
         const submitButton = this.form.querySelector('#' + signupFormViewConfig.submit.id);
         if (submitButton === null) {
-            console.log(`No submit btn signup`);
+            // console.log(`No submit btn signup`);
             return;
         }
         submitButton.addEventListener('click', (e) => {
@@ -90,7 +90,7 @@ export default class SignupFormView extends IComponent {
         signupFormViewConfig.footer.forEach((item) => {
             const link = this.form.querySelector('#' + item.id);
             if (link === null) {
-                console.log(`no link ${item.id}`);
+                // console.log(`no link ${item.id}`);
                 return;
             }
             link.addEventListener('click', (e) => {

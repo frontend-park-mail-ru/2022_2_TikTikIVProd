@@ -1,11 +1,5 @@
 import IValidationResult from "../IValidator/IValidator.js";
 
-const regexpPassword = /^([\w]{8,30})$/igd;
-const regexpEmail = /^([\w]*)@([a-z]*).([a-z]*)$/igd
-const regexpFirstName = /^[a-zа-я]{1,10}$/igd;
-const regexpLastName = /^[a-zа-я]{1,10}$/igd;
-const regexpNickname = /^[\w]{1,10}$/igd;
-
 export function validateInput(dataType: string | undefined, value: string | undefined): IValidationResult {
     if (dataType !== undefined && value !== undefined) {
 
@@ -37,6 +31,7 @@ export function validateInput(dataType: string | undefined, value: string | unde
 }
 
 function firstNameValidator(firstName: string): IValidationResult {
+    const regexpFirstName = /^[a-zа-я]{1,10}$/igd;
     const isValid = regexpFirstName.test(firstName);
     if (isValid) {
         return { isValid: true, msgError: '' }
@@ -45,6 +40,7 @@ function firstNameValidator(firstName: string): IValidationResult {
 }
 
 function lastNameValidator(lastName: string): IValidationResult {
+    const regexpLastName = /^[a-zа-я]{1,10}$/igd;
     const isValid = regexpLastName.test(lastName);
     if (isValid) {
         return { isValid: true, msgError: '' }
@@ -53,6 +49,7 @@ function lastNameValidator(lastName: string): IValidationResult {
 }
 
 function nicknameValidator(nickname: string): IValidationResult {
+    const regexpNickname = /^[\w]{1,10}$/igd;
     const isValid = regexpNickname.test(nickname);
     if (isValid) {
         return { isValid: true, msgError: '' }
@@ -61,6 +58,7 @@ function nicknameValidator(nickname: string): IValidationResult {
 }
 
 function passwordValidator(password: string): IValidationResult {
+    const regexpPassword = /^([\w]{8,30})$/igd;
     const isValid = regexpPassword.test(password);
     if (isValid) {
         return { isValid: true, msgError: '' }
@@ -70,6 +68,7 @@ function passwordValidator(password: string): IValidationResult {
 
 
 function emailValidator(email: string): IValidationResult {
+    const regexpEmail = /^([\w]*)@([a-z]*).([a-z]*)$/igd
     const isValid = regexpEmail.test(email);
     if (isValid) {
         return { isValid: true, msgError: '' }

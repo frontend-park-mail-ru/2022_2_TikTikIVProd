@@ -32,10 +32,7 @@ export default class UserModel extends IModel {
     }
 
     public async authUser(authData: IUserSignIn) {
-        // console.log(authData);
-        console.log(JSON.stringify(authData));
         const response = await ajax.post(`${config.APIUrl}/signin`, JSON.stringify(authData));
-        // TODO .body.body
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
             last_name: response.parsedBody.body.last_name,
@@ -61,10 +58,7 @@ export default class UserModel extends IModel {
 
 
     public async registerUser(user: IUserSignUp) {
-        console.log(user);
-        console.log(JSON.stringify(user));
         const response = await ajax.post(`${config.APIUrl}/signup`, JSON.stringify(user));
-        // TODO .body.body
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
             last_name: response.parsedBody.body.last_name,
@@ -95,7 +89,6 @@ export default class UserModel extends IModel {
 
     public async isAuthantificated() {
         const response = await ajax.get(`${config.APIUrl}/auth`);
-        // TODO Fix .body.body
         this.currentUser = {
             first_name: response.parsedBody.body.body.first_name,
             last_name: response.parsedBody.body.body.last_name,

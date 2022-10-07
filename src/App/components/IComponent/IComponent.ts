@@ -9,9 +9,4 @@ export default abstract class IComponent {
     public getParent(): HTMLElement {
         return this.parent;
     }
-
-    // TODO: Более умный 
-    unmount(): void {
-        this.parent.innerHTML = '';
-    }
 }

@@ -22,7 +22,7 @@ export default class SignupFormController extends IController {
             router.goToPath(paths.feedPage);
         }).catch(({ status, body }) => {
             // ПОКРАСИТЬ ПОЛЯ В КРАСНЫЙ
-            console.log('cant register');
+            // console.log('cant register');
         });
     }
     redirect(path) {
