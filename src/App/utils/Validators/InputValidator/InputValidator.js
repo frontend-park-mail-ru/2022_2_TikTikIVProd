@@ -47,15 +47,15 @@ function nicknameValidator(nickname) {
     if (isValid) {
         return { isValid: true, msgError: '' };
     }
-    return { isValid: false, msgError: `Псевдоним может состоять английских букв и цифр в одно слово` };
+    return { isValid: false, msgError: `Псевдоним может состоять из английских букв и цифр без пробелов` };
 }
 function passwordValidator(password) {
-    const regexpPassword = /^([\w]{8,30})$/igd;
+    const regexpPassword = /^(\S*){8,}$/igd;
     const isValid = regexpPassword.test(password);
     if (isValid) {
         return { isValid: true, msgError: '' };
     }
-    return { isValid: false, msgError: `Пароль должен состоять из букв и цифр и иметь длину от 8 до 30 символов` };
+    return { isValid: false, msgError: `Минимальная длина пароля 8 символов без пробелов` };
 }
 function emailValidator(email) {
     const regexpEmail = /[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/ig;
@@ -63,5 +63,5 @@ function emailValidator(email) {
     if (isValid) {
         return { isValid: true, msgError: '' };
     }
-    return { isValid: false, msgError: `Неверный формат "${email}". Пример: my-email@domain.ru` };
+    return { isValid: false, msgError: `Введённый email имеет некорректный вид` };
 }

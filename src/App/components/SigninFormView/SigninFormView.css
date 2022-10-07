@@ -65,8 +65,8 @@
 
 .form__input__error__msg{
     color: var(--color-input-value-error);
-    font-size: 10px;
-    padding: 0 8px;
+    font-size: 12px;
+    padding: 3px 8px 0px 8px;
 }
 
 .groupbox {

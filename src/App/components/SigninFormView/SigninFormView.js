@@ -23,7 +23,7 @@ export default class SigninFormView extends IComponent {
             text: signinFormViewConfig.title,
             styles: ['form__title'],
         });
-        const formContent = createDiv({});
+        const formContent = createDiv({ styles: ['form__content'] });
         signinFormViewConfig.fields.forEach((field) => {
             const title = createDiv({
                 text: field.title,
