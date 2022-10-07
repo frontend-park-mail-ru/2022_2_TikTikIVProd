@@ -15,22 +15,20 @@ const REQUEST_TYPE = {
 
 class Ajax {
     private async asyncFetch(params: IParamsProps) {
-        let headers = new Headers();
+        // let headers = new Headers();
         // headers.append('Content-Type', 'text/plain');
         // headers.append('Accept', 'application/json');
 
         // headers.append('Access-Control-Allow-Origin', '*');
-        headers.append('Access-Control-Allow-Credentials', 'true');
+        // headers.append('Access-Control-Allow-Credentials', 'true');
 
 
         const response = await fetch(params.url,
             {
                 method: params.method,
-                headers: headers,
+                // headers: headers,
                 body: params.body,
                 credentials: 'include',
-                //     mode: 'cors'
-                referrerPolicy: 'unsafe-url',
             }
         );
 
