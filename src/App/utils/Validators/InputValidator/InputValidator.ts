@@ -68,7 +68,7 @@ function passwordValidator(password: string): IValidationResult {
 
 
 function emailValidator(email: string): IValidationResult {
-    const regexpEmail = /^([\w]*)@([a-z]*).([a-z]*)$/igd
+    const regexpEmail = /[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/ig
     const isValid = regexpEmail.test(email);
     if (isValid) {
         return { isValid: true, msgError: '' }

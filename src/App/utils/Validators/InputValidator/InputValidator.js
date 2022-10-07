@@ -58,7 +58,7 @@ function passwordValidator(password) {
     return { isValid: false, msgError: `Пароль должен состоять из букв и цифр и иметь длину от 8 до 30 символов` };
 }
 function emailValidator(email) {
-    const regexpEmail = /^([\w]*)@([a-z]*).([a-z]*)$/igd;
+    const regexpEmail = /[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/ig;
     const isValid = regexpEmail.test(email);
     if (isValid) {
         return { isValid: true, msgError: '' };
