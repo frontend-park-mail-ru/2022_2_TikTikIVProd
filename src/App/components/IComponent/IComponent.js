@@ -5,8 +5,4 @@ export default class IComponent {
     getParent() {
         return this.parent;
     }
-    // TODO: Более умный 
-    unmount() {
-        this.parent.innerHTML = '';
-    }
 }

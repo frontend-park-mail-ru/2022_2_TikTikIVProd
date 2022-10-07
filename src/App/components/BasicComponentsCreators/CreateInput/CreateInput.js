@@ -9,7 +9,7 @@ export default function createInput(props) {
         });
     }
     if (props.dataset !== undefined) {
-        elem.setAttribute('model_field', props.dataset);
+        elem.dataset[props.dataset.key] = props.dataset.value;
     }
     return elem;
 }
