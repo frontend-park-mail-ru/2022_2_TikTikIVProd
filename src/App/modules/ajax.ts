@@ -20,7 +20,7 @@ class Ajax {
         // headers.append('Accept', 'application/json');
 
         // headers.append('Access-Control-Allow-Origin', '*');
-        // headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('Access-Control-Allow-Credentials', 'true');
 
 
         const response = await fetch(params.url,
