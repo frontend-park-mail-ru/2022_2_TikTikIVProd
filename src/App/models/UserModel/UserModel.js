@@ -56,11 +56,11 @@ export default class UserModel extends IModel {
     async isAuthantificated() {
         const response = await ajax.get(`${config.APIUrl}/auth`);
         this.currentUser = {
-            first_name: response.parsedBody.body.body.first_name,
-            last_name: response.parsedBody.body.body.last_name,
-            nick_name: response.parsedBody.body.body.nick_name,
-            email: response.parsedBody.body.body.email,
-            id: response.parsedBody.body.body.id,
+            first_name: response.parsedBody.body.first_name,
+            last_name: response.parsedBody.body.last_name,
+            nick_name: response.parsedBody.body.nick_name,
+            email: response.parsedBody.body.email,
+            id: response.parsedBody.body.id,
         };
         if (response.status === 200) {
             return Promise.resolve({

@@ -10,7 +10,7 @@ class Ajax {
         // headers.append('Content-Type', 'text/plain');
         // headers.append('Accept', 'application/json');
         // headers.append('Access-Control-Allow-Origin', '*');
-        // headers.append('Access-Control-Allow-Credentials', 'true');
+        headers.append('Access-Control-Allow-Credentials', 'true');
         const response = await fetch(params.url, {
             method: params.method,
             headers: headers,
