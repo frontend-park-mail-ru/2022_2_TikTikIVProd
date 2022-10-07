@@ -28,7 +28,7 @@ class Ajax {
                 method: params.method,
                 headers: headers,
                 body: params.body,
-                // credentials: 'include',
+                credentials: 'include',
                 //     mode: 'cors'
                 referrerPolicy: 'unsafe-url',
             }
