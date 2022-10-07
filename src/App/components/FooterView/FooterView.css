@@ -38,10 +38,14 @@
 }
 
 .contacts__item__icon {
-  height: 20px;
+  height: 16px;
   width: 100%;
   object-fit: cover;
-  margin: 0px 5px;
+  margin-left: 8px;
+  padding: 4px;
+  outline: 1px solid var(--color-footer-text);
+  outline-offset: -1px;
+  border-radius: 6px;
 }
 
 .company-name {

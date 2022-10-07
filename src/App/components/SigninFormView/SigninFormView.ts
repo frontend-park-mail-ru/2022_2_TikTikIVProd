@@ -148,4 +148,26 @@ export default class SigninFormView extends IComponent {
 
         return { data, isCorrect };
     }
+
+    public showErrorInvalidPassword(): void {
+        const passwordField = this.form.querySelector('#password-input');
+        if (passwordField === null) {
+            return;
+        }
+
+        const errorMsg = <HTMLElement>passwordField.parentElement?.querySelector('.form__input__error__msg');
+        errorMsg.style.visibility = 'visible';
+        errorMsg.textContent = 'Неверный пароль';
+    }
+
+    public showErrorNoSuchUser(): void {
+        const emailField = this.form.querySelector('#email-input');
+        if (emailField === null) {
+            return;
+        }
+
+        const errorMsg = <HTMLElement>emailField.parentElement?.querySelector('.form__input__error__msg');
+        errorMsg.style.visibility = 'visible';
+        errorMsg.textContent = 'Неверный email или пароль';
+    }
 }

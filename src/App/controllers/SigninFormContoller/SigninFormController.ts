@@ -25,6 +25,19 @@ export default class SigninFormController extends IController<SigninFormView, Us
             router.goToPath(paths.feedPage);
         }).catch(({ status, body }) => {
             // ПОКРАСИТЬ ПОЛЯ В КРАСНЫЙ
+            switch (status) {
+                case 401: {
+                    this.view.showErrorInvalidPassword();
+                    break;
+                }
+                case 404: {
+                    this.view.showErrorNoSuchUser();
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
         });
     }
 

@@ -58,7 +58,18 @@ class Header {
     }
     renderButtonItem(text, path) {
         //TODO убраь callback мб
-        this.link.appendChild(createButton({ id: 'header__link__profile', text: text, styles: ['header_button'], callback: () => { router.goToPath(path); } }));
+        this.link.appendChild(createButton({
+            id: 'header__link__profile',
+            text: text,
+            styles: ['header_button'],
+            event: {
+                eventType: 'click',
+                callback: (e) => {
+                    e.preventDefault();
+                    router.goToPath(path);
+                }
+            }
+        }));
     }
 }
 export default Header;

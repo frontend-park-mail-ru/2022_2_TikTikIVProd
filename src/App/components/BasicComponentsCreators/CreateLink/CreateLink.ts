@@ -5,7 +5,7 @@ export interface ILinkProps {
     styles?: string[];
     event?: {
         eventType: string;
-        callback: () => void;
+        callback: (e: Event) => void;
     }
 }
 
@@ -22,11 +22,12 @@ export default function createLink(props: ILinkProps): HTMLElement {
         });
     }
 
-    elem.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (props.event !== undefined) {
-            props.event.callback();
-        }
-    });
+    if (props.event !== undefined) {
+        elem.addEventListener(props.event.eventType, (e) => {
+            // e.preventDefault();
+            props.event?.callback(e);
+        });
+    }
+
     return elem;
 }

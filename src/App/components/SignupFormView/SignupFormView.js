@@ -137,4 +137,14 @@ export default class SignupFormView extends IComponent {
         }
         return { data, isCorrect };
     }
+    showErrorUserExists() {
+        var _a;
+        const emailField = this.form.querySelector('#email-input');
+        if (emailField === null) {
+            return;
+        }
+        const errorMsg = (_a = emailField.parentElement) === null || _a === void 0 ? void 0 : _a.querySelector('.form__input__error__msg');
+        errorMsg.style.visibility = 'visible';
+        errorMsg.textContent = 'Пользователь с таким именем уже существует';
+    }
 }

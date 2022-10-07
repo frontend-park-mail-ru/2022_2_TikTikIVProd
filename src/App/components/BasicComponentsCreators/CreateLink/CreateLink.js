@@ -10,11 +10,12 @@ export default function createLink(props) {
             }
         });
     }
-    elem.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (props.event !== undefined) {
-            props.event.callback();
-        }
-    });
+    if (props.event !== undefined) {
+        elem.addEventListener(props.event.eventType, (e) => {
+            var _a;
+            // e.preventDefault();
+            (_a = props.event) === null || _a === void 0 ? void 0 : _a.callback(e);
+        });
+    }
     return elem;
 }

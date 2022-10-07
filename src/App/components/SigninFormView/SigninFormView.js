@@ -127,4 +127,24 @@ export default class SigninFormView extends IComponent {
         });
         return { data, isCorrect };
     }
+    showErrorInvalidPassword() {
+        var _a;
+        const passwordField = this.form.querySelector('#password-input');
+        if (passwordField === null) {
+            return;
+        }
+        const errorMsg = (_a = passwordField.parentElement) === null || _a === void 0 ? void 0 : _a.querySelector('.form__input__error__msg');
+        errorMsg.style.visibility = 'visible';
+        errorMsg.textContent = 'Неверный пароль';
+    }
+    showErrorNoSuchUser() {
+        var _a;
+        const emailField = this.form.querySelector('#email-input');
+        if (emailField === null) {
+            return;
+        }
+        const errorMsg = (_a = emailField.parentElement) === null || _a === void 0 ? void 0 : _a.querySelector('.form__input__error__msg');
+        errorMsg.style.visibility = 'visible';
+        errorMsg.textContent = 'Неверный email или пароль';
+    }
 }

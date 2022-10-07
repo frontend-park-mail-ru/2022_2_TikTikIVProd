@@ -2,7 +2,10 @@ export interface IButtonProps {
     id?: string;
     text?: string;
     styles?: string[];
-    callback?: () => void;
+    event?: {
+        eventType: string,
+        callback: (e: Event) => void;
+    }
 }
 
 export default function createButton(props: IButtonProps): HTMLElement {
@@ -14,11 +17,11 @@ export default function createButton(props: IButtonProps): HTMLElement {
             elem.classList.add(style);
         });
     }
-    elem.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (props.callback !== undefined) {
-            props.callback();
-        }
-    });
+    if (props.event !== undefined) {
+        elem.addEventListener(props.event.eventType, (e) => {
+            // e.preventDefault();
+            props.event?.callback(e);
+        });
+    }
     return elem;
 }

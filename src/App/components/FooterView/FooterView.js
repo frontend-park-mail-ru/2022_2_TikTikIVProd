@@ -11,10 +11,10 @@ export default class FooterView extends IComponent {
         const content = createDiv({ styles: ['footer__container'] });
         const logo = createImg({ src: '../src/img/footer_logo.png', styles: ['footer__logo'] });
         const contacts = createDiv({ text: 'Contacts:', styles: ['contacts'] });
-        const tgContact = createLink({ href: 'https://t.me/george007361', styles: ['contacts__item'] });
-        const tgContactLogo = createImg({ src: '../src/img/tg_icon.png', styles: ['contacts__item__icon'] });
-        tgContact.appendChild(tgContactLogo);
-        contacts.appendChild(tgContact);
+        const phoneContact = createLink({ event: { eventType: 'click', callback: (e) => { } }, href: 'tel:555-555-5555', styles: ['contacts__item'] });
+        const phoneContactLogo = createImg({ src: '../src/img/phone_icon.svg', styles: ['contacts__item__icon'] });
+        phoneContact.appendChild(phoneContactLogo);
+        contacts.appendChild(phoneContact);
         const companyName = createDiv({ text: 'TikTikAndVProd2022', styles: ['company-name'] });
         content.appendChild(logo);
         content.appendChild(contacts);

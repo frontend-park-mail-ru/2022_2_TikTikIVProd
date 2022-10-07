@@ -7,11 +7,12 @@ export default function createButton(props) {
             elem.classList.add(style);
         });
     }
-    elem.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (props.callback !== undefined) {
-            props.callback();
-        }
-    });
+    if (props.event !== undefined) {
+        elem.addEventListener(props.event.eventType, (e) => {
+            var _a;
+            // e.preventDefault();
+            (_a = props.event) === null || _a === void 0 ? void 0 : _a.callback(e);
+        });
+    }
     return elem;
 }
