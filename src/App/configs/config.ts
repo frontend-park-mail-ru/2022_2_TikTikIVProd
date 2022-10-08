@@ -8,36 +8,23 @@ const config = {
             name: 'Лента',
             style: '',
             id: 'menu__item_0',
-            // render: renderFeed,
         },
-        // login: {
-        //     href: '/login',
-        //     name: 'Авторизация',
-        //     render: renderSigninView,
-        // },
-        // signup: {
-        //     href: '/signup',
-        //     name: 'Регистрация',
-        //     render: renderSignupView,
-        // },
         profile: {
             href: '/profile',
             name: 'Профиль',//safe('Профиль'),
             style: '',
             id: 'menu__item_1',
 
-            // render: renderProfile,
         },
         logout: {
             href: '/logout',
             name: 'Выйти',//safe('Профиль'),
-            // render: renderProfile,
             style: 'menu__logout__link',
             id: 'menu__item_2',
 
         },
     },
-    APIUrl: 'http://89.208.197.127:8080'
+    APIUrl: 'http://localhost:8080'
 };
 
 export default config;

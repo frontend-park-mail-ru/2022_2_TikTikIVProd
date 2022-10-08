@@ -16,9 +16,7 @@ import UserModel from './models/UserModel/UserModel.js'
 import router from './Router/Router.js'
 import paths from './Router/RouterPaths.js'
 
-import ajax from './modules/ajax.js'
 import FeedModel from './models/FeedModel/FeedModel.js'
-import MenuModel from './models/MenuModel/MenuModel.js'
 import Profile from './components/Profile/Profile.js'
 
 class App {
