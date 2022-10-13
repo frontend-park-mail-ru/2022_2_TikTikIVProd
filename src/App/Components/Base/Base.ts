@@ -1,6 +1,4 @@
-import Handlebars from "handlebars";
-
-const baseTemplate = `
+const source = `
 <div id="root">
     <div id="header"></div>
     <div id="content">
@@ -12,6 +10,6 @@ const baseTemplate = `
 </div>
 `;
 
-export default function compileBase(): HandlebarsTemplateDelegate<any> {
-    return Handlebars.compile(baseTemplate);
-}
+const baseTemplate = Handlebars.compile(source);
+
+export default baseTemplate;
