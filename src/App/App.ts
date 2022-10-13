@@ -3,6 +3,8 @@ import Handlebars from "handlebars";
 import SigninView from "./Views/SigninView/SigninView.js";
 import SigninController from "./Controllers/SigninController/SigninController.js";
 import UserModel from "./Models/UserModel/UserModel.js";
+import SignupView from "./Views/SignupView/SignupView.js";
+import SignupController from "./Controllers/SignupController/SignupController.js";
 
 export default class App {
     private root: HTMLElement;
@@ -24,9 +26,9 @@ export default class App {
         if (c === null) {
             return;
         }
-        const v = new SigninView(c);
+        const v = new SignupView(c);
         const m = new UserModel();
-        const vc = new SigninController(v, m);
+        const vc = new SignupController(v, m);
         v.render();
     }
 }
