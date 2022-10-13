@@ -8,11 +8,17 @@ import firstNameValidator from "../../Utils/Validators/FirstNameValidator/FirstN
 import lastNameValidator from "../../Utils/Validators/LastNameValidator/LastNameValidator.js";
 import nicknameValidator from "../../Utils/Validators/NicknameValidator/NicknamaValidator.js";
 import passwordValidator from "../../Utils/Validators/PasswordValidator/PasswordValidator.js";
+import router from "../../Router/Router.js";
 
 export default class SignupController extends IController<SignupView, UserModel> {
     constructor(view: SignupView, model: UserModel) {
         super(view, model);
         this.view.bindSubmit(this.onSubmit.bind(this));
+        this.view.bindRedirect(this.onRedirect.bind(this));
+    }
+
+    private onRedirect(href: string) {
+        router.goToPath(href);
     }
 
     private onSubmit(data: Map<string, string>): void {

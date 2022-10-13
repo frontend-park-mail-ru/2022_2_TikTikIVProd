@@ -27,6 +27,18 @@ export default class SignupView extends IView {
         this.parent.appendChild(this.form);
     }
 
+    public bindRedirect(callback: Function): void {
+        signupViewConfig.links.forEach((link) => {
+            const elem = this.form.querySelector('#' + link.id);
+            if (elem !== null) {
+                elem.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    callback(link.href);
+                });
+            }
+        });
+    }
+
     public bindSubmit(callback: Function): void {
         const submit = this.form.querySelector('#' + sigupViewConfig.submit.id);
         if (submit === null) {

@@ -26,6 +26,18 @@ export default class SigninView extends IView {
         this.parent.appendChild(this.form);
     }
 
+    public bindRedirect(callback: Function): void {
+        signinViewConfig.links.forEach((link) => {
+            const elem = this.form.querySelector('#' + link.id);
+            if (elem !== null) {
+                elem.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    callback(link.href);
+                });
+            }
+        });
+    }
+
     public bindSubmit(callback: Function): void {
         const submit = this.form.querySelector('#' + signinViewConfig.submit.id);
         if (submit === null) {
@@ -35,11 +47,8 @@ export default class SigninView extends IView {
 
         submit.addEventListener('click', (e) => {
             e.preventDefault();
-            // const { data, isValid } = this.validateForm();
-            // if (isValid) {
             const data = this.getData();
             callback(data);
-            // }
         });
     }
 
@@ -70,19 +79,4 @@ export default class SigninView extends IView {
             this.showError(id, value);
         });
     }
-
-    // private validateForm(): { data: Map<string, string>, isValid: boolean } {
-    //     const data = new Map<string, string>();
-    //     let isValid: boolean = true;
-
-    //     signinViewConfig.inputs.forEach(({ id, dataSection }) => {
-    //         const elem = <SigninFormInput>this.form.querySelector('#' + id);
-    //         data.set(dataSection.value, elem.value);
-    //         if (!elem.validate(dataSection.value)) {
-    //             isValid = false;
-    //         }
-    //     });
-
-    //     return { data, isValid };
-    // }
 }

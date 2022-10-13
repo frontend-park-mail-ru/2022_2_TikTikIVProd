@@ -1,4 +1,6 @@
-@import url(./Views/SigninView/SigninView.css);
+@import url("./Views/SigninView/SigninView.css");
+@import url("./Views/SignupView/SignupView.css");
+@import url("./Views/MenuView/MenuView.css");
 
 :root {
   --color-root-background: #f0f2f5;
@@ -35,6 +37,12 @@
   --color-logo-background: #21cf7a;
   --color-logo-border: #21cf7a;
 
+  --color-menu-item-background: none;
+  --color-menu-item-background-hover: rgba(0, 255, 132, 0.106);
+  --color-menu-item-text: #767676;
+  --color-menu-item-text-active: #333333;
+  --color-menu-item-logout-text: #f66363;
+
   --header-height: 50px;
 }
 
@@ -52,32 +60,34 @@ body {
 }
 
 #header {
+  position: fixed;
+  width: 100%;
   height: var(--header-height);
   background-color: var(--color-header-background);
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
 }
 
 #content {
+  margin-top: var(--header-height);
   display: flex;
-  flex: 1 0 100%;
+  flex: 1 0 auto;
   padding: 35px 20px;
 }
 
 #footer {
   display: flex;
-  flex: 0 0 100%;
+  flex: 0 0 auto;
+
   transform: translateY(100%);
   background-color: var(--color-footer-background);
   justify-content: center;
   align-items: center;
 }
 
+.right-menu,
 .left-menu {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 3;
-  align-items: center;
-  max-width: 300px;
+  min-width: 120px;
+  max-width: 200px;
 }
 
 .main-content {
@@ -86,12 +96,4 @@ body {
   flex-grow: 10;
   align-items: center;
   padding: 0 20px;
-}
-
-.right-menu {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 3;
-  align-items: center;
-  max-width: 300px;
 }

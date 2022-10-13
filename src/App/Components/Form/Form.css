@@ -1,14 +1,18 @@
 .form {
   display: flex;
   flex-direction: column;
-  width: 30%;
-  height: min-content;
+
+  width: 40%;
+  min-width: min-content;
+  max-width: 400px;
+
   padding: 30px 50px;
   margin-top: 50px;
 
   outline: 2px solid var(--color-form-border);
   outline-offset: -2px;
   border-radius: 10px;
+
   background-color: var(--color-form-background);
 }
 

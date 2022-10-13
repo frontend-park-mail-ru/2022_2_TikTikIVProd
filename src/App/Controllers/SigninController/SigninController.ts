@@ -4,11 +4,17 @@ import { IUserSignIn } from "../../Models/UserModel/UserModel.js"
 import SigninView from "../../Views/SigninView/SigninView.js";
 import { IValidatedData } from "../../Views/SigninView/SigninView.js";
 import emailValidator from "../../Utils/Validators/EmailValidator/EmailValidator.js";
+import router from "../../Router/Router.js";
 
 export default class SigninController extends IController<SigninView, UserModel> {
     constructor(view: SigninView, model: UserModel) {
         super(view, model);
         this.view.bindSubmit(this.onSubmit.bind(this));
+        this.view.bindRedirect(this.onRedirect.bind(this));
+    }
+
+    private onRedirect(href: string) {
+        router.goToPath(href);
     }
 
     private onSubmit(data: Map<string, string>): void {
