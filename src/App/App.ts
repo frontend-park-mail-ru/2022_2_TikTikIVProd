@@ -9,18 +9,22 @@ import MenuView from "./Views/MenuView/MenuView.js";
 import router from "./Router/Router.js";
 import paths from "./Router/RouterPaths.js";
 import MenuController from "./Controllers/MenuController/MenuController.js";
+import FeedView from "./Views/FeedView/FeedView.js";
+import FeedController from "./Controllers/FeedController/FeedController.js";
 
 export default class App {
     // Views
     private signinView: SigninView;
     private signupView: SignupView;
     private menuView: MenuView;
+    private feedView: FeedView;
     // Models
     private userModel: UserModel;
     // Controllers
     private signinController: SigninController;
     private signupController: SignupController;
     private menuController: MenuController;
+    private feedController: FeedController;
     // Elements
     private root: HTMLElement;
     private header: HTMLElement;
@@ -53,6 +57,7 @@ export default class App {
 
     private handleRedirectToFeed() {
         this.menuView.render();
+        this.feedView.render();
     }
 
     // Init
@@ -70,6 +75,7 @@ export default class App {
         this.signinView = new SigninView(this.content);
         this.signupView = new SignupView(this.content);
         this.menuView = new MenuView(this.leftSide);
+        this.feedView = new FeedView(this.content);
     }
 
     private initModels() {
@@ -80,6 +86,7 @@ export default class App {
         this.signinController = new SigninController(this.signinView, this.userModel);
         this.signupController = new SignupController(this.signupView, this.userModel);
         this.menuController = new MenuController(this.menuView);
+        this.feedController = new FeedController(this.feedView, null); // TODO
     }
 
     private initRoutes() {
