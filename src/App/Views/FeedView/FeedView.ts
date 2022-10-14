@@ -1,3 +1,4 @@
+import feedCardTemplate from "../../Components/FeedCard/FeedCard.js";
 import { IFeedData } from "../../Models/FeedModel/FeedModel.js";
 import IView from "../IView/IView.js";
 
@@ -21,11 +22,11 @@ export default class FeedView extends IView {
 
     // Binders
     public bindScrollEvent(listener: any): void {
-        window.addEventListener('scroll', listener);
+        window.addEventListener('scroll', listener.bind(this));
     }
 
     public bindResizeEvent(listener: any): void {
-        window.addEventListener('resize', listener);
+        window.addEventListener('resize', listener.bind(this));
     }
 
 
@@ -52,6 +53,14 @@ export default class FeedView extends IView {
 
     public pushContentToFeed(data: IFeedData[]) {
         // TODO
-        console.log('Add content');
+        const parser = new DOMParser();
+        data.forEach((item) => {
+            const card = feedCardTemplate(item);
+            const c = parser.parseFromString(card, 'text/html').querySelector('.feed__card');
+            if (c === null) {
+                return;
+            }
+            this.feed.appendChild(c);
+        });
     }
 }

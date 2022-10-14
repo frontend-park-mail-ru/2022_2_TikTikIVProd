@@ -6,7 +6,7 @@ export interface IFeedData {
     photoLink: string;
     description: string;
     likes: number;
-    date: Date;
+    date: string;
     author_name: string;
     author_photo: string;
 }

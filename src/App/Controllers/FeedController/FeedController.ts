@@ -1,4 +1,4 @@
-import FeedModel from "../../Models/FeedModel/FeedModel.js";
+import FeedModel, { IFeedData } from "../../Models/FeedModel/FeedModel.js";
 import throttle from "../../Utils/Throttle/Throttle.js";
 import FeedView from "../../Views/FeedView/FeedView.js";
 import IController from "../IController/IController.js";
@@ -17,6 +17,8 @@ export default class FeedController extends IController<FeedView, FeedModel> {
             this.view.bindScrollEvent(this.handleScroll.bind(this));
             this.view.bindResizeEvent(this.handleScroll.bind(this));
             this.isMounted = true;
+            //
+            this.addContent();
         }
     }
 
@@ -32,12 +34,27 @@ export default class FeedController extends IController<FeedView, FeedModel> {
     // Specific
 
     private handleScroll(): void {
-        throttle(this.checkPosition.bind(this), 250);
+        // TODO throttle
+
+        this.checkPosition();
     }
 
 
     private addContent(): void {
-        console.log('scroll or resize');
+        const item: IFeedData = {
+            photoLink: 'test',
+            description: 'test',
+            likes: 123,
+            date: 'test',
+            author_name: 'test',
+            author_photo: 'test',
+        }
+        const testData = [];
+        for (let index = 0; index < 10; index++) {
+            testData.push(item);
+        }
+
+        this.view.pushContentToFeed(testData);
     }
 
     private checkPosition() {
