@@ -1,0 +1,16 @@
+.header__item__settings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: 2px solid var(--color-button-background);
+  outline-offset: -2px;
+  border-radius: 8px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.header__item__settings__icon {
+  max-width: 100%;
+  max-height: 30px;
+  object-fit: cover;
+}

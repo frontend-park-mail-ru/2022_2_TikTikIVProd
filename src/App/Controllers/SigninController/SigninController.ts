@@ -9,15 +9,37 @@ import router from "../../Router/Router.js";
 export default class SigninController extends IController<SigninView, UserModel> {
     constructor(view: SigninView, model: UserModel) {
         super(view, model);
-        this.view.bindSubmit(this.onSubmit.bind(this));
-        this.view.bindRedirect(this.onRedirect.bind(this));
     }
 
-    private onRedirect(href: string) {
-        router.goToPath(href);
+    public mountComponent(): void {
+        if (!this.isMounted) {
+            this.view.bindSubmit(this.onSubmit.bind(this));
+            this.view.bindRedirect(this.onRedirect.bind(this));
+            this.view.show();
+            this.isMounted = true;
+        }
     }
 
-    private onSubmit(data: Map<string, string>): void {
+    public unmountComponent(): void {
+        if (this.isMounted) {
+            this.view.unbindSubmit(this.onSubmit.bind(this));
+            this.view.unbindRedirect(this.onRedirect.bind(this));
+            this.view.hide();
+        }
+        this.isMounted = false;
+    }
+
+    private onRedirect(e: Event) {
+        e.preventDefault();
+        router.goToPath((<HTMLLinkElement>e.target).getAttribute('href') || '');
+    }
+
+    private onSubmit(e: Event): void {
+
+        e.preventDefault();
+        const data: Map<string, string> = this.view.getData();
+
+
         const { isValidData, validatedData } = this.validate(data);
         this.view.showErrors(validatedData);
         if (!isValidData) {

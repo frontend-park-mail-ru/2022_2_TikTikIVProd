@@ -1,35 +1,39 @@
-import headerTemplate from "../../Components/Header/Header.js";
-import headerButtonTemplate from "../../Components/Header/HeaderButton.js";
-import headerProfileTemplate from "../../Components/Header/HeaderProfile.js";
+import headerButtonTemplate from "../../Components/HeaderButton/HeaderButton.js";
+import headerProfileTemplate from "../../Components/HeaderProfile/HeaderProfile.js";
 import IView from "../IView/IView.js";
 
 export default class HeaderView extends IView {
+    private headerTemplate;
     private header: HTMLElement;
+
     constructor(parent: HTMLElement) {
         super(parent);
+        this.headerTemplate = Handlebars.compile(source);
+
         const parser = new DOMParser();
-        const header: HTMLElement | null = parser.parseFromString(headerTemplate({}), 'text/html').querySelector('.header__container');
+        const header: HTMLElement | null = parser.parseFromString(this.headerTemplate({}), 'text/html').querySelector('.header__container');
         if (header === null) {
             throw Error();
         }
         this.header = header;
     }
 
-    public render(opts?: any): void {
-        this.parent.innerHTML = '';
+    public show(opts?: any): void {
         this.parent.appendChild(this.header);
     }
 
-    public bindClickEvent(callback: Function): void {
-        this.header.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetHref = (<HTMLLinkElement>e.target).getAttribute('href');
-            console.log(targetHref);
-            if (targetHref !== null) {
-                callback(targetHref);
-            }
-        });
+    public hide(opts?: any): void {
+        this.parent.removeChild(this.header);
     }
+
+    public bindClickEvent(listener: any): void {
+        this.header.addEventListener('click', listener.bind(this));
+    }
+
+    public unbindClickEvent(listener: any) {
+        this.header.removeEventListener('click', listener.bind(this));
+    }
+
 
     public changeHeaderItem(itemName: string): void {
         const headerItem = this.header.querySelector('#header__item');
@@ -53,3 +57,13 @@ export default class HeaderView extends IView {
         }
     }
 }
+
+
+const source = `
+<div class="header__container">
+    <div class="header__logo" href='/feed'>
+        WS
+    </div>
+    <div id="header__item" class="header__item">{{item}}</div>
+</div>
+`;

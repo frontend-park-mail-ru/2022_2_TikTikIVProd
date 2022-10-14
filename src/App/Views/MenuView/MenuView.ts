@@ -20,30 +20,37 @@ export default class MenuView extends IView {
         this.currentActiveItem = null;
     }
 
-    public render(currentItem?: string) {
-        this.parent.innerHTML = '';
+    public show(opts?: any): void {
         this.parent.appendChild(this.menu);
-        if (currentItem !== undefined) {
-            this.changeActiveMenuItem(currentItem);
-        }
+        // if (opts.currentItem !== undefined) {
+        //     this.changeActiveMenuItem(opts.currentItem);
+        // }
     }
 
-    private changeActiveMenuItem(newActiveItem: string) {
+    public hide(opts?: any): void {
+        this.parent.removeChild(this.menu);
+    }
+
+    public changeActiveMenuItem(newActiveItem: string) {
         this.menu.querySelector(`[href="${this.currentActiveItem}"]`)?.classList.remove('menu__item--active');
         this.currentActiveItem = newActiveItem;
         this.menu.querySelector(`[href="${newActiveItem}"]`)?.classList.add('menu__item--active');
     }
 
-    public bindRedirect(callback: Function): void {
+    public bindRedirect(listener: any): void {
         menuConfig.items.forEach((item) => {
             const elem = <HTMLElement>this.menu.querySelector('#' + item.id);
             if (elem !== null) {
-                elem.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const href = (<HTMLAnchorElement>e.target).getAttribute('href');
-                    this.changeActiveMenuItem(href || '');
-                    callback(href);
-                });
+                elem.addEventListener('click', listener.bind(this));
+            }
+        });
+    }
+
+    public unbindRedirect(listener: any): void {
+        menuConfig.items.forEach((item) => {
+            const elem = <HTMLElement>this.menu.querySelector('#' + item.id);
+            if (elem !== null) {
+                elem.removeEventListener('click', listener.bind(this));
             }
         });
     }

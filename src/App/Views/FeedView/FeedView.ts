@@ -10,27 +10,45 @@ export default class FeedView extends IView {
         this.feed.classList.add('feed__container');
     }
 
-    public render() {
-        this.parent.innerHTML = '';
+    // Interface 
+    public show(): void {
         this.parent.appendChild(this.feed);
     }
 
-    public bindScrollEvent(callback: Function): void {
-        window.addEventListener('scroll', () => { callback() });
+    public hide(): void {
+        this.parent.removeChild(this.feed);
     }
 
-    public bindResizeEvent(callback: Function): void {
-        window.addEventListener('resize', () => { callback() });
+    // Binders
+    public bindScrollEvent(listener: any): void {
+        window.addEventListener('scroll', listener);
     }
 
-    public bindClickEvent(callback: Function): void {
-        this.feed.addEventListener('click', (e) => {
-            e.preventDefault();
-
-            const target = <HTMLElement>e.target;
-            // TODO
-        });
+    public bindResizeEvent(listener: any): void {
+        window.addEventListener('resize', listener);
     }
+
+
+    // public bindClickEvent(callback: Function): void {
+    //     this.feed.addEventListener('click', (e) => {
+    //         e.preventDefault();
+
+    //         const target = <HTMLElement>e.target;
+    //         // TODO
+    //     });
+    // }
+
+    // Unbinders
+    public unbindScrollEvent(listener: any): void {
+        window.removeEventListener('scroll', listener);
+    }
+
+    public unbindResizeEvent(listener: any): void {
+        window.removeEventListener('resize', listener);
+    }
+
+
+    // Specific
 
     public pushContentToFeed(data: IFeedData[]) {
         // TODO

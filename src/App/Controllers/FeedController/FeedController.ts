@@ -4,14 +4,37 @@ import FeedView from "../../Views/FeedView/FeedView.js";
 import IController from "../IController/IController.js";
 
 export default class FeedController extends IController<FeedView, FeedModel> {
-
     private currentPage: number;
+
     constructor(view: FeedView, model: FeedModel) {
         super(view, model);
-
-        this.view.bindScrollEvent(throttle(this.checkPosition.bind(this), 250));
-        this.view.bindResizeEvent(throttle(this.checkPosition.bind(this), 250));
     }
+
+    // interface
+    public mountComponent(): void {
+        if (!this.isMounted) {
+            this.view.show();
+            this.view.bindScrollEvent(this.handleScroll.bind(this));
+            this.view.bindResizeEvent(this.handleScroll.bind(this));
+            this.isMounted = true;
+        }
+    }
+
+    public unmountComponent(): void {
+        if (this.isMounted) {
+            this.view.unbindScrollEvent(this.handleScroll.bind(this));
+            this.view.unbindResizeEvent(this.handleScroll.bind(this));
+            this.view.hide();
+            this.isMounted = false;
+        }
+    }
+
+    // Specific
+
+    private handleScroll(): void {
+        throttle(this.checkPosition.bind(this), 250);
+    }
+
 
     private addContent(): void {
         console.log('scroll or resize');

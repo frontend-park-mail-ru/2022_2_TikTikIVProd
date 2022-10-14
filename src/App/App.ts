@@ -14,14 +14,19 @@ import FeedController from "./Controllers/FeedController/FeedController.js";
 import FeedModel from "./Models/FeedModel/FeedModel.js";
 import HeaderView from "./Views/HeaderView/HeaderView.js";
 import HeaderController from "./Controllers/HeaderController/HeaderController.js";
+import FooterView from "./Views/FooterView/FooterView.js";
+import FooterController from "./Controllers/FooterController/FooterController.js";
 
 export default class App {
+    // States
+
     // Views
     private signinView: SigninView;
     private signupView: SignupView;
     private menuView: MenuView;
     private feedView: FeedView;
     private headerView: HeaderView;
+    private footerView: FooterView;
 
     // Models
     private userModel: UserModel;
@@ -33,6 +38,7 @@ export default class App {
     private menuController: MenuController;
     private feedController: FeedController;
     private headerController: HeaderController;
+    private footerController: FooterController;
 
     // Elements
     private root: HTMLElement;
@@ -52,25 +58,51 @@ export default class App {
 
     public run() {
         console.log('App run');
-        this.headerView.render();
-        router.goToPath(paths.signinPage);
+        router.goToPath(paths.feedPage);
     }
 
     // Redirects
     private handleRedirectToSignin() {
-        this.signinView.render();
+        // unmount
+        this.signupController.unmountComponent();
+        this.menuController.unmountComponent();
+        this.feedController.unmountComponent();
+        // mount
+        this.headerController.mountComponent();
+        this.footerController.mountComponent();
+        this.signinController.mountComponent();
+        //states
         this.headerView.changeHeaderItem('signup');
     }
 
     private handleRedirectToSignup() {
-        this.signupView.render();
+        // unmount
+        this.signinController.unmountComponent();
+        this.menuController.unmountComponent();
+        this.feedController.unmountComponent();
+        // mount
+        this.headerController.mountComponent();
+        this.footerController.mountComponent();
+        this.signupController.mountComponent();
+        //states
         this.headerView.changeHeaderItem('signin');
     }
 
     private handleRedirectToFeed() {
-        this.menuView.render();
-        this.feedView.render();
+        // unmount
+        this.signinController.unmountComponent();
+        this.signupController.unmountComponent();
+        this.footerController.unmountComponent();
+        // mount
+        this.headerController.mountComponent();
+        this.menuController.mountComponent();
+        this.feedController.mountComponent();
+        //states
         this.headerView.changeHeaderItem('profile');
+    }
+
+    private handleLogout() {
+        router.goToPath(paths.signinPage);
     }
 
     // Init
@@ -90,6 +122,7 @@ export default class App {
         this.menuView = new MenuView(this.leftSide);
         this.feedView = new FeedView(this.content);
         this.headerView = new HeaderView(this.header);
+        this.footerView = new FooterView(this.footer);
     }
 
     private initModels() {
@@ -103,11 +136,13 @@ export default class App {
         this.menuController = new MenuController(this.menuView);
         this.feedController = new FeedController(this.feedView, this.feedModel);
         this.headerController = new HeaderController(this.headerView, this.userModel);
+        this.footerController = new FooterController(this.footerView);
     }
 
     private initRoutes() {
         router.addPath({ path: paths.signinPage, handler: this.handleRedirectToSignin.bind(this) });
         router.addPath({ path: paths.signupPage, handler: this.handleRedirectToSignup.bind(this) });
         router.addPath({ path: paths.feedPage, handler: this.handleRedirectToFeed.bind(this) });
+        router.addPath({ path: paths.logout, handler: this.handleLogout.bind(this) });
     }
 }

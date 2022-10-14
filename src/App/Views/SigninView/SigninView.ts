@@ -21,38 +21,54 @@ export default class SigninView extends IView {
         this.form = form;
     }
 
-    public render() {
-        this.parent.innerHTML = '';
+    public show(opts?: any): void {
         this.parent.appendChild(this.form);
     }
 
-    public bindRedirect(callback: Function): void {
+    public hide(opts?: any): void {
+        this.parent.removeChild(this.form);
+    }
+
+    public bindRedirect(listener: any): void {
         signinViewConfig.links.forEach((link) => {
             const elem = this.form.querySelector('#' + link.id);
             if (elem !== null) {
-                elem.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    callback(link.href);
-                });
+                elem.addEventListener('click', listener.bind(this));
             }
         });
     }
 
-    public bindSubmit(callback: Function): void {
+    public bindSubmit(listener: any): void {
         const submit = this.form.querySelector('#' + signinViewConfig.submit.id);
         if (submit === null) {
             console.log('No submit btn signin view');
             return;
         }
 
-        submit.addEventListener('click', (e) => {
-            e.preventDefault();
-            const data = this.getData();
-            callback(data);
+        submit.addEventListener('click', listener.bind(this));
+    }
+
+    public unbindRedirect(listener: any): void {
+        signinViewConfig.links.forEach((link) => {
+            const elem = this.form.querySelector('#' + link.id);
+            if (elem !== null) {
+                elem.removeEventListener('click', listener.bind(this));
+            }
         });
     }
 
-    private getData(): Map<string, string> {
+    public unbindSubmit(listener: any): void {
+        const submit = this.form.querySelector('#' + signinViewConfig.submit.id);
+        if (submit === null) {
+            console.log('No submit btn signin view');
+            return;
+        }
+
+        submit.removeEventListener('click', listener.bind(this));
+    }
+
+
+    public getData(): Map<string, string> {
         const data = new Map<string, string>();
         signinViewConfig.inputs.forEach((input) => {
             const html = <HTMLInputElement>this.form.querySelector('#' + input.id);
@@ -60,6 +76,7 @@ export default class SigninView extends IView {
         });
         return data;
     }
+
     public showError(id: string, data: IValidatedData): void {
         const input = <HTMLInputElement>this.form.querySelector('#' + id);
         const errorField = <HTMLElement>this.form.querySelector('#' + id + '-msg');
