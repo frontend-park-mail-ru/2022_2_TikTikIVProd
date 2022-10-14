@@ -1,6 +1,8 @@
 @import url("./Views/SigninView/SigninView.css");
 @import url("./Views/SignupView/SignupView.css");
 @import url("./Views/MenuView/MenuView.css");
+@import url("./Views/HeaderView/HeaderView.css");
+/* @import url("./Views/FeedView/FeedView.css"); */
 
 :root {
   --color-root-background: #f0f2f5;

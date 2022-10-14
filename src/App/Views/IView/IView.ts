@@ -4,5 +4,5 @@ export default abstract class IView {
         this.parent = parent;
     }
 
-    abstract render(opts: any): void;
+    abstract render(opts?: any): void;
 }

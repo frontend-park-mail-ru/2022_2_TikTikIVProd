@@ -1,11 +1,12 @@
+import FeedModel from "../../Models/FeedModel/FeedModel.js";
 import throttle from "../../Utils/Throttle/Throttle.js";
 import FeedView from "../../Views/FeedView/FeedView.js";
 import IController from "../IController/IController.js";
 
-export default class FeedController extends IController<FeedView, null> {
+export default class FeedController extends IController<FeedView, FeedModel> {
 
     private currentPage: number;
-    constructor(view: FeedView, model: null) {
+    constructor(view: FeedView, model: FeedModel) {
         super(view, model);
 
         this.view.bindScrollEvent(throttle(this.checkPosition.bind(this), 250));

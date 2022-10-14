@@ -11,6 +11,9 @@ import paths from "./Router/RouterPaths.js";
 import MenuController from "./Controllers/MenuController/MenuController.js";
 import FeedView from "./Views/FeedView/FeedView.js";
 import FeedController from "./Controllers/FeedController/FeedController.js";
+import FeedModel from "./Models/FeedModel/FeedModel.js";
+import HeaderView from "./Views/HeaderView/HeaderView.js";
+import HeaderController from "./Controllers/HeaderController/HeaderController.js";
 
 export default class App {
     // Views
@@ -18,13 +21,19 @@ export default class App {
     private signupView: SignupView;
     private menuView: MenuView;
     private feedView: FeedView;
+    private headerView: HeaderView;
+
     // Models
     private userModel: UserModel;
+    private feedModel: FeedModel;
+
     // Controllers
     private signinController: SigninController;
     private signupController: SignupController;
     private menuController: MenuController;
     private feedController: FeedController;
+    private headerController: HeaderController;
+
     // Elements
     private root: HTMLElement;
     private header: HTMLElement;
@@ -43,21 +52,25 @@ export default class App {
 
     public run() {
         console.log('App run');
-        router.goToPath(paths.feedPage);
+        this.headerView.render();
+        router.goToPath(paths.signinPage);
     }
 
     // Redirects
     private handleRedirectToSignin() {
         this.signinView.render();
+        this.headerView.changeHeaderItem('signup');
     }
 
     private handleRedirectToSignup() {
         this.signupView.render();
+        this.headerView.changeHeaderItem('signin');
     }
 
     private handleRedirectToFeed() {
         this.menuView.render();
         this.feedView.render();
+        this.headerView.changeHeaderItem('profile');
     }
 
     // Init
@@ -76,17 +89,20 @@ export default class App {
         this.signupView = new SignupView(this.content);
         this.menuView = new MenuView(this.leftSide);
         this.feedView = new FeedView(this.content);
+        this.headerView = new HeaderView(this.header);
     }
 
     private initModels() {
         this.userModel = new UserModel();
+        this.feedModel = new FeedModel();
     }
 
     private initControllers() {
         this.signinController = new SigninController(this.signinView, this.userModel);
         this.signupController = new SignupController(this.signupView, this.userModel);
         this.menuController = new MenuController(this.menuView);
-        this.feedController = new FeedController(this.feedView, null); // TODO
+        this.feedController = new FeedController(this.feedView, this.feedModel);
+        this.headerController = new HeaderController(this.headerView, this.userModel);
     }
 
     private initRoutes() {
