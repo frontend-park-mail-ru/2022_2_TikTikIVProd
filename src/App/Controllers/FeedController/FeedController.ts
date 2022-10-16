@@ -42,7 +42,7 @@ export default class FeedController extends IController<FeedView, FeedModel> {
 
     private addContent(): void {
         const item: IFeedData = {
-            photoLink: 'test',
+            photoLink: '../src/img/test_post_img.jpg',
             description: 'test',
             likes: 123,
             date: 'test',

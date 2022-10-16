@@ -29,7 +29,7 @@ export default class FeedController extends IController {
     }
     addContent() {
         const item = {
-            photoLink: 'test',
+            photoLink: '../src/img/test_post_img.jpg',
             description: 'test',
             likes: 123,
             date: 'test',
