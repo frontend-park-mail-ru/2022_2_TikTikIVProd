@@ -9,68 +9,54 @@ import router from "../../Router/Router.js";
 export default class SigninController extends IController<SigninView, UserModel> {
     constructor(view: SigninView, model: UserModel) {
         super(view, model);
-    }
-
-    public mountComponent(): void {
-        if (!this.isMounted) {
-            this.view.bindSubmit(this.onSubmit.bind(this));
-            this.view.bindRedirect(this.onRedirect.bind(this));
-            this.view.show();
-            this.isMounted = true;
-        }
-    }
-
-    public unmountComponent(): void {
-        if (this.isMounted) {
-            this.view.unbindSubmit(this.onSubmit.bind(this));
-            this.view.unbindRedirect(this.onRedirect.bind(this));
-            this.view.hide();
-        }
-        this.isMounted = false;
+        this.view.bindSubmit(this.onSubmit.bind(this));
+        this.view.bindRedirect(this.onRedirect.bind(this));
     }
 
     private onRedirect(e: Event) {
         e.preventDefault();
-        router.goToPath((<HTMLLinkElement>e.target).getAttribute('href') || '');
+        if (this.isMounted) {
+            router.goToPath((<HTMLLinkElement>e.target).getAttribute('href') || '');
+        }
     }
 
     private onSubmit(e: Event): void {
-
         e.preventDefault();
-        const data: Map<string, string> = this.view.getData();
+        if (this.isMounted) {
+            const data: Map<string, string> = this.view.getData();
 
 
-        const { isValidData, validatedData } = this.validate(data);
-        this.view.showErrors(validatedData);
-        if (!isValidData) {
-            console.log('invalid data');
-            return;
-        }
-
-        console.log('valid data');
-
-        const user: IUserSignIn = {
-            email: data.get('email') || '',
-            password: data.get('password') || '',
-        };
-
-        this.model.authUser(user).then(({ status, body }) => {
-            console.log('auth success');
-        }).catch(({ status, body }) => {
-            console.log('auth failure');
-            switch (status) {
-                case 401:
-                case 404: {
-                    this.view.showError('email', { isValid: false, msg: 'Неверный email или пароль' });
-                    break;
-                }
-                default: {
-                    this.view.showError('email', { isValid: false, msg: `Ошибка сервера ${status}` });
-                    break;
-                }
+            const { isValidData, validatedData } = this.validate(data);
+            this.view.showErrors(validatedData);
+            if (!isValidData) {
+                console.log('invalid data');
+                return;
             }
-        });
 
+            console.log('valid data');
+
+            const user: IUserSignIn = {
+                email: data.get('email') || '',
+                password: data.get('password') || '',
+            };
+
+            this.model.authUser(user).then(({ status, body }) => {
+                console.log('auth success');
+            }).catch(({ status, body }) => {
+                console.log('auth failure');
+                switch (status) {
+                    case 401:
+                    case 404: {
+                        this.view.showError('email', { isValid: false, msg: 'Неверный email или пароль' });
+                        break;
+                    }
+                    default: {
+                        this.view.showError('email', { isValid: false, msg: `Ошибка сервера ${status}` });
+                        break;
+                    }
+                }
+            });
+        }
     }
 
     private validate(data: Map<string, string>): {
@@ -98,5 +84,4 @@ export default class SigninController extends IController<SigninView, UserModel>
 
         return { isValidData, validatedData };
     }
-
 }

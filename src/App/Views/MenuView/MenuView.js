@@ -28,20 +28,10 @@ export default class MenuView extends IView {
         (_b = this.menu.querySelector(`[href="${newActiveItem}"]`)) === null || _b === void 0 ? void 0 : _b.classList.add('menu__item--active');
     }
     bindRedirect(listener) {
-        menuConfig.items.forEach((item) => {
-            const elem = this.menu.querySelector('#' + item.id);
-            if (elem !== null) {
-                elem.addEventListener('click', listener.bind(this));
-            }
-        });
+        this.menu.addEventListener('click', listener);
     }
     unbindRedirect(listener) {
-        menuConfig.items.forEach((item) => {
-            const elem = this.menu.querySelector('#' + item.id);
-            if (elem !== null) {
-                elem.removeEventListener('click', listener.bind(this));
-            }
-        });
+        this.menu.removeEventListener('click', listener);
     }
 }
 const source = `

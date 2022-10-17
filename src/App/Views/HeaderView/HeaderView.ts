@@ -1,6 +1,7 @@
 import headerButtonTemplate from "../../Components/HeaderButton/HeaderButton.js";
 import headerProfileTemplate from "../../Components/HeaderProfile/HeaderProfile.js";
 import IView from "../IView/IView.js";
+import headerItems from "./HeaderViewConfig.js";
 
 export default class HeaderView extends IView {
     private headerTemplate;
@@ -35,26 +36,19 @@ export default class HeaderView extends IView {
     }
 
 
-    public changeHeaderItem(itemName: string): void {
+    public changeHeaderItem(itemName: string, data?: any): void {
         const headerItem = this.header.querySelector('#header__item');
         if (headerItem === null) {
             console.log('Header: no header item');
             return;
         }
-        switch (itemName) {
-            case 'signin': {
-                headerItem.innerHTML = headerButtonTemplate({ href: '/signin', text: 'Войти' });
-                break;
-            }
-            case 'signup': {
-                headerItem.innerHTML = headerButtonTemplate({ href: '/signup', text: 'Зарегистрироваться' });
-                break;
-            }
-            case 'profile': {
-                headerItem.innerHTML = headerProfileTemplate({ href: '/profile', name: 'TEst name', avatar: '#' });
-                break;
-            }
+
+        const elem = headerItems.get(itemName);
+        if (elem === undefined) {
+            return;
         }
+
+        headerItem.innerHTML = elem.render(Object.assign(elem.data, data));
     }
 }
 

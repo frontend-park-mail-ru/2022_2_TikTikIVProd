@@ -6,9 +6,13 @@ export default class FeedView extends IView {
     private feed: HTMLElement;
     constructor(parent: HTMLElement) {
         super(parent);
-        this.feed = document.createElement('div');
-        this.feed.id = 'feed';
-        this.feed.classList.add('feed__container');
+        const parser = new DOMParser();
+
+        const feed: HTMLElement | null = parser.parseFromString(feedTemplate({}), 'text/html').querySelector('#feed');
+        if (feed === null) {
+            throw Error();
+        }
+        this.feed = feed;
     }
 
     // Interface 
@@ -64,3 +68,10 @@ export default class FeedView extends IView {
         });
     }
 }
+
+
+const source = `
+<div id="feed" class="feed__container"></div>
+`;
+
+const feedTemplate = Handlebars.compile(source);

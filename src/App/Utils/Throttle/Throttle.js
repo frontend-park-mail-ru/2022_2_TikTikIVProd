@@ -11,24 +11,39 @@
 //         }, timeout);
 //     }
 // }
-const throttle = (fn, wait = 300) => {
-    let inThrottle, lastFn, lastTime;
-    return function () {
-        const context = this, args = arguments;
-        if (!inThrottle) {
-            fn.apply(context, args);
-            lastTime = Date.now();
-            inThrottle = true;
+// const throttle = (fn: Function, wait: number = 300) => {
+//     let inThrottle: boolean,
+//         lastFn: ReturnType<typeof setTimeout>,
+//         lastTime: number;
+//     return function (this: any) {
+//         const context = this,
+//             args = arguments;
+//         if (!inThrottle) {
+//             fn.apply(context, args);
+//             lastTime = Date.now();
+//             inThrottle = true;
+//         } else {
+//             clearTimeout(lastFn);
+//             lastFn = setTimeout(() => {
+//                 if (Date.now() - lastTime >= wait) {
+//                     fn.apply(context, args);
+//                     lastTime = Date.now();
+//                 }
+//             }, Math.max(wait - (Date.now() - lastTime), 0));
+//         }
+//     };
+// };
+function throttle(callee, timeout = 300) {
+    let timer = undefined;
+    return function perform(...args) {
+        if (timer) {
+            return;
         }
-        else {
-            clearTimeout(lastFn);
-            lastFn = setTimeout(() => {
-                if (Date.now() - lastTime >= wait) {
-                    fn.apply(context, args);
-                    lastTime = Date.now();
-                }
-            }, Math.max(wait - (Date.now() - lastTime), 0));
-        }
+        timer = setTimeout(() => {
+            callee(...args);
+            clearTimeout(timer);
+            timer = undefined;
+        }, timeout);
     };
-};
+}
 export default throttle;

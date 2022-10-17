@@ -1,48 +1,38 @@
+import throttle from "../../Utils/Throttle/Throttle.js";
 import IController from "../IController/IController.js";
 export default class FeedController extends IController {
     constructor(view, model) {
         super(view, model);
+        this.view.bindScrollEvent(throttle(this.handleScroll.bind(this), 250));
+        this.view.bindResizeEvent(throttle(this.handleScroll.bind(this), 250));
     }
-    // interface
-    mountComponent() {
-        if (!this.isMounted) {
-            this.view.show();
-            this.view.bindScrollEvent(this.handleScroll.bind(this));
-            this.view.bindResizeEvent(this.handleScroll.bind(this));
-            this.isMounted = true;
-            //
-            this.addContent();
-        }
-    }
-    unmountComponent() {
-        if (this.isMounted) {
-            this.view.unbindScrollEvent(this.handleScroll.bind(this));
-            this.view.unbindResizeEvent(this.handleScroll.bind(this));
-            this.view.hide();
-            this.isMounted = false;
-        }
-    }
+    // TODO доавить контент если фид пуст
     // Specific
     handleScroll() {
-        // TODO throttle
-        this.checkPosition();
+        if (this.isMounted) {
+            if (this.checkFeedEnd()) {
+                const content = this.getContent();
+                this.view.pushContentToFeed(content);
+            }
+        }
     }
-    addContent() {
+    getContent() {
+        // TODO model
         const item = {
             photoLink: '../src/img/test_post_img.jpg',
             description: 'test',
             likes: 123,
             date: 'test',
             author_name: 'test',
-            author_photo: 'test',
+            author_photo: '../src/img/test_avatar.jpg',
         };
         const testData = [];
         for (let index = 0; index < 10; index++) {
             testData.push(item);
         }
-        this.view.pushContentToFeed(testData);
+        return testData;
     }
-    checkPosition() {
+    checkFeedEnd() {
         // Нам потребуется знать высоту документа и высоту экрана:
         const height = document.body.offsetHeight;
         const screenHeight = window.innerHeight;
@@ -53,12 +43,11 @@ export default class FeedController extends IController {
         // Обозначим порог, по приближении к которому
         // будем вызывать какое-то действие.
         // В нашем случае — четверть экрана до конца страницы:
-        const threshold = height - screenHeight / 4;
+        const threshold = height - screenHeight / 12;
         // Отслеживаем, где находится низ экрана относительно страницы:
         const position = scrolled + screenHeight;
-        if (position >= threshold) {
-            // Если мы пересекли полосу-порог, вызываем нужное действие.
-            this.addContent();
-        }
+        return position >= threshold; // Если мы пересекли полосу-порог, вызываем нужное действие.
     }
 }
+// this.view.unbindScrollEvent(this.handleScroll.bind(this));
+// this.view.unbindResizeEvent(this.handleScroll.bind(this));

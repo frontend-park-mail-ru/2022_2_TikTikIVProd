@@ -1,6 +1,5 @@
 @import url("../../Components/HeaderButton/HeaderButton.css");
 @import url("../../Components/HeaderProfile/HeaderProfile.css");
-@import url("../../Components/HeaderSettings/HeaderSettings.css");
 
 .header__container {
   display: inline-flex;

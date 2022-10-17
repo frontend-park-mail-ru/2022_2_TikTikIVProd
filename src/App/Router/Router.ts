@@ -5,12 +5,24 @@ interface IRoute {
 
 class Router {
     private routes: IRoute[];
-
-    private current: IRoute | undefined;
+    private current: string | null;
 
     constructor() {
         this.routes = [];
-        this.current = undefined;
+        this.current = null;
+    }
+
+    public start(entryPath: string): void {
+        history.replaceState({ path: entryPath }, '', entryPath);
+        this.current = entryPath;
+
+        window.addEventListener('popstate', (e) => {
+            e.preventDefault();
+            console.log(e.state.path);
+            this.route();
+        });
+
+        this.route();
     }
 
     public addPath(route: IRoute) {
@@ -18,11 +30,19 @@ class Router {
     }
 
     public goToPath(path: string) {
+        history.pushState({ path: path }, '', path);
+        this.route();
+    }
+
+    private route(): void {
+        const path = history.state?.path;
+        console.log('location ', location);
+
+
         const item = this.routes.find((item) => item.path == path);
         if (item === undefined) {
             return;
         }
-
         item.handler();
     }
 }

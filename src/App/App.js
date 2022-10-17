@@ -25,7 +25,8 @@ export default class App {
     }
     run() {
         console.log('App run');
-        router.goToPath(paths.feedPage);
+        // router.goToPath(paths.feedPage);
+        router.start(paths.feedPage);
     }
     // Redirects
     handleRedirectToSignin() {
@@ -38,7 +39,7 @@ export default class App {
         this.footerController.mountComponent();
         this.signinController.mountComponent();
         //states
-        this.headerView.changeHeaderItem('signup');
+        this.headerView.changeHeaderItem('signupButton');
     }
     handleRedirectToSignup() {
         // unmount
@@ -50,7 +51,7 @@ export default class App {
         this.footerController.mountComponent();
         this.signupController.mountComponent();
         //states
-        this.headerView.changeHeaderItem('signin');
+        this.headerView.changeHeaderItem('signinButton');
     }
     handleRedirectToFeed() {
         // unmount
@@ -62,10 +63,11 @@ export default class App {
         this.menuController.mountComponent();
         this.feedController.mountComponent();
         //states
-        this.headerView.changeHeaderItem('profile');
+        this.headerView.changeHeaderItem('profile', { user_avatar: '../src/img/test_avatar.jpg', user_name: 'Test user' });
     }
     handleLogout() {
         router.goToPath(paths.signinPage);
+        // debugger;
     }
     // Init
     initPage() {

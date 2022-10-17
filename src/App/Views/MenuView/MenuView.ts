@@ -38,21 +38,11 @@ export default class MenuView extends IView {
     }
 
     public bindRedirect(listener: any): void {
-        menuConfig.items.forEach((item) => {
-            const elem = <HTMLElement>this.menu.querySelector('#' + item.id);
-            if (elem !== null) {
-                elem.addEventListener('click', listener.bind(this));
-            }
-        });
+        this.menu.addEventListener('click', listener);
     }
 
     public unbindRedirect(listener: any): void {
-        menuConfig.items.forEach((item) => {
-            const elem = <HTMLElement>this.menu.querySelector('#' + item.id);
-            if (elem !== null) {
-                elem.removeEventListener('click', listener.bind(this));
-            }
-        });
+        this.menu.removeEventListener('click', listener);
     }
 }
 
