@@ -1,180 +1,175 @@
-import SigninFormView from './components/SigninFormView/SigninFormView.js'
-import SignupFormView from './components/SignupFormView/SignupFormView.js'
-import FooterView from './components/FooterView/FooterView.js'
-import Header from './components/Header/Header.js'
-import Menu from './components/Menu/Menu.js'
-import Feed from './components/Feed/Feed.js'
+import baseTemplate from "./Components/Base/Base.hbs";
+import router from "./Router/Router.ts";
+import paths from "./Router/RouterPaths.ts";
 
-import SigninFormController from './controllers/SigninFormContoller/SigninFormController.js'
-import SignupFormController from './controllers/SignupFormContoller/SignupFormController.js'
-import MenuController from './controllers/MenuController/MenuController.js'
+import SigninView from "./Views/SigninView/SigninView.ts";
+import SigninController from "./Controllers/SigninController/SigninController.ts";
 
-import createDiv from './components/BasicComponentsCreators/CreateDiv/CreateDiv.js';
+import SignupView from "./Views/SignupView/SignupView.ts";
+import SignupController from "./Controllers/SignupController/SignupController.ts";
 
-import UserModel from './models/UserModel/UserModel.js'
+import MenuView from "./Views/MenuView/MenuView.ts";
+import MenuController from "./Controllers/MenuController/MenuController.ts";
 
-import router from './Router/Router.js'
-import paths from './Router/RouterPaths.js'
+import FeedView from "./Views/FeedView/FeedView.ts";
+import FeedController from "./Controllers/FeedController/FeedController.ts";
 
-import FeedModel from './models/FeedModel/FeedModel.js'
-import Profile from './components/Profile/Profile.js'
+import HeaderView from "./Views/HeaderView/HeaderView.ts";
+import HeaderController from "./Controllers/HeaderController/HeaderController.ts";
 
-class App {
-    // Elements
-    private root: HTMLElement;
-    private header: HTMLElement;
-    private content: HTMLElement;
-    private menu: HTMLElement;
-    private main: HTMLElement;
-    private footer: HTMLElement;
+import FooterView from "./Views/FooterView/FooterView.ts";
+import FooterController from "./Controllers/FooterController/FooterController.ts";
 
-    //Views 
-    private signinView: SigninFormView;
-    private signupView: SignupFormView;
+import UserModel from "./Models/UserModel/UserModel.ts";
+import FeedModel from "./Models/FeedModel/FeedModel.ts";
+
+export default class App {
+    // States
+
+    // Views
+    private signinView: SigninView;
+    private signupView: SignupView;
+    private menuView: MenuView;
+    private feedView: FeedView;
+    private headerView: HeaderView;
     private footerView: FooterView;
-    private headerView: Header;
-    private menuView: Menu;
-    private feedView: Feed;
-    private profileView: Profile;
 
-    //Controllers 
-    private signinController: SigninFormController;
-    private signupController: SignupFormController;
-    private menuController: MenuController;
-
-
-    //models
+    // Models
     private userModel: UserModel;
     private feedModel: FeedModel;
 
+    // Controllers
+    private signinController: SigninController;
+    private signupController: SignupController;
+    private menuController: MenuController;
+    private feedController: FeedController;
+    private headerController: HeaderController;
+    private footerController: FooterController;
+
+    // Elements
+    private root: HTMLElement;
+    private header: HTMLElement;
+    private footer: HTMLElement;
+    private leftSide: HTMLElement;
+    private rightSide: HTMLElement;
+    private content: HTMLElement;
+
     constructor() {
         this.initPage();
-        this.initModels();
         this.initViews();
+        this.initModels();
         this.initControllers();
-        this.initRouter();
+        this.initRoutes();
     }
 
-    public run(): void {
-        this.footerView.render();
-        this.headerView.render();
+    public run() {
+        console.log('App run');
+        router.start(paths.signinPage);
+    }
 
+    // Redirects
+    private handleRedirectToSignin() {
         this.userModel.isAuthantificated().then(({ status, body }) => {
-            router.goToPath(paths.menu);
             router.goToPath(paths.feedPage);
         }).catch(({ status, body }) => {
-            router.goToPath(paths.signinPage)
-        }); // Авторизация по куке
+
+            // unmount
+            this.signupController.unmountComponent();
+            this.menuController.unmountComponent();
+            this.feedController.unmountComponent();
+            // mount
+            this.headerController.mountComponent();
+            this.footerController.mountComponent();
+            this.signinController.mountComponent();
+            //states
+            this.headerView.changeHeaderItem('signupButton');
+
+        });
     }
 
-    // Handlers 
-    private handleRedirectToSignin(): void {
-        this.menu.innerHTML = '';
-        this.main.innerHTML = '';
-        // Обновить хэдер
-        this.headerView.setSignupButton();
-        this.headerView.show();
-        this.footerView.show();
-        this.signinView.render();
+    private handleRedirectToSignup() {
+        this.userModel.isAuthantificated().then(({ status, body }) => {
+            router.goToPath(paths.feedPage);
+        }).catch(({ status, body }) => {
+
+            // unmount
+            this.signinController.unmountComponent();
+            this.menuController.unmountComponent();
+            this.feedController.unmountComponent();
+            // mount
+            this.headerController.mountComponent();
+            this.footerController.mountComponent();
+            this.signupController.mountComponent();
+            //states
+            this.headerView.changeHeaderItem('signinButton');
+
+        });
     }
 
-    private handleRedirectToSignup(): void {
-        this.menu.innerHTML = '';
-        this.main.innerHTML = '';
-        // Обновить хэдер
-        this.headerView.setSigninButton();
-        this.headerView.show();
+    private handleRedirectToFeed() {
+        console.log('go to feed');
 
-        this.footerView.show();
+        this.userModel.isAuthantificated().then(({ status, body }) => {
 
-        this.signupView.render();
+            // unmount
+            this.signinController.unmountComponent();
+            this.signupController.unmountComponent();
+            this.footerController.unmountComponent();
+            // mount
+            this.headerController.mountComponent();
+            this.menuController.mountComponent();
+            this.feedController.mountComponent();
+            //states
+            this.headerView.changeHeaderItem('profile', { user_avatar: '../src/img/test_avatar.jpg', user_name: 'Test user' });
+
+        }).catch(({ status, body }) => {
+            router.goToPath(paths.signinPage);
+        });
     }
 
-    private handleRedirectMenu(): void {
-        this.menu.innerHTML = '';
-        this.menuView.render();
+    private handleLogout() {
+        router.goToPath(paths.signinPage);
+        // debugger;
     }
 
-    private handleRedirectToFeedPage(): void {
-        this.main.innerHTML = '';
-
-        this.headerView.show();
-
-        // скрыть футер
-        this.footerView.hide();
-
-        // Обновить хэдер
-        this.headerView.setProfile(this.userModel.getCurrentUser())
-
-        // показать фид
-        this.feedModel.getFeeds()
-            .then(({ status, body }) => {
-                this.feedView.render(body);
-            })
-            .catch(({ status, body }) => {
-                router.goToPath(paths.signinPage);
-            });
-    }
-
-    private handleRedirectProfile(): void {
-        this.main.innerHTML = '';
-
-        this.headerView.show();
-
-        // скрыть футер
-        this.footerView.hide();
-
-
-        this.profileView.render();
-    }
-
-
-    /// Initials 
-
-
+    // Init
     private initPage(): void {
-        this.root = createDiv({ id: 'root' });
-        this.header = createDiv({ id: 'header' });
-        this.content = createDiv({ id: 'content' });
-        this.menu = createDiv({ id: 'menu' });
-        this.main = createDiv({ id: 'main' });
-        this.footer = createDiv({ id: 'footer' });
-        this.root.appendChild(this.header);
-        this.root.appendChild(this.content);
-        this.content.appendChild(this.menu);
-        this.content.appendChild(this.main);
-        this.root.appendChild(this.footer);
-        document.body.appendChild(this.root);
+        document.body.innerHTML = baseTemplate({});
+        this.root = <HTMLElement>document.body.querySelector('#root');
+        this.header = <HTMLElement>document.body.querySelector('#header');
+        this.footer = <HTMLElement>document.body.querySelector('#footer');
+        this.leftSide = <HTMLElement>document.body.querySelector('.left-menu');
+        this.rightSide = <HTMLElement>document.body.querySelector('.right-menu');
+        this.content = <HTMLElement>document.body.querySelector('.main-content');
     }
 
-    private initViews(): void {
-        this.signinView = new SigninFormView(this.main);
-        this.signupView = new SignupFormView(this.main);
+    private initViews() {
+        this.signinView = new SigninView(this.content);
+        this.signupView = new SignupView(this.content);
+        this.menuView = new MenuView(this.leftSide);
+        this.feedView = new FeedView(this.content);
+        this.headerView = new HeaderView(this.header);
         this.footerView = new FooterView(this.footer);
-        this.headerView = new Header(this.header);
-        this.menuView = new Menu(this.menu);
-        this.feedView = new Feed(this.main);
-        this.profileView = new Profile(this.main);
     }
 
-    private initModels(): void {
+    private initModels() {
         this.userModel = new UserModel();
         this.feedModel = new FeedModel();
     }
 
-    private initControllers(): void {
-        this.signinController = new SigninFormController(this.signinView, this.userModel);
-        this.signupController = new SignupFormController(this.signupView, this.userModel);
+    private initControllers() {
+        this.signinController = new SigninController(this.signinView, this.userModel);
+        this.signupController = new SignupController(this.signupView, this.userModel);
         this.menuController = new MenuController(this.menuView);
+        this.feedController = new FeedController(this.feedView, this.feedModel);
+        this.headerController = new HeaderController(this.headerView, this.userModel);
+        this.footerController = new FooterController(this.footerView);
     }
 
-    private initRouter(): void {
+    private initRoutes() {
         router.addPath({ path: paths.signinPage, handler: this.handleRedirectToSignin.bind(this) });
         router.addPath({ path: paths.signupPage, handler: this.handleRedirectToSignup.bind(this) });
-        router.addPath({ path: paths.feedPage, handler: this.handleRedirectToFeedPage.bind(this) });
-        router.addPath({ path: paths.profile, handler: this.handleRedirectProfile.bind(this) });
-        router.addPath({ path: paths.menu, handler: this.handleRedirectMenu.bind(this) });
+        router.addPath({ path: paths.feedPage, handler: this.handleRedirectToFeed.bind(this) });
+        router.addPath({ path: paths.logout, handler: this.handleLogout.bind(this) });
     }
-};
-
-export default App;
+}

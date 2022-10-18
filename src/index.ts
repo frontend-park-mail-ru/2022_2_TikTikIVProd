@@ -1,7 +1,5 @@
-import App from "./App/App.js";
-import './index.css';
+import App from "./App/App.ts";
+import Handlebars from 'handlebars';
 
-(function () {
-    const app = new App();
-    app.run();
-})();
+const app = new App();
+app.run();

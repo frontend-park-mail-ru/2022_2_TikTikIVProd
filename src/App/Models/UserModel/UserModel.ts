@@ -1,6 +1,6 @@
-import config from "../../configs/config.js";
-import ajax from "../../modules/ajax.js";
-import IModel from "../IModel/IModel.js"
+import config from "../../Configs/Config.ts";
+import ajax from "../../Modules/Ajax.ts";
+import IModel from "../IModel/IModel.ts"
 
 export interface IUserSignIn { // ПО api
     email: string;
@@ -32,6 +32,8 @@ export default class UserModel extends IModel {
     }
 
     public async authUser(authData: IUserSignIn) {
+        console.log('model auth: ', authData);
+        
         const response = await ajax.post(`${config.APIUrl}/signin`, JSON.stringify(authData));
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
@@ -41,6 +43,10 @@ export default class UserModel extends IModel {
             id: response.parsedBody.body.id,
         };
 
+        console.log('model auth resp: ', 
+        response.status,
+        response.parsedBody);
+        
         if (response.status === 200) {
             return Promise.resolve({
                 status: response.status,

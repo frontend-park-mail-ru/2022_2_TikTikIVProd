@@ -1,0 +1,10 @@
+@import url("../../Components/FeedCard/FeedCard.css");
+
+.feed__container {
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  margin-left: 8%;
+  width: 70%;
+  height: 100%;
+}

@@ -1,5 +1,3 @@
-.vscode
-
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -25,5 +23,7 @@ yarn-debug.log*
 
 yarn-error.log*
 
-#debug
-tsconfig.json
+# App
+.vscode
+node_modules/
+build/

@@ -1,12 +1,12 @@
-import config from "../../configs/config.js";
-import ajax from "../../modules/ajax.js";
-import IModel from "../IModel/IModel.js"
+import config from "../../Configs/Config.ts";
+import ajax from "../../Modules/Ajax.ts";
+import IModel from "../IModel/IModel.ts"
 
 export interface IFeedData {
     photoLink: string;
     description: string;
     likes: number;
-    date: Date;
+    date: string;
     author_name: string;
     author_photo: string;
 }
@@ -19,7 +19,7 @@ export default class FeedModel extends IModel {
     public async getFeeds() {
         const response = await ajax.get(`${config.APIUrl}/feed`);
         let responseStatus: number = response.status;
-        let responseBody: any = response.parsedBody.body.map((feedPost) => {
+        let responseBody: any = response.parsedBody.body.map((feedPost: any) => {
             return {
                 photoLinks: feedPost.image_links,
                 description: feedPost.description,
