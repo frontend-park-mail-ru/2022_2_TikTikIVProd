@@ -1,6 +1,6 @@
 const path = require('path');
 
-const buildPath = path.resolve(__dirname, 'src');
+const buildPath = path.resolve(__dirname, 'public');
 
 
 module.exports = {
@@ -13,7 +13,15 @@ module.exports = {
         rules: [
             {
                 test: /\.ts/,
-                use: 'babel-loader'
+                use: 'babel-loader',
+            },
+            {
+                test: /\.css/,
+                use: ['style-loader', 'css-loader'],
+            },
+            {
+                test: /\.hbs/,
+                use: 'handlebars-loader',
             }
         ]
     }
