@@ -18,7 +18,6 @@ class Router {
 
         window.addEventListener('popstate', (e) => {
             e.preventDefault();
-            console.log(e.state.path);
             this.route();
         });
 
@@ -36,8 +35,6 @@ class Router {
 
     private route(): void {
         const path = history.state?.path;
-        console.log('location ', location);
-
 
         const item = this.routes.find((item) => item.path == path);
         if (item === undefined) {

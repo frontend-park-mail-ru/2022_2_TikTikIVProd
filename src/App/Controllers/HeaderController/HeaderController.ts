@@ -13,10 +13,9 @@ export default class HeaderController extends IController<HeaderView, UserModel>
     private handleRedirect(e: Event): void {
         e.preventDefault();
         if (this.isMounted) {
-            const targetHref = (<HTMLLinkElement>e.target).getAttribute('href');
-            console.log(targetHref);
-            if (targetHref !== null) {
-                router.goToPath(targetHref);
+            const href = (<HTMLElement>e.target).closest('[href]')?.getAttribute('href');
+            if (href !== undefined && href !== null) {
+                router.goToPath(href);
             }
         }
     }
