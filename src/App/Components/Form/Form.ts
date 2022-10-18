@@ -31,4 +31,3 @@ const source = `
 const formTemplate = Handlebars.compile(source);
 
 export default formTemplate;
-// data-{{dataSection.key}}="{{dataSection.value}}"

@@ -3,9 +3,9 @@
     <div class="footer__contacts">
         Contacts:
         {{#each contacts}}
-        <div id="{{id}}" href="{{href}}" class="footer__contacts__item">
+        <a id="{{id}}" href="{{href}}" class="footer__contacts__item">
             <img id="{{icon.id}}" src="{{icon.src}}" class="footer__contacts__item__icon">
-        </div>
+        </a>
         {{/each}}
         <div class="footer__company__name">
             {{company.name}}

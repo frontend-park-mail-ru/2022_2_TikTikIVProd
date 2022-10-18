@@ -1,5 +1,4 @@
 import baseTemplate from "./Components/Base/Base.js";
-import Handlebars from "handlebars";
 import SigninView from "./Views/SigninView/SigninView.js";
 import SigninController from "./Controllers/SigninController/SigninController.js";
 import UserModel from "./Models/UserModel/UserModel.js";
