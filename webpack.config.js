@@ -14,21 +14,26 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(ts|tsx)/,
+                test: /\.(handlebars|hbs)$/,
+                use: "handlebars-loader"
+            },
+            {
+                test: /\.(ts)$/,
                 exclude: /node_modules/,
                 use: 'babel-loader',
             },
         ]
     },
+
     plugins: [
-      new HtmlWebpackPlugin({
-        template:  path.resolve(publicPath, 'index.html'),
-      }),
+        new HtmlWebpackPlugin({
+            template: path.resolve(publicPath, 'index.html'),
+        }),
     ],
     resolve: {
         alias: {
-           handlebars: 'handlebars/dist/handlebars.min.js'
+            handlebars: 'handlebars/dist/handlebars.min.js'
         },
-        extensions: ['.js', '.jsx', '.tsx', '.ts', '.json'],
+        extensions: ['.js', '.ts', '.json', 'handlebars', 'hbs'],
     },
 }

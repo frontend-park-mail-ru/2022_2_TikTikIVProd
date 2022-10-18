@@ -1,4 +1,5 @@
-import feedCardTemplate from "../../Components/FeedCard/FeedCard.ts";
+import feedCardTemplate from "../../Components/FeedCard/FeedCard.hbs"
+import feedTemplate from "./FeedView.hbs"
 import { IFeedData } from "../../Models/FeedModel/FeedModel.ts";
 import IView from "../IView/IView.ts";
 
@@ -68,10 +69,3 @@ export default class FeedView extends IView {
         });
     }
 }
-
-
-const source = `
-<div id="feed" class="feed__container"></div>
-`;
-
-const feedTemplate = Handlebars.compile(source);

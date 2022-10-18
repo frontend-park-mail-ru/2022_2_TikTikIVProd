@@ -1,5 +1,5 @@
-import headerButtonTemplate from "../../Components/HeaderButton/HeaderButton.ts";
-import headerProfileTemplate from "../../Components/HeaderProfile/HeaderProfile.ts";
+import headerButtonTemplate from "../../Components/HeaderButton/HeaderButton.hbs";
+import headerProfileTemplate from "../../Components/HeaderProfile/HeaderProfile.hbs";
 
 const _headerItems = {
     'signinButton': {

@@ -1,16 +1,14 @@
 import IView from "../IView/IView.ts";
 import footerViewConfig from "./FooterViewConfig.ts";
+import footerTemplate from "./FooterView.hbs"
 
 export default class FooterView extends IView {
     private footer: HTMLElement;
-    private footerTemplate;
 
     constructor(parent: HTMLElement) {
         super(parent);
-        this.footerTemplate = Handlebars.compile(source);
-
         const parser = new DOMParser();
-        const footer: HTMLElement | null = parser.parseFromString(this.footerTemplate(footerViewConfig), 'text/html').querySelector('.footer__container');
+        const footer: HTMLElement | null = parser.parseFromString(footerTemplate(footerViewConfig), 'text/html').querySelector('.footer__container');
         if (footer === null) {
             throw Error();
         }
@@ -25,20 +23,3 @@ export default class FooterView extends IView {
         this.parent.removeChild(this.footer);
     }
 }
-
-const source = `
-<div class="footer__container">
-    <img src="{{logo.src}}" class="footer__logo">
-    <div class="footer__contacts">
-        Contacts:
-        {{#each contacts}}
-        <a id="{{id}}" href="{{href}}" class="footer__contacts__item">
-            <img id="{{icon.id}}" src="{{icon.src}}" class="footer__contacts__item__icon">
-        </a>
-        {{/each}}
-        <div class="footer__company__name">
-            {{company.name}}
-        </div>
-    </div>
-</div>
-`;

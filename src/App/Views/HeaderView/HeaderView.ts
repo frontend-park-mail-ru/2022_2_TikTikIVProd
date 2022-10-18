@@ -1,18 +1,15 @@
-import headerButtonTemplate from "../../Components/HeaderButton/HeaderButton.ts";
-import headerProfileTemplate from "../../Components/HeaderProfile/HeaderProfile.ts";
+import headerTemplate from "./HeaderView.hbs"
 import IView from "../IView/IView.ts";
 import headerItems from "./HeaderViewConfig.ts";
 
 export default class HeaderView extends IView {
-    private headerTemplate;
     private header: HTMLElement;
 
     constructor(parent: HTMLElement) {
         super(parent);
-        this.headerTemplate = Handlebars.compile(source);
 
         const parser = new DOMParser();
-        const header: HTMLElement | null = parser.parseFromString(this.headerTemplate({}), 'text/html').querySelector('.header__container');
+        const header: HTMLElement | null = parser.parseFromString(headerTemplate({}), 'text/html').querySelector('.header__container');
         if (header === null) {
             throw Error();
         }
@@ -51,13 +48,3 @@ export default class HeaderView extends IView {
         headerItem.innerHTML = elem.render(Object.assign(elem.data, data));
     }
 }
-
-
-const source = `
-<div class="header__container">
-    <div class="header__logo" href='/feed'>
-        WS
-    </div>
-    <div id="header__item" class="header__item">{{item}}</div>
-</div>
-`;

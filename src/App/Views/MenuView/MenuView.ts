@@ -1,18 +1,17 @@
 import IView from "../IView/IView.ts";
 import menuConfig from "./MenuViewConfig.ts"
+import menuTemplate from "./MenuView.hbs"
 
 export default class MenuView extends IView {
-    private menuTemplate;
     private menu: HTMLElement;
     private currentActiveItem: string | null;
 
     constructor(parent: HTMLElement) {
         super(parent);
-        this.menuTemplate = Handlebars.compile(source);
 
         const parser = new DOMParser();
 
-        const menu: HTMLElement | null = parser.parseFromString(this.menuTemplate(menuConfig), 'text/html').querySelector('.menu-container');
+        const menu: HTMLElement | null = parser.parseFromString(menuTemplate(menuConfig), 'text/html').querySelector('.menu-container');
         if (menu === null) {
             throw Error();
         }
@@ -45,19 +44,4 @@ export default class MenuView extends IView {
         this.menu.removeEventListener('click', listener);
     }
 }
-
-const source = `
-<div class="menu-container">
-    <div class="menu__title">
-        {{title}}
-    </div>
-    <div class="menu__items__container">
-        {{#each items as |item|}}
-        <div id="{{item.id}}" href="{{item.href}}" class="menu__item {{#if item.style }} {{item.style}} {{/if}}">
-            {{item.text}}
-        </div>
-        {{/each}}
-    </div>
-</div>
-`;
 

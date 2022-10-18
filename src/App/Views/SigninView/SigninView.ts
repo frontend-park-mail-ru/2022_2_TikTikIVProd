@@ -1,4 +1,4 @@
-import formTemplate from "../../Components/Form/Form.ts";
+import formTemplate from "../../Components/Form/Form.hbs";
 import IView from "../IView/IView.ts";
 import signinViewConfig from "./SigninViewConfig.ts";
 
