@@ -1,20 +1,20 @@
-import baseTemplate from "./Components/Base/Base.js";
-import SigninView from "./Views/SigninView/SigninView.js";
-import SigninController from "./Controllers/SigninController/SigninController.js";
-import UserModel from "./Models/UserModel/UserModel.js";
-import SignupView from "./Views/SignupView/SignupView.js";
-import SignupController from "./Controllers/SignupController/SignupController.js";
-import MenuView from "./Views/MenuView/MenuView.js";
-import router from "./Router/Router.js";
-import paths from "./Router/RouterPaths.js";
-import MenuController from "./Controllers/MenuController/MenuController.js";
-import FeedView from "./Views/FeedView/FeedView.js";
-import FeedController from "./Controllers/FeedController/FeedController.js";
-import FeedModel from "./Models/FeedModel/FeedModel.js";
-import HeaderView from "./Views/HeaderView/HeaderView.js";
-import HeaderController from "./Controllers/HeaderController/HeaderController.js";
-import FooterView from "./Views/FooterView/FooterView.js";
-import FooterController from "./Controllers/FooterController/FooterController.js";
+import baseTemplate from "./Components/Base/Base.ts";
+import SigninView from "./Views/SigninView/SigninView.ts";
+import SigninController from "./Controllers/SigninController/SigninController.ts";
+import UserModel from "./Models/UserModel/UserModel.ts";
+import SignupView from "./Views/SignupView/SignupView.ts";
+import SignupController from "./Controllers/SignupController/SignupController.ts";
+import MenuView from "./Views/MenuView/MenuView.ts";
+import router from "./Router/Router.ts";
+import paths from "./Router/RouterPaths.ts";
+import MenuController from "./Controllers/MenuController/MenuController.ts";
+import FeedView from "./Views/FeedView/FeedView.ts";
+import FeedController from "./Controllers/FeedController/FeedController.ts";
+import FeedModel from "./Models/FeedModel/FeedModel.ts";
+import HeaderView from "./Views/HeaderView/HeaderView.ts";
+import HeaderController from "./Controllers/HeaderController/HeaderController.ts";
+import FooterView from "./Views/FooterView/FooterView.ts";
+import FooterController from "./Controllers/FooterController/FooterController.ts";
 
 export default class App {
     // States

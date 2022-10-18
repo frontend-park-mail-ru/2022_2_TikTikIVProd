@@ -1,6 +1,6 @@
-import router from "../../Router/Router.js";
-import MenuView from "../../Views/MenuView/MenuView.js";
-import IController from "../IController/IController.js";
+import router from "../../Router/Router.ts";
+import MenuView from "../../Views/MenuView/MenuView.ts";
+import IController from "../IController/IController.ts";
 
 export default class MenuController extends IController<MenuView, null> {
     constructor(view: MenuView) {

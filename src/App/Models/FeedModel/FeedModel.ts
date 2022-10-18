@@ -1,6 +1,6 @@
-import config from "../../configs/config.js";
-import ajax from "../../modules/ajax.js";
-import IModel from "../IModel/IModel.js"
+import config from "../../Configs/Config.ts";
+import ajax from "../../Modules/Ajax.ts";
+import IModel from "../IModel/IModel.ts"
 
 export interface IFeedData {
     photoLink: string;
@@ -24,7 +24,7 @@ export default class FeedModel extends IModel {
                 photoLinks: feedPost.image_links,
                 description: feedPost.description,
                 likes: 228,
-                date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,//new Date(feedPost.create_date),
+                date: `${new Date(feedPost.create_date).totsON().slice(0, 10).replace(/-/g, '/')}`,//new Date(feedPost.create_date),
                 author_name: feedPost.user_first_name,
                 author_photo: ''
             }

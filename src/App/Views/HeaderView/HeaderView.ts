@@ -1,7 +1,7 @@
-import headerButtonTemplate from "../../Components/HeaderButton/HeaderButton.js";
-import headerProfileTemplate from "../../Components/HeaderProfile/HeaderProfile.js";
-import IView from "../IView/IView.js";
-import headerItems from "./HeaderViewConfig.js";
+import headerButtonTemplate from "../../Components/HeaderButton/HeaderButton.ts";
+import headerProfileTemplate from "../../Components/HeaderProfile/HeaderProfile.ts";
+import IView from "../IView/IView.ts";
+import headerItems from "./HeaderViewConfig.ts";
 
 export default class HeaderView extends IView {
     private headerTemplate;

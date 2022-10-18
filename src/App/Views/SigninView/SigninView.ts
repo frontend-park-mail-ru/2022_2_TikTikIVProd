@@ -1,6 +1,6 @@
-import formTemplate from "../../Components/Form/Form.js";
-import IView from "../IView/IView.js";
-import signinViewConfig from "./SigninViewConfig.js";
+import formTemplate from "../../Components/Form/Form.ts";
+import IView from "../IView/IView.ts";
+import signinViewConfig from "./SigninViewConfig.ts";
 
 export interface IValidatedData {
     isValid: boolean;

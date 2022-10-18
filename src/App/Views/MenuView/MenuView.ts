@@ -1,5 +1,5 @@
-import IView from "../IView/IView.js";
-import menuConfig from "./MenuViewConfig.js"
+import IView from "../IView/IView.ts";
+import menuConfig from "./MenuViewConfig.ts"
 
 export default class MenuView extends IView {
     private menuTemplate;

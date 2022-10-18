@@ -14,11 +14,11 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(ts|js)/,
+                test: /\.(ts|tsx)/,
                 exclude: /node_modules/,
                 use: 'babel-loader',
             },
-        ],
+        ]
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -28,6 +28,7 @@ module.exports = {
     resolve: {
         alias: {
            handlebars: 'handlebars/dist/handlebars.min.js'
-        }
-    }
+        },
+        extensions: ['.js', '.jsx', '.tsx', '.ts', '.json'],
+    },
 }

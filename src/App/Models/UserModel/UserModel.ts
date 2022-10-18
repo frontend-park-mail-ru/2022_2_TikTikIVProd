@@ -1,6 +1,6 @@
-import config from "../../configs/config.js";
-import ajax from "../../modules/ajax.js";
-import IModel from "../IModel/IModel.js"
+import config from "../../Configs/Config.ts";
+import ajax from "../../Modules/Ajax.ts";
+import IModel from "../IModel/IModel.ts"
 
 export interface IUserSignIn { // ПО api
     email: string;
@@ -32,7 +32,7 @@ export default class UserModel extends IModel {
     }
 
     public async authUser(authData: IUserSignIn) {
-        const response = await ajax.post(`${config.APIUrl}/signin`, JSON.stringify(authData));
+        const response = await ajax.post(`${config.APIUrl}/signin`, tsON.stringify(authData));
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
             last_name: response.parsedBody.body.last_name,
@@ -58,7 +58,7 @@ export default class UserModel extends IModel {
 
 
     public async registerUser(user: IUserSignUp) {
-        const response = await ajax.post(`${config.APIUrl}/signup`, JSON.stringify(user));
+        const response = await ajax.post(`${config.APIUrl}/signup`, tsON.stringify(user));
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
             last_name: response.parsedBody.body.last_name,

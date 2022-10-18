@@ -1,14 +1,14 @@
-import IController from "../IController/IController.js";
-import UserModel from "../../Models/UserModel/UserModel.js";
-import { IUserSignUp } from "../../Models/UserModel/UserModel.js"
-import SignupView from "../../Views/SignupView/SignupView.js";
-import { IValidatedData } from "../../Views/SigninView/SigninView.js";
-import emailValidator from "../../Utils/Validators/EmailValidator/EmailValidator.js";
-import firstNameValidator from "../../Utils/Validators/FirstNameValidator/FirstNameValidator.js";
-import lastNameValidator from "../../Utils/Validators/LastNameValidator/LastNameValidator.js";
-import nicknameValidator from "../../Utils/Validators/NicknameValidator/NicknamaValidator.js";
-import passwordValidator from "../../Utils/Validators/PasswordValidator/PasswordValidator.js";
-import router from "../../Router/Router.js";
+import IController from "../IController/IController.ts";
+import UserModel from "../../Models/UserModel/UserModel.ts";
+import { IUserSignUp } from "../../Models/UserModel/UserModel.ts"
+import SignupView from "../../Views/SignupView/SignupView.ts";
+import { IValidatedData } from "../../Views/SigninView/SigninView.ts";
+import emailValidator from "../../Utils/Validators/EmailValidator/EmailValidator.ts";
+import firstNameValidator from "../../Utils/Validators/FirstNameValidator/FirstNameValidator.ts";
+import lastNameValidator from "../../Utils/Validators/LastNameValidator/LastNameValidator.ts";
+import nicknameValidator from "../../Utils/Validators/NicknameValidator/NicknamaValidator.ts";
+import passwordValidator from "../../Utils/Validators/PasswordValidator/PasswordValidator.ts";
+import router from "../../Router/Router.ts";
 
 export default class SignupController extends IController<SignupView, UserModel> {
     constructor(view: SignupView, model: UserModel) {

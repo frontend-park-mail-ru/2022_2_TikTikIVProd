@@ -1,5 +1,5 @@
-import IView from "../IView/IView.js";
-import footerViewConfig from "./FooterViewConfig.js";
+import IView from "../IView/IView.ts";
+import footerViewConfig from "./FooterViewConfig.ts";
 
 export default class FooterView extends IView {
     private footer: HTMLElement;

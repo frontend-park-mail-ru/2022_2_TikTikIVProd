@@ -1,6 +1,6 @@
-import feedCardTemplate from "../../Components/FeedCard/FeedCard.js";
-import { IFeedData } from "../../Models/FeedModel/FeedModel.js";
-import IView from "../IView/IView.js";
+import feedCardTemplate from "../../Components/FeedCard/FeedCard.ts";
+import { IFeedData } from "../../Models/FeedModel/FeedModel.ts";
+import IView from "../IView/IView.ts";
 
 export default class FeedView extends IView {
     private feed: HTMLElement;

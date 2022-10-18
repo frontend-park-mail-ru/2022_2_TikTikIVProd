@@ -1,7 +1,7 @@
-import FeedModel, { IFeedData } from "../../Models/FeedModel/FeedModel.js";
-import throttle from "../../Utils/Throttle/Throttle.js";
-import FeedView from "../../Views/FeedView/FeedView.js";
-import IController from "../IController/IController.js";
+import FeedModel, { IFeedData } from "../../Models/FeedModel/FeedModel.ts";
+import throttle from "../../Utils/Throttle/Throttle.ts";
+import FeedView from "../../Views/FeedView/FeedView.ts";
+import IController from "../IController/IController.ts";
 
 export default class FeedController extends IController<FeedView, FeedModel> {
     private currentPage: number;

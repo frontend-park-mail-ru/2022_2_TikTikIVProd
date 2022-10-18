@@ -1,10 +1,10 @@
-import IController from "../IController/IController.js";
-import UserModel from "../../Models/UserModel/UserModel.js";
-import { IUserSignIn } from "../../Models/UserModel/UserModel.js"
-import SigninView from "../../Views/SigninView/SigninView.js";
-import { IValidatedData } from "../../Views/SigninView/SigninView.js";
-import emailValidator from "../../Utils/Validators/EmailValidator/EmailValidator.js";
-import router from "../../Router/Router.js";
+import IController from "../IController/IController.ts";
+import UserModel from "../../Models/UserModel/UserModel.ts";
+import { IUserSignIn } from "../../Models/UserModel/UserModel.ts"
+import SigninView from "../../Views/SigninView/SigninView.ts";
+import { IValidatedData } from "../../Views/SigninView/SigninView.ts";
+import emailValidator from "../../Utils/Validators/EmailValidator/EmailValidator.ts";
+import router from "../../Router/Router.ts";
 
 export default class SigninController extends IController<SigninView, UserModel> {
     constructor(view: SigninView, model: UserModel) {
