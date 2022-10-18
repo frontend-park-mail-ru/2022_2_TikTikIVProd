@@ -64,48 +64,67 @@ export default class App {
 
     public run() {
         console.log('App run');
-        // router.goToPath(paths.feedPage);
-        router.start(paths.feedPage);
+        router.start(paths.signinPage);
     }
 
     // Redirects
     private handleRedirectToSignin() {
-        // unmount
-        this.signupController.unmountComponent();
-        this.menuController.unmountComponent();
-        this.feedController.unmountComponent();
-        // mount
-        this.headerController.mountComponent();
-        this.footerController.mountComponent();
-        this.signinController.mountComponent();
-        //states
-        this.headerView.changeHeaderItem('signupButton');
+        this.userModel.isAuthantificated().then(({ status, body }) => {
+            router.goToPath(paths.feedPage);
+        }).catch(({ status, body }) => {
+
+            // unmount
+            this.signupController.unmountComponent();
+            this.menuController.unmountComponent();
+            this.feedController.unmountComponent();
+            // mount
+            this.headerController.mountComponent();
+            this.footerController.mountComponent();
+            this.signinController.mountComponent();
+            //states
+            this.headerView.changeHeaderItem('signupButton');
+
+        });
     }
 
     private handleRedirectToSignup() {
-        // unmount
-        this.signinController.unmountComponent();
-        this.menuController.unmountComponent();
-        this.feedController.unmountComponent();
-        // mount
-        this.headerController.mountComponent();
-        this.footerController.mountComponent();
-        this.signupController.mountComponent();
-        //states
-        this.headerView.changeHeaderItem('signinButton');
+        this.userModel.isAuthantificated().then(({ status, body }) => {
+            router.goToPath(paths.feedPage);
+        }).catch(({ status, body }) => {
+
+            // unmount
+            this.signinController.unmountComponent();
+            this.menuController.unmountComponent();
+            this.feedController.unmountComponent();
+            // mount
+            this.headerController.mountComponent();
+            this.footerController.mountComponent();
+            this.signupController.mountComponent();
+            //states
+            this.headerView.changeHeaderItem('signinButton');
+
+        });
     }
 
     private handleRedirectToFeed() {
-        // unmount
-        this.signinController.unmountComponent();
-        this.signupController.unmountComponent();
-        this.footerController.unmountComponent();
-        // mount
-        this.headerController.mountComponent();
-        this.menuController.mountComponent();
-        this.feedController.mountComponent();
-        //states
-        this.headerView.changeHeaderItem('profile', { user_avatar: '../src/img/test_avatar.jpg', user_name: 'Test user' });
+        console.log('go to feed');
+
+        this.userModel.isAuthantificated().then(({ status, body }) => {
+
+            // unmount
+            this.signinController.unmountComponent();
+            this.signupController.unmountComponent();
+            this.footerController.unmountComponent();
+            // mount
+            this.headerController.mountComponent();
+            this.menuController.mountComponent();
+            this.feedController.mountComponent();
+            //states
+            this.headerView.changeHeaderItem('profile', { user_avatar: '../src/img/test_avatar.jpg', user_name: 'Test user' });
+
+        }).catch(({ status, body }) => {
+            router.goToPath(paths.signinPage);
+        });
     }
 
     private handleLogout() {

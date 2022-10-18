@@ -5,6 +5,7 @@ import SigninView from "../../Views/SigninView/SigninView.ts";
 import { IValidatedData } from "../../Views/SigninView/SigninView.ts";
 import emailValidator from "../../Utils/Validators/EmailValidator/EmailValidator.ts";
 import router from "../../Router/Router.ts";
+import paths from "../../Router/RouterPaths.ts";
 
 export default class SigninController extends IController<SigninView, UserModel> {
     constructor(view: SigninView, model: UserModel) {
@@ -29,11 +30,9 @@ export default class SigninController extends IController<SigninView, UserModel>
             const { isValidData, validatedData } = this.validate(data);
             this.view.showErrors(validatedData);
             if (!isValidData) {
-                console.log('invalid data');
+                console.log('invalid data: ', validatedData);
                 return;
             }
-
-            console.log('valid data');
 
             const user: IUserSignIn = {
                 email: data.get('email') || '',
@@ -42,8 +41,9 @@ export default class SigninController extends IController<SigninView, UserModel>
 
             this.model.authUser(user).then(({ status, body }) => {
                 console.log('auth success');
+                router.goToPath(paths.feedPage);
             }).catch(({ status, body }) => {
-                console.log('auth failure');
+                console.log('auth failure ', status, body);
                 switch (status) {
                     case 401:
                     case 404: {

@@ -9,6 +9,7 @@ import lastNameValidator from "../../Utils/Validators/LastNameValidator/LastName
 import nicknameValidator from "../../Utils/Validators/NicknameValidator/NicknamaValidator.ts";
 import passwordValidator from "../../Utils/Validators/PasswordValidator/PasswordValidator.ts";
 import router from "../../Router/Router.ts";
+import paths from "../../Router/RouterPaths.ts";
 
 export default class SignupController extends IController<SignupView, UserModel> {
     constructor(view: SignupView, model: UserModel) {
@@ -46,10 +47,13 @@ export default class SignupController extends IController<SignupView, UserModel>
                 password: data.get('password') || ''
             };
 
+            console.log(user);
+
             this.model.registerUser(user).then(({ status, body }) => {
-                console.log('reg success');
+                console.log(status, body);
+                router.goToPath(paths.feedPage);
             }).catch(({ status, body }) => {
-                console.log('reg failure');
+                console.log(status, body);
                 switch (status) {
                     // case 401:
                     // case 404: {
