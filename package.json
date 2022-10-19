@@ -29,6 +29,8 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "handlebars-loader": "^1.7.2"
+    "css-loader": "^6.7.1",
+    "handlebars-loader": "^1.7.2",
+    "style-loader": "^3.3.1"
   }
 }
