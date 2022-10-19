@@ -63,7 +63,6 @@ export default class App {
     }
 
     public run() {
-        console.log('App run');
         router.start(paths.signinPage);
     }
 
@@ -107,10 +106,8 @@ export default class App {
     }
 
     private handleRedirectToFeed() {
-        console.log('go to feed');
-
         this.userModel.isAuthantificated().then(({ status, body }) => {
-
+            
             // unmount
             this.signinController.unmountComponent();
             this.signupController.unmountComponent();
