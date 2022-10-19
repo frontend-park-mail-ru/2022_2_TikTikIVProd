@@ -1,27 +1,27 @@
 import baseTemplate from "./Components/Base/Base.hbs";
-import router from "./Router/Router.ts";
-import paths from "./Router/RouterPaths.ts";
+import router from "./Router/Router";
+import paths from "./Router/RouterPaths";
 
-import SigninView from "./Views/SigninView/SigninView.ts";
-import SigninController from "./Controllers/SigninController/SigninController.ts";
+import SigninView from "./Views/SigninView/SigninView";
+import SigninController from "./Controllers/SigninController/SigninController";
 
-import SignupView from "./Views/SignupView/SignupView.ts";
-import SignupController from "./Controllers/SignupController/SignupController.ts";
+import SignupView from "./Views/SignupView/SignupView";
+import SignupController from "./Controllers/SignupController/SignupController";
 
-import MenuView from "./Views/MenuView/MenuView.ts";
-import MenuController from "./Controllers/MenuController/MenuController.ts";
+import MenuView from "./Views/MenuView/MenuView";
+import MenuController from "./Controllers/MenuController/MenuController";
 
-import FeedView from "./Views/FeedView/FeedView.ts";
-import FeedController from "./Controllers/FeedController/FeedController.ts";
+import FeedView from "./Views/FeedView/FeedView";
+import FeedController from "./Controllers/FeedController/FeedController";
 
-import HeaderView from "./Views/HeaderView/HeaderView.ts";
-import HeaderController from "./Controllers/HeaderController/HeaderController.ts";
+import HeaderView from "./Views/HeaderView/HeaderView";
+import HeaderController from "./Controllers/HeaderController/HeaderController";
 
-import FooterView from "./Views/FooterView/FooterView.ts";
-import FooterController from "./Controllers/FooterController/FooterController.ts";
+import FooterView from "./Views/FooterView/FooterView";
+import FooterController from "./Controllers/FooterController/FooterController";
 
-import UserModel from "./Models/UserModel/UserModel.ts";
-import FeedModel from "./Models/FeedModel/FeedModel.ts";
+import UserModel from "./Models/UserModel/UserModel";
+import FeedModel from "./Models/FeedModel/FeedModel";
 
 export default class App {
     // States

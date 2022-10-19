@@ -58,8 +58,5 @@ class Ajax {
 
 }
 
-
-
-const ajax = new Ajax();
-export default ajax;
+export default new Ajax();
 

@@ -1,5 +1,5 @@
-import IView from '../../Views/IView/IView.ts'
-import IModel from '../../Models/IModel/IModel.ts'
+import IView from '../../Views/IView/IView'
+import IModel from '../../Models/IModel/IModel'
 
 //extends IModel
 

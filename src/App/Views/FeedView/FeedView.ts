@@ -1,7 +1,7 @@
 import feedCardTemplate from "../../Components/FeedCard/FeedCard.hbs"
 import feedTemplate from "./FeedView.hbs"
-import { IFeedData } from "../../Models/FeedModel/FeedModel.ts";
-import IView from "../IView/IView.ts";
+import { IFeedData } from "../../Models/FeedModel/FeedModel";
+import IView from "../IView/IView";
 
 export default class FeedView extends IView {
     private feed: HTMLElement;

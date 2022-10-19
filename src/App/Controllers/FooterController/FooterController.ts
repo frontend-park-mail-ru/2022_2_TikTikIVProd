@@ -1,5 +1,5 @@
-import FooterView from "../../Views/FooterView/FooterView.ts";
-import IController from "../IController/IController.ts";
+import FooterView from "../../Views/FooterView/FooterView";
+import IController from "../IController/IController";
 
 export default class FooterController extends IController<FooterView, null> {
     constructor(view: FooterView) {

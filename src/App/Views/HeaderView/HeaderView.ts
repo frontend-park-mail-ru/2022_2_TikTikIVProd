@@ -1,6 +1,6 @@
 import headerTemplate from "./HeaderView.hbs"
-import IView from "../IView/IView.ts";
-import headerItems from "./HeaderViewConfig.ts";
+import IView from "../IView/IView";
+import headerItems from "./HeaderViewConfig";
 
 export default class HeaderView extends IView {
     private header: HTMLElement;

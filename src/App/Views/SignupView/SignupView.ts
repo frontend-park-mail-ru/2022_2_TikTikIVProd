@@ -1,7 +1,7 @@
 import formTemplate from "../../Components/Form/Form.hbs";
-import IView from "../IView/IView.ts";
-import signupViewConfig from "./SignupViewConfig.ts";
-import sigupViewConfig from "./SignupViewConfig.ts";
+import IView from "../IView/IView";
+import signupViewConfig from "./SignupViewConfig";
+import sigupViewConfig from "./SignupViewConfig";
 
 export interface IValidatedData {
     isValid: boolean;

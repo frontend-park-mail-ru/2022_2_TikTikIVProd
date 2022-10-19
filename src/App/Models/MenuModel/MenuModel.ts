@@ -1,4 +1,4 @@
-import IModel from "../IModel/IModel.js"
+import IModel from "../IModel/IModel"
 
 export default class MenuModel extends IModel {
 

@@ -1,5 +1,5 @@
-import IView from "../IView/IView.ts";
-import footerViewConfig from "./FooterViewConfig.ts";
+import IView from "../IView/IView";
+import footerViewConfig from "./FooterViewConfig";
 import footerTemplate from "./FooterView.hbs"
 
 export default class FooterView extends IView {

@@ -1,6 +1,6 @@
-import config from "../../Configs/Config.ts";
-import ajax from "../../Modules/Ajax.ts";
-import IModel from "../IModel/IModel.ts"
+import config from "../../Configs/Config";
+import ajax from "../../Modules/Ajax";
+import IModel from "../IModel/IModel"
 
 export interface IUserSignIn { // ПО api
     email: string;

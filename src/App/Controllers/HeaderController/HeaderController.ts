@@ -1,7 +1,7 @@
-import UserModel from "../../Models/UserModel/UserModel.ts";
-import router from "../../Router/Router.ts";
-import HeaderView from "../../Views/HeaderView/HeaderView.ts";
-import IController from "../IController/IController.ts";
+import UserModel from "../../Models/UserModel/UserModel";
+import router from "../../Router/Router";
+import HeaderView from "../../Views/HeaderView/HeaderView";
+import IController from "../IController/IController";
 
 export default class HeaderController extends IController<HeaderView, UserModel> {
     constructor(view: HeaderView, model: UserModel) {

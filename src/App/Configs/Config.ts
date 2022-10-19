@@ -1,6 +1,3 @@
-// import renderFeed from "../components/Feed/Feed.ts";
-// import renderProfile from "../components/Profile/Profile.ts";
-
 const config = {
     menu: {
         feed: {
