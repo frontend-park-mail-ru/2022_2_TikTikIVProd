@@ -1,4 +1,4 @@
-import App from "./App/App.js";
+import App from "./App/App.ts";
 import './index.css';
 
 (function () {

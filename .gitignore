@@ -27,3 +27,6 @@ yarn-error.log*
 
 #debug
 tsconfig.json
+
+yarn.lock
+package-lock.json
