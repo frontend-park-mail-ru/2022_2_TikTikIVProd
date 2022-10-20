@@ -23,6 +23,13 @@ import FooterController from "./Controllers/FooterController/FooterController";
 import UserModel from "./Models/UserModel/UserModel";
 import FeedModel from "./Models/FeedModel/FeedModel";
 
+
+// TODO delete 
+import config from "./Configs/Config";
+import ajax from "./Modules/Ajax";
+//
+
+
 export default class App {
     // States
 
@@ -107,7 +114,7 @@ export default class App {
 
     private handleRedirectToFeed() {
         this.userModel.isAuthantificated().then(({ status, body }) => {
-            
+
             // unmount
             this.signinController.unmountComponent();
             this.signupController.unmountComponent();
@@ -117,7 +124,7 @@ export default class App {
             this.menuController.mountComponent();
             this.feedController.mountComponent();
             //states
-            this.headerView.changeHeaderItem('profile', { user_avatar: '../src/img/test_avatar.jpg', user_name: 'Test user' });
+            this.headerView.changeHeaderItem('profile',Object.assign({user_avatar: '../src/img/test_avatar.jpg'}, this.userModel.currentUser));
 
         }).catch(({ status, body }) => {
             router.goToPath(paths.signinPage);
@@ -125,8 +132,16 @@ export default class App {
     }
 
     private handleLogout() {
-        router.goToPath(paths.signinPage);
-        // debugger;
+        ajax.get(`${config.APIUrl}/logout`).catch(() => {
+
+            router.goToPath(paths.signinPage);
+        });
+        // TODO fix cors
+        // this.userModel.logoutUser().then(({ status, body }) => {
+        //     router.goToPath(paths.signinPage);
+        // }).catch(({ status, body }) => {
+        //     console.log('logout err: ', status, body);
+        // });
     }
 
     // Init

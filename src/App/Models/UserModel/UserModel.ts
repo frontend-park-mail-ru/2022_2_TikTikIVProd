@@ -24,11 +24,31 @@ export interface IUser { // ПО api !!!!Без пароля
 }
 
 export default class UserModel extends IModel {
-    private currentUser: IUser | null;
+    public currentUser: IUser | null; //TODO private
 
     constructor() {
         super();
         this.currentUser = null;
+    }
+
+    public async logoutUser() {
+        // TODO: logout cors
+
+        const response = await ajax.get(`${config.APIUrl}/logout`);
+        this.currentUser = null;
+        console.log('model: ', response);
+        if (response.status === 200) {
+            return Promise.resolve({
+                status: response.status,
+                body: response.parsedBody
+            })
+        }
+        else {
+            return Promise.reject({
+                status: response.status,
+                body: response.parsedBody
+            })
+        }
     }
 
     public async authUser(authData: IUserSignIn) {
