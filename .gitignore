@@ -27,3 +27,4 @@ yarn-error.log*
 .vscode
 node_modules/
 build/
+docs/

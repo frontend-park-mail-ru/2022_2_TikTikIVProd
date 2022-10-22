@@ -1,10 +1,28 @@
+/**
+ * Интерфейс страницы приложения для роутера 
+ * @typedef {Object} IRoute
+ * @property {string} path - URL адрес страницы
+ * @property {Function} handler - Обработчик перехода на страницу
+ */
 interface IRoute {
     path: string;
     handler: () => void;
 }
 
+/**
+ * @class Роутер. Синглтон
+ */
 class Router {
+    /**
+     * Инициализированные страницы
+     * @private 
+     */
     private routes: IRoute[];
+    
+    /**
+     * URL текущей страницы
+     * @private 
+     */
     private current: string | null;
 
     constructor() {
@@ -12,6 +30,11 @@ class Router {
         this.current = null;
     }
 
+    /**
+     * Запуск роутера на заданной странице
+     * @param  {string} entryPath URL стартовой страницы приложения
+     * @return {void}
+     */
     public start(entryPath: string): void {
         history.replaceState({ path: entryPath }, '', entryPath);
         this.current = entryPath;
@@ -24,15 +47,30 @@ class Router {
         this.route();
     }
 
-    public addPath(route: IRoute) {
+    /**
+     * Инициализировать страницу в роутере
+     * @param  {IRoute} route Страница приложения
+     * @return {void}
+     */
+    public addPath(route: IRoute)  : void{
         this.routes.push(route);
     }
 
-    public goToPath(path: string) {
+    
+    /**
+     * Перейти на страницу
+     * @param  {string} path URL адрес страницы
+     * @return void
+     */
+    public goToPath(path: string) : void {
         history.pushState({ path: path }, '', path);
         this.route();
     }
-
+    /**
+     * Вызов перехода на страницу
+     * @private
+     * @return void
+     */
     private route(): void {
         const path = history.state?.path;
 
