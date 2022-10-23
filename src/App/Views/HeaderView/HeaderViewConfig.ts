@@ -1,6 +1,11 @@
 import headerButtonTemplate from "../../Components/HeaderButton/HeaderButton.hbs";
 import headerProfileTemplate from "../../Components/HeaderProfile/HeaderProfile.hbs";
-
+/**
+ * Конфигурация элемента в хэдере приложения
+ * @memberof module:Configs
+ * @constant {Object} 
+ * @param {{name: string, {data: Object, render: Function}}} Структура конфигурации 
+ */
 const _headerItems = {
     'signinButton': {
         data: {

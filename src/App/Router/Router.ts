@@ -15,13 +15,13 @@ interface IRoute {
 class Router {
     /**
      * Инициализированные страницы
-     * @private 
+     * (приватное поле класса) 
      */
     private routes: IRoute[];
     
     /**
      * URL текущей страницы
-     * @private 
+     * (приватное поле класса) 
      */
     private current: string | null;
 
@@ -68,7 +68,7 @@ class Router {
     }
     /**
      * Вызов перехода на страницу
-     * @private
+     * (приватное поле класса)
      * @return void
      */
     private route(): void {

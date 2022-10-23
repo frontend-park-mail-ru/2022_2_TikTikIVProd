@@ -2,7 +2,18 @@ import headerTemplate from "./HeaderView.hbs"
 import IView from "../IView/IView";
 import headerItems from "./HeaderViewConfig";
 
-export default class HeaderView extends IView {
+/**
+ * Отображение для хэдера приложения
+ * @memberof module:Views
+ * @class
+ * @extends {IView}
+ * @property {HTMLElement} parent - Родительский элемент для хэдера
+ */
+ class HeaderView extends IView {
+    /**
+     * Элемент хэдера
+     * (приватное поле класса)
+     */
     private header: HTMLElement;
 
     constructor(parent: HTMLElement) {
@@ -16,23 +27,38 @@ export default class HeaderView extends IView {
         this.header = header;
     }
 
+    /**
+     * Реализация метода отрисовки вида
+     * @returns {void}
+     */
     public show(opts?: any): void {
         this.parent.appendChild(this.header);
     }
 
+    /**
+     * Реализация метода скрытия вида
+     * @returns {void}
+     */
     public hide(opts?: any): void {
         this.parent.removeChild(this.header);
     }
 
+  
+    /**
+     * Функция добавления обработчика события нажатия на компонент
+     * @param  {any} listener - Callback функция для события
+     * @returns {void}
+     */
     public bindClickEvent(listener: any): void {
         this.header.addEventListener('click', listener.bind(this));
     }
-
-    public unbindClickEvent(listener: any) {
-        this.header.removeEventListener('click', listener.bind(this));
-    }
-
-
+    
+    /**
+     * Функция изменения элемента в хэдере
+     * @param  {string} itemName - название элемента
+     * @param  {any} data - Данные, необходимые для отрисочки элемента
+     * @returns {void}
+     */
     public changeHeaderItem(itemName: string, data?: any): void {
         const headerItem = this.header.querySelector('#header__item');
         if (headerItem === null) {
@@ -48,3 +74,5 @@ export default class HeaderView extends IView {
         headerItem.innerHTML = elem.render(Object.assign(elem.data, data));
     }
 }
+
+export default HeaderView;

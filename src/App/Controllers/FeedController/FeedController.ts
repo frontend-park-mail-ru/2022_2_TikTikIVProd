@@ -3,7 +3,19 @@ import throttle from "../../Utils/Throttle/Throttle";
 import FeedView from "../../Views/FeedView/FeedView";
 import IController from "../IController/IController";
 
-export default class FeedController extends IController<FeedView, FeedModel> {
+/**
+ * Котроллер для ленты
+ * @memberof module:Controllers
+ * @extends {IController<FeedView, FeedModel>}
+ * @param  {FeedView} view - Объект вида компонента лента
+ * @param  {FeedModel} model - Объект модели ленты
+ */
+class FeedController extends IController<FeedView, FeedModel> {
+    /**
+     * Текущая страница в ленте
+     * (приватное поле класса)
+     * @property {number} currentPage
+     */
     private currentPage: number;
 
     constructor(view: FeedView, model: FeedModel) {
@@ -15,6 +27,12 @@ export default class FeedController extends IController<FeedView, FeedModel> {
     // TODO доавить контент если фид пуст
     // Specific
 
+    /**
+     * Функция обработки события пролистывания страницы
+     * Проверяет нужно ли отрисовывать следующую часть ленты и при необходимости получает её и отправляет в вид
+     * (приватное поле класса)
+     * @returns {void}
+     */
     private handleScroll(): void {
         if (this.isMounted) {
             if (this.checkFeedEnd()) {
@@ -24,7 +42,11 @@ export default class FeedController extends IController<FeedView, FeedModel> {
         }
     }
 
-
+    /**
+     * Функция получения постов ленты из модели
+     * (приватное поле класса)
+     * @returns {IFeedData[]}
+     */
     private getContent(): IFeedData[] {
         // TODO model
         const item: IFeedData = {
@@ -43,6 +65,11 @@ export default class FeedController extends IController<FeedView, FeedModel> {
         return testData;
     }
 
+    /**
+     * Функция проверяют долистал ли пользователь ленту до низа
+     * (приватное поле класса)
+     * @returns {boolean}
+     */
     private checkFeedEnd(): boolean {
         // Нам потребуется знать высоту документа и высоту экрана:
         const height = document.body.offsetHeight;
@@ -66,7 +93,4 @@ export default class FeedController extends IController<FeedView, FeedModel> {
     }
 }
 
-
-
-// this.view.unbindScrollEvent(this.handleScroll.bind(this));
-// this.view.unbindResizeEvent(this.handleScroll.bind(this));
+export default FeedController;

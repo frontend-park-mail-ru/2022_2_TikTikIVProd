@@ -3,8 +3,20 @@ import feedTemplate from "./FeedView.hbs"
 import { IFeedData } from "../../Models/FeedModel/FeedModel";
 import IView from "../IView/IView";
 
-export default class FeedView extends IView {
+/**
+ * Отображение для ленты новостей
+ * @memberof module:Views
+ * @class
+ * @extends {IView}
+ * @property {HTMLElement} parent - Родительский элемент для ленты новостей
+ */
+class FeedView extends IView {
+    /**
+     * Элемент ленты новостей
+     * (приватное поле класса)
+     */
     private feed: HTMLElement;
+
     constructor(parent: HTMLElement) {
         super(parent);
         const parser = new DOMParser();
@@ -15,21 +27,38 @@ export default class FeedView extends IView {
         }
         this.feed = feed;
     }
-
-    // Interface 
+    
+    /**
+     * Реализация метода отрисовки вида
+     * @returns {void}
+     */
     public show(): void {
         this.parent.appendChild(this.feed);
     }
 
+    /**
+     * Реализация метода скрытия вида
+     * @returns {void}
+     */
     public hide(): void {
         this.parent.removeChild(this.feed);
     }
 
-    // Binders
+    
+    /**
+     * Функция добавления обработчика события пролистывания страницы
+     * @param  {any} listener - Callback функция для события
+     * @returns {void}
+     */
     public bindScrollEvent(listener: any): void {
         window.addEventListener('scroll', listener.bind(this));
     }
 
+    /**
+     * Функция добавления обработчика события изменения размера страницы
+     * @param  {any} listener - Callback функция для события
+     * @returns {void}
+     */
     public bindResizeEvent(listener: any): void {
         window.addEventListener('resize', listener.bind(this));
     }
@@ -44,19 +73,15 @@ export default class FeedView extends IView {
     //     });
     // }
 
-    // Unbinders
-    public unbindScrollEvent(listener: any): void {
-        window.removeEventListener('scroll', listener);
-    }
-
-    public unbindResizeEvent(listener: any): void {
-        window.removeEventListener('resize', listener);
-    }
-
-
     // Specific
 
-    public pushContentToFeed(data: IFeedData[]) {
+    
+    /**
+     * Функция отрисовки контента (постов) в ленте новостей
+     * @param  {IFeedData[]} data - Данные о постах
+     * @return {void}
+     */
+    public pushContentToFeed(data: IFeedData[]) : void {
         // TODO
         const parser = new DOMParser();
         data.forEach((item) => {
@@ -69,3 +94,5 @@ export default class FeedView extends IView {
         });
     }
 }
+
+export default FeedView;

@@ -2,25 +2,44 @@ import IController from "../IController/IController";
 import UserModel from "../../Models/UserModel/UserModel";
 import { IUserSignIn } from "../../Models/UserModel/UserModel"
 import SigninView from "../../Views/SigninView/SigninView";
-import { IValidatedData } from "../../Views/SigninView/SigninView";
 import emailValidator from "../../Utils/Validators/EmailValidator/EmailValidator";
 import router from "../../Router/Router";
 import paths from "../../Router/RouterPaths";
+import { IValidationResult } from "../../Utils/Validators/IValidationResult/IValidationResult";
 
-export default class SigninController extends IController<SigninView, UserModel> {
+/**
+ * Котроллер для страницы авторизации
+ * @memberof module:Controllers
+ * @extends {IController}
+ * @param  {SigninView} view Объект вида формы авторизации
+ * @param  {UserModel} model Объект модели пользователя
+ */
+class SigninController extends IController<SigninView, UserModel> {
     constructor(view: SigninView, model: UserModel) {
         super(view, model);
         this.view.bindSubmit(this.onSubmit.bind(this));
         this.view.bindRedirect(this.onRedirect.bind(this));
     }
 
-    private onRedirect(e: Event) {
+    /**
+     * Функция обработки события нажатия на блок ссылок формы
+     * (приватное поле класса)
+     * @param  {Event} e Объект события 
+     * @returns {void}
+     */
+    private onRedirect(e: Event) : void {
         e.preventDefault();
         if (this.isMounted) {
             router.goToPath((<HTMLLinkElement>e.target).getAttribute('href') || '');
         }
     }
 
+    /**
+     * Функция обработки события отправки формы
+     * (приватное поле класса)
+     * @param  {Event} e Объект события 
+     * @returns {void}
+     */
     private onSubmit(e: Event): void {
         e.preventDefault();
         if (this.isMounted) {
@@ -59,12 +78,18 @@ export default class SigninController extends IController<SigninView, UserModel>
         }
     }
 
+    /**
+     * Функция проверки данных из формы
+     * (приватное поле класса)
+     * @param {Map} data Данные из формы в формате ID поля -> значение
+     * @return {{boolean, Map<string, IValidationResult>}}
+     */
     private validate(data: Map<string, string>): {
         isValidData: boolean,
-        validatedData: Map<string, IValidatedData>
+        validatedData: Map<string, IValidationResult>
     } {
         let isValidData = true;
-        const validatedData = new Map<string, IValidatedData>;
+        const validatedData = new Map<string, IValidationResult>;
 
         data.forEach((value, id) => {
             switch (id) {
@@ -85,3 +110,5 @@ export default class SigninController extends IController<SigninView, UserModel>
         return { isValidData, validatedData };
     }
 }
+
+export default SigninController;

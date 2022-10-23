@@ -29,10 +29,11 @@ import config from "./Configs/Config";
 import ajax from "./Modules/Ajax";
 //
 
-
-export default class App {
-    // States
-
+/**
+ * Приложение Write&Send
+ * @class
+ */
+class App {
     // Views
     private signinView: SigninView;
     private signupView: SignupView;
@@ -69,12 +70,22 @@ export default class App {
         this.initRoutes();
     }
 
-    public run() {
+    /**
+     * Запуск приложения
+     * @return {void}
+     */
+    public run(): void {
         router.start(paths.signinPage);
     }
 
     // Redirects
-    private handleRedirectToSignin() {
+
+    /**
+ * Функция отрабатывает переход по URL
+ * (приватное поле класса)
+ * @return {void}
+ */
+    private handleRedirectToSignin(): void {
         this.userModel.isAuthantificated().then(({ status, body }) => {
             router.goToPath(paths.feedPage);
         }).catch(({ status, body }) => {
@@ -93,7 +104,12 @@ export default class App {
         });
     }
 
-    private handleRedirectToSignup() {
+    /**
+     * Функция отрабатывает переход по URL
+     * (приватное поле класса)
+     * @return {void}
+     */
+    private handleRedirectToSignup(): void {
         this.userModel.isAuthantificated().then(({ status, body }) => {
             router.goToPath(paths.feedPage);
         }).catch(({ status, body }) => {
@@ -112,7 +128,12 @@ export default class App {
         });
     }
 
-    private handleRedirectToFeed() {
+    /**
+     * Функция отрабатывает переход по URL
+     * (приватное поле класса)
+     * @return {void}
+     */
+    private handleRedirectToFeed(): void {
         this.userModel.isAuthantificated().then(({ status, body }) => {
 
             // unmount
@@ -124,14 +145,19 @@ export default class App {
             this.menuController.mountComponent();
             this.feedController.mountComponent();
             //states
-            this.headerView.changeHeaderItem('profile',Object.assign({user_avatar: '../src/img/test_avatar.jpg'}, this.userModel.currentUser));
+            this.headerView.changeHeaderItem('profile', Object.assign({ user_avatar: '../src/img/test_avatar.jpg' }, this.userModel.currentUser));
 
         }).catch(({ status, body }) => {
             router.goToPath(paths.signinPage);
         });
     }
 
-    private handleLogout() {
+    /**
+     * Функция отрабатывает переход по URL
+     * (приватное поле класса)
+     * @return {void}
+     */
+    private handleLogout(): void {
         ajax.get(`${config.APIUrl}/logout`).catch(() => {
 
             router.goToPath(paths.signinPage);
@@ -145,6 +171,11 @@ export default class App {
     }
 
     // Init
+    /**
+     * Функция инициализирует базовую вёрстку страницы
+     * (приватное поле класса)
+     * @return {void}
+     */
     private initPage(): void {
         document.body.innerHTML = baseTemplate({});
         this.root = <HTMLElement>document.body.querySelector('#root');
@@ -155,7 +186,12 @@ export default class App {
         this.content = <HTMLElement>document.body.querySelector('.main-content');
     }
 
-    private initViews() {
+    /**
+     * Функция инициализирует отображения страниц
+     * (приватное поле класса)
+     * @return {void}
+     */
+    private initViews(): void {
         this.signinView = new SigninView(this.content);
         this.signupView = new SignupView(this.content);
         this.menuView = new MenuView(this.leftSide);
@@ -164,12 +200,22 @@ export default class App {
         this.footerView = new FooterView(this.footer);
     }
 
-    private initModels() {
+    /**
+     * Функция инициализирует модели страниц
+     * (приватное поле класса)
+     * @return {void}
+     */
+    private initModels(): void {
         this.userModel = new UserModel();
         this.feedModel = new FeedModel();
     }
 
-    private initControllers() {
+    /**
+     * Функция инициализирует котроллеры страниц
+     * (приватное поле класса)
+     * @return {void}
+     */
+    private initControllers(): void {
         this.signinController = new SigninController(this.signinView, this.userModel);
         this.signupController = new SignupController(this.signupView, this.userModel);
         this.menuController = new MenuController(this.menuView);
@@ -178,10 +224,17 @@ export default class App {
         this.footerController = new FooterController(this.footerView);
     }
 
-    private initRoutes() {
+    /**
+     * Функция задаёт связи между страницами (URL -> обработчик)
+     * (приватное поле класса)
+     * @return {void}
+     */
+    private initRoutes(): void {
         router.addPath({ path: paths.signinPage, handler: this.handleRedirectToSignin.bind(this) });
         router.addPath({ path: paths.signupPage, handler: this.handleRedirectToSignup.bind(this) });
         router.addPath({ path: paths.feedPage, handler: this.handleRedirectToFeed.bind(this) });
         router.addPath({ path: paths.logout, handler: this.handleLogout.bind(this) });
     }
 }
+
+export default App;

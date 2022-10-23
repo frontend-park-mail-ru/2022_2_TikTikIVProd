@@ -1,8 +1,17 @@
-export default function passwordValidator(password: string): { isValid: boolean, msg: string } {
+import { IValidationResult, VALID } from "../IValidationResult/IValidationResult.ts";
+
+/**
+ * Валидатор пароля
+ * @param  {string} email - Строка, которую нужно проверить
+ * @returns {IValidationResult} Результат валидации
+ */
+function passwordValidator(password: string):  IValidationResult {
     const regexpPassword = /^(\S*){8,}$/igd;
     const isValid = regexpPassword.test(password);
     if (isValid) {
-        return { isValid: true, msg: '' }
+        return VALID;
     }
     return { isValid: false, msg: `Минимальная длина пароля 8 символов без пробелов` };
 }
+
+export default passwordValidator;

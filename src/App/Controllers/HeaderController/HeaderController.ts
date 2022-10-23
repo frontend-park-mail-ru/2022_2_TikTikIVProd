@@ -3,13 +3,25 @@ import router from "../../Router/Router";
 import HeaderView from "../../Views/HeaderView/HeaderView";
 import IController from "../IController/IController";
 
-export default class HeaderController extends IController<HeaderView, UserModel> {
+/**
+ * Котроллер для хэдера
+ * @memberof module:Controllers
+ * @extends {IController}
+     * @param  {HeaderView} view Объект вида компонента хэдер
+     * @param  {UserModel} model Объект модели пользователя
+ */
+class HeaderController extends IController<HeaderView, UserModel> {
     constructor(view: HeaderView, model: UserModel) {
         super(view, model);
         this.view.bindClickEvent(this.handleRedirect.bind(this));
     }
 
-    // Specific
+    /**
+     * Функция обработки нажатия на хэдер
+     * (приватное поле класса)
+     * @param  {Event} e
+     * @returns {void}
+     */
     private handleRedirect(e: Event): void {
         e.preventDefault();
         if (this.isMounted) {
@@ -20,3 +32,5 @@ export default class HeaderController extends IController<HeaderView, UserModel>
         }
     }
 }
+
+export default HeaderController;

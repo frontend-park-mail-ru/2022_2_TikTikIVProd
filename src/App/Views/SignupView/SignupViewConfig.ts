@@ -1,3 +1,8 @@
+/**
+ * Конфигурация формы регистрации
+ * @memberof module:Configs
+ * @constant {Object} 
+ */
 const signupViewConfig = {
     formId: 'signup-form',
     formTitle: 'Рады вас приветствовать!',

@@ -1,23 +1,16 @@
 import FooterView from "../../Views/FooterView/FooterView";
 import IController from "../IController/IController";
 
-export default class FooterController extends IController<FooterView, null> {
+/**
+ * Котроллер для футера
+ * @memberof module:Controllers
+ * @extends {IController}
+     * @param  {FooterView} view Объект вида компонента футер
+ */
+class FooterController extends IController<FooterView, null> {
     constructor(view: FooterView) {
         super(view, null);
     }
-
-    // Interface
-    public mountComponent(): void {
-        if (!this.isMounted) {
-            this.view.show();
-            this.isMounted = true;
-        }
-    }
-
-    public unmountComponent(): void {
-        if (this.isMounted) {
-            this.view.hide();
-            this.isMounted = false;
-        }
-    }
 }
+
+export default FooterController; 

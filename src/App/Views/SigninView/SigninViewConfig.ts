@@ -1,3 +1,8 @@
+/**
+ * Конфигурация формы авторизации
+ * @memberof module:Configs
+ * @constant {Object} 
+ */
 const signinViewConfig = {
     formId: 'signin-form',
     formTitle: 'Добро пожаловать!',

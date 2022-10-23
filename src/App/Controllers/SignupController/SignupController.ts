@@ -2,7 +2,6 @@ import IController from "../IController/IController";
 import UserModel from "../../Models/UserModel/UserModel";
 import { IUserSignUp } from "../../Models/UserModel/UserModel"
 import SignupView from "../../Views/SignupView/SignupView";
-import { IValidatedData } from "../../Views/SigninView/SigninView";
 import emailValidator from "../../Utils/Validators/EmailValidator/EmailValidator";
 import firstNameValidator from "../../Utils/Validators/FirstNameValidator/FirstNameValidator";
 import lastNameValidator from "../../Utils/Validators/LastNameValidator/LastNameValidator";
@@ -10,14 +9,27 @@ import nicknameValidator from "../../Utils/Validators/NicknameValidator/Nicknama
 import passwordValidator from "../../Utils/Validators/PasswordValidator/PasswordValidator";
 import router from "../../Router/Router";
 import paths from "../../Router/RouterPaths";
-
-export default class SignupController extends IController<SignupView, UserModel> {
+import { IValidationResult } from "../../Utils/Validators/IValidationResult/IValidationResult";
+/**
+ * Котроллер для страницы авторизации
+ * @memberof module:Controllers
+ * @extends {IController}
+     * @param  {SignupView} view Объект вида формы авторизации
+     * @param  {UserModel} model Объект модели пользователя
+ */
+class SignupController extends IController<SignupView, UserModel> {
     constructor(view: SignupView, model: UserModel) {
         super(view, model);
         this.view.bindSubmit(this.onSubmit.bind(this));
         this.view.bindRedirect(this.onRedirect.bind(this));
     }
 
+    /**
+     * Функция обработки события нажатия на блок ссылок формы
+     * (приватное поле класса)
+     * @param  {Event} e Объект события 
+     * @returns {void}
+     */
     private onRedirect(e: Event) {
         e.preventDefault();
         if (this.isMounted) {
@@ -25,6 +37,12 @@ export default class SignupController extends IController<SignupView, UserModel>
         }
     }
 
+    /**
+     * Функция обработки события отправки формы
+     * (приватное поле класса)
+     * @param  {Event} e Объект события 
+     * @returns {void}
+     */
     private onSubmit(e: Event): void {
         e.preventDefault();
         if (this.isMounted) {
@@ -69,12 +87,18 @@ export default class SignupController extends IController<SignupView, UserModel>
         }
     }
 
+    /**
+     * Функция проверки данных из формы
+     * (приватное поле класса)
+     * @param {Map} data Данные из формы в формате ID поля -> значение
+     * @return {{boolean, Map<string, IValidationResult>}}
+     */
     private validate(data: Map<string, string>): {
         isValidData: boolean,
-        validatedData: Map<string, IValidatedData>
+        validatedData: Map<string, IValidationResult>
     } {
         let isValidData = true;
-        const validatedData = new Map<string, IValidatedData>;
+        const validatedData = new Map<string, IValidationResult>;
 
         data.forEach((value, id) => {
             switch (id) {
@@ -133,3 +157,5 @@ export default class SignupController extends IController<SignupView, UserModel>
         return { isValidData, validatedData };
     }
 }
+
+export default SignupController;

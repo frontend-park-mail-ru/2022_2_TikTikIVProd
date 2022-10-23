@@ -1,3 +1,8 @@
+/**
+ * Конфигурация полей футера
+ * @memberof module:Configs
+ * @constant {Object} 
+ */
 const footerViewConfig = {
     logo: {
         src: '../src/img/logo_footer.png',

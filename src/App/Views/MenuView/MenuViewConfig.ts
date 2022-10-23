@@ -1,3 +1,8 @@
+/**
+ * Конфигурация элементов меню
+ * @memberof module:Configs
+ * @constant {Object} 
+ */
 const menuConfig = {
     title: '',
     items: [
