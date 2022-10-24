@@ -5,8 +5,7 @@ import signupViewConfig from "./SignupViewConfig";
 
 /**
  * Отображение для страницы регистрации
- * @memberof module:Views
- * @class
+ * @category SignupForm
  * @extends {IView}
  * @property {HTMLElement} parent - Родительский элемент для формы регистрации
  */

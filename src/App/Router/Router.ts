@@ -10,7 +10,8 @@ interface IRoute {
 }
 
 /**
- * @class Роутер. Синглтон
+ * Роутер. Синглтон
+ * @category Router
  */
 class Router {
     /**

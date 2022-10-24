@@ -5,8 +5,7 @@ import signinViewConfig from "./SigninViewConfig";
 
 /**
  * Отображение для страницы авторизации
- * @memberof module:Views
- * @class
+ * @category SigninForm
  * @extends {IView}
  * @property {HTMLElement} parent - Родительский элемент для формы авторизации
  */

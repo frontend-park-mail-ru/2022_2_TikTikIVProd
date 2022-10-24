@@ -4,8 +4,7 @@ import headerItems from "./HeaderViewConfig";
 
 /**
  * Отображение для хэдера приложения
- * @memberof module:Views
- * @class
+ * @category Header
  * @extends {IView}
  * @property {HTMLElement} parent - Родительский элемент для хэдера
  */

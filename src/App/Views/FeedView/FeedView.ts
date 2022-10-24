@@ -5,8 +5,7 @@ import IView from "../IView/IView";
 
 /**
  * Отображение для ленты новостей
- * @memberof module:Views
- * @class
+ * @category Feed
  * @extends {IView}
  * @property {HTMLElement} parent - Родительский элемент для ленты новостей
  */

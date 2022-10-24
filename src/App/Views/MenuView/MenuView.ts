@@ -4,8 +4,7 @@ import menuTemplate from "./MenuView.hbs"
 
 /**
  * Отображение для левого меню приложения
- * @memberof module:Views
- * @class
+ * @category Menu
  * @extends {IView}
  * @property {HTMLElement} parent - Родительский элемент для меню
  */

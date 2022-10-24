@@ -9,7 +9,7 @@ import { IValidationResult } from "../../Utils/Validators/IValidationResult/IVal
 
 /**
  * Котроллер для страницы авторизации
- * @memberof module:Controllers
+ * @category SigninForm
  * @extends {IController}
  * @param  {SigninView} view Объект вида формы авторизации
  * @param  {UserModel} model Объект модели пользователя

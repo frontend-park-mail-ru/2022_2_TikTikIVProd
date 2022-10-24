@@ -4,7 +4,7 @@ import IController from "../IController/IController";
 
 /**
  * Котроллер для левого меню
- * @memberof module:Controllers
+ * @category Menu
  * @extends {IController}
      * @param  {MenuView} view Объект вида компонента меню
  */

@@ -5,7 +5,7 @@ import IController from "../IController/IController";
 
 /**
  * Котроллер для хэдера
- * @memberof module:Controllers
+ * @category Header
  * @extends {IController}
      * @param  {HeaderView} view Объект вида компонента хэдер
      * @param  {UserModel} model Объект модели пользователя

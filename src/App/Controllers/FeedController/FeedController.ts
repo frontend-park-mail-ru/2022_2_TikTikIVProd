@@ -5,7 +5,7 @@ import IController from "../IController/IController";
 
 /**
  * Котроллер для ленты
- * @memberof module:Controllers
+ * @category Feed
  * @extends {IController<FeedView, FeedModel>}
  * @param  {FeedView} view - Объект вида компонента лента
  * @param  {FeedModel} model - Объект модели ленты

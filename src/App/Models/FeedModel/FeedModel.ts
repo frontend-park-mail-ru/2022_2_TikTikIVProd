@@ -2,6 +2,16 @@ import config from "../../Configs/Config";
 import ajax from "../../Modules/Ajax";
 import IModel from "../IModel/IModel"
 
+/**
+ * Интерфейс данных, содержащихся в посте в ленте
+ * @typedef {Object} IFeedData
+ * @property {string}  photoLink - URL адрес фотографии в посте
+ * @property {string} description - Содержимое поста
+ * @property {number} likes  - Количество лайков на посте
+ * @property {string} date  - Дата публикации поста
+ * @property {string}  author_name - Имя автора поста
+ * @property {string} author_photo - Фотография автора поста
+ */
 export interface IFeedData {
     photoLink: string;
     description: string;
@@ -11,11 +21,21 @@ export interface IFeedData {
     author_photo: string;
 }
 
-export default class FeedModel extends IModel {
+/**
+ * Модель ленты 
+ * @category Models 
+ * @extends {IModel}
+ */
+class FeedModel extends IModel {
     constructor() {
         super();
     }
 
+    /**
+     * Функция получения постов ленты с сервера
+     * @async
+     * @return {Promise}
+     */
     public async getFeeds() {
         const response = await ajax.get(`${config.APIUrl}/feed`);
         let responseStatus: number = response.status;
@@ -55,3 +75,5 @@ export default class FeedModel extends IModel {
         // return [obj, obj, obj];
     }
 }
+
+export default FeedModel;

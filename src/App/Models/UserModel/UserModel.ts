@@ -2,11 +2,26 @@ import config from "../../Configs/Config";
 import ajax from "../../Modules/Ajax";
 import IModel from "../IModel/IModel"
 
+/**
+ * Интерфейс данных, необходимых для авторизации
+ * @typedef {Object} IUserSignIn
+ * @property {string}  email - Email, привязанный к аккаунту
+ * @property {string} password - Пароль от аккаунта
+ */
 export interface IUserSignIn { // ПО api
     email: string;
     password: string;
 }
 
+/**
+ * Интерфейс данных, необходимых для регистрании нового пользователя
+ * @typedef {Object} IUserSignUp
+ * @property {string}  first_name - Имя пользователя
+ * @property {string} last_name - Фамилия пользователя
+ * @property {string} nick_name  - Псевдоним
+ * @property {string}  email - Email для входа в аккаунт
+ * @property {string} password - Пароль от аккаунта
+ */
 export interface IUserSignUp { // ПО api
     first_name: string;
     last_name: string;
@@ -15,6 +30,15 @@ export interface IUserSignUp { // ПО api
     password: string;
 }
 
+/**
+ * Интерфейс, содержащий данные о пользователе
+ * @typedef {Object} IUserSignUp
+ * @property {string} id - Идентификатор, присвоенный аккаунту
+ * @property {string}  first_name - Имя пользователя
+ * @property {string} last_name - Фамилия пользователя
+ * @property {string} nick_name  - Псевдоним
+ * @property {string}  email - Email для входа в аккаунт
+ */
 export interface IUser { // ПО api !!!!Без пароля 
     id: string;
     first_name: string;
@@ -23,7 +47,17 @@ export interface IUser { // ПО api !!!!Без пароля
     email: string;
 }
 
-export default class UserModel extends IModel {
+/**
+ * Модель пользователя
+ * @category Models 
+ * @extends {IModel}
+ */
+class UserModel extends IModel {
+    /**
+     * Данные о текущем пользователе
+     * (приватное поле класса)
+     * @type {IUser | null}
+     */
     public currentUser: IUser | null; //TODO private
 
     constructor() {
@@ -31,6 +65,11 @@ export default class UserModel extends IModel {
         this.currentUser = null;
     }
 
+    /**
+     * Функция деавторизации пользователя. Сообщает серверу что пользователь вышел из аккаунта
+     * @async
+     * @return {Promise}
+     */
     public async logoutUser() {
         // TODO: logout cors
 
@@ -51,9 +90,13 @@ export default class UserModel extends IModel {
         }
     }
 
+    /**
+     * Функция авторизации пользователя. Передаёт серверу данные авторизации.
+     * @async
+     * @param {IUserSignIn} authData - Данные авторизации
+     * @return {Promise}
+     */
     public async authUser(authData: IUserSignIn) {
-        console.log('model auth: ', authData);
-        
         const response = await ajax.post(`${config.APIUrl}/signin`, JSON.stringify(authData));
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
@@ -62,10 +105,6 @@ export default class UserModel extends IModel {
             email: response.parsedBody.body.email,
             id: response.parsedBody.body.id,
         };
-
-        console.log('model auth resp: ', 
-        response.status,
-        response.parsedBody);
         
         if (response.status === 200) {
             return Promise.resolve({
@@ -79,10 +118,14 @@ export default class UserModel extends IModel {
                 body: response.parsedBody
             })
         }
-
     }
 
-
+    /**
+     * Функция авторизации пользователя. Передаёт серверу данные авторизации.
+     * @async
+     * @param {IUserSignUp} user - Данные регистрации
+     * @return {Promise}
+     */
     public async registerUser(user: IUserSignUp) {
         const response = await ajax.post(`${config.APIUrl}/signup`, JSON.stringify(user));
         this.currentUser = {
@@ -105,14 +148,21 @@ export default class UserModel extends IModel {
                 body: response.parsedBody
             })
         }
-
     }
 
-
-    public getCurrentUser() {
+    /**
+     * Функция возвращает данные авторизованного пользователя
+     * @returns {IUser|null}
+     */
+    public getCurrentUser() : IUser | null{
         return this.currentUser;
     }
 
+    /**
+     * Функция проверки авторизации с использованием куки.
+     * @async
+     * @return {Promise}
+     */
     public async isAuthantificated() {
         const response = await ajax.get(`${config.APIUrl}/auth`);
         this.currentUser = {
@@ -137,3 +187,5 @@ export default class UserModel extends IModel {
         }
     }
 }
+
+export default UserModel;

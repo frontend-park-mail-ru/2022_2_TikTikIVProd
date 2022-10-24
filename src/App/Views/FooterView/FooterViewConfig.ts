@@ -1,6 +1,6 @@
 /**
  * Конфигурация полей футера
- * @memberof module:Configs
+ * @category Footer
  * @constant {Object} 
  */
 const footerViewConfig = {

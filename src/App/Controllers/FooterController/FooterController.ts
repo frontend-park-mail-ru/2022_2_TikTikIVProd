@@ -3,7 +3,7 @@ import IController from "../IController/IController";
 
 /**
  * Котроллер для футера
- * @memberof module:Controllers
+ * @category Footer
  * @extends {IController}
      * @param  {FooterView} view Объект вида компонента футер
  */

@@ -4,8 +4,7 @@ import footerTemplate from "./FooterView.hbs"
 
 /**
  * Отображение для футера приложения
- * @memberof module:Views
- * @class
+ * @category Footer
  * @extends {IView}
  * @property {HTMLElement} parent - Родительский элемент для футера
  */

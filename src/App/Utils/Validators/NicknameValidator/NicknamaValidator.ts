@@ -1,6 +1,7 @@
 import { IValidationResult, VALID } from "../IValidationResult/IValidationResult.ts";
 /**
  * Валидатор псевдомима пользователя
+ * @category Validators
  * @param  {string} nickname - Строка, которую нужно проверить
  * @returns {IValidationResult} Результат валидации
  */

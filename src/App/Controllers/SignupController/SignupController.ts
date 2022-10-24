@@ -12,7 +12,7 @@ import paths from "../../Router/RouterPaths";
 import { IValidationResult } from "../../Utils/Validators/IValidationResult/IValidationResult";
 /**
  * Котроллер для страницы авторизации
- * @memberof module:Controllers
+ * @category SignupForm
  * @extends {IController}
      * @param  {SignupView} view Объект вида формы авторизации
      * @param  {UserModel} model Объект модели пользователя

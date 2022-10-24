@@ -1,8 +1,15 @@
 import IModel from "../IModel/IModel"
 
-export default class MenuModel extends IModel {
+/**
+ * Модель меню 
+ * @category Models 
+ * @extends {IModel}
+ */
+class MenuModel extends IModel {
 
     constructor() {
         super();
     }
 };
+
+export default MenuModel;

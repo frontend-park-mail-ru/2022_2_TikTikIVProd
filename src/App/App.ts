@@ -31,7 +31,7 @@ import ajax from "./Modules/Ajax";
 
 /**
  * Приложение Write&Send
- * @class
+ * @category Application
  */
 class App {
     // Views

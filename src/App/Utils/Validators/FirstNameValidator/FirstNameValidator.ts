@@ -2,6 +2,7 @@ import { IValidationResult, VALID } from "../IValidationResult/IValidationResult
 
 /**
  * Валидатор имени пользователя
+ * @category Validators
  * @param  {string} firstName - Строка, которую нужно проверить
  * @returns {IValidationResult} Результат валидации
  */

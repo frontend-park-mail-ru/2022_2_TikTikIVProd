@@ -4,14 +4,15 @@
     },
     "tags": {
         "allowUnknownTags": [
-            "optional"
+            "category"
         ]
     },
     "plugins": [
-        "node_modules/better-docs/typescript"
+        "node_modules/better-docs/typescript",
+        "node_modules/better-docs/category"
     ],
     "source": {
-        "include": ["./src"],
+        "include": ["./src", "./README.md"],
         "includePattern": "\\.(js|ts)$"
     }
 }

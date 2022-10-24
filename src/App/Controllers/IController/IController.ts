@@ -1,18 +1,14 @@
 import IView from '../../Views/IView/IView'
 import IModel from '../../Models/IModel/IModel'
 
-/**
- * @module Controllers
- */
 
 /**
  * Базовый класс для контроллера компонента приложения.
  * Связывает вид с моделью
  * @class 
  * @virtual
- * @template tView, tModel
- * @param  {tView} view Вид, которым управляет контроллер
- * @param  {tModel} model Модель, которой пользуется контроллер
+ * @param  {tView<IView>} view Вид, которым управляет контроллер
+ * @param  {tModel<IModel>} model Модель, которой пользуется контроллер
  */
 abstract class IController<tView extends IView, tModel> {
     /**

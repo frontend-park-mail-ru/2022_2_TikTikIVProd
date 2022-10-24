@@ -1,6 +1,6 @@
 /**
  * Конфигурация формы регистрации
- * @memberof module:Configs
+ * @category Feed
  * @constant {Object} 
  */
 const signupViewConfig = {

@@ -1,5 +1,6 @@
 /**
  * Конфигурация URL адресов приложения
+ * @category Router
  * @constant {Object} 
  * @param {{name: string, URL: string}} Структура конфигурации 
  */

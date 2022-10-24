@@ -1,6 +1,6 @@
 /**
  * Конфигурация формы авторизации
- * @memberof module:Configs
+ * @category SigninForm
  * @constant {Object} 
  */
 const signinViewConfig = {

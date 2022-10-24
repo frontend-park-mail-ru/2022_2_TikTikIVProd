@@ -1,6 +1,6 @@
 /**
  * Конфигурация элементов меню
- * @memberof module:Configs
+ * @category Menu
  * @constant {Object} 
  */
 const menuConfig = {
