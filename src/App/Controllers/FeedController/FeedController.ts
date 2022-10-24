@@ -22,6 +22,10 @@ class FeedController extends IController<FeedView, FeedModel> {
         super(view, model);
         this.view.bindScrollEvent(throttle(this.handleScroll.bind(this), 250));
         this.view.bindResizeEvent(throttle(this.handleScroll.bind(this), 250));
+
+        // TODO убрать
+        const content = this.getContent();
+        this.view.pushContentToFeed(content);
     }
 
     // TODO доавить контент если фид пуст
