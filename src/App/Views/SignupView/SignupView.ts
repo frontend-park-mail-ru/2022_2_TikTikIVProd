@@ -1,6 +1,5 @@
 import formTemplate from "../../Components/Form/Form.hbs";
-import "./SignupView.css"
-import "../../Components/FeedCard/FeedCard.css"
+import "../../Components/Form/Form.css"
 
 import { IValidationResult } from "../../Utils/Validators/IValidationResult/IValidationResult";
 import IView from "../IView/IView";
