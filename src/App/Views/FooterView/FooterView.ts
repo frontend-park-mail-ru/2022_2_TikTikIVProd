@@ -1,6 +1,8 @@
+import footerTemplate from "./FooterView.hbs"
+import "./FooterView.css"
+
 import IView from "../IView/IView";
 import footerViewConfig from "./FooterViewConfig";
-import footerTemplate from "./FooterView.hbs"
 
 /**
  * Отображение для футера приложения

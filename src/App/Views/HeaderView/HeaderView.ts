@@ -1,4 +1,6 @@
 import headerTemplate from "./HeaderView.hbs"
+import "./HeaderView.css"
+
 import IView from "../IView/IView";
 import headerItems from "./HeaderViewConfig";
 

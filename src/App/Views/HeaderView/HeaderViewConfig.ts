@@ -1,5 +1,9 @@
 import headerButtonTemplate from "../../Components/HeaderButton/HeaderButton.hbs";
+import "../../Components/HeaderButton/HeaderButton.css"
+
 import headerProfileTemplate from "../../Components/HeaderProfile/HeaderProfile.hbs";
+import "../../Components/HeaderProfile/HeaderProfile.css"
+
 /**
  * Конфигурация элемента в хэдере приложения
  * @category Header

@@ -1,5 +1,3 @@
-@import url("../../Components/FeedCard/FeedCard.css");
-
 .feed__container {
   display: flex;
   flex-direction: column;

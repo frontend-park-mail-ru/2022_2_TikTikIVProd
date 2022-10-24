@@ -1,4 +1,7 @@
 import formTemplate from "../../Components/Form/Form.hbs";
+import "./SigninView.css"
+import "../../Components/FeedCard/FeedCard.css"
+
 import { IValidationResult } from "../../Utils/Validators/IValidationResult/IValidationResult";
 import IView from "../IView/IView";
 import signinViewConfig from "./SigninViewConfig";

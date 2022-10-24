@@ -1,5 +1,9 @@
 import feedCardTemplate from "../../Components/FeedCard/FeedCard.hbs"
+import "../../Components/FeedCard/FeedCard.css"
+
 import feedTemplate from "./FeedView.hbs"
+import "./FeedView.css"
+
 import { IFeedData } from "../../Models/FeedModel/FeedModel";
 import IView from "../IView/IView";
 

@@ -1,6 +1,8 @@
+import menuTemplate from "./MenuView.hbs"
+import "./MenuView.css"
+
 import IView from "../IView/IView";
 import menuConfig from "./MenuViewConfig"
-import menuTemplate from "./MenuView.hbs"
 
 /**
  * Отображение для левого меню приложения
