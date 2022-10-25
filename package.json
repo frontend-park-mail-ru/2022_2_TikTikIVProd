@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "lint": "npx eslint ./src/**/*.ts",
-    "docs": "rm -rf ./docs && jsdoc -c ./jsdoc.json -d ./docs -r --access \"all\""
+    "docs": "jsdoc -c ./jsdoc.json -d ./docs -r --access \"all\""
   },
   "repository": {
     "type": "git",

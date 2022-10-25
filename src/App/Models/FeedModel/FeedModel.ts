@@ -5,20 +5,20 @@ import IModel from "../IModel/IModel"
 /**
  * Интерфейс данных, содержащихся в посте в ленте
  * @typedef {Object} IFeedData
- * @property {string}  photoLink - URL адрес фотографии в посте
- * @property {string} description - Содержимое поста
+ * @property {Object} author - Данные о авторе поста
+ * @property {string} author.avatar - Ссылка на аватар
+ * @property {string} author.name - Имя пользователя
  * @property {number} likes  - Количество лайков на посте
+ * @property {string} text - Текстовое содержимое поста
  * @property {string} date  - Дата публикации поста
- * @property {string}  author_name - Имя автора поста
- * @property {string} author_photo - Фотография автора поста
+ * @property {Array.<{src: string}>} attachments - Вложения в пост (URL картинок)
  */
 export interface IFeedData {
-    photoLink: string;
-    description: string;
-    likes: number;
+    author: { avatar: string, name: string };
     date: string;
-    author_name: string;
-    author_photo: string;
+    text: string;
+    likes: number;
+    attachments: { src: string }[];
 }
 
 /**

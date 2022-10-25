@@ -40,6 +40,15 @@
   --color-menu-item-logout-text: #f66363;
 
   --header-height: 50px;
+
+  --color-feed-card-border: #d8d8d8;
+  --color-feed-card-background: #ffffff;
+  --color-feed-card-author-name: #000000;
+  --color-feed-card-img-background: #ebebeb;
+  --color-feed-card-img-border: #d8d8d8;
+  --color-feed-card-date: #818c99;
+  --color-feed-card-text: #000000;
+  --color-feed-card-likes: #818c99;
 }
 
 body {

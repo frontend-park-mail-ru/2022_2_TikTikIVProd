@@ -1,16 +1,29 @@
 <div class="feed__card">
-  <div class="feed__card__author">
-    <div class="feed__card__author__photo">{{author_photos}}</div>
-    <div class="feed__card__author__name">{{author_name}}</div>
+  <div class="feed__card__header">
+    <div class="feed__card__author">
+      <img src="{{author.avatar}}" alt="" class="feed__card__author__avatar" />
+      <div>
+        <div class="feed__card__author__name">{{author.name}}</div>
+        <div class="feed__card__date">{{date}}</div>
+      </div>
+    </div>
+    <div class="feed__card__buttons">
+      <img src="../../../img/pen_icon.svg" alt="" class="feed__card__button edit" />
+      <img src="../../../img/trash_icon.svg" alt="" class="feed__card__button delete" />
+    </div>
   </div>
-  <div class="feed__card__date">{{date}}</div>
-  <div class="feed__card__description">
-    {{description}}
+  <div class="feed__card__content"> {{text}}</div>
+  <div class="feed__card__attachments">
+    {{#each attachments}}
+      <img src="{{attachments.src}}" alt="" class="feed__card__attachments__item" />
+    {{/each}}
   </div>
-  <div class="feed__card__image__wrapper">
-    <img class="feed__card__image" src="{{photoLink}}" />
-  </div>
-  <div class="feed__card__bottom">
-    <div class="feed__card__bottom__likes">{{likes}}</div>
+  <div class="feed__card__footer">
+    <div class="feed__card__likes">{{likes}}</div>
+    <div class="feed__card__buttons">
+      <img src="../../../img/like_icon.svg" alt="" class="feed__card__button like" />
+      <img src="../../../img/comment_icon.svg" alt="" class="feed__card__button comment" />
+      <img src="../../../img/link_icon.svg" alt="" class="feed__card__button link" />
+    </div>
   </div>
 </div>
