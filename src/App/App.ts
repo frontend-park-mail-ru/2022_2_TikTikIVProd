@@ -65,6 +65,7 @@ class App {
     private content: HTMLElement;
 
     constructor() {
+        // this.initPrefferedColorTheme();
         this.initPage();
         this.initViews();
         this.initModels();
@@ -236,6 +237,49 @@ class App {
         router.addPath({ path: paths.signupPage, handler: this.handleRedirectToSignup.bind(this) });
         router.addPath({ path: paths.feedPage, handler: this.handleRedirectToFeed.bind(this) });
         router.addPath({ path: paths.logout, handler: this.handleLogout.bind(this) });
+    }
+
+    /**
+     * Функция изменения цветовой темы приложения
+     * @param {string} themeName - Название цветовой темы
+ * @return {void}
+ */
+    private setColorTheme(themeName: string): void {
+        document.documentElement.setAttribute('theme', themeName);
+    }
+
+    /**
+     * Функция получения цветовой схемы системы
+     * @return {string}
+     */
+    private getPreferedColorTheme(): string {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // Dark
+            return 'dark';
+        } else {
+            // Light
+            return 'light';
+        }
+    }
+
+    /**
+     * Функция реакции на событие изменения цветовой схемы системы
+     * @return {void}
+     */
+    private handlePreferedColorThemeChange(): void {
+        this.setColorTheme(this.getPreferedColorTheme());
+    }
+
+    /**
+     * Функция запуска прослушивания события изменения системной цветовой темы
+     * @return {void}
+     */
+    private initPrefferedColorTheme(): void {
+        if (!window.matchMedia) {
+            console.log('Браузер не поддерживает matchMedia');
+            return;
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.handlePreferedColorThemeChange.bind(this));
     }
 }
 

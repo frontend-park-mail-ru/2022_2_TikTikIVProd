@@ -54,7 +54,7 @@ class FeedController extends IController<FeedView, FeedModel> {
     private getContent(): IFeedData[] {
         // TODO model
         const item: IFeedData = {
-            author: { avatar: '../src/img/test_post_img.jpg', name: 'Test User' },
+            author: { avatar: '../src/img/test_avatar.jpg', name: 'Test User' },
             date: '01.01.2001',
             text: 'Sample text of feed card. Sample text of feed card. Sample text of feed card. Sample text of feed card. ',
             likes: 100500,

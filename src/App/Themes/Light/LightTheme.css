@@ -1,0 +1,52 @@
+:root, :root[theme='light'] {
+  --color-root-background: #f0f2f5;
+
+  --color-footer-background: #eaecf0;
+  --color-footer-text: #b5b5b5;
+
+  --color-form-title: #6f6f6f;
+  --color-form-background: #ffffff;
+  --color-form-border: #ebebeb;
+
+  --color-input-title: #6f6f6f;
+  --color-input-placeholder: #d8d8d8;
+  --color-input-border: #d8d8d8;
+  --color-input-border-focus: #6f6f6f;
+  --color-input-value: #767676;
+  --color-input-value-error: #f66363;
+  --color-input-border-error: #f66363;
+  --color-input-border-focus-error: #b04c4c;
+
+  --color-button-background: #21cf7a;
+  --color-button-value: #ffffff;
+  --color-button-background-pressed: #24b66f;
+  --color-button-border-focus: #24b66f;
+
+  --color-link-value: #b5b5b5;
+  --color-link-underline-hover: #b5b5b5;
+  --color-link-value-pressed: #d8d8d8;
+  --color-limk-underline-pressed: #d8d8d8;
+
+  --color-header-background: #ffffff;
+
+  --color-logo: #ffffff;
+  --color-logo-background: #21cf7a;
+  --color-logo-border: #21cf7a;
+
+  --color-menu-item-background: none;
+  --color-menu-item-background-hover: rgba(0, 255, 132, 0.106);
+  --color-menu-item-text: #767676;
+  --color-menu-item-text-active: #333333;
+  --color-menu-item-logout-text: #f66363;
+
+  --header-height: 50px;
+
+  --color-feed-card-border: #d8d8d8;
+  --color-feed-card-background: #ffffff;
+  --color-feed-card-author-name: #000000;
+  --color-feed-card-img-background: #ebebeb;
+  --color-feed-card-img-border: #d8d8d8;
+  --color-feed-card-date: #818c99;
+  --color-feed-card-text: #000000;
+  --color-feed-card-likes: #818c99;
+}
