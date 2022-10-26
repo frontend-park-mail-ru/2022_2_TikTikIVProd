@@ -75,10 +75,12 @@ class App {
 
     /**
      * Запуск приложения
+     * @param {string} url - Адрес запрашиваемой страницы.
      * @return {void}
      */
-    public run(): void {
-        router.start(paths.signinPage);
+    public run(url: string): void {
+        console.log('run app', url);
+        router.start(url);
     }
 
     // Redirects

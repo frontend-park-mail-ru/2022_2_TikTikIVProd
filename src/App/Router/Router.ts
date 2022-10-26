@@ -46,6 +46,8 @@ class Router {
             this.route();
         });
 
+        console.log('start: ', this.current, ' hist: ', history.state?.path);
+        
         this.route();
     }
 
@@ -65,6 +67,8 @@ class Router {
      * @return void
      */
     public goToPath(path: string) : void {
+        console.log('go to path: ', path);
+        
         history.pushState({ path: path }, '', path);
         this.route();
     }
@@ -75,9 +79,13 @@ class Router {
      */
     private route(): void {
         const path = history.state?.path;
+        console.log('route: ', path);
+        
 
         const item = this.routes.find((item) => item.path == path);
         if (item === undefined) {
+            console.log('route not found ',path );
+            
             return;
         }
         item.handler();

@@ -37,9 +37,9 @@ class FeedModel extends IModel {
      * @async
      * @return {Promise}
      */
-    public async getFeeds() {
-        const response = await ajax.get(`${config.APIUrl}/feed`);
-        let responseStatus: number = response.status;
+    public async getFeeds() : Promise<{status: number, body: IFeedData[]}>{
+
+        const response = await ajax.get(`${config.APIUrl}${config.API.feed.url}`);
         let responseBody: any = response.parsedBody.body.map((feedPost: any) => {
             return {
                 photoLinks: feedPost.image_links,
@@ -51,29 +51,17 @@ class FeedModel extends IModel {
             }
         });
 
-        if (response.status === 200) {
-            return Promise.resolve({
-                status: responseStatus,
-                body: responseBody
-            })
+        const result = {
+            status: response.status,
+            body: responseBody,
+        };
+
+        if (response.status === config.API.feed.status.success) {
+            return Promise.resolve(result);
         }
         else {
-            return Promise.reject({
-                status: responseStatus,
-                body: responseBody
-            })
+            return Promise.reject(result);
         }
-
-
-        // const obj: IFeedData = {
-        //     photoLink: '',
-        //     description: 'This is my First Post!',
-        //     likes: 228,
-        //     date: new Date('December 17, 1995 03:24:00'),
-        //     author_name: 'Павел Александров',
-        //     author_photo: ''
-        // }
-        // return [obj, obj, obj];
     }
 }
 

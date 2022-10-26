@@ -76,10 +76,9 @@ class UserModel extends IModel {
     public async logoutUser() {
         // TODO: logout cors
 
-        const response = await ajax.get(`${config.APIUrl}/logout`);
+        const response = await ajax.get(`${config.APIUrl}${config.API.logout}`);
         this.currentUser = null;
-        console.log('model: ', response);
-        if (response.status === 200) {
+        if (response.status === config.API.logout.status.success) {
             return Promise.resolve({
                 status: response.status,
                 body: response.parsedBody
@@ -100,7 +99,7 @@ class UserModel extends IModel {
      * @return {Promise}
      */
     public async authUser(authData: IUserSignIn) {
-        const response = await ajax.post(`${config.APIUrl}/signin`, JSON.stringify(authData));
+        const response = await ajax.post(`${config.APIUrl}${config.API.signin.url}`, JSON.stringify(authData));
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
             last_name: response.parsedBody.body.last_name,
@@ -109,7 +108,7 @@ class UserModel extends IModel {
             id: response.parsedBody.body.id,
         };
         
-        if (response.status === 200) {
+        if (response.status === config.API.signin.status.success) {
             return Promise.resolve({
                 status: response.status,
                 body: response.parsedBody
@@ -130,7 +129,7 @@ class UserModel extends IModel {
      * @return {Promise}
      */
     public async registerUser(user: IUserSignUp) {
-        const response = await ajax.post(`${config.APIUrl}/signup`, JSON.stringify(user));
+        const response = await ajax.post(`${config.APIUrl}${config.API.signup.url}`, JSON.stringify(user));
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
             last_name: response.parsedBody.body.last_name,
@@ -139,7 +138,7 @@ class UserModel extends IModel {
             id: response.parsedBody.body.id,
         };
 
-        if (response.status === 201) {
+        if (response.status === config.API.signup.status.success) {
             return Promise.resolve({
                 status: response.status,
                 body: response.parsedBody
@@ -167,7 +166,7 @@ class UserModel extends IModel {
      * @return {Promise}
      */
     public async isAuthantificated() {
-        const response = await ajax.get(`${config.APIUrl}/auth`);
+        const response = await ajax.get(`${config.APIUrl}${config.API.checkCookie.url}`);
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
             last_name: response.parsedBody.body.last_name,
@@ -176,7 +175,7 @@ class UserModel extends IModel {
             id: response.parsedBody.body.id,
         };
 
-        if (response.status === 200) {
+        if (response.status === config.API.checkCookie.status.success) {
             return Promise.resolve({
                 status: response.status,
                 body: response.parsedBody

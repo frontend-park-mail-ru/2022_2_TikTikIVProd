@@ -4,14 +4,11 @@ interface IParamsProps {
     body?: string;
 };
 
-
-
 const REQUEST_TYPE = {
     GET: 'GET',
     POST: 'POST',
     PUT: 'PUT',
 };
-
 
 class Ajax {
     private async asyncFetch(params: IParamsProps) {
