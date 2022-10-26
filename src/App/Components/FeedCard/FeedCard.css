@@ -30,9 +30,18 @@
 }
 
 .feed__card__likes {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   font-weight: 400;
   font-size: 13px;
   color: var(--color-feed-card-likes);
+}
+
+.feed__card__likes__icon{
+  object-fit: contain;
+  height: 13px;
+  margin-right: 5px;
 }
 
 .feed__card__attachments {

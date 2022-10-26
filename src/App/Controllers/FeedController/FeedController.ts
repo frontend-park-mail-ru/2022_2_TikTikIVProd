@@ -64,6 +64,8 @@ class FeedController extends IController<FeedView, FeedModel> {
         for (let index = 0; index < 10; index++) {
             testData.push(item);
         }
+        console.log(testData);
+        
 
         return testData;
     }
