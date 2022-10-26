@@ -4,6 +4,7 @@ import IModel from "../IModel/IModel"
 
 /**
  * Интерфейс данных, необходимых для авторизации
+ * @category User 
  * @typedef {Object} IUserSignIn
  * @property {string}  email - Email, привязанный к аккаунту
  * @property {string} password - Пароль от аккаунта
@@ -15,6 +16,7 @@ export interface IUserSignIn { // ПО api
 
 /**
  * Интерфейс данных, необходимых для регистрании нового пользователя
+ * @category User 
  * @typedef {Object} IUserSignUp
  * @property {string}  first_name - Имя пользователя
  * @property {string} last_name - Фамилия пользователя
@@ -32,6 +34,7 @@ export interface IUserSignUp { // ПО api
 
 /**
  * Интерфейс, содержащий данные о пользователе
+ * @category User 
  * @typedef {Object} IUserSignUp
  * @property {string} id - Идентификатор, присвоенный аккаунту
  * @property {string}  first_name - Имя пользователя

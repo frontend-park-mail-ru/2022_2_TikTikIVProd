@@ -2,14 +2,10 @@ import IController from "../IController/IController";
 import UserModel from "../../Models/UserModel/UserModel";
 import { IUserSignUp } from "../../Models/UserModel/UserModel"
 import SignupView from "../../Views/SignupView/SignupView";
-import emailValidator from "../../Utils/Validators/EmailValidator/EmailValidator";
-import firstNameValidator from "../../Utils/Validators/FirstNameValidator/FirstNameValidator";
-import lastNameValidator from "../../Utils/Validators/LastNameValidator/LastNameValidator";
-import nicknameValidator from "../../Utils/Validators/NicknameValidator/NicknamaValidator";
-import passwordValidator from "../../Utils/Validators/PasswordValidator/PasswordValidator";
 import router from "../../Router/Router";
 import paths from "../../Router/RouterPaths";
-import { IValidationResult } from "../../Utils/Validators/IValidationResult/IValidationResult";
+import validateInput, { IValidationResult } from "../../Utils/Validators/InputValidator/InputValidator";
+
 /**
  * Котроллер для страницы авторизации
  * @category SignupForm
@@ -101,56 +97,19 @@ class SignupController extends IController<SignupView, UserModel> {
         const validatedData = new Map<string, IValidationResult>;
 
         data.forEach((value, id) => {
-            switch (id) {
-                case 'first_name': {
-                    const { isValid, msg } = firstNameValidator(value);
-                    validatedData.set(id, { isValid, msg });
-                    if (!isValid) { isValidData = false; }
-                    break;
-                }
-                case 'last_name': {
-                    const { isValid, msg } = lastNameValidator(value);
-                    validatedData.set(id, { isValid, msg });
-                    if (!isValid) { isValidData = false; }
-                    break;
-                }
-                case 'nick_name': {
-                    const { isValid, msg } = nicknameValidator(value);
-                    validatedData.set(id, { isValid, msg });
-                    if (!isValid) { isValidData = false; }
-                    break;
-                }
-                case 'email': {
-                    const { isValid, msg } = emailValidator(value);
-                    validatedData.set(id, { isValid, msg });
-                    if (!isValid) { isValidData = false; }
-                    break;
-                }
-                case 'password': {
-                    const { isValid, msg } = passwordValidator(value);
-                    validatedData.set(id, { isValid, msg });
-                    if (!isValid) { isValidData = false; }
-                    break;
-                }
-                case 'email': {
-                    const { isValid, msg } = emailValidator(value);
-                    validatedData.set(id, { isValid, msg });
-                    if (!isValid) { isValidData = false; }
-                    break;
-                }
-                case 'repeat_password': {
-                    if (value !== data.get('password')) {
-                        validatedData.set(id, { isValid: false, msg: 'Пароли должны совпадать' });
-                    } else {
-                        validatedData.set(id, { isValid: true, msg: '' });
-                    }
-                    break;
-                }
-
-                default: {
+            if (id === 'repeat_password') {
+                if (value !== data.get('password')) {
+                    validatedData.set(id, { isValid: false, msg: 'Пароли должны совпадать' });
+                } else {
                     validatedData.set(id, { isValid: true, msg: '' });
-                    break;
                 }
+                return;
+            }
+
+            const { isValid, msg } = validateInput(id, value);
+            validatedData.set(id, { isValid, msg });
+            if (!isValid) {
+                isValidData = false;
             }
         });
 

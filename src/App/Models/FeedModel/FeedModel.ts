@@ -4,6 +4,7 @@ import IModel from "../IModel/IModel"
 
 /**
  * Интерфейс данных, содержащихся в посте в ленте
+ * @category Feed 
  * @typedef {Object} IFeedData
  * @property {Object} author - Данные о авторе поста
  * @property {string} author.avatar - Ссылка на аватар

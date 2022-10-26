@@ -2,10 +2,9 @@ import IController from "../IController/IController";
 import UserModel from "../../Models/UserModel/UserModel";
 import { IUserSignIn } from "../../Models/UserModel/UserModel"
 import SigninView from "../../Views/SigninView/SigninView";
-import emailValidator from "../../Utils/Validators/EmailValidator/EmailValidator";
 import router from "../../Router/Router";
 import paths from "../../Router/RouterPaths";
-import { IValidationResult } from "../../Utils/Validators/IValidationResult/IValidationResult";
+import validateInput, { IValidationResult } from "../../Utils/Validators/InputValidator/InputValidator";
 
 /**
  * Котроллер для страницы авторизации
@@ -92,18 +91,13 @@ class SigninController extends IController<SigninView, UserModel> {
         const validatedData = new Map<string, IValidationResult>;
 
         data.forEach((value, id) => {
-            switch (id) {
-                case 'email': {
-                    const { isValid, msg } = emailValidator(value);
-                    validatedData.set(id, { isValid, msg });
-                    if (!isValid) { isValidData = false; }
-                    break;
-                }
-                case 'password':
-                default: {
-                    validatedData.set(id, { isValid: true, msg: '' });
-                    break;
-                }
+            if(id === 'password') {
+                return;
+            }
+            const { isValid, msg } = validateInput(id, value);
+            validatedData.set(id, { isValid, msg });
+            if (!isValid) { 
+                isValidData = false; 
             }
         });
 

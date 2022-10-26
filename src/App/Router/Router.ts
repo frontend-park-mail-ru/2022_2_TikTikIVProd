@@ -1,5 +1,6 @@
 /**
- * Интерфейс страницы приложения для роутера 
+ * Интерфейс страницы приложения для роутера
+ * @category Router 
  * @typedef {Object} IRoute
  * @property {string} path - URL адрес страницы
  * @property {Function} handler - Обработчик перехода на страницу

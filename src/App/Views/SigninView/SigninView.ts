@@ -1,9 +1,9 @@
 import formTemplate from "../../Components/Form/Form.hbs";
 import "../../Components/Form/Form.css"
 
-import { IValidationResult } from "../../Utils/Validators/IValidationResult/IValidationResult";
 import IView from "../IView/IView";
 import signinViewConfig from "./SigninViewConfig";
+import { IValidationResult } from "../../Utils/Validators/InputValidator/InputValidator";
 
 /**
  * Отображение для страницы авторизации
