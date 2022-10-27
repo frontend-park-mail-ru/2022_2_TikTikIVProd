@@ -33,6 +33,8 @@ import FeedModel from "./Models/FeedModel/FeedModel";
 // TODO delete 
 import config from "./Configs/Config";
 import ajax from "./Modules/Ajax";
+import ProfileController from "./Controllers/ProfileController/ProfileController";
+import ProfileView from "./Views/ProfileView/ProfileView";
 //
 
 /**
@@ -48,6 +50,7 @@ class App {
     private headerView: HeaderView;
     private footerView: FooterView;
     private pageNotFoundView: PageNotFoundView;
+    private profileView: ProfileView;
 
     // Models
     private userModel: UserModel;
@@ -61,6 +64,7 @@ class App {
     private headerController: HeaderController;
     private footerController: FooterController;
     private pageNotFoundController: PageNotFoundController;
+    private profileController: ProfileController;
 
     // Elements
     private root: HTMLElement;
@@ -190,6 +194,26 @@ class App {
         this.pageNotFoundController.mountComponent();
     }
 
+    private handleProfile(): void { 
+        this.userModel.isAuthantificated()
+            .then(({ status, body }) => {
+                EventDispatcher.emit('unmount-all');
+                EventDispatcher.emit('redirected-profile');
+                // mount
+                this.headerController.mountComponent();
+                this.menuController.mountComponent();
+                this.profileController.mountComponent();
+                // states
+                this.headerView.changeHeaderItem(
+                    'profile',
+                    Object.assign(
+                        { user_avatar: '../src/img/test_avatar.jpg' },
+                        this.userModel.currentUser));
+            })
+            .catch(({ status, body }) => {
+                router.goToPath(paths.signinPage);
+            });
+    }
     /**
      * Функция инициализирует базовую вёрстку страницы
      * (приватное поле класса)
@@ -218,6 +242,7 @@ class App {
         this.headerView = new HeaderView(this.header);
         this.footerView = new FooterView(this.footer);
         this.pageNotFoundView = new PageNotFoundView(this.content);
+        this.profileView = new ProfileView(this.content);
     }
 
     /**
@@ -247,6 +272,7 @@ class App {
         this.footerController = new FooterController(this.footerView);
         this.pageNotFoundController =
             new PageNotFoundController(this.pageNotFoundView);
+            this.profileController = new ProfileController(this.profileView, this.userModel);
     }
 
     /**
@@ -268,6 +294,7 @@ class App {
         router.addPath({ path: paths.logout, handler: this.handleLogout.bind(this) });
         router.setDefaultHandler(this.handle404.bind(this));
         router.addPath({path: paths.home, handler: this.handleRedirectToFeed.bind(this)});
+            router.addPath({path: paths.profile, handler: this.handleProfile.bind(this)});
     }
 
     /**

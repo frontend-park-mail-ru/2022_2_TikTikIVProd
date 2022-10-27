@@ -1,0 +1,13 @@
+.profile__user__avatar {
+    background-color: var(--color-profile-img-background);
+    outline: 1px solid var(--color-profile-img-border);
+    border-radius: 50%;
+    height: 80%;
+    max-height: 100px;
+    object-fit: cover;
+}
+
+.profile__user__name {
+    font-size: 16px;
+    color: var(--color-profile-name);
+}
