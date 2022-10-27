@@ -1,6 +1,6 @@
-<div class="feed__card">
+<div class="feed__card" data-action="card_page" data-id="{{id}}">
   <div class="feed__card__header">
-    <div class="feed__card__author">
+    <div class="feed__card__author" data-action="profile_page" data-data="{{author.url}}">
       <img src="{{author.avatar}}" alt="" class="feed__card__author__avatar" />
       <div>
         <div class="feed__card__author__name">{{author.name}}</div>
@@ -8,8 +8,8 @@
       </div>
     </div>
     <div class="feed__card__buttons">
-      <img src="../src/img/pen_icon.svg" alt="" class="feed__card__button edit" />
-      <img src="../src/img/trash_icon.svg" alt="" class="feed__card__button delete" />
+      <img src="../src/img/pen_icon.svg" alt="" class="feed__card__button" data-action="edit"/>
+      <img src="../src/img/trash_icon.svg" alt="" class="feed__card__button" data-action="delete"/>
     </div>
   </div>
   <div class="feed__card__content"> {{text}}</div>
@@ -21,9 +21,9 @@
   <div class="feed__card__footer">
     <div class="feed__card__likes"><img src="../src/img/like_filled_icon.svg" alt="" class="feed__card__likes__icon">{{likes}}</div>
     <div class="feed__card__buttons">
-      <img src="../src/img/like_icon.svg" alt="" class="feed__card__button like" />
-      <img src="../src/img/comment_icon.svg" alt="" class="feed__card__button comment" />
-      <img src="../src/img/link_icon.svg" alt="" class="feed__card__button link" />
+      <img src="../src/img/like_icon.svg" alt="" class="feed__card__button" data-action="like"/>
+      <img src="../src/img/comment_icon.svg" alt="" class="feed__card__button" data-action="comment"/>
+      <img src="../src/img/link_icon.svg" alt="" class="feed__card__button" data-action="share"/>
     </div>
   </div>
 </div>

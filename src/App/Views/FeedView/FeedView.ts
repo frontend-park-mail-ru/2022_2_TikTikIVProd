@@ -36,15 +36,14 @@ class FeedView extends IView {
         window.addEventListener('resize', listener.bind(this));
     }
 
-
-    // public bindClickEvent(callback: Function): void {
-    //     this.element.addEventListener('click', (e) => {
-    //         e.preventDefault();
-
-    //         const target = <HTMLElement>e.target;
-    //         // TODO
-    //     });
-    // }
+    /**
+     * Функция добавления обработчика события нажатия на ленту
+     * @param  {any} listener - Callback функция для события
+     * @returns {void}
+     */
+    public bindClickEvent(callback: Function): void {
+        this.element.addEventListener('click', callback.bind(this));
+    }
 
     // Specific
 

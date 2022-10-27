@@ -1,5 +1,6 @@
 import FeedModel, { IFeedData } from "../../Models/FeedModel/FeedModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
+import router from "../../Router/Router";
 import throttle from "../../Utils/Throttle/Throttle";
 import FeedView from "../../Views/FeedView/FeedView";
 import IController from "../IController/IController";
@@ -23,6 +24,7 @@ class FeedController extends IController<FeedView, FeedModel> {
         super(view, model);
         this.view.bindScrollEvent(throttle(this.handleScroll.bind(this), 250));
         this.view.bindResizeEvent(throttle(this.handleScroll.bind(this), 250));
+        this.view.bindClickEvent(this.handleClickOnFeed.bind(this));
 
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         // TODO убрать
@@ -32,6 +34,44 @@ class FeedController extends IController<FeedView, FeedModel> {
 
     // TODO доавить контент если фид пуст
     // Specific
+    private handleClickOnFeed(event: Event): void {
+        event.preventDefault();
+        const target = <HTMLElement>event.target;
+        const action = (<HTMLElement>target.closest("[data-action]"))?.dataset['action'];
+        const cardId = (<HTMLElement>target.closest("[data-id]"))?.dataset['id'];
+        const data = (<HTMLElement>target.closest("[data-data]"))?.dataset['data'];
+        if (!action || !cardId) {
+            console.log('Cant find card id or action in ', target);
+            return;
+        }
+        console.log(action, cardId, data);
+
+        switch (action) {
+            default: {
+                console.log('action unknown');
+                return;
+            }
+            case 'like': {
+                break;
+            }
+            case 'edit': {
+                break;
+            }
+            case 'profile_page': {
+                if (data) {
+                    console.log('profile ', data);
+                    router.goToPath(data);
+                }
+                break;
+            }
+            case 'card_page':
+            case 'comment': {
+                console.log('feed card: ', location + '/' + cardId);
+                router.goToPath(location + '/' + cardId);
+                break;
+            }
+        }
+    }
 
     /**
      * Функция обработки события пролистывания страницы
@@ -56,7 +96,8 @@ class FeedController extends IController<FeedView, FeedModel> {
     private getContent(): IFeedData[] {
         // TODO model
         const item: IFeedData = {
-            author: { avatar: '../src/img/test_avatar.jpg', name: 'Test User' },
+            id: 321,
+            author: { url: '/testuser123', avatar: '../src/img/test_avatar.jpg', name: 'Test User' },
             date: '01.01.2001',
             text: 'Sample text of feed card. Sample text of feed card. Sample text of feed card. Sample text of feed card. ',
             likes: 100500,
@@ -67,7 +108,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             testData.push(item);
         }
         // console.log(testData);
-        
+
 
         return testData;
     }
