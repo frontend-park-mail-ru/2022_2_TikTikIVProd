@@ -1,4 +1,5 @@
 import router from "../../Router/Router";
+import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import MenuView from "../../Views/MenuView/MenuView";
 import IController from "../IController/IController";
 
@@ -11,6 +12,7 @@ import IController from "../IController/IController";
 class MenuController extends IController<MenuView, null> {
     constructor(view: MenuView) {
         super(view, null);
+        EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         this.view.bindRedirect(this.handleRedirect.bind(this));
     }
 

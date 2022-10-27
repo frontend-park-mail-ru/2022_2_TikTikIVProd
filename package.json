@@ -4,7 +4,7 @@
   "description": "Write and send",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --mode development",
     "lint": "npx eslint ./src/**/*.ts",
     "docs": "jsdoc -c ./jsdoc.json -d ./docs -r --access \"all\""
   },

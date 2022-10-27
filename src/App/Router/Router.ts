@@ -26,12 +26,27 @@ class Router {
      * (приватное поле класса) 
      */
     private current: string | null;
+    
+    /**
+     * Обработчик неинициализированных страниц
+     * (приватное поле класса) 
+     */
+    private defaultHandler: Function;
 
     constructor() {
         this.routes = [];
         this.current = null;
+        this.defaultHandler = () => {};
     }
 
+    /**
+     * Установка обработчика для неизвестных страниц
+    * @param  {Function} defaultHandler - Обработчик не найденных страниц
+    * @return {void}
+    */
+    public setDefaultHandler(defaultHandler: Function) : void{
+        this.defaultHandler = defaultHandler;
+    }
     /**
      * Запуск роутера на заданной странице
      * @param  {string} entryPath URL стартовой страницы приложения
@@ -46,7 +61,7 @@ class Router {
             this.route();
         });
 
-        console.log('start: ', this.current, ' hist: ', history.state?.path);
+        // console.log('start: ', this.current, ' hist: ', history.state?.path);
         
         this.route();
     }
@@ -67,7 +82,7 @@ class Router {
      * @return void
      */
     public goToPath(path: string) : void {
-        console.log('go to path: ', path);
+        // console.log('go to path: ', path);
         
         history.pushState({ path: path }, '', path);
         this.route();
@@ -79,13 +94,13 @@ class Router {
      */
     private route(): void {
         const path = history.state?.path;
-        console.log('route: ', path);
+        // console.log('route: ', path);
         
 
         const item = this.routes.find((item) => item.path == path);
         if (item === undefined) {
-            console.log('route not found ',path );
-            
+            // console.log('route not found. Call default ', path );
+            this.defaultHandler();
             return;
         }
         item.handler();

@@ -5,6 +5,7 @@ import SignupView from "../../Views/SignupView/SignupView";
 import router from "../../Router/Router";
 import paths from "../../Router/RouterPaths";
 import validateInput, { IValidationResult } from "../../Utils/Validators/InputValidator/InputValidator";
+import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 
 /**
  * Котроллер для страницы авторизации
@@ -16,6 +17,7 @@ import validateInput, { IValidationResult } from "../../Utils/Validators/InputVa
 class SignupController extends IController<SignupView, UserModel> {
     constructor(view: SignupView, model: UserModel) {
         super(view, model);
+        EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         this.view.bindSubmit(this.onSubmit.bind(this));
         this.view.bindRedirect(this.onRedirect.bind(this));
     }
@@ -47,11 +49,11 @@ class SignupController extends IController<SignupView, UserModel> {
             const { isValidData, validatedData } = this.validate(data);
             this.view.showErrors(validatedData);
             if (!isValidData) {
-                console.log('invalid data');
+                // console.log('invalid data');
                 return;
             }
 
-            console.log('valid data');
+            // console.log('valid data');
 
             const user: IUserSignUp = {
                 first_name: data.get('first_name') || '',
@@ -61,13 +63,13 @@ class SignupController extends IController<SignupView, UserModel> {
                 password: data.get('password') || ''
             };
 
-            console.log(user);
+            // console.log(user);
 
             this.model.registerUser(user).then(({ status, body }) => {
-                console.log(status, body);
+                // console.log(status, body);
                 router.goToPath(paths.feedPage);
             }).catch(({ status, body }) => {
-                console.log(status, body);
+                // console.log(status, body);
                 switch (status) {
                     // case 401:
                     // case 404: {

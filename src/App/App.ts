@@ -3,6 +3,10 @@ import "./App.css"
 
 import router from "./Router/Router";
 import paths from "./Router/RouterPaths";
+import EventDispatcher from "./Modules/EventDispatcher/EventDispatcher";
+
+import PageNotFoundView from "./Views/PageNotFoundView/PageNotFoundView";
+import PageNotFoundController from "./Controllers/PageNotFoundController/PageNotFoundController";
 
 import SigninView from "./Views/SigninView/SigninView";
 import SigninController from "./Controllers/SigninController/SigninController";
@@ -43,6 +47,7 @@ class App {
     private feedView: FeedView;
     private headerView: HeaderView;
     private footerView: FooterView;
+    private pageNotFoundView: PageNotFoundView;
 
     // Models
     private userModel: UserModel;
@@ -55,6 +60,7 @@ class App {
     private feedController: FeedController;
     private headerController: HeaderController;
     private footerController: FooterController;
+    private pageNotFoundController: PageNotFoundController;
 
     // Elements
     private root: HTMLElement;
@@ -79,103 +85,111 @@ class App {
      * @return {void}
      */
     public run(url: string): void {
-        console.log('run app', url);
         router.start(url);
     }
 
     // Redirects
 
     /**
- * Функция отрабатывает переход по URL
- * (приватное поле класса)
- * @return {void}
- */
+     * Функция отрабатывает переход по URL авторизации
+     * (приватное поле класса)
+     * @return {void}
+     */
     private handleRedirectToSignin(): void {
-        this.userModel.isAuthantificated().then(({ status, body }) => {
-            router.goToPath(paths.feedPage);
-        }).catch(({ status, body }) => {
-
-            // unmount
-            this.signupController.unmountComponent();
-            this.menuController.unmountComponent();
-            this.feedController.unmountComponent();
-            // mount
-            this.headerController.mountComponent();
-            this.footerController.mountComponent();
-            this.signinController.mountComponent();
-            //states
-            this.headerView.changeHeaderItem('signupButton');
-
-        });
+        this.userModel.isAuthantificated()
+            .then(({ status, body }) => {
+                router.goToPath(paths.feedPage);
+            })
+            .catch(({ status, body }) => {
+                EventDispatcher.emit('unmount-all');
+                EventDispatcher.emit('redirected-signin');
+                // mount
+                this.headerController.mountComponent();
+                this.footerController.mountComponent();
+                this.signinController.mountComponent();
+                // states
+                this.headerView.changeHeaderItem('signupButton');
+            });
     }
 
     /**
-     * Функция отрабатывает переход по URL
+     * Функция отрабатывает переход по URL регистрации
      * (приватное поле класса)
      * @return {void}
      */
     private handleRedirectToSignup(): void {
-        this.userModel.isAuthantificated().then(({ status, body }) => {
-            router.goToPath(paths.feedPage);
-        }).catch(({ status, body }) => {
-
-            // unmount
-            this.signinController.unmountComponent();
-            this.menuController.unmountComponent();
-            this.feedController.unmountComponent();
-            // mount
-            this.headerController.mountComponent();
-            this.footerController.mountComponent();
-            this.signupController.mountComponent();
-            //states
-            this.headerView.changeHeaderItem('signinButton');
-
-        });
+        this.userModel.isAuthantificated()
+            .then(({ status, body }) => {
+                router.goToPath(paths.feedPage);
+            })
+            .catch(({ status, body }) => {
+                EventDispatcher.emit('unmount-all');
+                EventDispatcher.emit('redirected-signup');
+                // mount
+                this.headerController.mountComponent();
+                this.footerController.mountComponent();
+                this.signupController.mountComponent();
+                // states
+                this.headerView.changeHeaderItem('signinButton');
+            });
     }
 
     /**
-     * Функция отрабатывает переход по URL
+     * Функция отрабатывает переход по URL ленты
      * (приватное поле класса)
      * @return {void}
      */
     private handleRedirectToFeed(): void {
-        this.userModel.isAuthantificated().then(({ status, body }) => {
-
-            // unmount
-            this.signinController.unmountComponent();
-            this.signupController.unmountComponent();
-            this.footerController.unmountComponent();
-            // mount
-            this.headerController.mountComponent();
-            this.menuController.mountComponent();
-            this.feedController.mountComponent();
-            //states
-            this.headerView.changeHeaderItem('profile', Object.assign({ user_avatar: '../src/img/test_avatar.jpg' }, this.userModel.currentUser));
-
-        }).catch(({ status, body }) => {
-            router.goToPath(paths.signinPage);
-        });
+        this.userModel.isAuthantificated()
+            .then(({ status, body }) => {
+                EventDispatcher.emit('unmount-all');
+                EventDispatcher.emit('redirected-feed');
+                // mount
+                this.headerController.mountComponent();
+                this.menuController.mountComponent();
+                this.feedController.mountComponent();
+                // states
+                this.headerView.changeHeaderItem(
+                    'profile',
+                    Object.assign(
+                        { user_avatar: '../src/img/test_avatar.jpg' },
+                        this.userModel.currentUser));
+            })
+            .catch(({ status, body }) => {
+                router.goToPath(paths.signinPage);
+            });
     }
 
     /**
-     * Функция отрабатывает переход по URL
+     * Функция отрабатывает переход по URL выхода
      * (приватное поле класса)
      * @return {void}
      */
     private handleLogout(): void {
+        EventDispatcher.emit('redirected-logout');
         ajax.get(`${config.APIUrl}/logout`).catch(() => {
-
             router.goToPath(paths.signinPage);
         });
         // TODO fix cors
         // this.userModel.logoutUser().then(({ status, body }) => {
         //     router.goToPath(paths.signinPage);
         // }).catch(({ status, body }) => {
-        //     console.log('logout err: ', status, body);
+        //     // console.log('logout err: ', status, body);
         // });
     }
 
-    // Init
+    /**
+     * Функция отрабатывает переход по незнакомому URL
+     * (приватное поле класса)
+     * @return {void}
+     */
+    private handle404(): void {
+        EventDispatcher.emit('unmount-all');
+        this.headerController.mountComponent();
+        this.footerController.mountComponent();
+        this.pageNotFoundController.mountComponent();
+    }
+
     /**
      * Функция инициализирует базовую вёрстку страницы
      * (приватное поле класса)
@@ -203,6 +217,7 @@ class App {
         this.feedView = new FeedView(this.content);
         this.headerView = new HeaderView(this.header);
         this.footerView = new FooterView(this.footer);
+        this.pageNotFoundView = new PageNotFoundView(this.content);
     }
 
     /**
@@ -221,12 +236,17 @@ class App {
      * @return {void}
      */
     private initControllers(): void {
-        this.signinController = new SigninController(this.signinView, this.userModel);
-        this.signupController = new SignupController(this.signupView, this.userModel);
+        this.signinController =
+            new SigninController(this.signinView, this.userModel);
+        this.signupController =
+            new SignupController(this.signupView, this.userModel);
         this.menuController = new MenuController(this.menuView);
         this.feedController = new FeedController(this.feedView, this.feedModel);
-        this.headerController = new HeaderController(this.headerView, this.userModel);
+        this.headerController =
+            new HeaderController(this.headerView, this.userModel);
         this.footerController = new FooterController(this.footerView);
+        this.pageNotFoundController =
+            new PageNotFoundController(this.pageNotFoundView);
     }
 
     /**
@@ -235,17 +255,26 @@ class App {
      * @return {void}
      */
     private initRoutes(): void {
-        router.addPath({ path: paths.signinPage, handler: this.handleRedirectToSignin.bind(this) });
-        router.addPath({ path: paths.signupPage, handler: this.handleRedirectToSignup.bind(this) });
-        router.addPath({ path: paths.feedPage, handler: this.handleRedirectToFeed.bind(this) });
+        router.addPath({
+            path: paths.signinPage,
+            handler: this.handleRedirectToSignin.bind(this)
+        });
+        router.addPath({
+            path: paths.signupPage,
+            handler: this.handleRedirectToSignup.bind(this)
+        });
+        router.addPath(
+            { path: paths.feedPage, handler: this.handleRedirectToFeed.bind(this) });
         router.addPath({ path: paths.logout, handler: this.handleLogout.bind(this) });
+        router.setDefaultHandler(this.handle404.bind(this));
+        router.addPath({path: paths.home, handler: this.handleRedirectToFeed.bind(this)});
     }
 
     /**
      * Функция изменения цветовой темы приложения
      * @param {string} themeName - Название цветовой темы
- * @return {void}
- */
+     * @return {void}
+     */
     private setColorTheme(themeName: string): void {
         document.documentElement.setAttribute('theme', themeName);
     }
@@ -278,10 +307,12 @@ class App {
      */
     private initPrefferedColorTheme(): void {
         if (!window.matchMedia) {
-            console.log('Браузер не поддерживает matchMedia');
+            // console.log('Браузер не поддерживает matchMedia');
             return;
         }
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.handlePreferedColorThemeChange.bind(this));
+        window.matchMedia('(prefers-color-scheme: dark)')
+            .addEventListener(
+                'change', this.handlePreferedColorThemeChange.bind(this));
     }
 }
 

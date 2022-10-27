@@ -14,40 +14,10 @@ import IView from "../IView/IView";
  * @property {HTMLElement} parent - Родительский элемент для ленты новостей
  */
 class FeedView extends IView {
-    /**
-     * Элемент ленты новостей
-     * (приватное поле класса)
-     */
-    private feed: HTMLElement;
-
     constructor(parent: HTMLElement) {
-        super(parent);
-        const parser = new DOMParser();
-
-        const feed: HTMLElement | null = parser.parseFromString(feedTemplate({}), 'text/html').querySelector('#feed');
-        if (feed === null) {
-            throw Error();
-        }
-        this.feed = feed;
+        super(parent, feedTemplate({}), '#feed');
     }
-    
-    /**
-     * Реализация метода отрисовки вида
-     * @returns {void}
-     */
-    public show(): void {
-        this.parent.appendChild(this.feed);
-    }
-
-    /**
-     * Реализация метода скрытия вида
-     * @returns {void}
-     */
-    public hide(): void {
-        this.parent.removeChild(this.feed);
-    }
-
-    
+         
     /**
      * Функция добавления обработчика события пролистывания страницы
      * @param  {any} listener - Callback функция для события
@@ -68,7 +38,7 @@ class FeedView extends IView {
 
 
     // public bindClickEvent(callback: Function): void {
-    //     this.feed.addEventListener('click', (e) => {
+    //     this.element.addEventListener('click', (e) => {
     //         e.preventDefault();
 
     //         const target = <HTMLElement>e.target;
@@ -93,7 +63,7 @@ class FeedView extends IView {
             if (c === null) {
                 return;
             }
-            this.feed.appendChild(c);
+            this.element.appendChild(c);
         });
     }
 }

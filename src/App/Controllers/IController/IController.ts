@@ -32,7 +32,7 @@ abstract class IController<tView extends IView, tModel> {
     constructor(view: tView, model: tModel) {
         this.view = view;
         this.model = model;
-        this.isMounted = false;
+        this.isMounted = false; 
     }
     
     /**

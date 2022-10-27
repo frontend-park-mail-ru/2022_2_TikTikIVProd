@@ -1,6 +1,8 @@
 import UserModel from "../../Models/UserModel/UserModel";
+import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
 import HeaderView from "../../Views/HeaderView/HeaderView";
+import headerItems from "../../Views/HeaderView/HeaderViewConfig";
 import IController from "../IController/IController";
 
 /**
@@ -14,6 +16,13 @@ class HeaderController extends IController<HeaderView, UserModel> {
     constructor(view: HeaderView, model: UserModel) {
         super(view, model);
         this.view.bindClickEvent(this.handleRedirect.bind(this));
+        // console.log('header ctor');
+        
+        EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
+        EventDispatcher.subscribe('user-authorized', () => this.view.changeHeaderItem('profile', this.model.getCurrentUser()));
+        // EventDispatcher.subscribe('redirect-signin', () => this.view.changeHeaderItem('signup'));
+        // EventDispatcher.subscribe('redirect-signup', () => this.view.changeHeaderItem('signip'));
+       
     }
 
     /**

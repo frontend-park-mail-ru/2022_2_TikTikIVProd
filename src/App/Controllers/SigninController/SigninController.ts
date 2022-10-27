@@ -5,6 +5,7 @@ import SigninView from "../../Views/SigninView/SigninView";
 import router from "../../Router/Router";
 import paths from "../../Router/RouterPaths";
 import validateInput, { IValidationResult } from "../../Utils/Validators/InputValidator/InputValidator";
+import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 
 /**
  * Котроллер для страницы авторизации
@@ -16,6 +17,7 @@ import validateInput, { IValidationResult } from "../../Utils/Validators/InputVa
 class SigninController extends IController<SigninView, UserModel> {
     constructor(view: SigninView, model: UserModel) {
         super(view, model);
+        EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         this.view.bindSubmit(this.onSubmit.bind(this));
         this.view.bindRedirect(this.onRedirect.bind(this));
     }
@@ -48,7 +50,7 @@ class SigninController extends IController<SigninView, UserModel> {
             const { isValidData, validatedData } = this.validate(data);
             this.view.showErrors(validatedData);
             if (!isValidData) {
-                console.log('invalid data: ', validatedData);
+                // console.log('invalid data: ', validatedData);
                 return;
             }
 
@@ -58,10 +60,10 @@ class SigninController extends IController<SigninView, UserModel> {
             };
 
             this.model.authUser(user).then(({ status, body }) => {
-                console.log('auth success');
+                // console.log('auth success');
                 router.goToPath(paths.feedPage);
             }).catch(({ status, body }) => {
-                console.log('auth failure ', status, body);
+                // console.log('auth failure ', status, body);
                 switch (status) {
                     case 401:
                     case 404: {

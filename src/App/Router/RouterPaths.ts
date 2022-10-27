@@ -5,6 +5,7 @@
  * @param {{name: string, URL: string}} Структура конфигурации 
  */
 const paths = {
+    home: '/',
     signinPage: '/signin',
     signupPage: '/signup',
     feedPage: '/feed',

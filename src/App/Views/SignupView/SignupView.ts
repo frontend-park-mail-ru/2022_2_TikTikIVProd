@@ -12,37 +12,8 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
  * @property {HTMLElement} parent - Родительский элемент для формы регистрации
  */
  class SignupView extends IView {
-    /**
-     * Элемент формы
-     * (приватное поле класса)
-     */
-    private form: HTMLElement;
-
     constructor(parent: HTMLElement) {
-        super(parent);
-        const parser = new DOMParser();
-
-        const form: HTMLElement | null = parser.parseFromString(formTemplate(signupViewConfig), 'text/html').querySelector('#' + signupViewConfig.formId);
-        if (form === null) {
-            throw Error();
-        }
-        this.form = form;
-    }
-
-    /**
-     * Реализация метода отрисовки вида
-     * @returns {void}
-     */
-    public show(opts?: any): void {
-        this.parent.appendChild(this.form);
-    }
-
-    /**
-     * Реализация метода скрытия вида
-     * @returns {void}
-     */
-    public hide(opts?: any): void {
-        this.parent.removeChild(this.form);
+        super(parent, formTemplate(signupViewConfig), '#' + signupViewConfig.formId);
     }
 
     /**
@@ -52,7 +23,7 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
         */
     public bindRedirect(listener: any): void {
         signupViewConfig.links.forEach((link) => {
-            const elem = this.form.querySelector('#' + link.id);
+            const elem = this.element.querySelector('#' + link.id);
             if (elem !== null) {
                 elem.addEventListener('click', listener.bind(this));
             }
@@ -65,9 +36,9 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
         * @returns {void}
         */
     public bindSubmit(listener: any): void {
-        const submit = this.form.querySelector('#' + signupViewConfig.submit.id);
+        const submit = this.element.querySelector('#' + signupViewConfig.submit.id);
         if (submit === null) {
-            console.log('No submit btn signup view');
+            // console.log('No submit btn signup view');
             return;
         }
 
@@ -81,7 +52,7 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
     public getData(): Map<string, string> {
         const data = new Map<string, string>();
         signupViewConfig.inputs.forEach((input) => {
-            const html = <HTMLInputElement>this.form.querySelector('#' + input.id);
+            const html = <HTMLInputElement>this.element.querySelector('#' + input.id);
             data.set(input.id, html.value);
         });
         return data;
@@ -94,8 +65,8 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
      * @returns {void}
      */
     public showError(id: string, data: IValidationResult): void {
-        const input = <HTMLInputElement>this.form.querySelector('#' + id);
-        const errorField = <HTMLElement>this.form.querySelector('#' + id + '-msg');
+        const input = <HTMLInputElement>this.element.querySelector('#' + id);
+        const errorField = <HTMLElement>this.element.querySelector('#' + id + '-msg');
         if (data.isValid) {
             input.classList.remove('invalid');
             errorField.textContent = '';

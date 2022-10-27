@@ -1,4 +1,5 @@
 import FeedModel, { IFeedData } from "../../Models/FeedModel/FeedModel";
+import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import throttle from "../../Utils/Throttle/Throttle";
 import FeedView from "../../Views/FeedView/FeedView";
 import IController from "../IController/IController";
@@ -23,6 +24,7 @@ class FeedController extends IController<FeedView, FeedModel> {
         this.view.bindScrollEvent(throttle(this.handleScroll.bind(this), 250));
         this.view.bindResizeEvent(throttle(this.handleScroll.bind(this), 250));
 
+        EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         // TODO убрать
         const content = this.getContent();
         this.view.pushContentToFeed(content);
@@ -64,7 +66,7 @@ class FeedController extends IController<FeedView, FeedModel> {
         for (let index = 0; index < 10; index++) {
             testData.push(item);
         }
-        console.log(testData);
+        // console.log(testData);
         
 
         return testData;
