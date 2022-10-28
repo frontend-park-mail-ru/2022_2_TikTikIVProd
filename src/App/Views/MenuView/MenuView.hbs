@@ -4,7 +4,7 @@
     </div>
     <div class="menu__items__container">
         {{#each items as |item|}}
-        <div id="{{item.id}}" href="{{item.href}}" class="menu__item {{#if item.style }} {{item.style}} {{/if}}">
+        <div href="{{item.href}}" class="menu__item {{#if item.style }} {{item.style}} {{/if}}">
             {{item.text}}
         </div>
         {{/each}}

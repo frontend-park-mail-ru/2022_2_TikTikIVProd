@@ -23,12 +23,14 @@ import menuConfig from "./MenuViewConfig"
 
     /**
      * Функция изменения активного элемента меню
-     * @param  {string} newActiveItem - URL адрес активного элемента меню
+     * @param  {string} href - URL адрес активного элемента меню
      */
-    public changeActiveMenuItem(newActiveItem: string) {
+    public changeActiveMenuItem(href: string) {
+        console.log(href);
+        
         this.element.querySelector(`[href="${this.currentActiveItem}"]`)?.classList.remove('menu__item--active');
-        this.currentActiveItem = newActiveItem;
-        this.element.querySelector(`[href="${newActiveItem}"]`)?.classList.add('menu__item--active');
+        this.currentActiveItem = href;
+        this.element.querySelector(`[href="${href}"]`)?.classList.add('menu__item--active');
     }
 
     /**
@@ -36,7 +38,7 @@ import menuConfig from "./MenuViewConfig"
      * @param  {any} listener - Callback функция для события
      * @returns {void}
      */
-    public bindRedirect(listener: any): void {
+    public bindClick(listener: any): void {
         this.element.addEventListener('click', listener);
     }
 }

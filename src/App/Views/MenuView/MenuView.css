@@ -4,9 +4,6 @@
   padding: 0px 10px;
 }
 
-.menu__title {
-}
-
 .menu__items__container {
   display: flex;
   flex-direction: column;

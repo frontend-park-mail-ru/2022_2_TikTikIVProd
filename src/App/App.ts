@@ -110,7 +110,7 @@ class App {
             })
             .catch(({ status, body }) => {
                 EventDispatcher.emit('unmount-all');
-                EventDispatcher.emit('redirected-signin');
+                EventDispatcher.emit('redirect', paths.signinPage);
                 // mount
                 this.headerController.mountComponent();
                 this.footerController.mountComponent();
@@ -132,7 +132,7 @@ class App {
             })
             .catch(({ status, body }) => {
                 EventDispatcher.emit('unmount-all');
-                EventDispatcher.emit('redirected-signup');
+                EventDispatcher.emit('redirect', paths.signupPage);
                 // mount
                 this.headerController.mountComponent();
                 this.footerController.mountComponent();
@@ -151,7 +151,7 @@ class App {
         this.userModel.isAuthantificated()
             .then(({ status, body }) => {
                 EventDispatcher.emit('unmount-all');
-                EventDispatcher.emit('redirected-feed');
+                EventDispatcher.emit('redirect', paths.feedPage);
                 // mount
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
@@ -174,7 +174,7 @@ class App {
      * @return {void}
      */
     private handleLogout(): void {
-        EventDispatcher.emit('redirected-logout');
+        EventDispatcher.emit('redirect', paths.logout);
         ajax.get(`${config.APIUrl}/logout`).catch(() => {
             router.goToPath(paths.signinPage);
         });
@@ -193,6 +193,7 @@ class App {
      */
     private handle404(): void {
         EventDispatcher.emit('unmount-all');
+        EventDispatcher.emit('redirect', '');
         this.headerController.mountComponent();
         this.footerController.mountComponent();
         this.pageNotFoundController.mountComponent();
@@ -202,7 +203,7 @@ class App {
         this.userModel.isAuthantificated()
             .then(({ status, body }) => {
                 EventDispatcher.emit('unmount-all');
-                EventDispatcher.emit('redirected-profile');
+                EventDispatcher.emit('redirect', paths.profile);
                 // mount
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
@@ -223,7 +224,7 @@ class App {
         this.userModel.isAuthantificated()
             .then(({ status, body }) => {
                 EventDispatcher.emit('unmount-all');
-                EventDispatcher.emit('redirected-settings');
+                EventDispatcher.emit('redirect', paths.profile);
                 // mount
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
