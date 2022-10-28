@@ -35,6 +35,8 @@ import config from "./Configs/Config";
 import ajax from "./Modules/Ajax";
 import ProfileController from "./Controllers/ProfileController/ProfileController";
 import ProfileView from "./Views/ProfileView/ProfileView";
+import SettingsController from "./Controllers/SettingsController/SettingsController";
+import SettingsView from "./Views/SettingsView/SettingsView";
 //
 
 /**
@@ -51,6 +53,7 @@ class App {
     private footerView: FooterView;
     private pageNotFoundView: PageNotFoundView;
     private profileView: ProfileView;
+    private settingsView: SettingsView;
 
     // Models
     private userModel: UserModel;
@@ -65,6 +68,7 @@ class App {
     private footerController: FooterController;
     private pageNotFoundController: PageNotFoundController;
     private profileController: ProfileController;
+    private settingsController: SettingsController;
 
     // Elements
     private root: HTMLElement;
@@ -214,6 +218,27 @@ class App {
                 router.goToPath(paths.signinPage);
             });
     }
+
+    private handleSettings() : void {
+        this.userModel.isAuthantificated()
+            .then(({ status, body }) => {
+                EventDispatcher.emit('unmount-all');
+                EventDispatcher.emit('redirected-settings');
+                // mount
+                this.headerController.mountComponent();
+                this.menuController.mountComponent();
+                this.settingsController.mountComponent();
+                // states
+                this.headerView.changeHeaderItem(
+                    'profile',
+                    Object.assign(
+                        { user_avatar: '../src/img/test_avatar.jpg' },
+                        this.userModel.currentUser));
+            })
+            .catch(({ status, body }) => {
+                router.goToPath(paths.signinPage);
+            });
+    }
     /**
      * Функция инициализирует базовую вёрстку страницы
      * (приватное поле класса)
@@ -243,6 +268,7 @@ class App {
         this.footerView = new FooterView(this.footer);
         this.pageNotFoundView = new PageNotFoundView(this.content);
         this.profileView = new ProfileView(this.content);
+        this.settingsView = new SettingsView(this.content);
     }
 
     /**
@@ -273,7 +299,8 @@ class App {
         this.pageNotFoundController =
             new PageNotFoundController(this.pageNotFoundView);
             this.profileController = new ProfileController(this.profileView, this.userModel);
-    }
+        this.settingsController = new SettingsController(this.settingsView, this.userModel);
+        }
 
     /**
      * Функция задаёт связи между страницами (URL -> обработчик)
@@ -295,7 +322,8 @@ class App {
         router.setDefaultHandler(this.handle404.bind(this));
         router.addPath({path: paths.home, handler: this.handleRedirectToFeed.bind(this)});
             router.addPath({path: paths.profile, handler: this.handleProfile.bind(this)});
-    }
+            router.addPath({path: paths.settings, handler: this.handleSettings.bind(this)});
+        }
 
     /**
      * Функция изменения цветовой темы приложения

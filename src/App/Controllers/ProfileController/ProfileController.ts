@@ -10,7 +10,7 @@ import IController from "../IController/IController";
  * @extends {IController}
      * @param  {ProfileView} view Объект вида профиля пользователя
  */
- class ProfileController extends IController<ProfileView, UserModel>{
+class ProfileController extends IController<ProfileView, UserModel>{
     constructor(view: ProfileView, model: UserModel) {
         super(view, model);
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
@@ -20,25 +20,27 @@ import IController from "../IController/IController";
     public mountComponent(): void {
         if (!this.isMounted) {
             const data = this.model.getCurrentUser();
-            if(!data) { 
-                console.log("Profile error: current user empty"); 
-            return;
+            if (!data) {
+                console.log("Profile error: current user empty");
+                return;
             }
             // TODO
-            this.view.show({avatar: '../src/img/test_avatar.jpg', name: data.first_name + ' ' + data.last_name});
+            this.view.show({ avatar: '../src/img/test_avatar.jpg', name: data.first_name + ' ' + data.last_name });
             this.isMounted = true;
         }
     }
 
-    private handleClick(e : Event) : void{
-    e.preventDefault();
-    const targetHref = (<HTMLElement>e.target).getAttribute('href');
-    console.log('profile click on: ', targetHref);
-    
-    if(!targetHref){
-        return;
-    }
-    router.goToPath(targetHref);
+    private handleClick(e: Event): void {
+        e.preventDefault();
+        if (this.isMounted) {
+            const targetHref = (<HTMLElement>e.target).getAttribute('href');
+            console.log('profile click on: ', targetHref);
+
+            if (!targetHref) {
+                return;
+            }
+            router.goToPath(targetHref);
+        }
     }
 }
 

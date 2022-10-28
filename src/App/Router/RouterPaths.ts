@@ -11,6 +11,7 @@ const paths = {
     feedPage: '/feed',
     profile: '/profile',
     logout: '/logout',
+    settings: '/settings',
 }
 
 export default paths;

@@ -1,0 +1,14 @@
+{{#each this.config.groups as |group|}}
+<div class="group">
+        {{#each group.inputs as |inpt|}}
+        <div class="form__input__title">
+            {{inpt.title}}
+        </div>
+        <input type='{{inpt.type}}' id='{{inpt.id}}' placeholder="{{lookup ../../this.data inpt.id}}" class="form__input" />
+        <div id="{{inpt.id}}-msg" class="form__input__error__msg"></div>
+        {{/each}}
+    <button class="form__button--small" type="submit">
+        ok
+    </button>
+</div>
+{{/each}}

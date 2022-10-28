@@ -36,6 +36,7 @@ class FeedController extends IController<FeedView, FeedModel> {
     // Specific
     private handleClickOnFeed(event: Event): void {
         event.preventDefault();
+        if(this.isMounted){
         const target = <HTMLElement>event.target;
         const action = (<HTMLElement>target.closest("[data-action]"))?.dataset['action'];
         const cardId = (<HTMLElement>target.closest("[data-id]"))?.dataset['id'];
@@ -72,6 +73,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             }
         }
     }
+    }
 
     /**
      * Функция обработки события пролистывания страницы
@@ -80,6 +82,8 @@ class FeedController extends IController<FeedView, FeedModel> {
      * @returns {void}
      */
     private handleScroll(): void {
+        console.log('scroll');
+        
         if (this.isMounted) {
             if (this.checkFeedEnd()) {
                 const content = this.getContent();
