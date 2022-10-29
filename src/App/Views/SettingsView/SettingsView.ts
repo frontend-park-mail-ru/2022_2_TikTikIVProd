@@ -23,6 +23,36 @@ class SettingsView extends IView{
     public bindClick(callback: Function) : void {
         this.element.addEventListener('click', callback.bind(this));
     }
+
+    public getDataFromGroup(child: HTMLElement): Map<string, string> { 
+        const data = new Map();
+        child.closest('.group')?.querySelectorAll('input').forEach((item) =>{
+            data.set(item.id, item.value);
+        });
+        return data;
+    }
+
+    public showErrorMsg(id: string, msg: string) : void {
+        const inpt = <HTMLElement>this.element.querySelector('#'+id);
+        const msgField = <HTMLElement>this.element.querySelector('#'+id+'-msg');
+        if(!inpt || !msgField){
+            return;
+        }
+        inpt.classList.add('invalid');
+        msgField.innerText = msg;
+        msgField.style.visibility = 'visible';
+    }
+
+    public hideErrorMsg(id: string, msg: string) : void {
+        const inpt = <HTMLElement>this.element.querySelector('#'+id);
+        const msgField = <HTMLElement>this.element.querySelector('#'+id+'-msg');
+        if(!inpt || !msgField){
+            return;
+        }
+        inpt.classList.remove('invalid');
+        msgField.innerText = '';
+        msgField.style.visibility = 'hidden';
+    }
 }
 
 export default SettingsView;

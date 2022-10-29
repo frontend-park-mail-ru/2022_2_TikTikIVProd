@@ -1,6 +1,7 @@
 import { IFeedData } from "../../Models/FeedModel/FeedModel";
 import UserModel from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
+import validateInput from "../../Utils/Validators/InputValidator/InputValidator";
 import SettingsView from "../../Views/SettingsView/SettingsView";
 import IController from "../IController/IController";
 
@@ -30,19 +31,28 @@ class SettingsController extends IController<SettingsView, UserModel> {
             return;
         }
 
-        const groupElem = target.closest('.group');
-        if (!groupElem) {
-            return;
-        }
+        const data = this.view.getDataFromGroup(target);
+        const isValidData = this.validateData(data);
+        // TODO update in model
+    }
 
-        const data = new Map;
+    public validateData(data: Map<string, string>) : boolean { 
+        let isFormValid = true;
+        data.forEach((value, key) => {
+            let ref: string | undefined = undefined;
+            if(key === 'repeat_password'){
+                ref = data.get('password');
+            }
 
-        groupElem.querySelectorAll('input').forEach((item) => {
-            data.set(item.id, item.value);
+            const { isValid, msg } = validateInput(key, value, ref);
+            if (!isValid) {
+                isFormValid = false;
+                this.view.showErrorMsg(key, msg);
+                return;
+            }
+            this.view.hideErrorMsg(key, msg);
         });
-
-        console.log(data);
-
+        return isFormValid;
     }
 }
 

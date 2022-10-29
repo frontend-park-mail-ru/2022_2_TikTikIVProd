@@ -7,24 +7,31 @@ import inputValidatorTypes from "./InputValidatorTypes"
  * @property {boolean} isValid - Является ли переданное значение корректным
  * @property {string} msg - Сообщение об ошибке
  */
-export interface IValidationResult { 
-    isValid : boolean;
-    msg : string;
+export interface IValidationResult {
+    isValid: boolean;
+    msg: string;
 };
 
 /**
- * Константа результата успешной вализации.
+ * Константа результата несовпадения значение при валидации
+ * @category Validators
+ * @constant {IValidationResult} DIFFERENT
+ */
+ export const DIFFERENT: IValidationResult = { isValid: false, msg: '' };
+
+/**
+ * Константа результата успешной валидации.
  * @category Validators
  * @constant {IValidationResult} VALID
  */
-export const VALID : IValidationResult = {isValid : true, msg: ''};
+export const VALID: IValidationResult = { isValid: true, msg: '' };
 
 /**
  * Константа результата валидации неизестного поля.
  * @category Validators
  * @constant {IValidationResult} UNKNOWN
  */
-export const UNKNOWN : IValidationResult = {isValid : false, msg: 'Неизвестный тип поля'};
+export const UNKNOWN: IValidationResult = { isValid: false, msg: 'Неизвестный тип поля' };
 
 /**
  * Валидатор значения введённго в поле ввода
@@ -33,17 +40,22 @@ export const UNKNOWN : IValidationResult = {isValid : false, msg: 'Неизве�
  * @param  {string} value - Значение
  * @return {IValidationResult}
  */
-function validateInput(type: string, value: string) : IValidationResult{
+function validateInput(type: string, value: string, reference?: string): IValidationResult {
     const validator = inputValidatorTypes[type as keyof typeof inputValidatorTypes];
-    if(!validator){
+    if (!validator) {
         return UNKNOWN;
     }
+    if (reference && value !== reference) {
+        return { isValid: false, msg: validator.msg };
+    }
+
     validator.regExp.lastIndex = 0;
     const isValid = validator.regExp.test(value);
-    if(isValid){
-        return VALID;
+    if (!isValid) {
+        return { isValid: false, msg: validator.msg };
     }
-    return {isValid: false, msg: validator.msg};
+
+    return VALID;
 }
 
 export default validateInput;

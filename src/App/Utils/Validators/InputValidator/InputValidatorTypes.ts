@@ -15,6 +15,10 @@ const inputValidatorTypes = {
         regExp: /^\S{8,}$/ig,
         msg: 'Минимальная длина пароля 8 символов',
     },
+    'repeat_password': {
+        regExp: /^\S{8,}$/ig,
+        msg: 'Пароли должны совпадать',
+    },
     'first_name': {
         regExp: /^[a-zа-я]{1,10}$/igd,
         msg: 'Имя может состоять из русских и английских букв без пробелов',

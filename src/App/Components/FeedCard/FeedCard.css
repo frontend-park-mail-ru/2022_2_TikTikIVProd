@@ -69,6 +69,7 @@
 .feed__card__author {
   display: flex;
   flex-direction: row;
+  cursor: pointer;
 }
 
 .feed__card__date {
@@ -81,6 +82,7 @@
   width: 20px;
   height: auto;
   object-fit: cover;
+  cursor: pointer;
 }
 
 .feed__card__author__avatar {
