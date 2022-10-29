@@ -47,7 +47,7 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
 
  /**
      * Функция извлечения введённых данных из формы
-     * @returns {Map}
+     * @returns {Map<string, string>}
      */
     public getData(): Map<string, string> {
         const data = new Map<string, string>();
@@ -58,7 +58,12 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
         return data;
     }
 
-
+    /**
+     * Функция отображения сообщения об ошибке в поле формы
+     * @param  {string} id - Идентификатор поля
+     * @param  {string} msg - Сообщение об ошибке
+     * @return {void}
+     */
     public showErrorMsg(id: string, msg: string) : void {
         const inpt = <HTMLElement>this.element.querySelector('#'+id);
         const msgField = <HTMLElement>this.element.querySelector('#'+id+'-msg');
@@ -69,7 +74,12 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
         msgField.innerText = msg;
         msgField.style.visibility = 'visible';
     }
-
+    
+    /**
+     * Функция скрытия сообщения об ошибке в поле формы
+     * @param  {string} id - Идентификатор поля
+     * @return {void}
+     */
     public hideErrorMsg(id: string) : void {
         const inpt = <HTMLElement>this.element.querySelector('#'+id);
         const msgField = <HTMLElement>this.element.querySelector('#'+id+'-msg');

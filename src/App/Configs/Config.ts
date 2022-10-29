@@ -3,6 +3,11 @@
  * @category Application
  * @type {object}
  * @property {string} APIUrl - URL и порт сервера
+ * @property {object} API - API взаиподействия с сервером
+ * @property {object} API.item - Именованный элемент API 
+ * @property {string} API.item.url - url элемента API
+ * @property {object} API.item.status - статусы ответа сервера
+ * @property {number} API.item.status.item - Именованный код ответа сервера
  */
 const config = {
     APIUrl: 'http://127.0.0.1:8080',

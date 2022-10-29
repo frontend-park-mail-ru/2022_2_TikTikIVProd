@@ -7,7 +7,7 @@ import IController from "../IController/IController";
  * Котроллер для левого меню
  * @category Menu
  * @extends {IController}
-     * @param  {MenuView} view Объект вида компонента меню
+ * @param  {MenuView} view Объект вида компонента меню
  */
 class MenuController extends IController<MenuView, null> {
     constructor(view: MenuView) {
@@ -16,9 +16,15 @@ class MenuController extends IController<MenuView, null> {
         EventDispatcher.subscribe('redirect', this.handleRedirect.bind(this));
         this.view.bindClick(this.handleClick.bind(this));
     }
-
+    
+    /**
+     * Функция обработки события перехода на страницу.
+     * Изменяет текущий активный элемент меню.
+     * (приватное поле класса)
+     * @param  {string} href
+     * @return {void}
+     */
     private handleRedirect(href: string): void {
-        console.log('menu handler ', href);
         this.view.changeActiveMenuItem(href);
     }
     

@@ -4,9 +4,9 @@ import IController from "../IController/IController";
 
 /**
  * Котроллер для страницы 404
- * @category Header
+ * @category Page404
  * @extends {IController}
-     * @param  {PageNotFoundView} view Объект вида страницы 404
+ * @param  {PageNotFoundView} view Объект вида страницы 404
  */
 class PageNotFoundController extends IController<PageNotFoundView, null>{
     constructor(view: PageNotFoundView) {

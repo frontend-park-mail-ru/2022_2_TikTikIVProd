@@ -8,7 +8,7 @@ import validateInput, { IValidationResult } from "../../Utils/Validators/InputVa
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 
 /**
- * Котроллер для страницы авторизации
+ * Контроллер для страницы авторизации
  * @category SigninForm
  * @extends {IController}
  * @param  {SigninView} view Объект вида формы авторизации

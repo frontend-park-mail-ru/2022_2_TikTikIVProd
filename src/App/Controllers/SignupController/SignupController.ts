@@ -11,8 +11,8 @@ import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
  * Котроллер для страницы авторизации
  * @category SignupForm
  * @extends {IController}
-     * @param  {SignupView} view Объект вида формы авторизации
-     * @param  {UserModel} model Объект модели пользователя
+ * @param  {SignupView} view Объект вида формы авторизации
+ * @param  {UserModel} model Объект модели пользователя
  */
 class SignupController extends IController<SignupView, UserModel> {
     constructor(view: SignupView, model: UserModel) {
@@ -84,7 +84,7 @@ class SignupController extends IController<SignupView, UserModel> {
     /**
      * Функция проверки данных из формы
      * (приватное поле класса)
-     * @param {Map<id: string, value: string>} data Данные из формы в формате ID поля -> значение
+     * @param {Map<string, string>} data Данные из формы в формате ID поля -> значение
      * @return {boolean}
      */
     private validate(data: Map<string, string>): boolean {

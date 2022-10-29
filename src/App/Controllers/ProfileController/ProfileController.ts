@@ -8,7 +8,7 @@ import IController from "../IController/IController";
  * Котроллер для профиля
  * @category Profile
  * @extends {IController}
-     * @param  {ProfileView} view Объект вида профиля пользователя
+ * @param  {ProfileView} view Объект вида профиля пользователя
  */
 class ProfileController extends IController<ProfileView, UserModel>{
     constructor(view: ProfileView, model: UserModel) {
@@ -16,7 +16,12 @@ class ProfileController extends IController<ProfileView, UserModel>{
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         this.view.bindClick(this.handleClick.bind(this));
     }
-
+    
+    /**
+     * Функция установки компонента.
+     * @override
+     * @return {void}
+     */
     public mountComponent(): void {
         if (!this.isMounted) {
             const data = this.model.getCurrentUser();
@@ -30,6 +35,12 @@ class ProfileController extends IController<ProfileView, UserModel>{
         }
     }
 
+    /**
+     * Функция обработки события клика на компонент.
+     * (приватный метод класса)
+     * @param  {Event} e - Объект события
+     * @return {void}
+     */
     private handleClick(e: Event): void {
         e.preventDefault();
         if (this.isMounted) {

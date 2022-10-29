@@ -6,7 +6,6 @@ import IModel from "../IModel/IModel"
  * @extends {IModel}
  */
 class MenuModel extends IModel {
-
     constructor() {
         super();
     }

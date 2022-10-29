@@ -33,7 +33,13 @@ class FeedController extends IController<FeedView, FeedModel> {
     }
 
     // TODO доавить контент если фид пуст
-    // Specific
+    
+    /**
+     * Функция обработки клина на ленту
+     * (приватный метод класса)
+     * @param  {Event} event - Объект события
+     * @return {void}
+     */
     private handleClickOnFeed(event: Event): void {
         event.preventDefault();
         if(this.isMounted){
@@ -78,7 +84,7 @@ class FeedController extends IController<FeedView, FeedModel> {
     /**
      * Функция обработки события пролистывания страницы
      * Проверяет нужно ли отрисовывать следующую часть ленты и при необходимости получает её и отправляет в вид
-     * (приватное поле класса)
+     * (приватный метод класса)
      * @returns {void}
      */
     private handleScroll(): void {
@@ -94,7 +100,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
     /**
      * Функция получения постов ленты из модели
-     * (приватное поле класса)
+     * (приватный метод класса)
      * @returns {IFeedData[]}
      */
     private getContent(): IFeedData[] {
@@ -119,7 +125,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
     /**
      * Функция проверяют долистал ли пользователь ленту до низа
-     * (приватное поле класса)
+     * (приватный метод класса)
      * @returns {boolean}
      */
     private checkFeedEnd(): boolean {

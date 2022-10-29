@@ -15,7 +15,7 @@ import headerItems from "./HeaderViewConfig";
         super(parent, headerTemplate({}), '.header__container');
     }
 
-      /**
+    /**
      * Функция добавления обработчика события нажатия на компонент
      * @param  {any} listener - Callback функция для события
      * @returns {void}

@@ -1,7 +1,21 @@
 /**
  * Конфигурация формы регистрации
- * @category Feed
- * @constant {Object} 
+ * @category SignupForm
+ * @constant {Object} signinViewConfig
+ * @property {string} formId Идентификатор формы
+ * @property {string} formId Идентификатор формы
+ * @property {Array<object>} inputs Поля формы
+ * @property {string} inputs.title - Заголовок поля ввода
+ * @property {string} inputs.type - Тип поля
+ * @property {string} inputs.id - Идентификатор поля ввода 
+ * @property {string} inputs.placeholder - Подсказка поля ввода
+ * @property {object} submit - Конфигуряция кнопки отправки формы
+ * @property {object} submit.id - Идентификатор кнопки отправки формы
+ * @property {object} submit.text - Текст кнопки отправки формы
+ * @property {Array<object>} links - Ссылки внизу формы
+ * @property {string} links.href - URL ссылки
+ * @property {object} links.id - Идентификатор ссылки
+ * @property {object} links.text - Текст ссылки
  */
 const signupViewConfig = {
     formId: 'signup-form',

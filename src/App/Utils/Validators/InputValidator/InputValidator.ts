@@ -13,7 +13,7 @@ export interface IValidationResult {
 };
 
 /**
- * Константа результата несовпадения значение при валидации
+ * Константа результата несовпадения значения с контрольным при валидации
  * @category Validators
  * @constant {IValidationResult} DIFFERENT
  */
@@ -37,7 +37,8 @@ export const UNKNOWN: IValidationResult = { isValid: false, msg: 'Неизвес
  * Валидатор значения введённго в поле ввода
  * @category Validators
  * @param  {string} type - Тип данного, содержащегося в поле
- * @param  {string} value - Значение
+ * @param  {string} value - Проверяемое значение
+ * @param {?string} reference - Целевое значение для сравнения
  * @return {IValidationResult}
  */
 function validateInput(type: string, value: string, reference?: string): IValidationResult {

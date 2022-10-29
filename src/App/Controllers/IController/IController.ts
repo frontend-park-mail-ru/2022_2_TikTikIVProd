@@ -38,7 +38,7 @@ abstract class IController<tView extends IView, tModel> {
     /**
      * Функция устрановки компонента.
      * Отрисовывает элемент и управляет им.
-     * @returns void
+     * @return {void}
      */
     public mountComponent(): void {
         if (!this.isMounted) {
@@ -50,7 +50,7 @@ abstract class IController<tView extends IView, tModel> {
     /**
      * Функция убирания компонента.
      * Отрисовывает элемент и управляет им.
-     * @returns void
+     * @return {void}
      */
     public unmountComponent(): void {
         if (this.isMounted) {

@@ -29,14 +29,15 @@ import FooterController from "./Controllers/FooterController/FooterController";
 import UserModel from "./Models/UserModel/UserModel";
 import FeedModel from "./Models/FeedModel/FeedModel";
 
+import ProfileController from "./Controllers/ProfileController/ProfileController";
+import ProfileView from "./Views/ProfileView/ProfileView";
+
+import SettingsController from "./Controllers/SettingsController/SettingsController";
+import SettingsView from "./Views/SettingsView/SettingsView";
 
 // TODO delete 
 import config from "./Configs/Config";
 import ajax from "./Modules/Ajax";
-import ProfileController from "./Controllers/ProfileController/ProfileController";
-import ProfileView from "./Views/ProfileView/ProfileView";
-import SettingsController from "./Controllers/SettingsController/SettingsController";
-import SettingsView from "./Views/SettingsView/SettingsView";
 //
 
 /**
@@ -198,7 +199,12 @@ class App {
         this.footerController.mountComponent();
         this.pageNotFoundController.mountComponent();
     }
-
+    
+    /**
+     * Функция отрабатывает переход на страницу профиля пользователя
+     * (приватное поле класса)
+     * @return {void}
+     */
     private handleProfile(): void { 
         this.userModel.isAuthantificated()
             .then(({ status, body }) => {
@@ -219,7 +225,12 @@ class App {
                 router.goToPath(paths.signinPage);
             });
     }
-
+    
+    /**
+     * Функция отрабатывает переход на страницу настроек профиля
+     * (приватное поле класса)
+     * @return {void}
+     */
     private handleSettings() : void {
         this.userModel.isAuthantificated()
             .then(({ status, body }) => {
@@ -240,6 +251,7 @@ class App {
                 router.goToPath(paths.signinPage);
             });
     }
+    
     /**
      * Функция инициализирует базовую вёрстку страницы
      * (приватное поле класса)

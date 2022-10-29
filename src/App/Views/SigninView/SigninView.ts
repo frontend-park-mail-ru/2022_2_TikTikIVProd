@@ -48,7 +48,7 @@ class SigninView extends IView {
 
     /**
      * Функция извлечения введённых данных из формы
-     * @returns {Map}
+     * @returns {Map<string, string>}
      */
     public getData(): Map<string, string> {
         const data = new Map<string, string>();
@@ -58,7 +58,13 @@ class SigninView extends IView {
         });
         return data;
     }
-
+    
+    /**
+     * Функция отображения сообщения об ошибке в поле формы
+     * @param  {string} id - Идентификатор поля
+     * @param  {string} msg - Сообщение об ошибке
+     * @return {void}
+     */
     public showErrorMsg(id: string, msg: string): void {
         const inpt = <HTMLElement>this.element.querySelector('#' + id);
         const msgField = <HTMLElement>this.element.querySelector('#' + id + '-msg');
@@ -70,6 +76,11 @@ class SigninView extends IView {
         msgField.style.visibility = 'visible';
     }
 
+    /**
+     * Функция скрытия сообщения об ошибке в поле формы
+     * @param  {string} id - Идентификатор поля
+     * @return {void}
+     */
     public hideErrorMsg(id: string): void {
         const inpt = <HTMLElement>this.element.querySelector('#' + id);
         const msgField = <HTMLElement>this.element.querySelector('#' + id + '-msg');
