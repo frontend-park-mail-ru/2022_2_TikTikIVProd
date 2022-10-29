@@ -26,21 +26,23 @@ class SettingsController extends IController<SettingsView, UserModel> {
 
     private handleClick(e: Event): void {
         e.preventDefault();
-        const target = <HTMLElement>e.target;
-        if ((<HTMLButtonElement>target).type !== 'submit') {
-            return;
-        }
+        if (this.isMounted) {
+            const target = <HTMLElement>e.target;
+            if ((<HTMLButtonElement>target).type !== 'submit') {
+                return;
+            }
 
-        const data = this.view.getDataFromGroup(target);
-        const isValidData = this.validateData(data);
-        // TODO update in model
+            const data = this.view.getDataFromGroup(target);
+            const isValidData = this.validateData(data);
+            // TODO update in model
+        }
     }
 
-    public validateData(data: Map<string, string>) : boolean { 
+    private validateData(data: Map<string, string>): boolean {
         let isFormValid = true;
         data.forEach((value, key) => {
             let ref: string | undefined = undefined;
-            if(key === 'repeat_password'){
+            if (key === 'repeat_password') {
                 ref = data.get('password');
             }
 
@@ -50,7 +52,7 @@ class SettingsController extends IController<SettingsView, UserModel> {
                 this.view.showErrorMsg(key, msg);
                 return;
             }
-            this.view.hideErrorMsg(key, msg);
+            this.view.hideErrorMsg(key);
         });
         return isFormValid;
     }

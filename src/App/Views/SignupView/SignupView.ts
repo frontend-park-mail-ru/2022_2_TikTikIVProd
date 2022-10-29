@@ -58,35 +58,27 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
         return data;
     }
 
-  /**
-     * Функция вывода ошибки ввода в форме регистрации
-     * @param  {string} id - ID поля в форме
-     * @param  {IValidationResult} data - Результат проверки корректности вида
-     * @returns {void}
-     */
-    public showError(id: string, data: IValidationResult): void {
-        const input = <HTMLInputElement>this.element.querySelector('#' + id);
-        const errorField = <HTMLElement>this.element.querySelector('#' + id + '-msg');
-        if (data.isValid) {
-            input.classList.remove('invalid');
-            errorField.textContent = '';
-            errorField.style.visibility = 'hidden';
-        } else {
-            input.classList.add('invalid');
-            errorField.textContent = data.msg;
-            errorField.style.visibility = 'visible';
+
+    public showErrorMsg(id: string, msg: string) : void {
+        const inpt = <HTMLElement>this.element.querySelector('#'+id);
+        const msgField = <HTMLElement>this.element.querySelector('#'+id+'-msg');
+        if(!inpt || !msgField){
+            return;
         }
+        inpt.classList.add('invalid');
+        msgField.innerText = msg;
+        msgField.style.visibility = 'visible';
     }
 
- /**
-     * Функиция вывода ошибок в нескольких полях 
-     * @param  {Map} data - Карта ID поля формы -> Результат проверки
-     * @returns {void}
-     */
-    public showErrors(data: Map<string, IValidationResult>): void {
-        data.forEach((value, id) => {
-            this.showError(id, value);
-        });
+    public hideErrorMsg(id: string) : void {
+        const inpt = <HTMLElement>this.element.querySelector('#'+id);
+        const msgField = <HTMLElement>this.element.querySelector('#'+id+'-msg');
+        if(!inpt || !msgField){
+            return;
+        }
+        inpt.classList.remove('invalid');
+        msgField.innerText = '';
+        msgField.style.visibility = 'hidden';
     }
 }
 

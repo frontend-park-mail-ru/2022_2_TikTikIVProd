@@ -46,9 +46,7 @@ class SigninController extends IController<SigninView, UserModel> {
         if (this.isMounted) {
             const data: Map<string, string> = this.view.getData();
 
-
-            const { isValidData, validatedData } = this.validate(data);
-            this.view.showErrors(validatedData);
+            const isValidData = this.validate(data);
             if (!isValidData) {
                 // console.log('invalid data: ', validatedData);
                 return;
@@ -67,11 +65,11 @@ class SigninController extends IController<SigninView, UserModel> {
                 switch (status) {
                     case 401:
                     case 404: {
-                        this.view.showError('email', { isValid: false, msg: 'Неверный email или пароль' });
+                        this.view.showErrorMsg('email', 'Неверный email или пароль');
                         break;
                     }
                     default: {
-                        this.view.showError('email', { isValid: false, msg: `Ошибка сервера ${status}` });
+                        this.view.showErrorMsg('email',`Ошибка сервера ${status}`);
                         break;
                     }
                 }
@@ -85,25 +83,22 @@ class SigninController extends IController<SigninView, UserModel> {
      * @param {Map} data Данные из формы в формате ID поля -> значение
      * @return {{boolean, Map<string, IValidationResult>}}
      */
-    private validate(data: Map<string, string>): {
-        isValidData: boolean,
-        validatedData: Map<string, IValidationResult>
-    } {
+    private validate(data: Map<string, string>): boolean {
         let isValidData = true;
-        const validatedData = new Map<string, IValidationResult>;
 
         data.forEach((value, id) => {
             if(id === 'password') {
                 return;
             }
             const { isValid, msg } = validateInput(id, value);
-            validatedData.set(id, { isValid, msg });
             if (!isValid) { 
                 isValidData = false; 
+                this.view.showErrorMsg(id, msg);
+                return;
             }
+            this.view.hideErrorMsg(id);
         });
-
-        return { isValidData, validatedData };
+        return isValidData;
     }
 }
 

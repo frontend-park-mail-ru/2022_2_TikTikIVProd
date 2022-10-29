@@ -44,16 +44,12 @@ class SignupController extends IController<SignupView, UserModel> {
     private onSubmit(e: Event): void {
         e.preventDefault();
         if (this.isMounted) {
-            const data: Map<string, string> = this.view.getData();
+            const data = this.view.getData();
 
-            const { isValidData, validatedData } = this.validate(data);
-            this.view.showErrors(validatedData);
+            const isValidData = this.validate(data);
             if (!isValidData) {
-                // console.log('invalid data');
                 return;
             }
-
-            // console.log('valid data');
 
             const user: IUserSignUp = {
                 first_name: data.get('first_name') || '',
@@ -77,7 +73,7 @@ class SignupController extends IController<SignupView, UserModel> {
                     //     break;
                     // }
                     default: {
-                        this.view.showError('email', { isValid: false, msg: `Ошибка сервера ${status}` });
+                        this.view.showErrorMsg('email', `Ошибка сервера ${status}`);
                         break;
                     }
                 }
@@ -88,34 +84,27 @@ class SignupController extends IController<SignupView, UserModel> {
     /**
      * Функция проверки данных из формы
      * (приватное поле класса)
-     * @param {Map} data Данные из формы в формате ID поля -> значение
-     * @return {{boolean, Map<string, IValidationResult>}}
+     * @param {Map<id: string, value: string>} data Данные из формы в формате ID поля -> значение
+     * @return {boolean}
      */
-    private validate(data: Map<string, string>): {
-        isValidData: boolean,
-        validatedData: Map<string, IValidationResult>
-    } {
+    private validate(data: Map<string, string>): boolean {
         let isValidData = true;
-        const validatedData = new Map<string, IValidationResult>;
 
         data.forEach((value, id) => {
+            let ref : string | undefined = undefined;
             if (id === 'repeat_password') {
-                if (value !== data.get('password')) {
-                    validatedData.set(id, { isValid: false, msg: 'Пароли должны совпадать' });
-                } else {
-                    validatedData.set(id, { isValid: true, msg: '' });
-                }
-                return;
+                ref = data.get('password');
             }
 
             const { isValid, msg } = validateInput(id, value);
-            validatedData.set(id, { isValid, msg });
             if (!isValid) {
                 isValidData = false;
+                this.view.showErrorMsg(id, msg);
+                return;
             }
+            this.view.hideErrorMsg(id);
         });
-
-        return { isValidData, validatedData };
+        return isValidData;
     }
 }
 

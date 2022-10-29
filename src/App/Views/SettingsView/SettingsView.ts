@@ -43,7 +43,7 @@ class SettingsView extends IView{
         msgField.style.visibility = 'visible';
     }
 
-    public hideErrorMsg(id: string, msg: string) : void {
+    public hideErrorMsg(id: string) : void {
         const inpt = <HTMLElement>this.element.querySelector('#'+id);
         const msgField = <HTMLElement>this.element.querySelector('#'+id+'-msg');
         if(!inpt || !msgField){
