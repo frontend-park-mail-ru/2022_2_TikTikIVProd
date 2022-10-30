@@ -29,8 +29,6 @@ const _headerItems = {
         data: {
             href_profile: '/profile',
             href_settings: '/settings',
-            // user_avatar: '../src/img/test_avatar.jpg',
-            // user_name: 'Test User',
             settings_icon: '../src/img/settings_icon.svg',
         },
         render: headerProfileTemplate,

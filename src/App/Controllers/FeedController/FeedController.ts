@@ -1,4 +1,5 @@
 import FeedModel, { IFeedData } from "../../Models/FeedModel/FeedModel";
+import { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
 import throttle from "../../Utils/Throttle/Throttle";
@@ -20,6 +21,8 @@ class FeedController extends IController<FeedView, FeedModel> {
      */
     private currentPage: number;
 
+    private user: IUser;
+
     constructor(view: FeedView, model: FeedModel) {
         super(view, model);
         this.view.bindScrollEvent(throttle(this.handleScroll.bind(this), 250));
@@ -27,13 +30,34 @@ class FeedController extends IController<FeedView, FeedModel> {
         this.view.bindClickEvent(this.handleClickOnFeed.bind(this));
 
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
+        EventDispatcher.subscribe('user-changed', this.setCurrentUser.bind(this));
         // TODO убрать
         const content = this.getContent();
         this.view.pushContentToFeed(content);
     }
 
     // TODO доавить контент если фид пуст
-    
+    public setCurrentUser(user: IUser) {
+        this.user = user;
+    }
+
+    public mountComponent(): void {
+        if (!this.isMounted) {
+            this.view.show();
+            this.view.showNavbar();
+            this.isMounted = true;
+        }
+    }
+
+    public unmountComponent(): void {
+        if (this.isMounted) {
+            this.view.hide();
+            this.view.hideNavbar();
+            this.view.hideFeedCardCreation();
+            this.isMounted = false;
+        }
+    }
+
     /**
      * Функция обработки клина на ленту
      * (приватный метод класса)
@@ -42,43 +66,82 @@ class FeedController extends IController<FeedView, FeedModel> {
      */
     private handleClickOnFeed(event: Event): void {
         event.preventDefault();
-        if(this.isMounted){
-        const target = <HTMLElement>event.target;
-        const action = (<HTMLElement>target.closest("[data-action]"))?.dataset['action'];
-        const cardId = (<HTMLElement>target.closest("[data-id]"))?.dataset['id'];
-        const data = (<HTMLElement>target.closest("[data-data]"))?.dataset['data'];
-        if (!action || !cardId) {
-            console.log('Cant find card id or action in ', target);
-            return;
-        }
-        console.log(action, cardId, data);
+        if (this.isMounted) {
+            const target = <HTMLElement>event.target;
 
-        switch (action) {
-            default: {
-                console.log('action unknown');
+            if(target.classList.contains('feed__overlay')) {
+                this.view.hideFeedCardCreation();
                 return;
             }
-            case 'like': {
-                break;
+            
+            const action = (<HTMLElement>target.closest("[data-action]"))?.dataset['action'];
+            const cardId = (<HTMLElement>target.closest("[data-id]"))?.dataset['id'];
+            const data = (<HTMLElement>target.closest("[data-data]"))?.dataset['data'];
+
+            if(!action) { 
+                console.log('No handler: ', target);
+                return;
             }
-            case 'edit': {
-                break;
-            }
-            case 'profile_page': {
-                if (data) {
-                    console.log('profile ', data);
-                    router.goToPath(data);
+
+            switch(action) {
+                case 'sumbit_new_post':{
+                    // TODO to to model to submit new post;
+                    console.log('submit new post');
+                    this.view.hideFeedCardCreation();
+                    return;
                 }
-                break;
-            }
-            case 'card_page':
-            case 'comment': {
-                console.log('feed card: ', location + '/' + cardId);
-                router.goToPath(location + '/' + cardId);
-                break;
+                case 'submit_search': {
+                    // TODO to to model to search posts;
+                    console.log('seatch posts');
+                    return;
+                }
+                
+                case 'create_feed': {
+                    this.view.showFeedCardCreation();
+                    return;
+                }
+
+                case 'like': {
+                    console.log('like');
+                    return;
+                }
+
+                case 'edit': {
+                    console.log('edit');
+                    return;
+                }
+
+                case 'profile_page': {
+                    if (data) {
+                        console.log('profile ', data);
+                        router.goToPath(data);
+                    }
+                    return;
+                }
+
+                case 'delete': {
+                    console.log('delete');
+                    return;
+                }
+
+                case 'share': {
+                    console.log('share');
+                    return;
+                }
+
+                case 'card_page':
+                case 'comment': {
+                    console.log('feed card: ', location + '/' + cardId);
+                    router.goToPath(location + '/' + cardId);
+                    return;
+                }
+                
+                default: {
+                    console.log('action unknown');
+                    return;
+                }
             }
         }
-    }
     }
 
     /**
@@ -89,7 +152,7 @@ class FeedController extends IController<FeedView, FeedModel> {
      */
     private handleScroll(): void {
         console.log('scroll');
-        
+
         if (this.isMounted) {
             if (this.checkFeedEnd()) {
                 const content = this.getContent();

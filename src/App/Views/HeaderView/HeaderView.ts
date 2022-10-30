@@ -27,7 +27,7 @@ import headerItems from "./HeaderViewConfig";
     /**
      * Функция изменения элемента в хэдере
      * @param  {string} itemName - название элемента
-     * @param  {any} data - Данные, необходимые для отрисочки элемента
+     * @param  {any} data - Данные, необходимые для отрисовки элемента
      * @returns {void}
      */
     public changeHeaderItem(itemName: string, data?: any): void {

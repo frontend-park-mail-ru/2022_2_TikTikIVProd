@@ -1,0 +1,86 @@
+.feed__card__new {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 20px 25px;
+    width: 60%;
+    max-height: 60%;
+
+    background: var(--color-feed-card-background);
+    outline: 2px solid var(--color-feed-card-border);
+    outline-offset: -2px;
+    border-radius: 10px;
+}
+
+.feed__card__new__user {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+.feed__card__new__user__avatar {
+    width: 42px;
+    height: min-content;
+    object-fit: contain;
+    background-color: var(--color-profile-img-background);
+    outline: 1px solid var(--color-profile-img-border);
+    border-radius: 50%;
+}
+
+.feed__card__new__content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.feed__card__new__content__text {
+    min-height: 200px;
+    font-size: 14px;
+    resize: vertical;
+    padding: 5px 8px;
+
+    border-radius: 10px;
+    outline: 2px solid var(--color-feed-card-border);
+    outline-offset: -2px;
+}
+
+.feed__card__new__content__text:focus {
+    outline: 2px solid var(--color-feed-card-border);
+    outline-offset: -2px;
+}
+
+.feed__card__new__content__attachments {
+    overflow-x: scroll;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin: auto;
+    display: none;
+}
+
+.feed__card__new__content__submit {
+    margin-left: auto;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    background-color: var(--color-button-background);
+    color: var(--color-button-value);
+    font-weight: bolder;
+    font-size: 14px;
+}
+
+.feed__card__new__tools {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.feed__card__new__tools__button {
+    width: 24px;
+    height: auto;
+    object-fit: cover;
+    cursor: pointer;
+}

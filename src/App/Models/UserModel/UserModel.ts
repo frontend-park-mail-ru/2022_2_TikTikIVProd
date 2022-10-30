@@ -1,5 +1,6 @@
 import config from "../../Configs/Config";
 import ajax from "../../Modules/Ajax";
+import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import IModel from "../IModel/IModel"
 
 /**
@@ -48,6 +49,7 @@ export interface IUser { // ПО api !!!!Без пароля
     last_name: string;
     nick_name: string;
     email: string;
+    avatar: string;
 }
 
 /**
@@ -61,7 +63,7 @@ class UserModel extends IModel {
      * (приватное поле класса)
      * @type {IUser | null}
      */
-    public currentUser: IUser | null; //TODO private
+    private currentUser: IUser | null; //TODO private
 
     constructor() {
         super();
@@ -106,7 +108,10 @@ class UserModel extends IModel {
             nick_name: response.parsedBody.body.nick_name,
             email: response.parsedBody.body.email,
             id: response.parsedBody.body.id,
+            avatar: '../src/img/test_avatar.jpg',
         };
+
+        EventDispatcher.emit('user-changed', this.currentUser);
         
         if (response.status === config.API.signin.status.success) {
             return Promise.resolve({
@@ -136,8 +141,11 @@ class UserModel extends IModel {
             nick_name: response.parsedBody.body.nick_name,
             email: response.parsedBody.body.email,
             id: response.parsedBody.body.id,
+            avatar: '../src/img/test_avatar.jpg',
         };
 
+        EventDispatcher.emit('user-changed', this.currentUser);
+        
         if (response.status === config.API.signup.status.success) {
             return Promise.resolve({
                 status: response.status,
@@ -173,8 +181,11 @@ class UserModel extends IModel {
             nick_name: response.parsedBody.body.nick_name,
             email: response.parsedBody.body.email,
             id: response.parsedBody.body.id,
+            avatar: '../src/img/test_avatar.jpg',
         };
 
+        EventDispatcher.emit('user-changed', this.currentUser);
+        
         if (response.status === config.API.checkCookie.status.success) {
             return Promise.resolve({
                 status: response.status,

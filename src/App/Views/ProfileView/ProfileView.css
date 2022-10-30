@@ -1,20 +1,28 @@
-
-.profile__container{
+.profile {
   display: flex;
-  width: 70%;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.profile__container {
+  width: auto;
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 14px 25px;
-  margin-bottom: 8px;
+  padding: 15px 20px;
   background-color: var(--color-profile-background);
   border-radius: 10px;
 }
 
-.profile__user{
- display: flex;
- flex-direction: row;
- align-items: center;
- gap: 8px;
+.profile__user {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  width: auto;
 }
 
 .profile__nav {
@@ -24,7 +32,7 @@
   justify-content: center;
 }
 
-.profile__nav__button{
+.profile__nav__button {
   cursor: pointer;
   border: none;
   outline: none;

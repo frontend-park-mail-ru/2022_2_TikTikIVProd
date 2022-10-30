@@ -157,12 +157,6 @@ class App {
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
                 this.feedController.mountComponent();
-                // states
-                this.headerView.changeHeaderItem(
-                    'profile',
-                    Object.assign(
-                        { user_avatar: '../src/img/test_avatar.jpg' },
-                        this.userModel.currentUser));
             })
             .catch(({ status, body }) => {
                 router.goToPath(paths.signinPage);
@@ -199,13 +193,13 @@ class App {
         this.footerController.mountComponent();
         this.pageNotFoundController.mountComponent();
     }
-    
+
     /**
      * Функция отрабатывает переход на страницу профиля пользователя
      * (приватное поле класса)
      * @return {void}
      */
-    private handleProfile(): void { 
+    private handleProfile(): void {
         this.userModel.isAuthantificated()
             .then(({ status, body }) => {
                 EventDispatcher.emit('unmount-all');
@@ -214,24 +208,19 @@ class App {
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
                 this.profileController.mountComponent();
-                // states
-                this.headerView.changeHeaderItem(
-                    'profile',
-                    Object.assign(
-                        { user_avatar: '../src/img/test_avatar.jpg' },
-                        this.userModel.currentUser));
+                this.feedController.mountComponent();
             })
             .catch(({ status, body }) => {
                 router.goToPath(paths.signinPage);
             });
     }
-    
+
     /**
      * Функция отрабатывает переход на страницу настроек профиля
      * (приватное поле класса)
      * @return {void}
      */
-    private handleSettings() : void {
+    private handleSettings(): void {
         this.userModel.isAuthantificated()
             .then(({ status, body }) => {
                 EventDispatcher.emit('unmount-all');
@@ -240,18 +229,12 @@ class App {
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
                 this.settingsController.mountComponent();
-                // states
-                this.headerView.changeHeaderItem(
-                    'profile',
-                    Object.assign(
-                        { user_avatar: '../src/img/test_avatar.jpg' },
-                        this.userModel.currentUser));
             })
             .catch(({ status, body }) => {
                 router.goToPath(paths.signinPage);
             });
     }
-    
+
     /**
      * Функция инициализирует базовую вёрстку страницы
      * (приватное поле класса)
@@ -307,13 +290,13 @@ class App {
         this.menuController = new MenuController(this.menuView);
         this.feedController = new FeedController(this.feedView, this.feedModel);
         this.headerController =
-            new HeaderController(this.headerView, this.userModel);
+            new HeaderController(this.headerView);
         this.footerController = new FooterController(this.footerView);
         this.pageNotFoundController =
             new PageNotFoundController(this.pageNotFoundView);
-            this.profileController = new ProfileController(this.profileView, this.userModel);
+        this.profileController = new ProfileController(this.profileView, this.userModel);
         this.settingsController = new SettingsController(this.settingsView, this.userModel);
-        }
+    }
 
     /**
      * Функция задаёт связи между страницами (URL -> обработчик)
@@ -333,10 +316,10 @@ class App {
             { path: paths.feedPage, handler: this.handleRedirectToFeed.bind(this) });
         router.addPath({ path: paths.logout, handler: this.handleLogout.bind(this) });
         router.setDefaultHandler(this.handle404.bind(this));
-        router.addPath({path: paths.home, handler: this.handleRedirectToFeed.bind(this)});
-            router.addPath({path: paths.profile, handler: this.handleProfile.bind(this)});
-            router.addPath({path: paths.settings, handler: this.handleSettings.bind(this)});
-        }
+        router.addPath({ path: paths.home, handler: this.handleRedirectToFeed.bind(this) });
+        router.addPath({ path: paths.profile, handler: this.handleProfile.bind(this) });
+        router.addPath({ path: paths.settings, handler: this.handleSettings.bind(this) });
+    }
 
     /**
      * Функция изменения цветовой темы приложения

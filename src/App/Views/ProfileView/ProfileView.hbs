@@ -1,9 +1,11 @@
-<div class="profile__container">
-    <div class="profile__user">
-    </div>
-    <div class="profile__nav">
-        {{#each buttons as |button|}}
-        <div href="{{button.href}}" class="profile__nav__button" id="{{button.id}}">{{button.text}}</div>            
-        {{/each}}
+<div class="profile">
+    <div class="profile__container">
+        <div class="profile__user">
+        </div>
+        <div class="profile__nav">
+            {{#each buttons as |button|}}
+            <div href="{{button.href}}" class="profile__nav__button" id="{{button.id}}">{{button.text}}</div>
+            {{/each}}
+        </div>
     </div>
 </div>

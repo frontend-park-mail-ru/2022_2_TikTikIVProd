@@ -57,8 +57,6 @@ abstract class IController<tView extends IView, tModel> {
             this.view.hide();
             this.isMounted = false;
         }
-        console.log(this.isMounted);
-        
     }
 }
 

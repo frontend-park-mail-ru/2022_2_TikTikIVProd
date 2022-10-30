@@ -1,6 +1,12 @@
 import feedCardTemplate from "../../Components/FeedCard/FeedCard.hbs"
 import "../../Components/FeedCard/FeedCard.css"
 
+import feedCardCreationTemplate from "../../Components/FeedCardCreate/FeedCardCreate.hbs"
+import "../../Components/FeedCardCreate/FeedCardCreate.css"
+
+import feedNavbarTemplate from "../../Components/FeedNavbar/FeedNavbar.hbs"
+import "../../Components/FeedNavbar/FeedNavbar.css"
+
 import feedTemplate from "./FeedView.hbs"
 import "./FeedView.css"
 
@@ -14,8 +20,15 @@ import IView from "../IView/IView";
  * @property {HTMLElement} parent - Родительский элемент для ленты новостей
  */
 class FeedView extends IView {
+    private navbar : HTMLElement;
+    private cards : HTMLElement;
+    private overlay : HTMLElement;
+
     constructor(parent: HTMLElement) {
-        super(parent, feedTemplate({}), '#feed');
+        super(parent, feedTemplate({}), '.feed');
+        this.navbar = <HTMLElement>this.element.querySelector('.feed__navbar');
+        this.cards = <HTMLElement>this.element.querySelector('.feed__cards');
+        this.overlay = <HTMLElement>this.element.querySelector('.feed__overlay');
     }
          
     /**
@@ -62,8 +75,27 @@ class FeedView extends IView {
             if (c === null) {
                 return;
             }
-            this.element.appendChild(c);
+            this.cards.appendChild(c);
         });
+    }
+
+    public showFeedCardCreation() : void { 
+        this.overlay.innerHTML = feedCardCreationTemplate({});
+        this.overlay.style.visibility = 'visible';
+    }
+
+    public hideFeedCardCreation() : void {
+        this.overlay.innerHTML = '';
+        this.overlay.style.visibility = 'collapse';
+    }
+
+    public showNavbar() : void {
+        this.navbar.innerHTML = feedNavbarTemplate({});
+        this.navbar.style.visibility = 'visible';
+    }
+
+    public hideNavbar() : void{
+        this.navbar.style.visibility = 'collapse';
     }
 }
 

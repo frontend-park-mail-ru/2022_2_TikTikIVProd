@@ -1,4 +1,4 @@
-import UserModel from "../../Models/UserModel/UserModel";
+import UserModel, { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
 import HeaderView from "../../Views/HeaderView/HeaderView";
@@ -12,12 +12,12 @@ import IController from "../IController/IController";
      * @param  {HeaderView} view Объект вида компонента хэдер
      * @param  {UserModel} model Объект модели пользователя
  */
-class HeaderController extends IController<HeaderView, UserModel> {
-    constructor(view: HeaderView, model: UserModel) {
-        super(view, model);
+class HeaderController extends IController<HeaderView, null> {
+    constructor(view: HeaderView) {
+        super(view, null);
         this.view.bindClickEvent(this.handleRedirect.bind(this));
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
-        EventDispatcher.subscribe('user-authorized', () => this.view.changeHeaderItem('profile', this.model.getCurrentUser()));
+        EventDispatcher.subscribe('user-changed', (user : IUser) => this.view.changeHeaderItem('profile', user));
     }
 
     /**

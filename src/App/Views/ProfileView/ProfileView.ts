@@ -15,7 +15,7 @@ import "../../Components/ProfileUser/ProfileUser.css"
  */
 class ProfileView extends IView{
     constructor(parent : HTMLElement) {
-        super(parent, profileTemplate(profileViewConfig), '.profile__container');
+        super(parent, profileTemplate(profileViewConfig), '.profile');
     }
 
     /**
