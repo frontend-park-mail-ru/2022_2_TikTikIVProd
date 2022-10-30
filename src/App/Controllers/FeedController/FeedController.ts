@@ -97,7 +97,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
                 
                 case 'create_feed': {
-                    this.view.showFeedCardCreation();
+                    this.view.showFeedCardCreation(this.user);
                     return;
                 }
 

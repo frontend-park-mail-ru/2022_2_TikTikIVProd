@@ -12,6 +12,7 @@ import "./FeedView.css"
 
 import { IFeedData } from "../../Models/FeedModel/FeedModel";
 import IView from "../IView/IView";
+import { IUser } from "../../Models/UserModel/UserModel"
 
 /**
  * Отображение для ленты новостей
@@ -79,8 +80,8 @@ class FeedView extends IView {
         });
     }
 
-    public showFeedCardCreation() : void { 
-        this.overlay.innerHTML = feedCardCreationTemplate({});
+    public showFeedCardCreation(user : IUser) : void { 
+        this.overlay.innerHTML = feedCardCreationTemplate(user);
         this.overlay.style.visibility = 'visible';
     }
 
