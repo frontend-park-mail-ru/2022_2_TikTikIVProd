@@ -23,11 +23,11 @@ const menuConfig = {
         //     text: 'Сообщения',
         //     icon: '../src/img/messenger_icon.svg',
         // },
-        // {
-        //     href: paths.friends,
-        //     text: 'Друзья',
-        //     icon: '../src/img/friends_icon.svg',
-        // },
+        {
+            href: paths.friends,
+            text: 'Друзья',
+            icon: '../src/img/friends_icon.svg',
+        },
         // {
         //     href: paths.groups,
         //     text: 'Сообщества',

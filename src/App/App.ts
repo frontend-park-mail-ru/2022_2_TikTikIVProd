@@ -39,6 +39,8 @@ import SettingsView from "./Views/SettingsView/SettingsView";
 // TODO delete 
 import config from "./Configs/Config";
 import ajax from "./Modules/Ajax";
+import FriendsView from "./Views/FriendsView/FriendsView";
+import FriendsController from "./Controllers/FriendsController/FriendsController";
 //
 
 /**
@@ -56,6 +58,7 @@ class App {
     private pageNotFoundView: PageNotFoundView;
     private profileView: ProfileView;
     private settingsView: SettingsView;
+    private friendsView: FriendsView;
 
     // Models
     private userModel: UserModel;
@@ -71,6 +74,7 @@ class App {
     private pageNotFoundController: PageNotFoundController;
     private profileController: ProfileController;
     private settingsController: SettingsController;
+    private friendsController: FriendsController;
 
     // Elements
     private root: HTMLElement;
@@ -236,6 +240,20 @@ class App {
             });
     }
 
+    private handleRedirectToFriends() : void{
+        this.userModel.isAuthantificated()
+            .then(({ status, body }) => {
+                EventDispatcher.emit('unmount-all');
+                EventDispatcher.emit('redirect', paths.friends);
+                // mount
+                this.headerController.mountComponent();
+                this.menuController.mountComponent();
+                this.friendsController.mountComponent();
+            })
+            .catch(({ status, body }) => {
+                router.goToPath(paths.signinPage);
+            });
+    }
     /**
      * Функция инициализирует базовую вёрстку страницы
      * (приватное поле класса)
@@ -266,6 +284,7 @@ class App {
         this.pageNotFoundView = new PageNotFoundView(this.content);
         this.profileView = new ProfileView(this.content);
         this.settingsView = new SettingsView(this.content);
+        this.friendsView = new FriendsView(this.content);
     }
 
     /**
@@ -297,6 +316,7 @@ class App {
             new PageNotFoundController(this.pageNotFoundView);
         this.profileController = new ProfileController(this.profileView, this.userModel);
         this.settingsController = new SettingsController(this.settingsView, this.userModel);
+        this.friendsController = new FriendsController(this.friendsView);
     }
 
     /**
@@ -320,7 +340,8 @@ class App {
         router.addPath({ path: paths.home, handler: this.handleRedirectToFeed.bind(this) });
         router.addPath({ path: paths.profile, handler: this.handleProfile.bind(this) });
         router.addPath({ path: paths.settings, handler: this.handleSettings.bind(this) });
-    }
+    router.addPath({path: paths.friends, handler: this.handleRedirectToFriends.bind(this)});
+        }
 
     /**
      * Функция изменения цветовой темы приложения

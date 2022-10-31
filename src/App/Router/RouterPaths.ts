@@ -12,6 +12,7 @@ const paths = {
     profile: '/profile',
     logout: '/logout',
     settings: '/settings',
+    friends: '/friends',
 }
 
 export default paths;

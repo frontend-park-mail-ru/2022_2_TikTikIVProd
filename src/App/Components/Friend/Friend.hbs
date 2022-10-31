@@ -1,0 +1,23 @@
+<div class="friend">
+    <img src="{{avatar}}" class="friend__avatar">
+    <div class="friend__wrapper">
+        <div class="friend__name">{{first_name}} {{last_name}}</div>
+        <div class="friend__tools">
+            <div class="friend__tools__button" data-action="message">
+                <img src="../src/img/message_icon.svg" alt="" class="friend__tools__button__icon">
+                <div class="friend__tools__button__text">Сообщение</div>
+            </div>
+            {{#if isFriend}}
+            <div class="friend__tools__button" data-action="remove">
+                <img src="../src/img/cancel_icon.svg" alt="" class="friend__tools__button__icon red">
+                <div class="friend__tools__button__text">Убрать из друзей</div>
+            </div>
+            {{else}}
+            <div class="friend__tools__button" data-action="add">
+                <img src="../src/img/add_icon.svg" alt="" class="friend__tools__button__icon green">
+                <div class="friend__tools__button__text">Добавить в друзья</div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
