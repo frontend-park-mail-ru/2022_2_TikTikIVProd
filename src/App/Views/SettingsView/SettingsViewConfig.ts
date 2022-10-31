@@ -28,7 +28,7 @@ const settingsViewConfig = {
                     placeholder: '*****',
                 },
                 {
-                    title: 'Введите пароль ещё раз:',
+                    title: 'Подтверждение пароля:',
                     type: 'password',
                     id: 'repeat_password',
                     placeholder: '*****',
@@ -48,7 +48,7 @@ const settingsViewConfig = {
                     id: 'last_name',
                 },
                 {
-                    title: 'Придумайте псевдоним:',
+                    title: 'Псевдоним:',
                     type: 'text',
                     id: 'nick_name',
                 },

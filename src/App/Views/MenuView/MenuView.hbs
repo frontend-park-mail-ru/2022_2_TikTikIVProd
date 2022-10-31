@@ -5,7 +5,8 @@
     <div class="menu__items__container">
         {{#each items as |item|}}
         <div href="{{item.href}}" class="menu__item {{#if item.style }} {{item.style}} {{/if}}">
-            {{item.text}}
+            <img src="{{item.icon}}" class="menu__item__icon">
+            <div class="menu__item__text">{{item.text}}</div>
         </div>
         {{/each}}
     </div>

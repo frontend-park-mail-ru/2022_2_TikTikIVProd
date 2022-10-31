@@ -1,3 +1,5 @@
+import paths from "../../Router/RouterPaths";
+
 /**
  * Конфигурация элементов меню
  * @category Menu
@@ -7,17 +9,35 @@ const menuConfig = {
     title: '',
     items: [
         {
-            href: '/feed',
+            href: paths.feedPage,
             text: 'Лента',
+            icon: '../src/img/feed_icon.svg',
         },
         {
-            href: '/profile',
+            href: paths.profile,
             text: 'Профиль',
+            icon: '../src/img/profile_icon.svg',
         },
+        // {
+        //     href: paths.messenger,
+        //     text: 'Сообщения',
+        //     icon: '../src/img/messenger_icon.svg',
+        // },
+        // {
+        //     href: paths.friends,
+        //     text: 'Друзья',
+        //     icon: '../src/img/friends_icon.svg',
+        // },
+        // {
+        //     href: paths.groups,
+        //     text: 'Сообщества',
+        //     icon: '../src/img/groups_icon.svg',
+        // },
         {
-            href: '/logout',
+            href: paths.logout,
             text: 'Выйти',
             style: 'menu__logout__link',
+            icon: '../src/img/logout_icon.svg',
         },
     ],
 }

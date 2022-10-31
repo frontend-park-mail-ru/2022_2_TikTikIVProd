@@ -1,5 +1,6 @@
 import baseTemplate from "./Components/Base/Base.hbs";
 import "./App.css"
+import "./Components/Base/Base.css"
 
 import router from "./Router/Router";
 import paths from "./Router/RouterPaths";

@@ -37,7 +37,7 @@ class MenuController extends IController<MenuView, null> {
     private handleClick(e: Event): void {
         e.preventDefault();
         if (this.isMounted) {
-            const href = (<HTMLAnchorElement>e.target).getAttribute('href');
+            const href = (<HTMLAnchorElement>e.target).closest('.menu__item')?.getAttribute('href');
             if (!href) {
                 return;
             }
