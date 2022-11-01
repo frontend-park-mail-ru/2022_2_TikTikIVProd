@@ -42,6 +42,9 @@ const config = {
                 success: 200,
             },
         },
+        image: {
+            url: '/image',
+        },
     },
 };
 

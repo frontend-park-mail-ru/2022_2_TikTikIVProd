@@ -15,7 +15,7 @@
   <div class="feed__card__content"> {{text}}</div>
   <div class="feed__card__attachments">
     {{#each attachments as |attachment|}}
-      <img src="http://localhost:8080/image/{{attachment.src}}" alt="" class="feed__card__attachments__item" />
+      <img src="{{attachment}}" alt="" class="feed__card__attachments__item" />
     {{/each}}
   </div>
   <div class="feed__card__footer">

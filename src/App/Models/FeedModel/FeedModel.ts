@@ -54,7 +54,7 @@ class FeedModel extends IModel {
                 date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
                 text: feedPost.message,
                 likes: 228,
-                attachments: feedPost.images,
+                attachments: feedPost.images.map((elem: any) => {return `${config.APIUrl}${config.API.image.url}/${elem.id}`}),
             }
         });
 
