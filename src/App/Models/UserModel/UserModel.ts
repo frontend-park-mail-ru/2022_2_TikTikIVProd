@@ -76,7 +76,6 @@ class UserModel extends IModel {
      * @return {Promise}
      */
     public async logoutUser() {
-        console.log(`DATA: ${config.APIUrl}${config.API.logout.url}`);
         ajax.delete(`${config.APIUrl}${config.API.logout.url}`);
         this.currentUser = null;
     }
