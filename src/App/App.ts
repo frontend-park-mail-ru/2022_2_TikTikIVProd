@@ -175,9 +175,9 @@ class App {
      */
     private handleLogout(): void {
         EventDispatcher.emit('redirect', paths.logout);
-        ajax.get(`${config.APIUrl}/logout`).catch(() => {
-            router.goToPath(paths.signinPage);
-        });
+        
+        this.userModel.logoutUser();
+        router.goToPath(paths.signinPage);
         // TODO fix cors
         // this.userModel.logoutUser().then(({ status, body }) => {
         //     router.goToPath(paths.signinPage);

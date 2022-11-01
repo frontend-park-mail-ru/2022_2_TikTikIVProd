@@ -76,22 +76,9 @@ class UserModel extends IModel {
      * @return {Promise}
      */
     public async logoutUser() {
-        // TODO: logout cors
-
-        const response = await ajax.get(`${config.APIUrl}${config.API.logout}`);
+        console.log(`DATA: ${config.APIUrl}${config.API.logout.url}`);
+        ajax.delete(`${config.APIUrl}${config.API.logout.url}`);
         this.currentUser = null;
-        if (response.status === config.API.logout.status.success) {
-            return Promise.resolve({
-                status: response.status,
-                body: response.parsedBody
-            })
-        }
-        else {
-            return Promise.reject({
-                status: response.status,
-                body: response.parsedBody
-            })
-        }
     }
 
     /**

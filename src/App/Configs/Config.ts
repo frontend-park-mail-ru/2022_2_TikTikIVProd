@@ -10,12 +10,12 @@
  * @property {number} API.item.status.item - Именованный код ответа сервера
  */
 const config = {
-    APIUrl: 'http://127.0.0.1:8080',
+    APIUrl: 'http://localhost:8080',
     API: {
         logout: {
             url: '/logout',
             status: {
-                success: 200,
+                success: 204,
             }
         },
         signin: {

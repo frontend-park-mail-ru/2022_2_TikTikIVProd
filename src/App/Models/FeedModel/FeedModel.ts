@@ -45,12 +45,16 @@ class FeedModel extends IModel {
         const response = await ajax.get(`${config.APIUrl}${config.API.feed.url}`);
         let responseBody: any = response.parsedBody.body.map((feedPost: any) => {
             return {
-                photoLinks: feedPost.image_links,
-                description: feedPost.description,
+                id: feedPost.id,
+                author: { 
+                    url: '',
+                    avatar: 'https://video-editor.su/images/kak-snimalsya-film-avatar_01.jpg', 
+                    name: `${feedPost.user_last_name} ${feedPost.user_first_name}` 
+                },
+                date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
+                text: feedPost.message,
                 likes: 228,
-                date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,//new Date(feedPost.create_date),
-                author_name: feedPost.user_first_name,
-                author_photo: ''
+                attachments: feedPost.images,
             }
         });
 

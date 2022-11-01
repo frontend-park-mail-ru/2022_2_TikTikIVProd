@@ -32,8 +32,9 @@ class FeedController extends IController<FeedView, FeedModel> {
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         EventDispatcher.subscribe('user-changed', this.setCurrentUser.bind(this));
         // TODO убрать
-        const content = this.getContent();
-        this.view.pushContentToFeed(content);
+        this.getContent().then((content) => {
+            this.view.pushContentToFeed(content);
+        });
     }
 
     // TODO доавить контент если фид пуст
@@ -155,8 +156,9 @@ class FeedController extends IController<FeedView, FeedModel> {
 
         if (this.isMounted) {
             if (this.checkFeedEnd()) {
-                const content = this.getContent();
-                this.view.pushContentToFeed(content);
+                this.getContent().then((content) => {
+                    this.view.pushContentToFeed(content);
+                });
             }
         }
     }
@@ -166,24 +168,29 @@ class FeedController extends IController<FeedView, FeedModel> {
      * (приватный метод класса)
      * @returns {IFeedData[]}
      */
-    private getContent(): IFeedData[] {
+    private async getContent(): Promise<IFeedData[]> {
         // TODO model
-        const item: IFeedData = {
-            id: 321,
-            author: { url: '/testuser123', avatar: '../src/img/test_avatar.jpg', name: 'Test User' },
-            date: '01.01.2001',
-            text: 'Sample text of feed card. Sample text of feed card. Sample text of feed card. Sample text of feed card. ',
-            likes: 100500,
-            attachments: [{ src: '../src/img/test_post_img.jpg' }],
-        }
-        const testData = [];
-        for (let index = 0; index < 10; index++) {
-            testData.push(item);
-        }
-        // console.log(testData);
+        const data: IFeedData[] = [];
 
+        const model: FeedModel = new FeedModel();
+        await model.getFeeds().then(({status, body}) => {
+            body.forEach((elem) => {
+                data.push(elem);
+            })
+        }).catch(({status, body}) => {
+            const item: IFeedData = {
+                id: 321,
+                author: { url: '/testuser123', avatar: '../src/img/test_avatar.jpg', name: 'Неопознанный Капи' },
+                date: 'В будующем...',
+                text: 'Ваши друзья еще не выложили свой первый пост. Напомните им об этом!',
+                likes: 100500,
+                attachments: [{ src: '../src/img/test_post_img.jpg' }],
+            }
+            data.push(item);
+        });
+        
 
-        return testData;
+        return data;
     }
 
     /**
