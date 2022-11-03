@@ -44,7 +44,7 @@ export interface IUserSignUp { // ПО api
  * @property {string}  email - Email для входа в аккаунт
  */
 export interface IUser { // ПО api !!!!Без пароля 
-    id: string;
+    id: number;
     first_name: string;
     last_name: string;
     nick_name: string;

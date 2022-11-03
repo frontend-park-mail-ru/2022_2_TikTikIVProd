@@ -29,6 +29,18 @@ export interface IFeedData {
     attachments: { src: string }[];
 }
 
+export interface IFeedNewPost {
+    images: { src: string }[];
+    message: string;
+
+    user_id: number; // TODO
+    user_first_name: string; // TODO
+    user_last_name: string; // TODO
+
+    create_date: string; // TODO
+    id: number; //TODO
+}
+
 /**
  * Модель ленты 
  * @category Models 
@@ -39,6 +51,29 @@ class FeedModel extends IModel {
         super();
     }
 
+    public async getPost(id: number | string) {
+        let conf = config.api.post;
+        conf.url = conf.url.replace('{:id}', id.toString());        
+        const response = await ajax(conf);
+        console.log(response);
+    }
+
+    public async sendNewFeed(data: IFeedNewPost) : Promise<{}>{ 
+        const response= await ajax(config.api.postCreate, JSON.stringify(data));
+
+        if(response.status.toString() in config.api.postCreate.statuses.success){
+            return Promise.resolve({});
+        }
+
+        if(response.status.toString() in config.api.postCreate.statuses.failure){
+            const keyCode = response.status.toString() as keyof typeof config.api.postCreate.statuses.failure;
+            console.log(keyCode, config.api.postCreate.statuses.failure[keyCode]);
+            return Promise.reject({});
+        }
+
+        console.log('Create post err');
+        return Promise.reject({});
+    }
     /**
      * Функция получения постов ленты с сервера
      * @async
@@ -46,7 +81,7 @@ class FeedModel extends IModel {
      */
     public async getFeeds(): Promise<{ status: number, body: IFeedData[] }> {
         const response = await ajax(config.api.feed);
-        
+
         let responseBody: any = response.parsedBody.body.map((feedPost: any) => {
             return {
                 id: feedPost.id,

@@ -39,6 +39,7 @@ import SettingsView from "./Views/SettingsView/SettingsView";
 // TODO delete 
 import FriendsView from "./Views/FriendsView/FriendsView";
 import FriendsController from "./Controllers/FriendsController/FriendsController";
+import config from "./Configs/Config";
 //
 
 /**

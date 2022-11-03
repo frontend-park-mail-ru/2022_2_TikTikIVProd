@@ -125,6 +125,39 @@ const config = {
                 },
             },
         },
+        post: {
+            url: '/post/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Получение поста успешно'
+                },
+                failure: {
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+
+        },
+        postCreate: {
+            url: '/post/create',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Получение постов успешно'
+                },
+                failure: {
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
     }
 }
 

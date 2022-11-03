@@ -61,6 +61,23 @@ class FeedView extends IView {
 
     // Specific
 
+
+    public getNewPostData() : {text: string} {
+        const form = this.overlay.querySelector('.feed__card__new');
+        if(!form){
+            console.log('Post create no form');
+            return {text: ''};
+        }
+
+        const textar = <HTMLTextAreaElement>form.querySelector('.feed__card__new__content__text')
+        console.log(textar);
+
+        const text = textar.value;
+        console.log(text);
+        
+        
+        return {text: text};
+    }
     
     /**
      * Функция отрисовки контента (постов) в ленте новостей

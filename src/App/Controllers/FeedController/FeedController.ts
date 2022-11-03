@@ -1,4 +1,4 @@
-import FeedModel, { IFeedData } from "../../Models/FeedModel/FeedModel";
+import FeedModel, { IFeedData, IFeedNewPost } from "../../Models/FeedModel/FeedModel";
 import { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
@@ -37,6 +37,43 @@ class FeedController extends IController<FeedView, FeedModel> {
         });
     }
 
+    private openFeedCard(id : string) : void {
+        this.model.getPost(id);
+    }
+
+    private submitNewPost(): void {
+        console.log('submit new post');
+
+        const content = this.view.getNewPostData();
+        if (content.text.length < 1) {
+            console.log('Post create empty form');
+            return;
+        }
+
+        const data: IFeedNewPost = {
+
+            images: [],
+            message: content.text,
+
+            // TODO  delete this shit
+            user_id: this.user.id,
+            user_first_name: this.user.first_name,
+            user_last_name: this.user.last_name,
+
+            create_date: '2022-08-15T00:00:00Z',
+            id: 0,
+            // TODO
+        };
+
+        this.model.sendNewFeed(data)
+            .then(() => {
+                this.view.hideFeedCardCreation();
+            })
+            .catch(() => {
+                console.log('Post create show err to view');
+                // TODO Post create show err to view
+            });
+    }
     // TODO доавить контент если фид пуст
     public setCurrentUser(user: IUser) {
         this.user = user;
@@ -86,9 +123,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
             switch (action) {
                 case 'sumbit_new_post': {
-                    // TODO to to model to submit new post;
-                    console.log('submit new post');
-                    this.view.hideFeedCardCreation();
+                    this.submitNewPost();
                     return;
                 }
                 case 'submit_search': {
@@ -132,8 +167,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                 case 'card_page':
                 case 'comment': {
-                    console.log('feed card: ', location + '/' + cardId);
-                    router.goToPath(location + '/' + cardId);
+                    this.openFeedCard(cardId);
                     return;
                 }
 
