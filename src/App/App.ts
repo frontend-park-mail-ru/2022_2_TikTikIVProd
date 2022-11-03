@@ -37,8 +37,6 @@ import SettingsController from "./Controllers/SettingsController/SettingsControl
 import SettingsView from "./Views/SettingsView/SettingsView";
 
 // TODO delete 
-import config from "./Configs/Config";
-import ajax from "./Modules/Ajax";
 import FriendsView from "./Views/FriendsView/FriendsView";
 import FriendsController from "./Controllers/FriendsController/FriendsController";
 //
@@ -175,15 +173,9 @@ class App {
      */
     private handleLogout(): void {
         EventDispatcher.emit('redirect', paths.logout);
-        
+
         this.userModel.logoutUser();
         router.goToPath(paths.signinPage);
-        // TODO fix cors
-        // this.userModel.logoutUser().then(({ status, body }) => {
-        //     router.goToPath(paths.signinPage);
-        // }).catch(({ status, body }) => {
-        //     // console.log('logout err: ', status, body);
-        // });
     }
 
     /**
@@ -240,7 +232,7 @@ class App {
             });
     }
 
-    private handleRedirectToFriends() : void{
+    private handleRedirectToFriends(): void {
         this.userModel.isAuthantificated()
             .then(({ status, body }) => {
                 EventDispatcher.emit('unmount-all');
@@ -340,8 +332,8 @@ class App {
         router.addPath({ path: paths.home, handler: this.handleRedirectToFeed.bind(this) });
         router.addPath({ path: paths.profile, handler: this.handleProfile.bind(this) });
         router.addPath({ path: paths.settings, handler: this.handleSettings.bind(this) });
-    router.addPath({path: paths.friends, handler: this.handleRedirectToFriends.bind(this)});
-        }
+        router.addPath({ path: paths.friends, handler: this.handleRedirectToFriends.bind(this) });
+    }
 
     /**
      * Функция изменения цветовой темы приложения

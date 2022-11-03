@@ -70,22 +70,22 @@ class FeedController extends IController<FeedView, FeedModel> {
         if (this.isMounted) {
             const target = <HTMLElement>event.target;
 
-            if(target.classList.contains('feed__overlay')) {
+            if (target.classList.contains('feed__overlay')) {
                 this.view.hideFeedCardCreation();
                 return;
             }
-            
+
             const action = (<HTMLElement>target.closest("[data-action]"))?.dataset['action'];
             const cardId = (<HTMLElement>target.closest("[data-id]"))?.dataset['id'];
             const data = (<HTMLElement>target.closest("[data-data]"))?.dataset['data'];
 
-            if(!action) { 
+            if (!action) {
                 console.log('No handler: ', target);
                 return;
             }
 
-            switch(action) {
-                case 'sumbit_new_post':{
+            switch (action) {
+                case 'sumbit_new_post': {
                     // TODO to to model to submit new post;
                     console.log('submit new post');
                     this.view.hideFeedCardCreation();
@@ -96,7 +96,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                     console.log('seatch posts');
                     return;
                 }
-                
+
                 case 'create_feed': {
                     this.view.showFeedCardCreation(this.user);
                     return;
@@ -136,7 +136,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                     router.goToPath(location + '/' + cardId);
                     return;
                 }
-                
+
                 default: {
                     console.log('action unknown');
                     return;
@@ -173,11 +173,11 @@ class FeedController extends IController<FeedView, FeedModel> {
         const data: IFeedData[] = [];
 
         const model: FeedModel = new FeedModel();
-        await model.getFeeds().then(({status, body}) => {
+        await model.getFeeds().then(({ status, body }) => {
             body.forEach((elem) => {
                 data.push(elem);
             })
-        }).catch(({status, body}) => {
+        }).catch(({ status, body }) => {
             const item: IFeedData = {
                 id: 321,
                 author: { url: '/testuser123', avatar: '../src/img/test_avatar.jpg', name: 'Неопознанный Капи' },
@@ -188,7 +188,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             }
             data.push(item);
         });
-        
+
 
         return data;
     }

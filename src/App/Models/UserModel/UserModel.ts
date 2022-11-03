@@ -1,5 +1,5 @@
 import config from "../../Configs/Config";
-import ajax from "../../Modules/Ajax";
+import ajax from "../../Ajax/Ajax";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import IModel from "../IModel/IModel"
 
@@ -76,7 +76,7 @@ class UserModel extends IModel {
      * @return {Promise}
      */
     public async logoutUser() {
-        ajax.delete(`${config.APIUrl}${config.API.logout.url}`);
+        ajax(config.api.logout);
         this.currentUser = null;
     }
 
@@ -87,7 +87,7 @@ class UserModel extends IModel {
      * @return {Promise}
      */
     public async authUser(authData: IUserSignIn) {
-        const response = await ajax.post(`${config.APIUrl}${config.API.signin.url}`, JSON.stringify(authData));
+        const response = await ajax(config.api.signin, JSON.stringify(authData));
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
             last_name: response.parsedBody.body.last_name,
@@ -98,8 +98,8 @@ class UserModel extends IModel {
         };
 
         EventDispatcher.emit('user-changed', this.currentUser);
-        
-        if (response.status === config.API.signin.status.success) {
+
+        if (response.status === config.api.signin.statuses.success) {
             return Promise.resolve({
                 status: response.status,
                 body: response.parsedBody
@@ -120,7 +120,7 @@ class UserModel extends IModel {
      * @return {Promise}
      */
     public async registerUser(user: IUserSignUp) {
-        const response = await ajax.post(`${config.APIUrl}${config.API.signup.url}`, JSON.stringify(user));
+        const response = await ajax(config.api.signup, JSON.stringify(user));
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
             last_name: response.parsedBody.body.last_name,
@@ -131,8 +131,8 @@ class UserModel extends IModel {
         };
 
         EventDispatcher.emit('user-changed', this.currentUser);
-        
-        if (response.status === config.API.signup.status.success) {
+
+        if (response.status === config.api.signup.statuses.success) {
             return Promise.resolve({
                 status: response.status,
                 body: response.parsedBody
@@ -150,7 +150,7 @@ class UserModel extends IModel {
      * Функция возвращает данные авторизованного пользователя
      * @returns {IUser|null}
      */
-    public getCurrentUser() : IUser | null{
+    public getCurrentUser(): IUser | null {
         return this.currentUser;
     }
 
@@ -160,7 +160,7 @@ class UserModel extends IModel {
      * @return {Promise}
      */
     public async isAuthantificated() {
-        const response = await ajax.get(`${config.APIUrl}${config.API.checkCookie.url}`);
+        const response = await ajax(config.api.auth);
         this.currentUser = {
             first_name: response.parsedBody.body.first_name,
             last_name: response.parsedBody.body.last_name,
@@ -171,8 +171,8 @@ class UserModel extends IModel {
         };
 
         EventDispatcher.emit('user-changed', this.currentUser);
-        
-        if (response.status === config.API.checkCookie.status.success) {
+
+        if (response.status === config.api.auth.statuses.success) {
             return Promise.resolve({
                 status: response.status,
                 body: response.parsedBody

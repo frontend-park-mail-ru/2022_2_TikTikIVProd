@@ -1,5 +1,5 @@
 import config from "../../Configs/Config";
-import ajax from "../../Modules/Ajax";
+import ajax from "../../Ajax/Ajax";
 import IModel from "../IModel/IModel"
 
 /**
@@ -40,21 +40,20 @@ class FeedModel extends IModel {
      * @async
      * @return {Promise}
      */
-    public async getFeeds() : Promise<{status: number, body: IFeedData[]}>{
-
-        const response = await ajax.get(`${config.APIUrl}${config.API.feed.url}`);
+    public async getFeeds(): Promise<{ status: number, body: IFeedData[] }> {
+        const response = await ajax(config.api.feed);
         let responseBody: any = response.parsedBody.body.map((feedPost: any) => {
             return {
                 id: feedPost.id,
-                author: { 
+                author: {
                     url: '',
-                    avatar: 'https://video-editor.su/images/kak-snimalsya-film-avatar_01.jpg', 
-                    name: `${feedPost.user_last_name} ${feedPost.user_first_name}` 
+                    avatar: './src/img/avatar_pavel.jpg',
+                    name: `${feedPost.user_last_name} ${feedPost.user_first_name}`
                 },
                 date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
                 text: feedPost.message,
                 likes: 228,
-                attachments: feedPost.images.map((elem: any) => {return `${config.APIUrl}${config.API.image.url}/${elem.id}`}),
+                attachments: feedPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
             }
         });
 
@@ -63,7 +62,7 @@ class FeedModel extends IModel {
             body: responseBody,
         };
 
-        if (response.status === config.API.feed.status.success) {
+        if (response.status === config.api.image.statuses.success) {
             return Promise.resolve(result);
         }
         else {

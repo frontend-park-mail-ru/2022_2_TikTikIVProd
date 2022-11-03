@@ -28,7 +28,7 @@ class SigninController extends IController<SigninView, UserModel> {
      * @param  {Event} e Объект события 
      * @returns {void}
      */
-    private onRedirect(e: Event) : void {
+    private onRedirect(e: Event): void {
         e.preventDefault();
         if (this.isMounted) {
             router.goToPath((<HTMLLinkElement>e.target).getAttribute('href') || '');
@@ -69,7 +69,7 @@ class SigninController extends IController<SigninView, UserModel> {
                         break;
                     }
                     default: {
-                        this.view.showErrorMsg('email',`Ошибка сервера ${status}`);
+                        this.view.showErrorMsg('email', `Ошибка сервера ${status}`);
                         break;
                     }
                 }
@@ -87,12 +87,12 @@ class SigninController extends IController<SigninView, UserModel> {
         let isValidData = true;
 
         data.forEach((value, id) => {
-            if(id === 'password') {
+            if (id === 'password') {
                 return;
             }
             const { isValid, msg } = validateInput(id, value);
-            if (!isValid) { 
-                isValidData = false; 
+            if (!isValid) {
+                isValidData = false;
                 this.view.showErrorMsg(id, msg);
                 return;
             }
