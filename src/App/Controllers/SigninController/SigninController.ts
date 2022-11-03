@@ -48,7 +48,6 @@ class SigninController extends IController<SigninView, UserModel> {
 
             const isValidData = this.validate(data);
             if (!isValidData) {
-                // console.log('invalid data: ', validatedData);
                 return;
             }
 
@@ -57,22 +56,10 @@ class SigninController extends IController<SigninView, UserModel> {
                 password: data.get('password') || '',
             };
 
-            this.model.authUser(user).then(({ status, body }) => {
-                // console.log('auth success');
+            this.model.signInUser(user).then(({ status, body, msg }) => {
                 router.goToPath(paths.feedPage);
-            }).catch(({ status, body }) => {
-                // console.log('auth failure ', status, body);
-                switch (status) {
-                    case 401:
-                    case 404: {
-                        this.view.showErrorMsg('email', 'Неверный email или пароль');
-                        break;
-                    }
-                    default: {
-                        this.view.showErrorMsg('email', `Ошибка сервера ${status}`);
-                        break;
-                    }
-                }
+            }).catch(({ status, body, msg }) => {
+                this.view.showErrorMsg('email', msg);
             });
         }
     }

@@ -108,11 +108,11 @@ class App {
      * @return {void}
      */
     private handleRedirectToSignin(): void {
-        this.userModel.isAuthantificated()
-            .then(({ status, body }) => {
+        this.userModel.authUserByCookie()
+            .then(() => {
                 router.goToPath(paths.feedPage);
             })
-            .catch(({ status, body }) => {
+            .catch(() => {
                 EventDispatcher.emit('unmount-all');
                 EventDispatcher.emit('redirect', paths.signinPage);
                 // mount
@@ -130,11 +130,11 @@ class App {
      * @return {void}
      */
     private handleRedirectToSignup(): void {
-        this.userModel.isAuthantificated()
-            .then(({ status, body }) => {
+        this.userModel.authUserByCookie()
+            .then(() => {
                 router.goToPath(paths.feedPage);
             })
-            .catch(({ status, body }) => {
+            .catch(() => {
                 EventDispatcher.emit('unmount-all');
                 EventDispatcher.emit('redirect', paths.signupPage);
                 // mount
@@ -152,8 +152,8 @@ class App {
      * @return {void}
      */
     private handleRedirectToFeed(): void {
-        this.userModel.isAuthantificated()
-            .then(({ status, body }) => {
+        this.userModel.authUserByCookie()
+            .then(() => {
                 EventDispatcher.emit('unmount-all');
                 EventDispatcher.emit('redirect', paths.feedPage);
                 // mount
@@ -161,7 +161,7 @@ class App {
                 this.menuController.mountComponent();
                 this.feedController.mountComponent();
             })
-            .catch(({ status, body }) => {
+            .catch(() => {
                 router.goToPath(paths.signinPage);
             });
     }
@@ -174,8 +174,13 @@ class App {
     private handleLogout(): void {
         EventDispatcher.emit('redirect', paths.logout);
 
-        this.userModel.logoutUser();
-        router.goToPath(paths.signinPage);
+        this.userModel.logoutUser()
+            .then(() => {
+                router.goToPath(paths.signinPage);
+            })
+            .catch(({ status, body, msg }) => {
+                console.log(status, body, msg);
+            });
     }
 
     /**
@@ -185,7 +190,7 @@ class App {
      */
     private handle404(): void {
         EventDispatcher.emit('unmount-all');
-        EventDispatcher.emit('redirect', '');
+        EventDispatcher.emit('redirect', '404');
         this.headerController.mountComponent();
         this.footerController.mountComponent();
         this.pageNotFoundController.mountComponent();
@@ -197,8 +202,8 @@ class App {
      * @return {void}
      */
     private handleProfile(): void {
-        this.userModel.isAuthantificated()
-            .then(({ status, body }) => {
+        this.userModel.authUserByCookie()
+            .then(() => {
                 EventDispatcher.emit('unmount-all');
                 EventDispatcher.emit('redirect', paths.profile);
                 // mount
@@ -207,7 +212,7 @@ class App {
                 this.profileController.mountComponent();
                 this.feedController.mountComponent();
             })
-            .catch(({ status, body }) => {
+            .catch(() => {
                 router.goToPath(paths.signinPage);
             });
     }
@@ -218,8 +223,8 @@ class App {
      * @return {void}
      */
     private handleSettings(): void {
-        this.userModel.isAuthantificated()
-            .then(({ status, body }) => {
+        this.userModel.authUserByCookie()
+            .then(() => {
                 EventDispatcher.emit('unmount-all');
                 EventDispatcher.emit('redirect', paths.profile);
                 // mount
@@ -227,14 +232,14 @@ class App {
                 this.menuController.mountComponent();
                 this.settingsController.mountComponent();
             })
-            .catch(({ status, body }) => {
+            .catch(() => {
                 router.goToPath(paths.signinPage);
             });
     }
 
     private handleRedirectToFriends(): void {
-        this.userModel.isAuthantificated()
-            .then(({ status, body }) => {
+        this.userModel.authUserByCookie()
+            .then(() => {
                 EventDispatcher.emit('unmount-all');
                 EventDispatcher.emit('redirect', paths.friends);
                 // mount
@@ -242,7 +247,7 @@ class App {
                 this.menuController.mountComponent();
                 this.friendsController.mountComponent();
             })
-            .catch(({ status, body }) => {
+            .catch(() => {
                 router.goToPath(paths.signinPage);
             });
     }

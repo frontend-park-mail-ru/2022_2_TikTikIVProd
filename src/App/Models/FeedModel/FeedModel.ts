@@ -18,7 +18,11 @@ import IModel from "../IModel/IModel"
  */
 export interface IFeedData {
     id: number;
-    author: { url: string, avatar: string, name: string };
+    author: {
+        url: string,
+        avatar: string,
+        name: string
+    };
     date: string;
     text: string;
     likes: number;
@@ -42,6 +46,7 @@ class FeedModel extends IModel {
      */
     public async getFeeds(): Promise<{ status: number, body: IFeedData[] }> {
         const response = await ajax(config.api.feed);
+        
         let responseBody: any = response.parsedBody.body.map((feedPost: any) => {
             return {
                 id: feedPost.id,
@@ -62,7 +67,7 @@ class FeedModel extends IModel {
             body: responseBody,
         };
 
-        if (response.status === config.api.image.statuses.success) {
+        if (response.status in config.api.image.statuses.success) {
             return Promise.resolve(result);
         }
         else {
