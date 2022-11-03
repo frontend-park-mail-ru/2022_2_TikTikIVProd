@@ -25,7 +25,7 @@ const REQUEST_TYPE = {
 };
 
 const config = {
-    host: 'http://localhost:8080',
+    host: 'http://89.208.197.127:8080',
     api: {
         logout: {
             url: '/logout',
