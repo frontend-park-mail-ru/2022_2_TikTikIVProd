@@ -44,6 +44,7 @@ export interface IConfig {
 const config : IConfig = {
     host: 'http://89.208.197.127:8080',
     // host: 'http://127.0.0.1:8080',
+    // host: 'http://localhost:8080',
     api: {
         logout: {
             url: '/logout',

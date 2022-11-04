@@ -9,7 +9,7 @@
 /coverage
 
 # production
-/build
+# /build
 
 # misc
 .DS_Store
@@ -26,5 +26,4 @@ yarn-error.log*
 # App
 .vscode
 node_modules/
-build/
 docs/
