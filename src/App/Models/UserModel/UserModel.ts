@@ -44,7 +44,7 @@ export interface IUserSignUp { // ПО api
  * @property {string}  email - Email для входа в аккаунт
  */
 export interface IUser { // ПО api !!!!Без пароля 
-    id: string;
+    id: number;
     first_name: string;
     last_name: string;
     nick_name: string;
@@ -76,8 +76,15 @@ class UserModel extends IModel {
      * @return {Promise}
      */
     public async logoutUser() {
-        ajax(config.api.logout);
+        const response = await ajax(config.api.logout);
+        // console.log(
+        // 'logout (succ, failed else err)',
+        // response.status.toString() in config.api.logout.statuses.success,
+        // response.status.toString() in config.api.logout.statuses.failure
+        // );
+
         this.currentUser = null;
+        EventDispatcher.emit('user-changed', this.currentUser);
     }
 
     /**
@@ -86,31 +93,49 @@ class UserModel extends IModel {
      * @param {IUserSignIn} authData - Данные авторизации
      * @return {Promise}
      */
-    public async authUser(authData: IUserSignIn) {
+    public async signInUser(authData: IUserSignIn) {
         const response = await ajax(config.api.signin, JSON.stringify(authData));
-        this.currentUser = {
-            first_name: response.parsedBody.body.first_name,
-            last_name: response.parsedBody.body.last_name,
-            nick_name: response.parsedBody.body.nick_name,
-            email: response.parsedBody.body.email,
-            id: response.parsedBody.body.id,
-            avatar: '../src/img/test_avatar.jpg',
-        };
 
-        EventDispatcher.emit('user-changed', this.currentUser);
+        if (response.status.toString() in config.api.signin.statuses.success) {
+            // console.log('signin success');
 
-        if (response.status === config.api.signin.statuses.success) {
+            this.currentUser = {
+                first_name: response.parsedBody.body.first_name,
+                last_name: response.parsedBody.body.last_name,
+                nick_name: response.parsedBody.body.nick_name,
+                email: response.parsedBody.body.email,
+                id: response.parsedBody.body.id,
+                avatar: '../src/img/test_avatar.jpg',
+            };
+            EventDispatcher.emit('user-changed', this.currentUser);
+            const keyStatus = response.status.toString() as keyof typeof config.api.signin.statuses.success;
             return Promise.resolve({
                 status: response.status,
+                msg: config.api.signin.statuses.success[keyStatus],
                 body: response.parsedBody
             })
         }
-        else {
+
+
+        this.currentUser = null;
+        EventDispatcher.emit('user-changed', this.currentUser);
+
+        if (response.status.toString() in config.api.signin.statuses.failure) {
+            // console.log('signin fail');
+
+            const keyStatus = response.status.toString() as keyof typeof config.api.signin.statuses.failure;
             return Promise.reject({
                 status: response.status,
+                msg: config.api.signin.statuses.failure[keyStatus],
                 body: response.parsedBody
             })
         }
+        // console.log('signin err');
+
+        return Promise.reject({
+            status: response.status,
+            msg: 'Неожиданная ошибка',
+        });
     }
 
     /**
@@ -119,31 +144,48 @@ class UserModel extends IModel {
      * @param {IUserSignUp} user - Данные регистрации
      * @return {Promise}
      */
-    public async registerUser(user: IUserSignUp) {
+    public async signUpUser(user: IUserSignUp) {
         const response = await ajax(config.api.signup, JSON.stringify(user));
-        this.currentUser = {
-            first_name: response.parsedBody.body.first_name,
-            last_name: response.parsedBody.body.last_name,
-            nick_name: response.parsedBody.body.nick_name,
-            email: response.parsedBody.body.email,
-            id: response.parsedBody.body.id,
-            avatar: '../src/img/test_avatar.jpg',
-        };
 
-        EventDispatcher.emit('user-changed', this.currentUser);
+        if (response.status.toString() in config.api.signup.statuses.success) {
+            // console.log('signup success');
 
-        if (response.status === config.api.signup.statuses.success) {
+            this.currentUser = {
+                first_name: response.parsedBody.body.first_name,
+                last_name: response.parsedBody.body.last_name,
+                nick_name: response.parsedBody.body.nick_name,
+                email: response.parsedBody.body.email,
+                id: response.parsedBody.body.id,
+                avatar: '../src/img/test_avatar.jpg',
+            };
+            EventDispatcher.emit('user-changed', this.currentUser);
+            const keyStatus = response.status.toString() as keyof typeof config.api.signup.statuses.success;
             return Promise.resolve({
                 status: response.status,
+                msg: config.api.signup.statuses.success[keyStatus],
                 body: response.parsedBody
             })
         }
-        else {
+
+        this.currentUser = null;
+        EventDispatcher.emit('user-changed', this.currentUser);
+
+        if (response.status.toString() in config.api.signup.statuses.failure) {
+            // console.log('signup fail');
+
+            const keyStatus = response.status.toString() as keyof typeof config.api.signup.statuses.failure;
             return Promise.reject({
                 status: response.status,
+                msg: config.api.signup.statuses.failure[keyStatus],
                 body: response.parsedBody
             })
         }
+        // console.log('signup err');
+
+        return Promise.reject({
+            status: response.status,
+            msg: 'Неожиданная ошибка',
+        });
     }
 
     /**
@@ -159,31 +201,48 @@ class UserModel extends IModel {
      * @async
      * @return {Promise}
      */
-    public async isAuthantificated() {
+    public async authUserByCookie() {
         const response = await ajax(config.api.auth);
-        this.currentUser = {
-            first_name: response.parsedBody.body.first_name,
-            last_name: response.parsedBody.body.last_name,
-            nick_name: response.parsedBody.body.nick_name,
-            email: response.parsedBody.body.email,
-            id: response.parsedBody.body.id,
-            avatar: '../src/img/test_avatar.jpg',
-        };
 
-        EventDispatcher.emit('user-changed', this.currentUser);
+        if (response.status.toString() in config.api.auth.statuses.success) {
+            // console.log('auth success');
 
-        if (response.status === config.api.auth.statuses.success) {
+            this.currentUser = {
+                first_name: response.parsedBody.body.first_name,
+                last_name: response.parsedBody.body.last_name,
+                nick_name: response.parsedBody.body.nick_name,
+                email: response.parsedBody.body.email,
+                id: response.parsedBody.body.id,
+                avatar: '../src/img/test_avatar.jpg',
+            };
+            EventDispatcher.emit('user-changed', this.currentUser);
+            const keyStatus = response.status.toString() as keyof typeof config.api.auth.statuses.success;
             return Promise.resolve({
                 status: response.status,
+                msg: config.api.auth.statuses.success[keyStatus],
                 body: response.parsedBody
             })
         }
-        else {
+
+        this.currentUser = null;
+        EventDispatcher.emit('user-changed', this.currentUser);
+
+        if (response.status.toString() in config.api.auth.statuses.failure) {
+            // console.log('auth fail');
+
+            const keyStatus = response.status.toString() as keyof typeof config.api.auth.statuses.failure;
             return Promise.reject({
                 status: response.status,
+                msg: config.api.auth.statuses.failure[keyStatus],
                 body: response.parsedBody
             })
         }
+
+        // console.log('auth err');
+        return Promise.reject({
+            status: response.status,
+            msg: 'Неожиданная ошибка',
+        });
     }
 }
 

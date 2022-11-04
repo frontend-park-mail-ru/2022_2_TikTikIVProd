@@ -11,10 +11,10 @@
  */
 
 const failureDefaultStatuses: { [index: string]: string } = {
-    400: 'Неверный запрос',
-    401: 'No Cookie',
-    405: 'Неверный HTTP метод',
-    500: 'Ошибка сервера',
+    '400': 'Неверный запрос',
+    '401': 'No Cookie',
+    '405': 'Неверный HTTP метод',
+    '500': 'Ошибка сервера',
 }
 
 const REQUEST_TYPE = {
@@ -26,6 +26,7 @@ const REQUEST_TYPE = {
 
 const config = {
     host: 'http://89.208.197.127:8080',
+    // host: 'http://127.0.0.1:8080',
     // host: 'http://localhost:8080',
     api: {
         logout: {
@@ -36,7 +37,7 @@ const config = {
             },
             statuses: {
                 success: {
-                    200: 'Успешно',
+                    '204': 'Успешно',
                 },
                 failure: failureDefaultStatuses,
             },
@@ -48,7 +49,9 @@ const config = {
                 'Content-Type': 'application/json;charset=utf-8',
             },
             statuses: {
-                success: 200, // 'Успешно',
+                success: {
+                    '200': 'Успешно'
+                },
                 failure: failureDefaultStatuses,
             },
         },
@@ -59,13 +62,15 @@ const config = {
                 'Content-Type': 'application/json;charset=utf-8',
             },
             statuses: {
-                success: 200, //'Авторизация успешна'
+                success: {
+                    '200': 'Авторизация успешна'
+                },
                 failure: {
-                    400: 400,   //'Неверный запрос',
-                    401: 400,   //'Неверный пароль',
-                    404: 400,   //'Пользователь не найден',
-                    405: 400,   //'Неверный HTTP метод',
-                    500: 400,   //'Ошибка сервера',
+                    '400': 'Неверный запрос',
+                    '401': 'Неверный пароль',
+                    '404': 'Пользователь не найден',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
                 },
             },
         },
@@ -76,12 +81,14 @@ const config = {
                 'Content-Type': 'application/json;charset=utf-8',
             },
             statuses: {
-                success: 201, // 'Регистрация успешна',
+                success: {
+                    '201': 'Регистрация успешна'
+                },
                 failure: {
-                    400: 'Неверный запрос',
-                    405: 'Неверный HTTP метод',
-                    409: 'Данный email занят',
-                    500: 'Ошибка сервера',
+                    '400': 'Неверный запрос',
+                    '405': 'Неверный HTTP метод',
+                    '409': 'Данный email занят',
+                    '500': 'Ошибка сервера',
                 },
             },
         },
@@ -92,11 +99,13 @@ const config = {
                 'Content-Type': 'application/json;charset=utf-8',
             },
             statuses: {
-                success: 201, // 'Получение постов успешно',
+                success: {
+                    '201': 'Получение постов успешно'
+                },
                 failure: {
-                    400: 'Неверный запрос',
-                    405: 'Неверный HTTP метод',
-                    500: 'Ошибка сервера',
+                    '400': 'Неверный запрос',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
                 },
             },
         },
@@ -107,11 +116,46 @@ const config = {
                 'Content-Type': 'application/json;charset=utf-8',
             },
             statuses: {
-                success: 200, // 'Получение изображения успешно',
+                success: {
+                    '200': 'Получение изображения успешно'
+                },
                 failure: {
-                    400: 'Неверный запрос',
-                    405: 'Неверный HTTP метод',
-                    500: 'Ошибка сервера',
+                    '400': 'Неверный запрос',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+        post: {
+            url: '/post/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Получение поста успешно'
+                },
+                failure: {
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+
+        },
+        postCreate: {
+            url: '/post/create',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Получение постов успешно'
+                },
+                failure: {
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
                 },
             },
         },

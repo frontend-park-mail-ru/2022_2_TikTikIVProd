@@ -26,7 +26,7 @@ export async function ajax(params: IParamsProps, body?: string) {
     try {
         parsedBody = await response.json();
     } catch (error) {
-        console.log(error);
+        // console.log('Ajax: parsing json error: ', error);
         parsedBody = {};
     }
 

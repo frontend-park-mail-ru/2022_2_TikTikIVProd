@@ -59,24 +59,10 @@ class SignupController extends IController<SignupView, UserModel> {
                 password: data.get('password') || ''
             };
 
-            // console.log(user);
-
-            this.model.registerUser(user).then(({ status, body }) => {
-                // console.log(status, body);
+            this.model.signUpUser(user).then(({ status, body, msg }) => {
                 router.goToPath(paths.feedPage);
-            }).catch(({ status, body }) => {
-                // console.log(status, body);
-                switch (status) {
-                    // case 401:
-                    // case 404: {
-                    //     this.view.showError('email', { isValid: false, msg: 'Неверный email или пароль' });
-                    //     break;
-                    // }
-                    default: {
-                        this.view.showErrorMsg('email', `Ошибка сервера ${status}`);
-                        break;
-                    }
-                }
+            }).catch(({ status, body, msg }) => {
+                this.view.showErrorMsg('email', msg);
             });
         }
     }
@@ -91,7 +77,7 @@ class SignupController extends IController<SignupView, UserModel> {
         let isValidData = true;
 
         data.forEach((value, id) => {
-            let ref : string | undefined = undefined;
+            let ref: string | undefined = undefined;
             if (id === 'repeat_password') {
                 ref = data.get('password');
             }
