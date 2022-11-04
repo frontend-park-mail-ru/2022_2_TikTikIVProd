@@ -21,9 +21,9 @@ import { IUser } from "../../Models/UserModel/UserModel"
  * @property {HTMLElement} parent - Родительский элемент для ленты новостей
  */
 class FeedView extends IView {
-    private navbar : HTMLElement;
-    private cards : HTMLElement;
-    private overlay : HTMLElement;
+    private navbar: HTMLElement;
+    private cards: HTMLElement;
+    private overlay: HTMLElement;
 
     constructor(parent: HTMLElement) {
         super(parent, feedTemplate({}), '.feed');
@@ -31,7 +31,7 @@ class FeedView extends IView {
         this.cards = <HTMLElement>this.element.querySelector('.feed__cards');
         this.overlay = <HTMLElement>this.element.querySelector('.feed__overlay');
     }
-         
+
     /**
      * Функция добавления обработчика события пролистывания страницы
      * @param  {any} listener - Callback функция для события
@@ -61,12 +61,15 @@ class FeedView extends IView {
 
     // Specific
 
+    public clearFeed(): void {
+        this.cards.innerHTML = '';
+    }
 
-    public getNewPostData() : {text: string} {
+    public getNewPostData(): { text: string } {
         const form = this.overlay.querySelector('.feed__card__new');
-        if(!form){
+        if (!form) {
             console.log('Post create no form');
-            return {text: ''};
+            return { text: '' };
         }
 
         const textar = <HTMLTextAreaElement>form.querySelector('.feed__card__new__content__text')
@@ -74,21 +77,21 @@ class FeedView extends IView {
 
         const text = textar.value;
         console.log(text);
-        
-        
-        return {text: text};
+
+
+        return { text: text };
     }
-    
+
     /**
      * Функция отрисовки контента (постов) в ленте новостей
      * @param  {IFeedData[]} data - Данные о постах
      * @return {void}
      */
-    public pushContentToFeed(data: IFeedData[]) : void {
+    public pushContentToFeed(data: IFeedData[], currentUserId: number): void {
         // TODO
         const parser = new DOMParser();
         data.forEach((item) => {
-            const card = feedCardTemplate(item);
+            const card = feedCardTemplate(currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true }));
             const c = parser.parseFromString(card, 'text/html').querySelector('.feed__card');
             if (c === null) {
                 return;
@@ -97,22 +100,30 @@ class FeedView extends IView {
         });
     }
 
-    public showFeedCardCreation(user : IUser) : void { 
+    public deletePost(id : number | string) : void {
+        const feed = this.cards.querySelector(`[id="${id}"]`);
+        if(!feed){
+            return;
+        }
+        this.cards.removeChild(feed);
+    }
+
+    public showFeedCardCreation(user: IUser): void {
         this.overlay.innerHTML = feedCardCreationTemplate(user);
         this.overlay.style.visibility = 'visible';
     }
 
-    public hideFeedCardCreation() : void {
+    public hideFeedCardCreation(): void {
         this.overlay.innerHTML = '';
         this.overlay.style.visibility = 'collapse';
     }
 
-    public showNavbar() : void {
+    public showNavbar(): void {
         this.navbar.innerHTML = feedNavbarTemplate({});
         this.navbar.style.visibility = 'visible';
     }
 
-    public hideNavbar() : void{
+    public hideNavbar(): void {
         this.navbar.style.visibility = 'collapse';
     }
 }

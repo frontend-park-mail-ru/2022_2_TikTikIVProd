@@ -1,4 +1,4 @@
-import FeedModel, { IFeedData, IFeedNewPost } from "../../Models/FeedModel/FeedModel";
+import FeedModel, { FeedType, IFeedData, IFeedNewPost } from "../../Models/FeedModel/FeedModel";
 import { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
@@ -6,38 +6,31 @@ import throttle from "../../Utils/Throttle/Throttle";
 import FeedView from "../../Views/FeedView/FeedView";
 import IController from "../IController/IController";
 
-/**
- * Котроллер для ленты
- * @category Feed
- * @extends {IController<FeedView, FeedModel>}
- * @param  {FeedView} view - Объект вида компонента лента
- * @param  {FeedModel} model - Объект модели ленты
- */
 class FeedController extends IController<FeedView, FeedModel> {
-    /**
-     * Текущая страница в ленте
-     * (приватное поле класса)
-     * @property {number} currentPage
-     */
-    private currentPage: number;
+    private user: IUser; // TODO delete
 
-    private user: IUser;
+    private currentFeedType: FeedType;
+    private currentPage: number;
 
     constructor(view: FeedView, model: FeedModel) {
         super(view, model);
+
+        this.currentPage = 0;
+        this.currentFeedType = {};
+
         this.view.bindScrollEvent(throttle(this.handleScroll.bind(this), 250));
         this.view.bindResizeEvent(throttle(this.handleScroll.bind(this), 250));
         this.view.bindClickEvent(this.handleClickOnFeed.bind(this));
 
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
-        EventDispatcher.subscribe('user-changed', this.setCurrentUser.bind(this));
-        // TODO убрать
-        this.getContent().then((content) => {
-            this.view.pushContentToFeed(content);
-        });
+        EventDispatcher.subscribe('user-changed', this.setCurrentUser.bind(this)); // TODO delete
     }
 
-    private openFeedCard(id : string) : void {
+    private openFeedCard(id: string | undefined): void {
+        if(!id) {
+            return;
+        }
+
         this.model.getPost(id);
     }
 
@@ -64,7 +57,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             id: 0,
             // TODO
         };
-
+        
         this.model.sendNewFeed(data)
             .then(() => {
                 this.view.hideFeedCardCreation();
@@ -74,13 +67,67 @@ class FeedController extends IController<FeedView, FeedModel> {
                 // TODO Post create show err to view
             });
     }
-    // TODO доавить контент если фид пуст
+
+    public changeFeedType(feedType: FeedType): void {
+        if (JSON.stringify(this.currentFeedType) === JSON.stringify(feedType)) {
+            return;
+        }
+
+        this.currentFeedType = feedType;
+        this.currentPage = 0;
+        this.view.clearFeed();
+    }
+
+    private deletePost(id : number | string) : void { 
+        this.model.deletePost(id)
+        .then(()=>{
+            this.view.deletePost(id);
+        })
+        .catch(({status, body}) => {
+            console.log('Delete post err: ', status, body);
+        })
+    } 
+
+    // TODO DELETE
     public setCurrentUser(user: IUser) {
         this.user = user;
     }
 
+    private async getFeeds(): Promise<{page: number, feeds: IFeedData[], currentUserId: number}> {
+        let data: IFeedData[] = [];
+        let page = 0;
+
+        await this.model.getFeeds(this.currentFeedType)
+            .then(({ feeds }) => {
+                data = feeds;
+                page = 1; // TODO
+            })
+            .catch(({ status, body }) => {
+                const item: IFeedData = {
+                    id: 321,
+                    author: { id: 0, url: '/testuser123', avatar: '../src/img/test_avatar.jpg', name: 'Неопознанный Капи' },
+                    date: 'В будующем...',
+                    text: 'Ваши друзья еще не выложили свой первый пост. Напомните им об этом!',
+                    likes: 100500,
+                    attachments: [{ src: '../src/img/test_post_img.jpg' }],
+                }
+                data.push(item);
+                page = 1; // TODO
+            });
+
+
+        return {page: page, feeds: data, currentUserId: this.user.id};
+    }
+
     public mountComponent(): void {
         if (!this.isMounted) {
+            if (this.currentPage == 0) {
+                this.getFeeds()
+                    .then(({page, feeds, currentUserId}) => {
+                        this.view.pushContentToFeed(feeds, currentUserId);
+                        this.currentPage = page;
+                    });
+            }
             this.view.show();
             this.view.showNavbar();
             this.isMounted = true;
@@ -113,7 +160,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             }
 
             const action = (<HTMLElement>target.closest("[data-action]"))?.dataset['action'];
-            const cardId = (<HTMLElement>target.closest("[data-id]"))?.dataset['id'];
+            const cardId = (<HTMLElement>target.closest(".feed__card"))?.id;
             const data = (<HTMLElement>target.closest("[data-data]"))?.dataset['data'];
 
             if (!action) {
@@ -147,16 +194,16 @@ class FeedController extends IController<FeedView, FeedModel> {
                     return;
                 }
 
+                case 'delete': {
+                    this.deletePost(cardId);
+                    return;
+                }
+
                 case 'profile_page': {
                     if (data) {
                         console.log('profile ', data);
                         router.goToPath(data);
                     }
-                    return;
-                }
-
-                case 'delete': {
-                    console.log('delete');
                     return;
                 }
 
@@ -187,11 +234,12 @@ class FeedController extends IController<FeedView, FeedModel> {
      */
     private handleScroll(): void {
         console.log('scroll');
-
         if (this.isMounted) {
             if (this.checkFeedEnd()) {
-                this.getContent().then((content) => {
-                    this.view.pushContentToFeed(content);
+                this.getFeeds(this.currentFeedType)
+                .then(({page, feeds}) => {
+                    this.view.pushContentToFeed(feeds);
+                    this.currentPage = page; // TODO
                 });
             }
         }
@@ -202,30 +250,7 @@ class FeedController extends IController<FeedView, FeedModel> {
      * (приватный метод класса)
      * @returns {IFeedData[]}
      */
-    private async getContent(): Promise<IFeedData[]> {
-        // TODO model
-        const data: IFeedData[] = [];
 
-        const model: FeedModel = new FeedModel();
-        await model.getFeeds().then(({ status, body }) => {
-            body.forEach((elem) => {
-                data.push(elem);
-            })
-        }).catch(({ status, body }) => {
-            const item: IFeedData = {
-                id: 321,
-                author: { url: '/testuser123', avatar: '../src/img/test_avatar.jpg', name: 'Неопознанный Капи' },
-                date: 'В будующем...',
-                text: 'Ваши друзья еще не выложили свой первый пост. Напомните им об этом!',
-                likes: 100500,
-                attachments: [{ src: '../src/img/test_post_img.jpg' }],
-            }
-            data.push(item);
-        });
-
-
-        return data;
-    }
 
     /**
      * Функция проверяют долистал ли пользователь ленту до низа
@@ -233,25 +258,12 @@ class FeedController extends IController<FeedView, FeedModel> {
      * @returns {boolean}
      */
     private checkFeedEnd(): boolean {
-        // Нам потребуется знать высоту документа и высоту экрана:
         const height = document.body.offsetHeight;
         const screenHeight = window.innerHeight;
-
-        // Они могут отличаться: если на странице много контента,
-        // высота документа будет больше высоты экрана (отсюда и скролл).
-
-        // Записываем, сколько пикселей пользователь уже проскроллил:
         const scrolled = window.scrollY;
-
-        // Обозначим порог, по приближении к которому
-        // будем вызывать какое-то действие.
-        // В нашем случае — четверть экрана до конца страницы:
         const threshold = height - screenHeight / 12;
-
-        // Отслеживаем, где находится низ экрана относительно страницы:
         const position = scrolled + screenHeight;
-
-        return position >= threshold;  // Если мы пересекли полосу-порог, вызываем нужное действие.
+        return position >= threshold;
     }
 }
 

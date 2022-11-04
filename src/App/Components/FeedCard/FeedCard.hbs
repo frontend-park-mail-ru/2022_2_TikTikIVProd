@@ -1,4 +1,5 @@
-<div class="feed__card" data-action="card_page" data-id="{{id}}">
+{{log this}}
+<div class="feed__card" data-action="card_page" id="{{id}}">
   <div class="feed__card__header">
     <div class="feed__card__author" data-action="profile_page" data-data="{{author.url}}">
       <img src="{{author.avatar}}" alt="" class="feed__card__author__avatar" />
@@ -7,23 +8,26 @@
         <div class="feed__card__date">{{date}}</div>
       </div>
     </div>
+    {{#if showTools}}
     <div class="feed__card__buttons">
-      <img src="../src/img/pen_icon.svg" alt="" class="feed__card__button" data-action="edit"/>
-      <img src="../src/img/trash_icon.svg" alt="" class="feed__card__button" data-action="delete"/>
+      <img src="../src/img/pen_icon.svg" alt="" class="feed__card__button" data-action="edit" />
+      <img src="../src/img/trash_icon.svg" alt="" class="feed__card__button" data-action="delete" />
     </div>
+    {{/if}}
   </div>
   <div class="feed__card__content"> {{text}}</div>
   <div class="feed__card__attachments">
     {{#each attachments as |attachment|}}
-      <img src="{{attachment}}" alt="" class="feed__card__attachments__item" />
+    <img src="{{attachment}}" alt="" class="feed__card__attachments__item" />
     {{/each}}
   </div>
   <div class="feed__card__footer">
-    <div class="feed__card__likes"><img src="../src/img/like_filled_icon.svg" alt="" class="feed__card__likes__icon">{{likes}}</div>
+    <div class="feed__card__likes"><img src="../src/img/like_filled_icon.svg" alt=""
+        class="feed__card__likes__icon">{{likes}}</div>
     <div class="feed__card__buttons">
-      <img src="../src/img/like_icon.svg" alt="" class="feed__card__button" data-action="like"/>
-      <img src="../src/img/comment_icon.svg" alt="" class="feed__card__button" data-action="comment"/>
-      <img src="../src/img/link_icon.svg" alt="" class="feed__card__button" data-action="share"/>
+      <img src="../src/img/like_icon.svg" alt="" class="feed__card__button" data-action="like" />
+      <img src="../src/img/comment_icon.svg" alt="" class="feed__card__button" data-action="comment" />
+      <img src="../src/img/link_icon.svg" alt="" class="feed__card__button" data-action="share" />
     </div>
   </div>
 </div>

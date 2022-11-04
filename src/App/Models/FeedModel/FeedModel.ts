@@ -1,6 +1,24 @@
-import config from "../../Configs/Config";
+import config, { IApiItem } from "../../Configs/Config";
 import ajax from "../../Ajax/Ajax";
 import IModel from "../IModel/IModel"
+
+export type UserFeed = {
+    userId: number,
+};
+
+function isUserFeed(object: any): object is UserFeed {
+    return 'userId' in object;
+}
+
+export type AllFeed = {
+    [Key in any]: never; // Пустой объект
+};
+
+function isAllFeed(object: any): object is AllFeed {
+    return Object.keys(object).length == 0;
+}
+
+export type FeedType = UserFeed | AllFeed;
 
 /**
  * Интерфейс данных, содержащихся в посте в ленте
@@ -21,7 +39,8 @@ export interface IFeedData {
     author: {
         url: string,
         avatar: string,
-        name: string
+        name: string,
+        id: number,
     };
     date: string;
     text: string;
@@ -51,36 +70,34 @@ class FeedModel extends IModel {
         super();
     }
 
+    public async deletePost(id : number | string) {
+        let conf = config.api.postDelete;
+        conf.url = conf.url.replace('{:id}', id.toString());
+        const response = await ajax(conf);
+        if(response.status.toString() in conf.statuses.success){
+            return Promise.resolve({status: response.status, body: response.parsedBody});
+        }
+        
+        if(response.status.toString() in conf.statuses.failure){
+            return Promise.reject({status: response.status, body: response.parsedBody});
+        }
+
+        if(response.status.toString() in conf.statuses.success){
+            return Promise.resolve({status: response.status, body: response.parsedBody});
+        }
+    }
+
     public async getPost(id: number | string) {
         let conf = config.api.post;
-        conf.url = conf.url.replace('{:id}', id.toString());        
+        conf.url = conf.url.replace('{:id}', id.toString());
         const response = await ajax(conf);
         console.log(response);
     }
 
-    public async sendNewFeed(data: IFeedNewPost) : Promise<{}>{ 
-        const response= await ajax(config.api.postCreate, JSON.stringify(data));
-
-        if(response.status.toString() in config.api.postCreate.statuses.success){
-            return Promise.resolve({});
-        }
-
-        if(response.status.toString() in config.api.postCreate.statuses.failure){
-            const keyCode = response.status.toString() as keyof typeof config.api.postCreate.statuses.failure;
-            console.log(keyCode, config.api.postCreate.statuses.failure[keyCode]);
-            return Promise.reject({});
-        }
-
-        console.log('Create post err');
-        return Promise.reject({});
-    }
-    /**
-     * Функция получения постов ленты с сервера
-     * @async
-     * @return {Promise}
-     */
-    public async getFeeds(): Promise<{ status: number, body: IFeedData[] }> {
-        const response = await ajax(config.api.feed);
+    public async getUserPosts(userId: string) {
+        let conf = config.api.userPosts;
+        conf.url = conf.url.replace("{:id}", userId);
+        const response = await ajax(conf);
 
         let responseBody: any = response.parsedBody.body.map((feedPost: any) => {
             return {
@@ -107,6 +124,66 @@ class FeedModel extends IModel {
         }
         else {
             return Promise.reject(result);
+        }
+    }
+
+    public async sendNewFeed(data: IFeedNewPost): Promise<{}> {
+        const response = await ajax(config.api.postCreate, JSON.stringify(data));
+
+        if (response.status.toString() in config.api.postCreate.statuses.success) {
+            return Promise.resolve({});
+        }
+
+        if (response.status.toString() in config.api.postCreate.statuses.failure) {
+            const keyCode = response.status.toString() as keyof typeof config.api.postCreate.statuses.failure;
+            console.log(keyCode, config.api.postCreate.statuses.failure[keyCode]);
+            return Promise.reject({});
+        }
+
+        console.log('Create post err');
+        return Promise.reject({});
+    }
+    /**
+     * Функция получения постов ленты с сервера
+     * @async
+     * @return {Promise}
+     */
+    public async getFeeds(feedType: FeedType): Promise<{ status: number, feeds: IFeedData[] }> {
+        let conf : IApiItem;
+
+        if (isUserFeed(feedType)) {
+            // console.log('Feed type is UserFeed');
+            conf = config.api.userPosts;
+            conf.url = conf.url.replace('{:id}', feedType.userId.toString());
+        } else if (isAllFeed(feedType)) {
+            // console.log('Feed type is all');
+            conf = config.api.feed;
+        } else {
+            return Promise.reject();
+        }
+
+        let response = await ajax(conf);
+        
+        if (response.status in config.api.image.statuses.success) {
+            let feeds: IFeedData[] = response.parsedBody.body.map((rawFeed: any) => {
+                return {
+                    id: rawFeed.id,
+                    author: {
+                        id: rawFeed.user_id,
+                        url: '',
+                        avatar: './src/img/avatar_pavel.jpg',
+                        name: `${rawFeed.user_last_name} ${rawFeed.user_first_name}`
+                    },
+                    date: `${new Date(rawFeed.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
+                    text: rawFeed.message,
+                    likes: 228,
+                    attachments: rawFeed.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
+                }
+            });
+            return Promise.resolve({status: response.status, feeds: feeds});
+        }
+        else {
+            return Promise.reject({status: response.status, feeds: []});
         }
     }
 }

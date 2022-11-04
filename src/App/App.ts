@@ -160,6 +160,7 @@ class App {
                 // mount
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
+                this.feedController.changeFeedType({});
                 this.feedController.mountComponent();
             })
             .catch(() => {
@@ -211,6 +212,7 @@ class App {
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
                 this.profileController.mountComponent();
+                this.feedController.changeFeedType({userId: this.userModel.getCurrentUser()?.id || 0});
                 this.feedController.mountComponent();
             })
             .catch(() => {

@@ -24,7 +24,24 @@ const REQUEST_TYPE = {
     DELETE: 'DELETE',
 };
 
-const config = {
+export interface IApiItem {
+    url: string;
+    method: string;
+    headers: {[index: string]: string};
+    statuses: {
+        success: {[index: string]: string};
+        failure: {[index: string]: string};
+    }
+}
+
+export interface IConfig {
+    host: string;
+    api: {
+        [index: string]: IApiItem;
+    }
+}
+
+const config : IConfig = {
     host: 'http://89.208.197.127:8080',
     // host: 'http://127.0.0.1:8080',
     api: {
@@ -158,6 +175,40 @@ const config = {
                 },
             },
         },
+        userPosts: {
+            url: '/users/{:id}/posts',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Получение постов успешно'
+                },
+                failure: {
+                    '404': 'Записи не найдены',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+        postDelete: {
+            url: '/post/{:id}',
+            method: REQUEST_TYPE.DELETE,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Удаление поста успешно'
+                },
+                failure: {
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
     }
 }
 
