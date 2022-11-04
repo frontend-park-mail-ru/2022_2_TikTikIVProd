@@ -1,0 +1,123 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    width: min-content;
+    height: min-content;
+    padding: 30px 50px;
+    outline: 2px solid var(--color-form-border);
+    outline-offset: -2px;
+    border-radius: 10px;
+    background-color: var(--color-form-background);
+    margin-right: 100px;
+}
+
+.form__title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: var(--color-form-title);
+}
+
+.form__footer {
+    padding-top: 20px;
+}
+
+.form__footer__link {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    text-decoration: none;
+    text-align: center;
+    color: var(--color-link-value);
+}
+
+.form__footer__link:hover {
+    text-decoration: underline var(--color-link-underline-hover);
+}
+
+.form__footer__link:active {
+    color: var(--color-link-value-pressed);
+    text-decoration: underline var(--color-limk-underline-pressed);
+}
+
+.form__input {
+    display: block;
+    padding: 10px 20px;
+    border: none;
+    outline: 2px solid var(--color-input-border);
+    outline-offset: -2px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: inherit;
+}
+
+.form__input:focus {
+    border-style: none;
+    outline-color: var(--color-input-border-focus);
+}
+
+.form__input__title {
+    color: var(--color-input-title);
+    margin-bottom: 2px;
+    font-size: 16px;
+}
+
+.form__input__error__msg{
+    color: var(--color-input-value-error);
+    font-size: 12px;
+    padding: 3px 8px 0px 8px;
+}
+
+.groupbox {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.form__button {
+    margin-top: 15px;
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    background-color: var(--color-button-background);
+    color: var(--color-button-value);
+    font-weight: bolder;
+}
+
+.form__button:hover {
+    border: none;
+    outline: none;
+    box-shadow: 0 5px 5px 1px var(--color-light-gray);
+}
+
+.form__button:focus {
+    outline: 2px solid var(--color-button-border-focus);
+    outline-offset: -2px;
+    box-shadow: 0 3px 5px 1px var(--color-lighter-gray);
+}
+
+.form__button:active {
+    outline: none;
+    border-style: none;
+    background-color: var(--color-button-background-pressed);
+}
+
+.form__input__error { 
+    color: var(--color-input-value-error);
+    outline-color: var(--color-input-border-error);
+}
+
+.form__input__error:focus { 
+    color: var(--color-input-value-error);
+    outline-color: var(--color-input-border-focus-error);
+}

@@ -1,0 +1,20 @@
+.menu__item {
+    color: #514770;
+    color: #333333;
+    display: block;
+    padding-bottom: 10px;
+    text-decoration: none;
+}
+
+.menu__item:hover {
+    background-color: rgba(0, 255, 132, 0.106);
+    border-radius: 10px;
+}
+
+.menu__logout__link {
+    color: rgba(255, 0, 0, 0.4);
+}
+
+.menu__active__link {
+    font-weight: bold;
+}
