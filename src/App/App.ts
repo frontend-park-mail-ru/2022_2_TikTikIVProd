@@ -212,7 +212,7 @@ class App {
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
                 this.profileController.mountComponent();
-                this.feedController.changeFeedType({userId: this.userModel.getCurrentUser()?.id || 0});
+                this.feedController.changeFeedType({ userId: this.userModel.getCurrentUser()?.id || 0 });
                 this.feedController.mountComponent();
             })
             .catch(() => {
@@ -253,6 +253,10 @@ class App {
             .catch(() => {
                 router.goToPath(paths.signinPage);
             });
+    }
+
+    private handleUserProfile(data: any): void {
+        console.log(data);
     }
     /**
      * Функция инициализирует базовую вёрстку страницы
@@ -325,22 +329,16 @@ class App {
      * @return {void}
      */
     private initRoutes(): void {
-        router.addPath({
-            path: paths.signinPage,
-            handler: this.handleRedirectToSignin.bind(this)
-        });
-        router.addPath({
-            path: paths.signupPage,
-            handler: this.handleRedirectToSignup.bind(this)
-        });
-        router.addPath(
-            { path: paths.feedPage, handler: this.handleRedirectToFeed.bind(this) });
-        router.addPath({ path: paths.logout, handler: this.handleLogout.bind(this) });
-        router.setDefaultHandler(this.handle404.bind(this));
-        router.addPath({ path: paths.home, handler: this.handleRedirectToFeed.bind(this) });
-        router.addPath({ path: paths.profile, handler: this.handleProfile.bind(this) });
-        router.addPath({ path: paths.settings, handler: this.handleSettings.bind(this) });
-        router.addPath({ path: paths.friends, handler: this.handleRedirectToFriends.bind(this) });
+        router.setUnknownPageHandler(this.handle404.bind(this));
+        router.addRule(paths.signinPage, this.handleRedirectToSignin.bind(this));
+        router.addRule(paths.signupPage, this.handleRedirectToSignup.bind(this));
+        router.addRule(paths.feedPage, this.handleRedirectToFeed.bind(this));
+        router.addRule(paths.logout, this.handleLogout.bind(this));
+        router.addRule(paths.home, this.handleRedirectToFeed.bind(this));
+        router.addRule(paths.profile, this.handleProfile.bind(this));
+        router.addRule(paths.settings, this.handleSettings.bind(this));
+        router.addRule(paths.friends, this.handleRedirectToFriends.bind(this));
+        router.addRule(paths.userProfie, this.handleUserProfile.bind(this));
     }
 
     /**

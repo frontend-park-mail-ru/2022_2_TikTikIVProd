@@ -209,7 +209,24 @@ const config : IConfig = {
                 },
             },
         },
-
+        userProfile: {
+            url: '/users/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Профиль получен'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '404': 'Не найден',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        }
     }
 }
 
