@@ -188,6 +188,28 @@ class UserModel extends IModel {
         });
     }
 
+    public async getUser(id : number | string) {
+        let conf = config.api.userProfile;
+        conf.url = conf.url.replace('{:id}', id.toString());
+        
+        const response = await ajax(conf);
+        
+        if(response.status.toString() in config.api.userProfile.statuses.success)
+        {
+            const user: IUser = {
+                first_name: response.parsedBody.body.first_name,
+                last_name: response.parsedBody.body.last_name,
+                nick_name: response.parsedBody.body.nick_name,
+                email: response.parsedBody.body.email,
+                id: response.parsedBody.body.id,
+                avatar: '../src/img/test_avatar.jpg',
+            };
+            return Promise.resolve(user);
+        }
+
+        return Promise.reject({status: response.status, body: response.parsedBody});
+    }
+
     /**
      * Функция возвращает данные авторизованного пользователя
      * @returns {IUser|null}

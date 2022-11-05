@@ -54,6 +54,10 @@ class Router {
         }
     }
 
+    public showUnknownPage() : void {
+        this.unknownPageHandler();
+    }
+
     public setUnknownPageHandler(handler: Function) {
         this.unknownPageHandler = handler;
     }

@@ -1,7 +1,7 @@
 import IView from "../IView/IView"
 import profileViewConfig from "./ProfileViewConfig";
 
-import profileTemplate from  "./ProfileView.hbs"
+import profileTemplate from "./ProfileView.hbs"
 import "./ProfileView.css"
 
 import profileUserTemplate from "../../Components/ProfileUser/ProfileUser.hbs"
@@ -13,8 +13,8 @@ import "../../Components/ProfileUser/ProfileUser.css"
  * @extends {IView}
  * @property {HTMLElement} parent - Родительский элемент для профиля
  */
-class ProfileView extends IView{
-    constructor(parent : HTMLElement) {
+class ProfileView extends IView {
+    constructor(parent: HTMLElement) {
         super(parent, profileTemplate(profileViewConfig), '.profile');
     }
 
@@ -23,7 +23,7 @@ class ProfileView extends IView{
      * @param  {any} listener - Callback функция для события
      * @return {void}
      */
-    public bindClick(callback: Function): void { 
+    public bindClick(callback: Function): void {
         this.element.addEventListener('click', callback.bind(this));
     }
 
@@ -34,8 +34,13 @@ class ProfileView extends IView{
      * @return {void}
      */
     public show(opts?: any): void {
+        // console.log('opts ', opts);
+
         const userField = this.element.querySelector('.profile__user');
-        if(!userField){ return; }
+        if (!userField) {
+            // console.log('err');
+            return;
+        }
         userField.innerHTML = profileUserTemplate(opts);
         this.parent.appendChild(this.element);
     }

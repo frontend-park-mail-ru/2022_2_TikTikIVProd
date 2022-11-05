@@ -203,7 +203,7 @@ class App {
      * (приватное поле класса)
      * @return {void}
      */
-    private handleProfile(): void {
+    private handleProfile(data: any): void {
         this.userModel.authUserByCookie()
             .then(() => {
                 EventDispatcher.emit('unmount-all');
@@ -211,9 +211,17 @@ class App {
                 // mount
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
-                this.profileController.mountComponent();
-                this.feedController.changeFeedType({ userId: this.userModel.getCurrentUser()?.id || 0 });
-                this.feedController.mountComponent();
+
+                // this.profileController.changeUser(data);
+                this.profileController.mountComponent(data).then(() => {
+                    this.feedController.changeFeedType({ userId: this.userModel.getCurrentUser()?.id || 0 });
+                    this.feedController.mountComponent();
+                })
+                .catch( () => {
+                    console.log('4040404040404004');
+                    
+                    router.showUnknownPage();
+                }) 
             })
             .catch(() => {
                 router.goToPath(paths.signinPage);
@@ -255,9 +263,6 @@ class App {
             });
     }
 
-    private handleUserProfile(data: any): void {
-        console.log(data);
-    }
     /**
      * Функция инициализирует базовую вёрстку страницы
      * (приватное поле класса)
@@ -338,7 +343,7 @@ class App {
         router.addRule(paths.profile, this.handleProfile.bind(this));
         router.addRule(paths.settings, this.handleSettings.bind(this));
         router.addRule(paths.friends, this.handleRedirectToFriends.bind(this));
-        router.addRule(paths.userProfie, this.handleUserProfile.bind(this));
+        router.addRule(paths.userProfie, this.handleProfile.bind(this));
     }
 
     /**
