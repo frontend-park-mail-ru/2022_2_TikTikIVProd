@@ -1,0 +1,36 @@
+.messenger {
+    /* display: flex; */
+    /* flex-direction: column; */
+    gap: 10px;
+    /* flex: 0 1 100%; */
+    /* width: 100%; */
+    /* min-height: 100%; */
+    /* max-height: 100%; */
+    background-color: white;
+    border-radius: 10px;
+}
+
+.messenger__navbar{
+    height: 40px;
+    width: auto;
+}
+
+.messenger__content{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    gap: 5px;
+
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 100%;
+
+    border-top: 2px solid #18a158;
+    margin-top: 2px;
+    border-bottom: 2px solid #18a158;
+    margin-bottom: 2px;
+}
+
+.messenger__footer{
+    width: auto;
+    display: flex;
+}

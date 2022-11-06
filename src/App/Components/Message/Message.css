@@ -1,0 +1,39 @@
+.message {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    gap: 8px;
+    padding: 0px 15px;
+}
+
+.message__author {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    width: fit-content;
+}
+
+.message__autor__avatar {
+    border-radius: 50%;
+    height: 24px;
+    object-fit: cover;
+}
+
+.message__container {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    gap: 5px;
+}
+
+.message__container__date {
+    color: gray;
+    font-size: 13px;
+}
+
+.message__container__text {
+    color: black;
+    font-size: 14px;
+}
+
+.message__container__attachments {}

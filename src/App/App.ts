@@ -29,6 +29,7 @@ import FooterController from "./Controllers/FooterController/FooterController";
 
 import UserModel from "./Models/UserModel/UserModel";
 import FeedModel from "./Models/FeedModel/FeedModel";
+import MessengerModel from "./Models/MessengerModel/MessengerModel";
 
 import ProfileController from "./Controllers/ProfileController/ProfileController";
 import ProfileView from "./Views/ProfileView/ProfileView";
@@ -36,11 +37,13 @@ import ProfileView from "./Views/ProfileView/ProfileView";
 import SettingsController from "./Controllers/SettingsController/SettingsController";
 import SettingsView from "./Views/SettingsView/SettingsView";
 
-// TODO delete 
+
 import FriendsView from "./Views/FriendsView/FriendsView";
 import FriendsController from "./Controllers/FriendsController/FriendsController";
-import config from "./Configs/Config";
-//
+
+import MessengerController from "./Controllers/MessengerController/MessengerController";
+import MessengerView from "./Views/MessengerView/MessengerView";
+
 
 /**
  * Приложение Write&Send
@@ -58,10 +61,12 @@ class App {
     private profileView: ProfileView;
     private settingsView: SettingsView;
     private friendsView: FriendsView;
+    private messengerView: MessengerView;
 
     // Models
     private userModel: UserModel;
     private feedModel: FeedModel;
+    private messengerModel: MessengerModel;
 
     // Controllers
     private signinController: SigninController;
@@ -74,6 +79,7 @@ class App {
     private profileController: ProfileController;
     private settingsController: SettingsController;
     private friendsController: FriendsController;
+    private messengerController: MessengerController;
 
     // Elements
     private root: HTMLElement;
@@ -263,6 +269,22 @@ class App {
             });
     }
 
+
+    private handleMessenger(): void {
+        this.userModel.authUserByCookie()
+            .then(({ status, body }) => {
+                EventDispatcher.emit('unmount-all');
+                EventDispatcher.emit('redirect', paths.messenger);
+                // mount
+                this.headerController.mountComponent();
+                this.menuController.mountComponent();
+                this.messengerController.mountComponent();
+            })
+            .catch(({ status, body }) => {
+                router.goToPath(paths.signinPage);
+            });
+    }
+
     /**
      * Функция инициализирует базовую вёрстку страницы
      * (приватное поле класса)
@@ -294,6 +316,8 @@ class App {
         this.profileView = new ProfileView(this.content);
         this.settingsView = new SettingsView(this.content);
         this.friendsView = new FriendsView(this.content);
+        this.messengerView = new MessengerView(this.content);
+    
     }
 
     /**
@@ -304,6 +328,8 @@ class App {
     private initModels(): void {
         this.userModel = new UserModel();
         this.feedModel = new FeedModel();
+        this.messengerModel = new MessengerModel();
+   
     }
 
     /**
@@ -326,6 +352,8 @@ class App {
         this.profileController = new ProfileController(this.profileView, this.userModel);
         this.settingsController = new SettingsController(this.settingsView, this.userModel);
         this.friendsController = new FriendsController(this.friendsView);
+        this.messengerController = new MessengerController(this.messengerView, this.messengerModel);
+    
     }
 
     /**
@@ -344,6 +372,8 @@ class App {
         router.addRule(paths.settings, this.handleSettings.bind(this));
         router.addRule(paths.friends, this.handleRedirectToFriends.bind(this));
         router.addRule(paths.userProfie, this.handleProfile.bind(this));
+        router.addRule(paths.messenger, this.handleMessenger.bind(this));
+   
     }
 
     /**

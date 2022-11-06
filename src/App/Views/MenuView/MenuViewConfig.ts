@@ -18,11 +18,11 @@ const menuConfig = {
             text: 'Профиль',
             icon: '../src/img/profile_icon.svg',
         },
-        // {
-        //     href: paths.messenger,
-        //     text: 'Сообщения',
-        //     icon: '../src/img/messenger_icon.svg',
-        // },
+        {
+            href: paths.messenger,
+            text: 'Сообщения',
+            icon: '../src/img/messenger_icon.svg',
+        },
         {
             href: paths.friends,
             text: 'Друзья',
