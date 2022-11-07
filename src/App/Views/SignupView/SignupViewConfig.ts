@@ -68,19 +68,6 @@ const signupViewConfig = {
             id: 'link-signin',
             text: 'Уже есть аккаунт?',
         },
-        {
-            href: '#',
-            id: 'link-reset-password',
-            text: 'Забыли пароль?'
-        }, {
-            href: '#',
-            id: 'link-reset-password',
-            text: 'Забыли пароль?'
-        }, {
-            href: '#',
-            id: 'link-reset-password',
-            text: 'Забыли пароль?'
-        }
     ],
 };
 
