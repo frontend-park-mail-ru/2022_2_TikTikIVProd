@@ -1,0 +1,140 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: auto;
+  height: min-content;
+
+  padding: 8% 15%;
+
+  outline: 2px solid var(--color-form-border);
+  outline-offset: -2px;
+  border-radius: 10px;
+
+  background-color: var(--color-form-background);
+
+  &__title {
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+    word-wrap: break-word;
+    color: var(--color-form-title);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__button {
+    cursor: pointer;
+
+    width: min-content;
+    height: min-content;
+
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    padding: 8px 15px;
+
+    background-color: var(--color-button-background);
+
+    color: var(--color-button-value);
+    text-overflow: ellipsis;
+    font-weight: bolder;
+    font-size: 16px;
+  }
+
+  &__button:hover {
+    border: none;
+    outline: none;
+    box-shadow: 0 5px 5px 1px var(--color-light-gray);
+  }
+
+  &__button:focus {
+    outline: 2px solid var(--color-button-border-focus);
+    outline-offset: -2px;
+    box-shadow: 0 3px 5px 1px var(--color-lighter-gray);
+  }
+
+  &__button:active {
+    outline: none;
+    border-style: none;
+    background-color: var(--color-button-background-pressed);
+  }
+
+  &__link {
+    text-decoration: none;
+    color: var(--color-link-value);
+    font-size: 16px;
+  }
+
+  &__link:hover {
+    text-decoration: underline var(--color-link-underline-hover);
+  }
+
+  &__link:active {
+    color: var(--color-link-value-pressed);
+    text-decoration: underline var(--color-limk-underline-pressed);
+  }
+
+}
+
+.input-with-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+
+  &__title {
+    color: var(--color-input-title);
+    font-size: 16px;
+  }
+
+
+  &__input {
+    padding: 10px 20px;
+    border: none;
+    outline: 2px solid var(--color-input-border);
+    outline-offset: -2px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: inherit;
+  }
+
+  &__input:focus {
+    border-style: none;
+    outline-color: var(--color-input-border-focus);
+  }
+
+  &__error-msg {
+    color: var(--color-input-value-error);
+    font-size: 16px;
+    display: none;
+  }
+
+  &--error {
+    input {
+      color: var(--color-input-value-error);
+      outline-color: var(--color-input-border-error);
+    }
+
+    .input-with-title__error-msg {
+      display: block;
+    }
+  }
+
+  &--error:focus {
+    color: var(--color-input-value-error);
+    outline-color: var(--color-input-border-focus-error);
+  }
+}

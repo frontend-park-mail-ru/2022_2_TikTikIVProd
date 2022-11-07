@@ -1,0 +1,95 @@
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+
+  background-color: var(--color-form-background);
+  border-radius: 10px;
+  padding: 20px 25px;
+
+  &__button {
+    cursor: pointer;
+    height: min-content;
+    width: min-content;
+
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    padding: 8px 10px;
+    background-color: var(--color-button-background);
+
+    color: var(--color-button-value);
+    font-weight: bolder;
+  }
+
+
+  &__button:hover {
+    border: none;
+    outline: none;
+    box-shadow: 0 5px 5px 1px var(--color-light-gray);
+  }
+
+  &__button:focus {
+    outline: 2px solid var(--color-button-border-focus);
+    outline-offset: -2px;
+    box-shadow: 0 3px 5px 1px var(--color-lighter-gray);
+  }
+
+  &__button:active {
+    outline: none;
+    border-style: none;
+    background-color: var(--color-button-background-pressed);
+  }
+
+  &__button--small {}
+}
+
+.settings-input-with-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+
+  &__title {
+    color: var(--color-input-title);
+    font-size: 16px;
+  }
+
+  &__input {
+    padding: 10px 20px;
+    border: none;
+    outline: 2px solid var(--color-input-border);
+    outline-offset: -2px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: inherit;
+  }
+
+  &__input:focus {
+    border-style: none;
+    outline-color: var(--color-input-border-focus);
+  }
+
+  &__error-msg {
+    color: var(--color-input-value-error);
+    font-size: 16px;
+    display: none;
+  }
+
+  &--error {
+    input {
+      color: var(--color-input-value-error);
+      outline-color: var(--color-input-border-error);
+    }
+
+    .settings-input-with-title__error-msg {
+      display: block;
+    }
+  }
+
+  &--error:focus {
+    color: var(--color-input-value-error);
+    outline-color: var(--color-input-border-focus-error);
+  }
+}

@@ -1,0 +1,40 @@
+.message {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 5px;
+        padding: 2px 0;
+    }
+
+    &__date {
+        color: gray;
+        font-size: 13px;
+    }
+
+    &__text {
+        color: black;
+        font-size: 14px;
+    }
+
+    &__attachments {}
+}
+
+.author-message {
+    display: flex;
+    gap: 5px;
+    width: fit-content;
+
+    &__avatar {
+        border-radius: 50%;
+        height: 30px;
+        object-fit: cover;
+        background-color: gray;
+        outline: 1px solid darken($color: gray, $amount: 10);
+        outline-offset: -1px;
+    }
+}

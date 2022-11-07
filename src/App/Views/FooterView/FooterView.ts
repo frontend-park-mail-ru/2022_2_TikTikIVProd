@@ -1,5 +1,5 @@
 import footerTemplate from "./FooterView.hbs"
-import "./FooterView.css"
+import "./FooterView.scss"
 
 import IView from "../IView/IView";
 import footerViewConfig from "./FooterViewConfig";

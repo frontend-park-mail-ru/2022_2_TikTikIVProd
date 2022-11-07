@@ -1,6 +1,6 @@
 import baseTemplate from "./Components/Base/Base.hbs";
-import "./App.css"
-import "./Components/Base/Base.css"
+import "./App.scss"
+import "./Components/Base/Base.scss"
 
 import router from "./Router/Router";
 import paths from "./Router/RouterPaths";
@@ -295,9 +295,9 @@ class App {
         this.root = <HTMLElement>document.body.querySelector('#root');
         this.header = <HTMLElement>document.body.querySelector('#header');
         this.footer = <HTMLElement>document.body.querySelector('#footer');
-        this.leftSide = <HTMLElement>document.body.querySelector('.left-menu');
-        this.rightSide = <HTMLElement>document.body.querySelector('.right-menu');
-        this.content = <HTMLElement>document.body.querySelector('.main-content');
+        this.leftSide = <HTMLElement>document.body.querySelector('#left-menu');
+        this.rightSide = <HTMLElement>document.body.querySelector('#right-menu');
+        this.content = <HTMLElement>document.body.querySelector('#main');
     }
 
     /**

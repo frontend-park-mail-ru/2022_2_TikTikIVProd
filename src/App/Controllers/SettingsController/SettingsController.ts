@@ -45,11 +45,13 @@ class SettingsController extends IController<SettingsView, UserModel> {
         e.preventDefault();
         if (this.isMounted) {
             const target = <HTMLElement>e.target;
+            
             if ((<HTMLButtonElement>target).type !== 'submit') {
                 return;
             }
 
             const data = this.view.getDataFromGroup(target);
+            
             const isValidData = this.validateData(data);
             // TODO update in model
         }

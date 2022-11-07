@@ -1,6 +1,6 @@
 import IView from "../IView/IView"
 import pageNotFoundTemplate from  "./PageNotFoundView.hbs"
-import "./PageNotFoundView.css"
+import "./PageNotFoundView.scss"
 
 /**
  * Отображение для левого меню приложения
@@ -10,7 +10,7 @@ import "./PageNotFoundView.css"
  */
 class PageNotFoundView extends IView{
     constructor(parent : HTMLElement) {
-        super(parent, pageNotFoundTemplate({}), '.page__not_found');
+        super(parent, pageNotFoundTemplate({}), '.page-not-found');
     }
 }
 

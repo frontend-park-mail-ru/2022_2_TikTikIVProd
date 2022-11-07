@@ -1,14 +1,14 @@
 import feedCardTemplate from "../../Components/FeedCard/FeedCard.hbs"
-import "../../Components/FeedCard/FeedCard.css"
+import "../../Components/FeedCard/FeedCard.scss"
 
 import feedCardCreationTemplate from "../../Components/FeedCardCreate/FeedCardCreate.hbs"
-import "../../Components/FeedCardCreate/FeedCardCreate.css"
+import "../../Components/FeedCardCreate/FeedCardCreate.scss"
 
 import feedNavbarTemplate from "../../Components/FeedNavbar/FeedNavbar.hbs"
-import "../../Components/FeedNavbar/FeedNavbar.css"
+import "../../Components/FeedNavbar/FeedNavbar.scss"
 
 import feedTemplate from "./FeedView.hbs"
-import "./FeedView.css"
+import "./FeedView.scss"
 
 import { IFeedData } from "../../Models/FeedModel/FeedModel";
 import IView from "../IView/IView";
@@ -38,7 +38,7 @@ class FeedView extends IView {
      * @returns {void}
      */
     public bindScrollEvent(listener: any): void {
-        window.addEventListener('scroll', listener.bind(this));
+        this.cards.addEventListener('scroll', listener.bind(this));
     }
 
     /**
@@ -47,7 +47,7 @@ class FeedView extends IView {
      * @returns {void}
      */
     public bindResizeEvent(listener: any): void {
-        window.addEventListener('resize', listener.bind(this));
+        this.cards.addEventListener('resize', listener.bind(this));
     }
 
     /**
@@ -66,13 +66,13 @@ class FeedView extends IView {
     }
 
     public getNewPostData(): { text: string } {
-        const form = this.overlay.querySelector('.feed__card__new');
+        const form = this.overlay.querySelector('.feed-card-create');
         if (!form) {
             console.log('Post create no form');
             return { text: '' };
         }
 
-        const textar = <HTMLTextAreaElement>form.querySelector('.feed__card__new__content__text')
+        const textar = <HTMLTextAreaElement>form.querySelector('.feed-card-create__text')
         console.log(textar);
 
         const text = textar.value;
@@ -92,7 +92,7 @@ class FeedView extends IView {
         const parser = new DOMParser();
         data.forEach((item) => {
             const card = feedCardTemplate(currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true }));
-            const c = parser.parseFromString(card, 'text/html').querySelector('.feed__card');
+            const c = parser.parseFromString(card, 'text/html').querySelector('.feed-card');
             if (c === null) {
                 return;
             }
@@ -102,6 +102,8 @@ class FeedView extends IView {
 
     public deletePost(id : number | string) : void {
         const feed = this.cards.querySelector(`[id="${id}"]`);
+        console.log(feed);
+        
         if(!feed){
             return;
         }

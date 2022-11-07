@@ -1,0 +1,45 @@
+.footer {
+
+  &__container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    color: var(--color-footer-text);
+    font-size: 12px;
+  }
+
+  &__logo{
+    max-width: 100%;
+    max-height: 30px;
+    object-fit: cover;
+  }
+
+  &__contacts{
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__company-name{
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+.footer-contact{
+  display: flex;
+  align-items: center;
+
+  &__icon{
+    object-fit: cover;
+    height: 16px;
+    width: auto;
+    padding: 4px;
+    outline: 1px solid var(--color-footer-text);
+    outline-offset: -1px;
+    border-radius: 8px;
+  }
+}

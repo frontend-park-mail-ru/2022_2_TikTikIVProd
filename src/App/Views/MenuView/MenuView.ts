@@ -1,5 +1,5 @@
 import menuTemplate from "./MenuView.hbs"
-import "./MenuView.css"
+import "./MenuView.scss"
 
 import IView from "../IView/IView";
 import menuConfig from "./MenuViewConfig"
@@ -18,7 +18,7 @@ import menuConfig from "./MenuViewConfig"
     private currentActiveItem: string | null;
 
     constructor(parent: HTMLElement) {
-        super(parent, menuTemplate(menuConfig), '.menu-container');
+        super(parent, menuTemplate(menuConfig), '.menu-left');
     }
 
     /**
@@ -27,9 +27,9 @@ import menuConfig from "./MenuViewConfig"
      */
     public changeActiveMenuItem(href: string) {
         // console.log(href);
-        this.element.querySelector(`[href="${this.currentActiveItem}"]`)?.classList.remove('menu__item--active');
+        this.element.querySelector(`[href="${this.currentActiveItem}"]`)?.classList.remove('menu-left-item--active');
         this.currentActiveItem = href;
-        this.element.querySelector(`[href="${href}"]`)?.classList.add('menu__item--active');
+        this.element.querySelector(`[href="${href}"]`)?.classList.add('menu-left-item--active');
     }
 
     /**

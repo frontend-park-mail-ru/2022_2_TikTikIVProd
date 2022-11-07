@@ -1,5 +1,5 @@
 import headerTemplate from "./HeaderView.hbs"
-import "./HeaderView.css"
+import "./HeaderView.scss"
 
 import IView from "../IView/IView";
 import headerItems from "./HeaderViewConfig";
@@ -12,7 +12,7 @@ import headerItems from "./HeaderViewConfig";
  */
  class HeaderView extends IView {
     constructor(parent: HTMLElement) {
-        super(parent, headerTemplate({}), '.header__container');
+        super(parent, headerTemplate({}), '.header-container');
     }
 
     /**

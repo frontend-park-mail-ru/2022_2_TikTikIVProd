@@ -1,8 +1,8 @@
 import headerButtonTemplate from "../../Components/HeaderButton/HeaderButton.hbs";
-import "../../Components/HeaderButton/HeaderButton.css"
+import "../../Components/HeaderButton/HeaderButton.scss"
 
 import headerProfileTemplate from "../../Components/HeaderProfile/HeaderProfile.hbs";
-import "../../Components/HeaderProfile/HeaderProfile.css"
+import "../../Components/HeaderProfile/HeaderProfile.scss"
 
 /**
  * Конфигурация элемента в хэдере приложения

@@ -2,10 +2,10 @@ import IView from "../IView/IView"
 import profileViewConfig from "./ProfileViewConfig";
 
 import profileTemplate from "./ProfileView.hbs"
-import "./ProfileView.css"
+import "./ProfileView.scss"
 
 import profileUserTemplate from "../../Components/ProfileUser/ProfileUser.hbs"
-import "../../Components/ProfileUser/ProfileUser.css"
+import "../../Components/ProfileUser/ProfileUser.scss"
 
 /**
  * Отображение для профиля пользователя

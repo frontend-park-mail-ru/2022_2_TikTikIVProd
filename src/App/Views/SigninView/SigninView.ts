@@ -1,5 +1,8 @@
 import formTemplate from "../../Components/Form/Form.hbs";
-import "../../Components/Form/Form.css"
+import "../../Components/Form/Form.scss"
+
+import siginTemplate from "./SigninView.hbs"
+import "./SigninView.scss"
 
 import IView from "../IView/IView";
 import signinViewConfig from "./SigninViewConfig";
@@ -13,7 +16,8 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
  */
 class SigninView extends IView {
     constructor(parent: HTMLElement) {
-        super(parent, formTemplate(signinViewConfig), '#' + signinViewConfig.formId);
+        super(parent, siginTemplate({}), '.signin-container');
+        this.element.innerHTML = formTemplate(signinViewConfig);
     }
 
     /**
@@ -38,7 +42,6 @@ class SigninView extends IView {
     public bindSubmit(listener: any): void {
         const submit = this.element.querySelector('#' + signinViewConfig.submit.id);
         if (submit === null) {
-            // console.log('No submit btn signin view');
             return;
         }
 
@@ -58,7 +61,7 @@ class SigninView extends IView {
         });
         return data;
     }
-    
+
     /**
      * Функция отображения сообщения об ошибке в поле формы
      * @param  {string} id - Идентификатор поля
@@ -66,14 +69,12 @@ class SigninView extends IView {
      * @return {void}
      */
     public showErrorMsg(id: string, msg: string): void {
-        const inpt = <HTMLElement>this.element.querySelector('#' + id);
-        const msgField = <HTMLElement>this.element.querySelector('#' + id + '-msg');
-        if (!inpt || !msgField) {
+        const inpt = <HTMLElement>this.element.querySelector('#' + id)?.closest('.input-with-title');
+        if (!inpt) {
             return;
         }
-        inpt.classList.add('invalid');
-        msgField.innerText = msg;
-        msgField.style.visibility = 'visible';
+        inpt.classList.add('input-with-title--error');
+        (<HTMLElement>inpt.querySelector('.input-with-title__error-msg')).innerHTML = msg;
     }
 
     /**
@@ -82,14 +83,11 @@ class SigninView extends IView {
      * @return {void}
      */
     public hideErrorMsg(id: string): void {
-        const inpt = <HTMLElement>this.element.querySelector('#' + id);
-        const msgField = <HTMLElement>this.element.querySelector('#' + id + '-msg');
-        if (!inpt || !msgField) {
+        const inpt = <HTMLElement>this.element.querySelector('#' + id)?.closest('.input-with-title');
+        if (!inpt) {
             return;
         }
-        inpt.classList.remove('invalid');
-        msgField.innerText = '';
-        msgField.style.visibility = 'hidden';
+        inpt.classList.remove('input-with-title--error');
     }
 }
 

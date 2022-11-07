@@ -1,17 +1,20 @@
-<div class="feed__card__new">
-    <div class="feed__card__new__user">
-        <img src="{{avatar}}" alt="" class="feed__card__new__user__avatar">
+<div class="feed-card-create">
+    <div class="feed-card-create-author">
+        <img src="{{avatar}}" alt="" class="feed-card-create-author__avatar">
     </div>
-    <div class="feed__card__new__content">
-        <textarea class="feed__card__new__content__text"></textarea>
-        <div class="feed__card__new__content__attachments"></div>
-        <div class="feed__card__new__content__submit" data-action="sumbit_new_post">
+    <div class="feed-card-create__content">
+        <textarea class="feed-card-create__text"></textarea>
+        <div class="feed-card-create__attachments"></div>
+        <div class="feed-card-create__button feed-card-create__button--submit" data-action="sumbit_new_post">
             Опубликовать
         </div>
     </div>
-    <div class="feed__card__new__tools">
-        {{!-- <img src="../src/img/camera_icon.svg" alt="" class="feed__card__new__tools__button" data-action="add_attachment"> --}}
-        {{!-- <img src="../src/img/image_icon.svg" alt="" class="feed__card__new__tools__button" data-action=""> --}}
-        {{!-- <img src="../src/img/smile_icon.svg" alt="" class="feed__card__new__tools__button" data-action="add_smile"> --}}
+    <div class="feed-card-create__tools">
+        <img src="../src/img/camera_icon.svg" alt="" class="feed-card-create__button feed-card-create__button--tool"
+            data-action="add_attachment">
+        <img src="../src/img/image_icon.svg" alt="" class="feed-card-create__button feed-card-create__button--tool"
+            data-action="">
+        <img src="../src/img/smile_icon.svg" alt="" class="feed-card-create__button feed-card-create__button--tool"
+            data-action="add_smile">
     </div>
 </div>

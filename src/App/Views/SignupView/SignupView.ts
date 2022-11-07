@@ -1,5 +1,8 @@
 import formTemplate from "../../Components/Form/Form.hbs";
-import "../../Components/Form/Form.css"
+import "../../Components/Form/Form.scss"
+
+import sigupTemplate from "./SignupView.hbs"
+import "./SignupView.scss"
 
 import IView from "../IView/IView";
 import signupViewConfig from "./SignupViewConfig";
@@ -13,7 +16,8 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
  */
  class SignupView extends IView {
     constructor(parent: HTMLElement) {
-        super(parent, formTemplate(signupViewConfig), '#' + signupViewConfig.formId);
+        super(parent, sigupTemplate({}), '.signup-container');
+        this.element.innerHTML = formTemplate(signupViewConfig);
     }
 
     /**

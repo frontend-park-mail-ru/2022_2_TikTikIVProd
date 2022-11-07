@@ -1,0 +1,44 @@
+$scrollbar-padding: 10px;
+$scrollbar-width: 8px;
+
+.messenger {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: min-content auto min-content;
+
+    margin: 15px 20px;
+
+    background-color: white;
+    border-radius: 10px;
+
+    &__navbar {
+        padding: 5px 10px;
+        box-shadow: 0px 5px 10px rgb(0 0 0 / 15%);
+    }
+
+    &__content {
+        max-height: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        gap: 5px;
+        padding: 5px 10px;
+    }
+
+    &__content::-webkit-scrollbar {
+        width: calc(2 * $scrollbar-padding + $scrollbar-width);
+    }
+
+    &__content::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0);
+    }
+
+    &__content::-webkit-scrollbar-thumb {
+        border: $scrollbar-padding solid white;
+        border-radius: 9999px;
+        background-color: lightgray;
+    }
+
+    &__footer {}
+}

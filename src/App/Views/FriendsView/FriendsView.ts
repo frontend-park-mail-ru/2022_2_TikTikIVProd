@@ -1,10 +1,11 @@
 import IView from "../IView/IView";
 
 import friendsViewTemplate from "./FriendsView.hbs"
-import "./FriendsView.css"
+import "./FriendsView.scss"
 
 import friendTemplate from "../../Components/Friend/Friend.hbs"
-import "../../Components/Friend/Friend.css"
+import "../../Components/Friend/Friend.scss"
+
 import { IUser } from "../../Models/UserModel/UserModel";
 
 
@@ -13,12 +14,12 @@ class FriendsView extends IView {
     private friendList: HTMLElement;
     constructor(parent: HTMLElement) {
         super(parent, friendsViewTemplate({}), '.friends');
-        this.friendList = <HTMLElement>this.element.querySelector('.friends__list');
+        this.friendList = <HTMLElement>this.element.querySelector('.friends__content');
     }
 
     public show(opts?: any): void {
         const user : IUser = {
-            id:'000',
+            id: 0,
             first_name: 'Valera',
             last_name: 'Valeriev',
             nick_name: 'wdawd',

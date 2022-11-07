@@ -79,6 +79,8 @@ class FeedController extends IController<FeedView, FeedModel> {
     }
 
     private deletePost(id : number | string) : void { 
+        console.log(id);
+        
         this.model.deletePost(id)
         .then(()=>{
             this.view.deletePost(id);
@@ -160,7 +162,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             }
 
             const action = (<HTMLElement>target.closest("[data-action]"))?.dataset['action'];
-            const cardId = (<HTMLElement>target.closest(".feed__card"))?.id;
+            const cardId = (<HTMLElement>target.closest(".feed-card"))?.id;
             const data = (<HTMLElement>target.closest("[data-data]"))?.dataset['data'];
 
             if (!action) {
@@ -195,6 +197,8 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'delete': {
+                    console.log('click delete post');
+                    
                     this.deletePost(cardId);
                     return;
                 }

@@ -2,10 +2,10 @@ import IView from "../IView/IView"
 import settingsViewConfig from "./SettingsViewConfig";
 
 import settingsViewTemplate from "./SettingsView.hbs"
-import "./SettingsView.css"
+import "./SettingsView.scss"
 
 import settingsFormTemplate from "../../Components/SettingsForm/SettingsForm.hbs"
-import "../../Components/SettingsForm/SettingsForm.css"
+import "../../Components/SettingsForm/SettingsForm.scss"
 
 /**
  * Отображение для настроек пользователя
@@ -15,7 +15,7 @@ import "../../Components/SettingsForm/SettingsForm.css"
  */
 class SettingsView extends IView{
     constructor(parent : HTMLElement) {
-        super(parent, settingsViewTemplate({}), '.settings__container');
+        super(parent, settingsViewTemplate({}), '.settings');
     }
     
     /**
@@ -48,7 +48,7 @@ class SettingsView extends IView{
      */
     public getDataFromGroup(child: HTMLElement): Map<string, string> { 
         const data = new Map();
-        child.closest('.group')?.querySelectorAll('input').forEach((item) =>{
+        child.closest('.settings-group')?.querySelectorAll('input').forEach((item) =>{
             data.set(item.id, item.value);
         });
         return data;
@@ -61,14 +61,13 @@ class SettingsView extends IView{
      * @return {void}
      */
     public showErrorMsg(id: string, msg: string) : void {
-        const inpt = <HTMLElement>this.element.querySelector('#'+id);
-        const msgField = <HTMLElement>this.element.querySelector('#'+id+'-msg');
-        if(!inpt || !msgField){
+
+        const inpt = <HTMLElement>this.element.querySelector('#' + id)?.closest('.settings-input-with-title');
+        if (!inpt) {
             return;
         }
-        inpt.classList.add('invalid');
-        msgField.innerText = msg;
-        msgField.style.visibility = 'visible';
+        inpt.classList.add('settings-input-with-title--error');
+        (<HTMLElement>inpt.querySelector('.settings-input-with-title__error-msg')).innerHTML = msg;
     }
 
     /**
@@ -77,14 +76,11 @@ class SettingsView extends IView{
      * @return {void}
      */
     public hideErrorMsg(id: string) : void {
-        const inpt = <HTMLElement>this.element.querySelector('#'+id);
-        const msgField = <HTMLElement>this.element.querySelector('#'+id+'-msg');
-        if(!inpt || !msgField){
+        const inpt = <HTMLElement>this.element.querySelector('#' + id)?.closest('.settings-input-with-title');
+        if (!inpt) {
             return;
         }
-        inpt.classList.remove('invalid');
-        msgField.innerText = '';
-        msgField.style.visibility = 'hidden';
+        inpt.classList.remove('settings-input-with-title--error');
     }
 }
 
