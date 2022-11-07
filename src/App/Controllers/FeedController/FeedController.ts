@@ -2,6 +2,7 @@ import FeedModel, { FeedType, IFeedData, IFeedNewPost } from "../../Models/FeedM
 import { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
+import { checkScrollEnd } from "../../Utils/Scrollbar/CheckPosition/CheckPosition";
 import throttle from "../../Utils/Throttle/Throttle";
 import FeedView from "../../Views/FeedView/FeedView";
 import IController from "../IController/IController";
@@ -27,7 +28,7 @@ class FeedController extends IController<FeedView, FeedModel> {
     }
 
     private openFeedCard(id: string | undefined): void {
-        if(!id) {
+        if (!id) {
             return;
         }
 
@@ -57,7 +58,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             id: 0,
             // TODO
         };
-        
+
         this.model.sendNewFeed(data)
             .then(() => {
                 this.view.hideFeedCardCreation();
@@ -78,24 +79,24 @@ class FeedController extends IController<FeedView, FeedModel> {
         this.view.clearFeed();
     }
 
-    private deletePost(id : number | string) : void { 
+    private deletePost(id: number | string): void {
         console.log(id);
-        
+
         this.model.deletePost(id)
-        .then(()=>{
-            this.view.deletePost(id);
-        })
-        .catch(({status, body}) => {
-            console.log('Delete post err: ', status, body);
-        })
-    } 
+            .then(() => {
+                this.view.deletePost(id);
+            })
+            .catch(({ status, body }) => {
+                console.log('Delete post err: ', status, body);
+            })
+    }
 
     // TODO DELETE
     public setCurrentUser(user: IUser) {
         this.user = user;
     }
 
-    private async getFeeds(): Promise<{page: number, feeds: IFeedData[], currentUserId: number}> {
+    private async getFeeds(): Promise<{ page: number, feeds: IFeedData[], currentUserId: number }> {
         let data: IFeedData[] = [];
         let page = 0;
 
@@ -118,14 +119,14 @@ class FeedController extends IController<FeedView, FeedModel> {
             });
 
 
-        return {page: page, feeds: data, currentUserId: this.user.id};
+        return { page: page, feeds: data, currentUserId: this.user.id };
     }
 
     public mountComponent(): void {
         if (!this.isMounted) {
             if (this.currentPage == 0) {
                 this.getFeeds()
-                    .then(({page, feeds, currentUserId}) => {
+                    .then(({ page, feeds, currentUserId }) => {
                         this.view.pushContentToFeed(feeds, currentUserId);
                         this.currentPage = page;
                     });
@@ -198,7 +199,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                 case 'delete': {
                     console.log('click delete post');
-                    
+
                     this.deletePost(cardId);
                     return;
                 }
@@ -236,15 +237,15 @@ class FeedController extends IController<FeedView, FeedModel> {
      * (приватный метод класса)
      * @returns {void}
      */
-    private handleScroll(): void {
-        console.log('scroll');
+    private handleScroll(e: Event): void {
         if (this.isMounted) {
-            if (this.checkFeedEnd()) {
-                this.getFeeds(this.currentFeedType)
-                .then(({page, feeds}) => {
-                    this.view.pushContentToFeed(feeds);
-                    this.currentPage = page; // TODO
-                });
+            const target = <HTMLElement>e.target;
+            if (checkScrollEnd(target, 2)) {
+                this.getFeeds()
+                    .then(({ page, feeds }) => {
+                        this.view.pushContentToFeed(feeds, this.user.id);
+                        this.currentPage = page; // TODO
+                    });
             }
         }
     }
@@ -254,21 +255,6 @@ class FeedController extends IController<FeedView, FeedModel> {
      * (приватный метод класса)
      * @returns {IFeedData[]}
      */
-
-
-    /**
-     * Функция проверяют долистал ли пользователь ленту до низа
-     * (приватный метод класса)
-     * @returns {boolean}
-     */
-    private checkFeedEnd(): boolean {
-        const height = document.body.offsetHeight;
-        const screenHeight = window.innerHeight;
-        const scrolled = window.scrollY;
-        const threshold = height - screenHeight / 12;
-        const position = scrolled + screenHeight;
-        return position >= threshold;
-    }
 }
 
 export default FeedController;
