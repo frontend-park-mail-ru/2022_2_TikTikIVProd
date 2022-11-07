@@ -17,7 +17,19 @@ class HeaderController extends IController<HeaderView, null> {
         super(view, null);
         this.view.bindClickEvent(this.handleRedirect.bind(this));
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
-        EventDispatcher.subscribe('user-changed', (user : IUser) => this.view.changeHeaderItem('profile', user));
+        EventDispatcher.subscribe('user-changed', (user : IUser) => {
+            if(user){
+               this.view.changeHeaderItem('profile', user);
+            }
+        });
+
+        EventDispatcher.subscribe('redirect-signin', () => {
+            this.view.changeHeaderItem('signupButton');
+        });
+
+        EventDispatcher.subscribe('redirect-signup', () => {
+            this.view.changeHeaderItem('signinButton');
+        });
     }
 
     /**
