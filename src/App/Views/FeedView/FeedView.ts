@@ -65,6 +65,21 @@ class FeedView extends IView {
         this.cards.innerHTML = '';
     }
 
+
+    public getEditedPostData(): { id: string | undefined, text: string | undefined } {
+
+        const form = this.overlay.querySelector('.feed-card-create');
+        if (!form) {
+            console.log('Post create no form');
+            return { id: undefined, text: undefined };
+        }
+
+        const id = form?.id;
+        const text = (<HTMLTextAreaElement>form.querySelector('.feed-card-create__text')).value;
+
+        return {id: id, text: text};
+    }
+
     public getNewPostData(): { text: string } {
         const form = this.overlay.querySelector('.feed-card-create');
         if (!form) {
@@ -91,30 +106,30 @@ class FeedView extends IView {
         // TODO
         // const parser = new DOMParser();
         console.log(data);
-        
+
         data.forEach((item) => {
             const card = feedCardTemplate(currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true }));
             // const c = parser.parseFromString(card, 'text/html').querySelector('.feed-card');
             // if (c === null) {
-                // return;
+            // return;
             // }
             // this.cards.appendChild(c);
             this.cards.innerHTML += card;
         });
     }
 
-    public deletePost(id : number | string) : void {
+    public deletePost(id: number | string): void {
         const feed = this.cards.querySelector(`[id="${id}"]`);
         console.log(feed);
-        
-        if(!feed){
+
+        if (!feed) {
             return;
         }
         this.cards.removeChild(feed);
     }
 
-    public showFeedCardCreation(user: IUser): void {
-        this.overlay.innerHTML = feedCardCreationTemplate(user);
+    public showFeedCardCreation(user: IUser, exsData?: IFeedData): void {
+        this.overlay.innerHTML = feedCardCreationTemplate({ user: user, data: exsData });
         this.overlay.style.visibility = 'visible';
     }
 

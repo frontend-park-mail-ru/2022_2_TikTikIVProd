@@ -99,7 +99,28 @@ class FeedModel extends IModel {
         let conf = Object.assign({}, config.api.post);
         conf.url = conf.url.replace('{:id}', id.toString());
         const response = await ajax(conf);
+
+        if (response.status.toString() in conf.statuses.success) {
+            const feedPost = response.parsedBody.body;
+            const feed: IFeedData = {
+                id: feedPost.id,
+                author: {
+                    url: '',
+                    avatar: './src/img/avatar_pavel.jpg',
+                    first_name: feedPost.user_first_name,
+                    last_name: feedPost.user_last_name,
+                    id: feedPost.user_id,
+                },
+                date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
+                text: feedPost.message,
+                likes: 228,
+                attachments: feedPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
+            }
+
+            return Promise.resolve(feed);
+        }
         console.log(response);
+        return Promise.reject();
     }
 
     public async getUserPosts(userId: string) {
@@ -134,6 +155,23 @@ class FeedModel extends IModel {
         else {
             return Promise.reject(result);
         }
+    }
+
+    public async sendEditedFeed(data: IFeedNewPost) {
+        const response = await ajax(config.api.postEdit, JSON.stringify(data));
+
+        if (response.status.toString() in config.api.postCreate.statuses.success) {
+            return Promise.resolve({});
+        }
+
+        if (response.status.toString() in config.api.postCreate.statuses.failure) {
+            const keyCode = response.status.toString() as keyof typeof config.api.postCreate.statuses.failure;
+            console.log(keyCode, config.api.postCreate.statuses.failure[keyCode]);
+            return Promise.reject({});
+        }
+
+        console.log('Create post err');
+        return Promise.reject({});
     }
 
     public async sendNewFeed(data: IFeedNewPost): Promise<{}> {

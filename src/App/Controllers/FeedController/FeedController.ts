@@ -14,7 +14,7 @@ class FeedController extends IController<FeedView, FeedModel> {
     private currentPage: number;
 
     // NEW!!!!!
-    private feedType : IFeedType;
+    private feedType: IFeedType;
     //
 
     constructor(view: FeedView, model: FeedModel) {
@@ -36,17 +36,17 @@ class FeedController extends IController<FeedView, FeedModel> {
     }
 
 
-    public setFeedContent(feedType : IFeedType) {
-        if(JSON.stringify(this.feedType) === JSON.stringify(feedType)){
+    public setFeedContent(feedType: IFeedType) {
+        if (JSON.stringify(this.feedType) === JSON.stringify(feedType)) {
             // НЕ поменялся тип фида;
             console.log('feed type no changes');
-            
+
             return;
         }
 
-        this.feedType = feedType;   
+        this.feedType = feedType;
         this.view.clearFeed();
-        this.currentPage = 0;     
+        this.currentPage = 0;
     }
 
     private openFeedCard(id: string | undefined): void {
@@ -87,6 +87,37 @@ class FeedController extends IController<FeedView, FeedModel> {
             })
             .catch(() => {
                 console.log('Post create show err to view');
+                // TODO Post create show err to view
+            });
+    }
+
+    private submitEditedPost(): void {
+        console.log('submit edited post');
+
+        const content = this.view.getEditedPostData();
+        if (!content.id || !content.text || content.text.length < 1) {
+            console.log('Post create empty form');
+            return;
+        }
+
+        const data: IFeedNewPost = {
+            id: Number(content.id), // TODO errors
+            message: content.text,
+
+            images: [], // TODO
+            // TODO  delete this shit
+            user_id: this.user.id,
+            user_first_name: this.user.first_name,
+            user_last_name: this.user.last_name,
+            create_date: '2022-08-15T00:00:00Z',
+        };
+
+        this.model.sendEditedFeed(data)
+            .then(() => {
+                this.view.hideFeedCardCreation();
+            })
+            .catch(() => {
+                console.log('Post edit show err to view');
                 // TODO Post create show err to view
             });
     }
@@ -148,7 +179,7 @@ class FeedController extends IController<FeedView, FeedModel> {
         if (!this.isMounted) {
             if (this.currentPage == 0) {
                 console.log('Feed is empty');
-                
+
                 this.getFeeds()
                     .then(({ page, feeds, currentUserId }) => {
                         this.view.pushContentToFeed(feeds, currentUserId);
@@ -196,6 +227,10 @@ class FeedController extends IController<FeedView, FeedModel> {
             }
 
             switch (action) {
+                case 'sumbit_edited_post': {
+                    this.submitEditedPost();
+                    return;
+                }
                 case 'sumbit_new_post': {
                     this.submitNewPost();
                     return;
@@ -218,6 +253,18 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                 case 'edit': {
                     console.log('edit');
+                    if (!cardId) {
+                        console.log('Edit feed: null cardID');
+                        return;
+                    }
+
+                    this.model.getPost(cardId)
+                        .then((feed) => {
+                            this.view.showFeedCardCreation(this.user, feed);
+                        })
+                        .catch(() => {
+                            console.log('edit open, err');
+                        });
                     return;
                 }
 
@@ -230,12 +277,12 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                 case 'profile_page': {
                     if (data) {
-        console.log(' T0 ', data);
+                        console.log(' T0 ', data);
 
-                        
+
                         // TODO убрать отсюда
                         console.log('Conf 0: ', config.api.userProfile);
-                        
+
                         let url = config.api.userProfile.url;
                         url = url.replace('{:id}', data.toString());
                         console.log('Conf 0: ', config.api.userProfile);
@@ -258,7 +305,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 default: {
-                    console.log('action unknown');
+                    console.log('action unknown', action);
                     return;
                 }
             }

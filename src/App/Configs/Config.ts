@@ -176,6 +176,26 @@ const config: IConfig = {
                 },
             },
         },
+
+        postEdit: {
+            url: '/post/edit',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Обновление поста успешно'
+                },
+                failure: {
+                    '401': 'no cookie',
+                    '403': 'no csrf',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
         userPosts: {
             url: '/users/{:id}/posts',
             method: REQUEST_TYPE.GET,
