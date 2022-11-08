@@ -376,7 +376,7 @@ class App {
             new PageNotFoundController(this.pageNotFoundView);
         this.profileController = new ProfileController(this.profileView, this.userModel);
         this.settingsController = new SettingsController(this.settingsView, this.userModel);
-        this.friendsController = new FriendsController(this.friendsView);
+        this.friendsController = new FriendsController(this.friendsView, this.userModel);
         this.messengerController = new MessengerController(this.messengerView, this.messengerModel);
 
     }
@@ -398,7 +398,6 @@ class App {
         router.addRule(paths.friends, this.handleRedirectToFriends.bind(this));
         router.addRule(paths.userProfie, this.handleProfile.bind(this));
         router.addRule(paths.messenger, this.handleMessenger.bind(this));
-
     }
 
     /**

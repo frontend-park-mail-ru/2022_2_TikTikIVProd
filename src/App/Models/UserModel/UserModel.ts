@@ -188,14 +188,13 @@ class UserModel extends IModel {
         });
     }
 
-    public async getUser(id : number | string) {
+    public async getUser(id: number | string) {
         let conf = Object.assign({}, config.api.userProfile);
         conf.url = conf.url.replace('{:id}', id.toString());
-        
+
         const response = await ajax(conf);
-        
-        if(response.status.toString() in config.api.userProfile.statuses.success)
-        {
+
+        if (response.status.toString() in config.api.userProfile.statuses.success) {
             const user: IUser = {
                 first_name: response.parsedBody.body.first_name,
                 last_name: response.parsedBody.body.last_name,
@@ -207,7 +206,7 @@ class UserModel extends IModel {
             return Promise.resolve(user);
         }
 
-        return Promise.reject({status: response.status, body: response.parsedBody});
+        return Promise.reject({ status: response.status, body: response.parsedBody });
     }
 
     /**
@@ -264,6 +263,114 @@ class UserModel extends IModel {
         return Promise.reject({
             status: response.status,
             msg: 'Неожиданная ошибка',
+        });
+    }
+
+
+    public async getFriends(userId: string | number) {
+        let conf = Object.assign({}, config.api.userFriends);
+        conf.url = conf.url.replace('{:id}', userId.toString());
+
+        const response = await ajax(conf);
+        console.log(response);
+
+        if (response.status.toString() in config.api.userFriends.statuses.success) {
+            let users: IUser[] = response.parsedBody.body.map((rawUser: any) => {
+                console.log(rawUser);
+
+                return {
+                    first_name: rawUser.first_name,
+                    last_name: rawUser.last_name,
+                    nick_name: rawUser.nick_name,
+                    email: rawUser.email,
+                    id: rawUser.id,
+                    avatar: '../src/img/test_avatar.jpg',
+                };
+            });
+
+
+            return Promise.resolve({ status: response.status, users: users });
+        }
+
+        if (response.status.toString() in config.api.userFriends.statuses.failure) {
+            const keyStatus = response.status.toString() as keyof typeof config.api.userFriends.statuses.failure;
+
+            return Promise.reject({
+                status: response.status,
+                msg: config.api.userFriends.statuses.failure[keyStatus],
+                body: response.parsedBody
+            });
+        }
+
+        return Promise.reject({
+            status: response.status,
+            msg: 'Неожиданная ошибка',
+            body: response.parsedBody,
+        });
+    }
+
+    public async isFriend(userId: number | string): Promise<boolean> {
+        const currentUserId = this.currentUser?.id;
+        if (!currentUserId) {
+            return Promise.reject();
+        }
+
+        const friends = (await this.getFriends(currentUserId)).users;
+        
+        return Promise.resolve(friends.find(user => user.id.toString() === userId.toString()) !== undefined ? true : false);
+    }
+
+    public async addFriend(userId: string | number) {
+        let conf = Object.assign({}, config.api.addFriend);
+        conf.url = conf.url.replace('{:id}', userId.toString());
+
+        const response = await ajax(conf);
+
+        if (response.status.toString() in config.api.addFriend.statuses.success) {
+            return Promise.resolve();
+        }
+
+        if (response.status.toString() in config.api.addFriend.statuses.failure) {
+            const keyStatus = response.status.toString() as keyof typeof config.api.addFriend.statuses.failure;
+
+            return Promise.reject({
+                status: response.status,
+                msg: config.api.addFriend.statuses.failure[keyStatus],
+                body: response.parsedBody
+            });
+        }
+
+        return Promise.reject({
+            status: response.status,
+            msg: 'Неожиданная ошибка',
+            body: response.parsedBody,
+        });
+    }
+
+    public async removeFriend(userId: string | number) {
+        let conf = Object.assign({}, config.api.deleteFriend);
+        conf.url = conf.url.replace('{:id}', userId.toString());
+
+        const response = await ajax(conf);
+
+        if (response.status.toString() in config.api.deleteFriend.statuses.success) {
+            return Promise.resolve();
+        }
+
+        if (response.status.toString() in config.api.deleteFriend.statuses.failure) {
+            const keyStatus = response.status.toString() as keyof typeof config.api.deleteFriend.statuses.failure;
+
+            return Promise.reject({
+                status: response.status,
+                msg: config.api.deleteFriend.statuses.failure[keyStatus],
+                body: response.parsedBody
+            });
+        }
+
+        return Promise.reject({
+            status: response.status,
+            msg: 'Неожиданная ошибка',
+            body: response.parsedBody,
         });
     }
 }

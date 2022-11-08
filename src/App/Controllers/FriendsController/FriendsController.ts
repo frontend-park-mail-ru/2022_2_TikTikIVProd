@@ -19,14 +19,14 @@ class FriendsController extends IController<FriendsView, UserModel> {
             const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
             const userId = (<HTMLElement>target.closest('.friend')).id;
 
+            if (!userId) {
+                console.log('No user id in ', target);
+                return;
+            }
+
             switch (action) {
                 default: return;
                 case 'profile': {
-                    if (!userId) {
-                        console.log('No user id in ', target);
-                        return;
-                    }
-
                     let url = `${config.api.userProfile.url}`;
                     url = url.replace('{:id}', userId.toString());
                     router.goToPath(url);
@@ -35,11 +35,15 @@ class FriendsController extends IController<FriendsView, UserModel> {
 
                 case 'add_friend': {
                     console.log('add');
+                    this.model.addFriend(userId).catch((data) => console.log(data));
+                    this.updateFriendsList();
                     return;
                 }
 
                 case 'remove_friend': {
                     console.log('remove');
+                    this.model.removeFriend(userId).catch((data) => console.log(data));
+                    this.updateFriendsList();
                     return;
                 }
 
@@ -50,6 +54,42 @@ class FriendsController extends IController<FriendsView, UserModel> {
             }
         }
     }
+
+    public updateFriendsList() {
+        const userId = this.model.getCurrentUser()?.id;
+
+        if (!userId) {
+            console.log('Friends err: user id null');
+            return;
+        }
+
+        this.model.getFriends(userId)
+            .then(({ users }) => {
+                console.log(users);
+                this.view.clearList(); //TODO
+                this.view.fillList(users);
+            })
+            .catch((resp) => {
+                console.log('Friends err: ', resp);
+            });
+    }
+
+    public mountComponent(): void {
+        if (!this.isMounted) {
+            this.view.show();
+            this.isMounted = true;
+            this.updateFriendsList();
+        }
+    }
+
+    public unmountComponent(): void {
+        if (this.isMounted) {
+            this.view.hide();
+            this.isMounted = false;
+        }
+    }
+
+
 }
 
 export default FriendsController; 

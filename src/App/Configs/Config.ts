@@ -27,10 +27,10 @@ const REQUEST_TYPE = {
 export interface IApiItem {
     url: string;
     method: string;
-    headers: {[index: string]: string};
+    headers: { [index: string]: string };
     statuses: {
-        success: {[index: string]: string};
-        failure: {[index: string]: string};
+        success: { [index: string]: string };
+        failure: { [index: string]: string };
     }
 }
 
@@ -41,7 +41,7 @@ export interface IConfig {
     }
 }
 
-const config : IConfig = {
+const config: IConfig = {
     host: 'http://89.208.197.127:8080',
     // host: 'http://127.0.0.1:8080',
     // host: 'http://localhost:8080',
@@ -226,8 +226,75 @@ const config : IConfig = {
                     '500': 'Ошибка сервера',
                 },
             },
-        }
+        },
+
+        userFriends: {
+            url: '/friends/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Друзья пользователя получен'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '403': 'Нет csrf',
+                    '404': 'Пользователь не найден',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+
+        addFriend: {
+            url: '/friends/add/{:id}',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '201': 'Друг добавлен'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '403': 'Нет csrf',
+                    '404': 'Пользователь не найден',
+                    '405': 'Неверный метод',
+                    '409': 'Уже в друзьях',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+
+        deleteFriend: {
+            url: '/friends/delete/{:id}',
+            method: REQUEST_TYPE.DELETE,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Друг Удалён'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '403': 'Нет csrf',
+                    '404': 'Нет в друзьях',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
     }
+
 }
 
 export default config;

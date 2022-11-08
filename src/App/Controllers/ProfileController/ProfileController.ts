@@ -1,6 +1,7 @@
 import UserModel, { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
+import paths from "../../Router/RouterPaths";
 import ProfileView from "../../Views/ProfileView/ProfileView";
 import IController from "../IController/IController";
 
@@ -22,7 +23,7 @@ class ProfileController extends IController<ProfileView, UserModel>{
 
     public async changeProfileUser(userId: number | string) {
         const currentUser = this.model.getCurrentUser();
-        if(!currentUser){
+        if (!currentUser) {
             console.log('ProfileContr: current user null');
             return Promise.reject();
         }
@@ -32,13 +33,13 @@ class ProfileController extends IController<ProfileView, UserModel>{
             console.log('ProfileContr: User ', userId, ' does not exist');
             return Promise.reject();
         }
-        
-        const isFriend = true; // TODO;
 
-        console.log(' T5 ', user.id);
+        const isFriend = await this.model.isFriend(userId); // TODO;
+
+        console.log(' T5 ', user.id, isFriend);
 
         this.view.redrawProfile(user, currentUser, isFriend);
-        
+
         return Promise.resolve();
     }
 
@@ -51,13 +52,60 @@ class ProfileController extends IController<ProfileView, UserModel>{
     private handleClick(e: Event): void {
         e.preventDefault();
         if (this.isMounted) {
-            const targetHref = (<HTMLElement>e.target).getAttribute('href');
-            console.log('profile click on: ', targetHref);
+            const target = <HTMLElement>e.target;
 
-            if (!targetHref) {
+            const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
+            const userId = (<HTMLElement>target.closest('.profile')?.querySelector('.profile-user'))?.dataset['user_id'];
+            
+            if(!userId) {
+                console.log('usr id frield empty');
                 return;
             }
-            router.goToPath(targetHref);
+
+            console.log('profile click on: ', action);
+            
+            switch (action) {
+                default: return;
+                case 'settings': {
+                    router.goToPath(paths.settings);
+                    return;
+                }
+                case 'message': {
+                    console.log('message');
+                    return;
+                }
+                case 'add_to_friends': {
+                    if (!userId) {
+                        console.log('add friend err');
+                        return;
+                    }
+                    this.model.addFriend(userId)
+                    .then(()=>{
+                        console.log('succ');
+                        this.changeProfileUser(userId);
+                    })
+                    .catch((data) => {
+                        console.log(data);
+                    })
+                    return;
+                }
+                case 'remove_friend': {
+                    if (!userId) {
+                        console.log('remove friend err');
+                        return;
+                    }
+
+                    this.model.removeFriend(userId)
+                    .then(()=>{
+                        console.log('succ');
+                        this.changeProfileUser(userId);
+                    })
+                    .catch((data) => {
+                        console.log(data);
+                    })
+                    return;
+                }
+            }
         }
     }
 }
