@@ -89,14 +89,17 @@ class FeedView extends IView {
      */
     public pushContentToFeed(data: IFeedData[], currentUserId: number): void {
         // TODO
-        const parser = new DOMParser();
+        // const parser = new DOMParser();
+        console.log(data);
+        
         data.forEach((item) => {
             const card = feedCardTemplate(currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true }));
-            const c = parser.parseFromString(card, 'text/html').querySelector('.feed-card');
-            if (c === null) {
-                return;
-            }
-            this.cards.appendChild(c);
+            // const c = parser.parseFromString(card, 'text/html').querySelector('.feed-card');
+            // if (c === null) {
+                // return;
+            // }
+            // this.cards.appendChild(c);
+            this.cards.innerHTML += card;
         });
     }
 

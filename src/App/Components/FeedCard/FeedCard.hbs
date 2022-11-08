@@ -1,9 +1,9 @@
 <div class="feed-card" data-action="card_page" id="{{id}}">
   <div class="feed-card__header">
-    <div class="feed-card-author" data-action="profile_page" data-data="{{author.url}}">
+    <div class="feed-card-author" data-action="profile_page" data-data="{{author.id}}">
       <img src="{{author.avatar}}" alt="" class="feed-card-author__avatar" />
       <div>
-        <div class="feed-card-author__name">{{author.name}}</div>
+        <div class="feed-card-author__name">{{author.first_name}} {{author.last_name}}</div>
         <div class="feed-card__date">{{date}}</div>
       </div>
     </div>

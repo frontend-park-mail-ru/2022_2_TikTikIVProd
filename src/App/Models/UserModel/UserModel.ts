@@ -189,7 +189,7 @@ class UserModel extends IModel {
     }
 
     public async getUser(id : number | string) {
-        let conf = config.api.userProfile;
+        let conf = Object.assign({}, config.api.userProfile);
         conf.url = conf.url.replace('{:id}', id.toString());
         
         const response = await ajax(conf);

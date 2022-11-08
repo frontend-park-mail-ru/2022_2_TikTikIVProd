@@ -2,23 +2,30 @@ import config, { IApiItem } from "../../Configs/Config";
 import ajax from "../../Ajax/Ajax";
 import IModel from "../IModel/IModel"
 
-export type UserFeed = {
-    userId: number,
-};
+// export type UserFeed = {
+//     userId: number,
+// };
 
-function isUserFeed(object: any): object is UserFeed {
-    return 'userId' in object;
+// function isUserFeed(object: any): object is UserFeed {
+//     return 'userId' in object;
+// }
+
+// export type AllFeed = {
+//     [Key in any]: never; // Пустой объект
+// };
+
+// function isAllFeed(object: any): object is AllFeed {
+//     return Object.keys(object).length == 0;
+// }
+
+// export type FeedType = UserFeed | AllFeed;
+
+export interface IFeedType {
+    user?: { id: string | number },
+    group?: { id: string | number },
+    // Если пустой, то общий фид
 }
 
-export type AllFeed = {
-    [Key in any]: never; // Пустой объект
-};
-
-function isAllFeed(object: any): object is AllFeed {
-    return Object.keys(object).length == 0;
-}
-
-export type FeedType = UserFeed | AllFeed;
 
 /**
  * Интерфейс данных, содержащихся в посте в ленте
@@ -39,7 +46,8 @@ export interface IFeedData {
     author: {
         url: string,
         avatar: string,
-        name: string,
+        first_name: string,
+        last_name: string,
         id: number,
     };
     date: string;
@@ -70,32 +78,32 @@ class FeedModel extends IModel {
         super();
     }
 
-    public async deletePost(id : number | string) {
-        let conf = config.api.postDelete;
+    public async deletePost(id: number | string) {
+        let conf = Object.assign({}, config.api.postDelete);
         conf.url = conf.url.replace('{:id}', id.toString());
         const response = await ajax(conf);
-        if(response.status.toString() in conf.statuses.success){
-            return Promise.resolve({status: response.status, body: response.parsedBody});
-        }
-        
-        if(response.status.toString() in conf.statuses.failure){
-            return Promise.reject({status: response.status, body: response.parsedBody});
+        if (response.status.toString() in conf.statuses.success) {
+            return Promise.resolve({ status: response.status, body: response.parsedBody });
         }
 
-        if(response.status.toString() in conf.statuses.success){
-            return Promise.resolve({status: response.status, body: response.parsedBody});
+        if (response.status.toString() in conf.statuses.failure) {
+            return Promise.reject({ status: response.status, body: response.parsedBody });
+        }
+
+        if (response.status.toString() in conf.statuses.success) {
+            return Promise.resolve({ status: response.status, body: response.parsedBody });
         }
     }
 
     public async getPost(id: number | string) {
-        let conf = config.api.post;
+        let conf = Object.assign({}, config.api.post);
         conf.url = conf.url.replace('{:id}', id.toString());
         const response = await ajax(conf);
         console.log(response);
     }
 
     public async getUserPosts(userId: string) {
-        let conf = config.api.userPosts;
+        let conf = Object.assign({}, config.api.userPosts);
         conf.url = conf.url.replace("{:id}", userId);
         const response = await ajax(conf);
 
@@ -105,7 +113,8 @@ class FeedModel extends IModel {
                 author: {
                     url: '',
                     avatar: './src/img/avatar_pavel.jpg',
-                    name: `${feedPost.user_last_name} ${feedPost.user_first_name}`
+                    first_name: feedPost.user_first_name,
+                    last_name: feedPost.user_last_name,
                 },
                 date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
                 text: feedPost.message,
@@ -148,22 +157,18 @@ class FeedModel extends IModel {
      * @async
      * @return {Promise}
      */
-    public async getFeeds(feedType: FeedType): Promise<{ status: number, feeds: IFeedData[] }> {
-        let conf : IApiItem;
+    public async getFeeds(feedType: IFeedType): Promise<{ status: number, feeds: IFeedData[] }> {
+        let conf = Object.assign({}, config.api.feed); // Весь фид
 
-        if (isUserFeed(feedType)) {
-            // console.log('Feed type is UserFeed');
-            conf = config.api.userPosts;
-            conf.url = conf.url.replace('{:id}', feedType.userId.toString());
-        } else if (isAllFeed(feedType)) {
-            // console.log('Feed type is all');
-            conf = config.api.feed;
-        } else {
-            return Promise.reject();
+        if (feedType.user) { // Посты пользователя
+            conf = Object.assign({}, config.api.userPosts);
+            conf.url = conf.url.replace('{:id}', feedType.user.id.toString());
         }
 
+        // if(feedType.group){} // TODO
+
         let response = await ajax(conf);
-        
+
         if (response.status in config.api.image.statuses.success) {
             let feeds: IFeedData[] = response.parsedBody.body.map((rawFeed: any) => {
                 return {
@@ -172,7 +177,8 @@ class FeedModel extends IModel {
                         id: rawFeed.user_id,
                         url: '',
                         avatar: './src/img/avatar_pavel.jpg',
-                        name: `${rawFeed.user_last_name} ${rawFeed.user_first_name}`
+                        first_name: rawFeed.user_first_name,
+                        last_name: rawFeed.user_last_name,
                     },
                     date: `${new Date(rawFeed.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
                     text: rawFeed.message,
@@ -180,10 +186,10 @@ class FeedModel extends IModel {
                     attachments: rawFeed.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
                 }
             });
-            return Promise.resolve({status: response.status, feeds: feeds});
+            return Promise.resolve({ status: response.status, feeds: feeds });
         }
         else {
-            return Promise.reject({status: response.status, feeds: []});
+            return Promise.reject({ status: response.status, feeds: [] });
         }
     }
 }

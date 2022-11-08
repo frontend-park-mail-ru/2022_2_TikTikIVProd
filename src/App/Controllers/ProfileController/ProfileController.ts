@@ -19,46 +19,26 @@ class ProfileController extends IController<ProfileView, UserModel>{
         this.view.bindClick(this.handleClick.bind(this));
     }
 
-    // public changeUser(data: any): void {
 
-    // }
-
-    /**
-     * Функция установки компонента.
-     * @override
-     * @return {void}
-     */
-    public async mountComponent(data?: any) {
-        if (!this.isMounted) {
-            let userData: IUser | null = null;
-
-            if (data && data.length > 0) {
-                await this.model.getUser(data[0])
-                    .then((user: IUser) => {
-                        // console.log('model: ', user);
-                        
-                        userData = user;
-                    })
-                    .catch(({ status, body }) => {
-                        // console.log(status, body);
-                    });
-            } else {
-                userData = this.model.getCurrentUser();
-            }
-
-            console.log(userData);
-            
-            if (!userData) {
-                console.log('emty user');
-                return Promise.reject();
-            }
-
-            // TODO
-            this.view.show({ avatar: '../src/img/test_avatar.jpg', name: userData.first_name + ' ' + userData.last_name });
-            this.isMounted = true;
-            return Promise.resolve();
+    public async changeProfileUser(userId: number | string) {
+        const currentUser = this.model.getCurrentUser();
+        if(!currentUser){
+            console.log('ProfileContr: current user null');
+            return Promise.reject();
         }
 
+        const user = await this.model.getUser(userId);
+        if (!user) {
+            console.log('ProfileContr: User ', userId, ' does not exist');
+            return Promise.reject();
+        }
+        
+        const isFriend = true; // TODO;
+
+        console.log(' T5 ', user.id);
+
+        this.view.redrawProfile(user, currentUser, isFriend);
+        
         return Promise.resolve();
     }
 

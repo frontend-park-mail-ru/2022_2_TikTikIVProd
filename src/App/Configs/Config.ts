@@ -48,7 +48,7 @@ const config : IConfig = {
     api: {
         logout: {
             url: '/logout',
-            method: REQUEST_TYPE.DELETE,
+            method: REQUEST_TYPE.POST,
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
             },

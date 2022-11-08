@@ -7,23 +7,44 @@
   padding: 10px 15px;
   background-color: white;
   border-radius: 10px;
+}
 
-  &__button {
-    cursor: pointer;
+.feed-navbar-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: min-content;
 
-    border-radius: 8px;
-    padding: 8px 15px;
-    background-color: var(--color-button-background);
+  cursor: pointer;
 
-    color: var(--color-button-value);
-    font-weight: bolder;
-    font-size: 14px;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  padding: 8px 15px;
+
+  background-color: var(--color-button-background);
+
+  &__icon {
+      object-fit: contain;
+      width: 24px;
   }
 
-  &__button:hover {
-    background-color: rgb(10, 178, 10);
+  &__text {
+      color: var(--color-button-value);
+      text-overflow: ellipsis;
+      font-weight: bolder;
+      font-size: 16px;
+  }
+
+  &:hover {
+      background-color: #24dc83;
+  }
+  
+  &:active {
+      background-color: #24B66F;
   }
 }
+
 
 .feed-navbar-search {
   display: flex;
