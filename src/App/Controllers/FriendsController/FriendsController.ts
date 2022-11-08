@@ -35,15 +35,21 @@ class FriendsController extends IController<FriendsView, UserModel> {
 
                 case 'add_friend': {
                     console.log('add');
-                    this.model.addFriend(userId).catch((data) => console.log(data));
-                    this.updateFriendsList();
+                    this.model.addFriend(userId)
+                        .then(() => {
+                            this.updateFriendsList();
+                        })
+                        .catch((data) => console.log(data));
                     return;
                 }
 
                 case 'remove_friend': {
                     console.log('remove');
-                    this.model.removeFriend(userId).catch((data) => console.log(data));
-                    this.updateFriendsList();
+                    this.model.removeFriend(userId)
+                        .then(() => {
+                            this.updateFriendsList();
+                        })
+                        .catch((data) => console.log(data));
                     return;
                 }
 
