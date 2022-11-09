@@ -1,4 +1,4 @@
-import UserModel from "../../Models/UserModel/UserModel";
+import UserModel, { IProfileSettings } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import validateInput from "../../Utils/Validators/InputValidator/InputValidator";
 import SettingsView from "../../Views/SettingsView/SettingsView";
@@ -17,7 +17,7 @@ class SettingsController extends IController<SettingsView, UserModel> {
         this.view.bindClick(this.handleClick.bind(this));
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
     }
-    
+
     /**
      * Функция установки компонента.
      * @override
@@ -45,15 +45,35 @@ class SettingsController extends IController<SettingsView, UserModel> {
         e.preventDefault();
         if (this.isMounted) {
             const target = <HTMLElement>e.target;
-            
-            if ((<HTMLButtonElement>target).type !== 'submit') {
+            const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
+
+            if (!action) {
+                // console.log('No action ', target);
                 return;
             }
 
-            const data = this.view.getDataFromGroup(target);
-            
-            const isValidData = this.validateData(data);
-            // TODO update in model
+            switch (action) {
+                default: {
+                    // console.log('No action ', action, ' in ', target);
+                    return;
+                }
+
+                case 'submit': {
+                    const data = this.view.getDataFromGroup(target);
+                    const isValidData = this.validateData(data);
+
+                    if (!isValidData) {
+                        // console.log('Settings: invalid data');
+                        return;
+                    }
+
+                    let params: IProfileSettings = Object.fromEntries(data);
+                    this.model.updateUserData(params)
+                        .catch(data => {
+                            console.log(data, ' fail');
+                        });
+                }
+            }
         }
     }
 

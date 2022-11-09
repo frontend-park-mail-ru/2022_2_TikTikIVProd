@@ -44,6 +44,7 @@ export interface IUserSignUp { // ПО api
  * @property {string}  email - Email для входа в аккаунт
  */
 export interface IUser { // ПО api !!!!Без пароля 
+    [index: string]: string | number;
     id: number;
     first_name: string;
     last_name: string;
@@ -52,6 +53,16 @@ export interface IUser { // ПО api !!!!Без пароля
     avatar: string;
 }
 
+
+export interface IProfileSettings {
+    [index: string]: any;
+    first_name?: string;
+    last_name?: string;
+    nick_name?: string;
+    email?: string;
+    password?: string;
+    avatar?: string;
+}
 /**
  * Модель пользователя
  * @category Models 
@@ -316,7 +327,7 @@ class UserModel extends IModel {
         }
 
         const friends = (await this.getFriends(currentUserId)).users;
-        
+
         return Promise.resolve(friends.find(user => user.id.toString() === userId.toString()) !== undefined ? true : false);
     }
 
@@ -374,20 +385,24 @@ class UserModel extends IModel {
         });
     }
 
-    public async updateUserData(newData : IUser) {
-        if(JSON.stringify(newData) === JSON.stringify(this.currentUser))
-        {
-            // Данные не были изменены
-            return Promise.reject({
-                status: 0,
-                msg: 'Данные не были изменены',
-                body: {},
-            });
-        }
-
+    public async updateUserData(newData: IProfileSettings) {
         const response = await ajax(config.api.userUpdate, JSON.stringify(newData));
 
         if (response.status.toString() in config.api.deleteFriend.statuses.success) {
+
+            try {
+                let newCurrentUser = Object.assign({}, this.currentUser);
+                Object.keys(newData).forEach(key => {
+                    newCurrentUser[key] = newData[key];
+                });
+                this.currentUser = newCurrentUser;
+                EventDispatcher.emit('user-changed', this.currentUser);
+
+            }
+            catch (error) {
+                console.log(error);
+            }
+
             return Promise.resolve();
         }
 
