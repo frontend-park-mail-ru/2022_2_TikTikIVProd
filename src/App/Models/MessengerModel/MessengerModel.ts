@@ -114,15 +114,21 @@ class MessengerModel extends IModel {
         });
     }
 
-    public createChatEventListener(chatId: string | number, opts?: { onclose?: Function, onmessage?: Function }) {
+    public async createChatEventListener(chatId: string | number, opts?: { onclose?: Function, onmessage?: Function }) {
         if (!window["WebSocket"]) {
             console.log('Websocket is not supported');
             return;
         }
 
-        // let host = Object.assign({url: config.host}).url;
-        // host = host.replace('http://', '');
-        const newSocket = new WebSocket("ws://127.0.0.1:8080/ws/" + chatId);
+        let host = Object.assign({url: config.host}).url;
+        host = host.replace('http://', '');
+
+        let conf = Object.assign({}, config.api.initws);
+        conf.url = conf.url.replace('{:id}', chatId.toString());
+
+        const _ = await ajax(conf);
+
+        const newSocket = new WebSocket("ws://"+host+"/ws/" + chatId);
 
         if (opts) {
             if (opts.onclose) {
@@ -143,6 +149,8 @@ class MessengerModel extends IModel {
                             try {
                                 const msg: IMessage = JSON.parse(evt.data);
                                 _callback(_chatId, msg);
+                                console.log(msg);
+                                
                             } catch (error) { console.log(error); }
                         }
                     })(chatId, opts.onmessage);
@@ -196,6 +204,19 @@ class MessengerModel extends IModel {
 
     }
 
+    public sendMessage(dialogId : string | number, text: string, sender_id : string | number, receiver_id : string | number) {
+        const ws = this.websockets.get(dialogId.toString());
+        if(!ws){
+            console.log('No ws for ', dialogId);
+            return;
+        }
+
+        ws.send(JSON.stringify({
+            body: text,
+            sender_id: sender_id,
+            receiver_id: receiver_id,
+        }));
+    }
 
     public async checkChatExist(userId: string | number) {
         let conf = Object.assign({}, config.api.checkChat);

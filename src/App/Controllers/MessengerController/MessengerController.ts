@@ -52,9 +52,13 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
             return;
         }
 
-        data.forEach(async (item): Promise<any> => {
+        data.forEach(async function(item): Promise<any>  {
             const userId = item.userId1 === currentUser.id ? item.userId1 : item.userId2;
+            console.log('Process: ', userId);
+            
             const user = await this.model.user.getUser(userId);
+            console.log('Process: user: ', user);
+            
             dialogsData.push({
                 dialog_id: item.dialog_id.toString(),
                 user_id: user.id.toString(),

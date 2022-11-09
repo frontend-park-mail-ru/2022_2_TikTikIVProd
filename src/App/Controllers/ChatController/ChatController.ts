@@ -15,7 +15,7 @@ class ChatController extends
     // private websocket: WebSocket | undefined;
     // private dialogId: string | number | undefined;
     private currentDialogId: string | number | undefined;
-    private userID : string | number | undefined;
+    private userID: string | number | undefined;
     private emptyChat: boolean;
 
     constructor(
@@ -45,32 +45,54 @@ class ChatController extends
 
             case 'send': {
                 console.log('send');
-                
+
                 if (this.emptyChat) {
                     console.log('Empty chat');
-                    
+
                     if (!this.userID) {
                         console.log('USer id is null');
                         return;
                     }
 
                     this.model.messenger.initChat(this.userID)
-                        .then((data : IMessage) => {
+                        .then((data: IMessage) => {
                             console.log('Init chat succ');
-                            
-                            this.currentDialogId  = data.dialog_id;
+
+                            this.currentDialogId = data.dialog_id;
+                            this.emptyChat = false;
 
                             this.model.messenger.createChatEventListener(
                                 this.currentDialogId,
-                                { onmessage: this.view.pushMessage.bind(this) });
-                                
-                                this.view.pushMessage(data);
+                                {
+                                    onmessage: this.view.pushMessage.bind(this),
+                                },
+                            );
+
+                            this.view.pushMessage(data);
                         })
                         .catch(data => {
                             console.log('init chat err');
-                            
+
                             console.log(data);
-                        })
+                        });
+                } else {
+
+                    const cid = this.model.user.getCurrentUser()?.id;
+                    if(!cid)
+                    {
+                        return;
+                    }
+
+                    if(!this.currentDialogId){
+                        return;
+                    }
+
+                    if(!this.userID)
+                    {
+                        return;
+                    }
+
+                    this.model.messenger.sendMessage(this.currentDialogId, 'Test msg', cid ,this.userID)
                 }
             }
         }

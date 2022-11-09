@@ -414,6 +414,26 @@ const config: IConfig = {
                 },
             },
         },
+
+        initws: {
+            url: '/ws/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Сообщение отправлено'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '404': 'Чат не найден',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
     }
 
 }
