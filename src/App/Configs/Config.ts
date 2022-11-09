@@ -48,7 +48,7 @@ const config: IConfig = {
     api: {
         logout: {
             url: '/logout',
-            method: REQUEST_TYPE.DELETE,
+            method: REQUEST_TYPE.POST,
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
             },
@@ -189,6 +189,26 @@ const config: IConfig = {
                 },
             },
         },
+
+        postEdit: {
+            url: '/post/edit',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Обновление поста успешно'
+                },
+                failure: {
+                    '401': 'no cookie',
+                    '403': 'no csrf',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
         userPosts: {
             url: '/users/{:id}/posts',
             method: REQUEST_TYPE.GET,
@@ -200,12 +220,35 @@ const config: IConfig = {
                     '200': 'Получение постов успешно'
                 },
                 failure: {
+                    '401': 'no cookie',
+                    '403': 'no csrf',
+                    '404': 'Пользователь не найден',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+
+        userUpdate: {
+            url: '/users/update',
+            method: REQUEST_TYPE.PUT,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Данные обновлены'
+                },
+                failure: {
                     '404': 'Записи не найдены',
                     '405': 'Неверный HTTP метод',
                     '500': 'Ошибка сервера',
                 },
             },
         },
+
+
         postDelete: {
             url: '/post/{:id}',
             method: REQUEST_TYPE.DELETE,
@@ -239,8 +282,75 @@ const config: IConfig = {
                     '500': 'Ошибка сервера',
                 },
             },
-        }
+        },
+
+        userFriends: {
+            url: '/friends/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Друзья пользователя получен'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '403': 'Нет csrf',
+                    '404': 'Пользователь не найден',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+
+        addFriend: {
+            url: '/friends/add/{:id}',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '201': 'Друг добавлен'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '403': 'Нет csrf',
+                    '404': 'Пользователь не найден',
+                    '405': 'Неверный метод',
+                    '409': 'Уже в друзьях',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+
+        deleteFriend: {
+            url: '/friends/delete/{:id}',
+            method: REQUEST_TYPE.DELETE,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Друг Удалён'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '403': 'Нет csrf',
+                    '404': 'Нет в друзьях',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
     }
+
 }
 
 export default config;

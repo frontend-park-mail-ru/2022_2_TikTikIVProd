@@ -166,7 +166,7 @@ class App {
                 // mount
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
-                this.feedController.changeFeedType({});
+                this.feedController.setFeedContent({});
                 this.feedController.mountComponent();
             })
             .catch(() => {
@@ -214,20 +214,45 @@ class App {
             .then(() => {
                 EventDispatcher.emit('unmount-all');
                 EventDispatcher.emit('redirect', paths.profile);
+
                 // mount
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
+                this.profileController.mountComponent();
 
-                // this.profileController.changeUser(data);
-                this.profileController.mountComponent(data).then(() => {
-                    this.feedController.changeFeedType({ userId: this.userModel.getCurrentUser()?.id || 0 });
-                    this.feedController.mountComponent();
-                })
-                .catch( () => {
-                    console.log('4040404040404004');
-                    
-                    router.showUnknownPage();
-                }) 
+                // Если без параметров - наш профиль
+                let userId : number | string =  this.userModel.getCurrentUser()?.id ?? -1;
+        console.log(' T3 ', userId);
+
+
+                // Если есть параметр, достаем его
+                if (data && data[0]) {
+                    userId = data[0]; // Если передали id, то профиль юзера
+                }
+
+                console.log(' T4 ', userId);
+
+                if(!userId || userId === -1) {
+                    console.log('App: show profile- current user null');
+                    return;
+                }
+                
+                this.profileController.changeProfileUser(userId)
+                    .then(() => {
+                        // Нарисовали профиль
+
+                        // Рисуем фид юзера
+                        this.feedController.setFeedContent({
+                            user: {
+                                id: userId,
+                            },
+                        });
+                        this.feedController.mountComponent();
+                    })
+                    .catch(() => {
+                        // Что-то пошло не так, то 404
+                        router.showUnknownPage();
+                    });
             })
             .catch(() => {
                 router.goToPath(paths.signinPage);
@@ -317,7 +342,7 @@ class App {
         this.settingsView = new SettingsView(this.content);
         this.friendsView = new FriendsView(this.content);
         this.messengerView = new MessengerView(this.content);
-    
+
     }
 
     /**
@@ -329,7 +354,7 @@ class App {
         this.userModel = new UserModel();
         this.feedModel = new FeedModel();
         this.messengerModel = new MessengerModel();
-   
+
     }
 
     /**
@@ -351,9 +376,9 @@ class App {
             new PageNotFoundController(this.pageNotFoundView);
         this.profileController = new ProfileController(this.profileView, this.userModel);
         this.settingsController = new SettingsController(this.settingsView, this.userModel);
-        this.friendsController = new FriendsController(this.friendsView);
+        this.friendsController = new FriendsController(this.friendsView, this.userModel);
         this.messengerController = new MessengerController(this.messengerView, this.messengerModel);
-    
+
     }
 
     /**
@@ -373,7 +398,6 @@ class App {
         router.addRule(paths.friends, this.handleRedirectToFriends.bind(this));
         router.addRule(paths.userProfie, this.handleProfile.bind(this));
         router.addRule(paths.messenger, this.handleMessenger.bind(this));
-   
     }
 
     /**

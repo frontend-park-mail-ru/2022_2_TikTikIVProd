@@ -1,4 +1,5 @@
-import FeedModel, { FeedType, IFeedData, IFeedNewPost } from "../../Models/FeedModel/FeedModel";
+import config from "../../Configs/Config";
+import FeedModel, { /*FeedType,*/ IFeedData, IFeedNewPost, IFeedType } from "../../Models/FeedModel/FeedModel";
 import { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
@@ -9,15 +10,22 @@ import IController from "../IController/IController";
 
 class FeedController extends IController<FeedView, FeedModel> {
     private user: IUser; // TODO delete
-
-    private currentFeedType: FeedType;
+    // private currentFeedType: FeedType;
     private currentPage: number;
+
+    // NEW!!!!!
+    private feedType: IFeedType;
+    //
 
     constructor(view: FeedView, model: FeedModel) {
         super(view, model);
 
         this.currentPage = 0;
-        this.currentFeedType = {};
+        // this.currentFeedType = {};
+
+        //
+        this.feedType = {};
+        //
 
         this.view.bindScrollEvent(throttle(this.handleScroll.bind(this), 250));
         this.view.bindResizeEvent(throttle(this.handleScroll.bind(this), 250));
@@ -25,6 +33,20 @@ class FeedController extends IController<FeedView, FeedModel> {
 
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         EventDispatcher.subscribe('user-changed', this.setCurrentUser.bind(this)); // TODO delete
+    }
+
+
+    public setFeedContent(feedType: IFeedType) {
+        if (JSON.stringify(this.feedType) === JSON.stringify(feedType)) {
+            // НЕ поменялся тип фида;
+            console.log('feed type no changes');
+
+            return;
+        }
+
+        this.feedType = feedType;
+        this.view.clearFeed();
+        this.currentPage = 0;
     }
 
     private openFeedCard(id: string | undefined): void {
@@ -69,15 +91,46 @@ class FeedController extends IController<FeedView, FeedModel> {
             });
     }
 
-    public changeFeedType(feedType: FeedType): void {
-        if (JSON.stringify(this.currentFeedType) === JSON.stringify(feedType)) {
+    private submitEditedPost(): void {
+        console.log('submit edited post');
+
+        const content = this.view.getEditedPostData();
+        if (!content.id || !content.text || content.text.length < 1) {
+            console.log('Post create empty form');
             return;
         }
 
-        this.currentFeedType = feedType;
-        this.currentPage = 0;
-        this.view.clearFeed();
+        const data: IFeedNewPost = {
+            id: Number(content.id), // TODO errors
+            message: content.text,
+
+            images: [], // TODO
+            // TODO  delete this shit
+            user_id: this.user.id,
+            user_first_name: this.user.first_name,
+            user_last_name: this.user.last_name,
+            create_date: '2022-08-15T00:00:00Z',
+        };
+
+        this.model.sendEditedFeed(data)
+            .then(() => {
+                this.view.hideFeedCardCreation();
+            })
+            .catch(() => {
+                console.log('Post edit show err to view');
+                // TODO Post create show err to view
+            });
     }
+
+    // public changeFeedType(feedType: FeedType): void {
+    //     if (JSON.stringify(this.currentFeedType) === JSON.stringify(feedType)) {
+    //         return;
+    //     }
+
+    //     this.currentFeedType = feedType;
+    //     this.currentPage = 0;
+    //     this.view.clearFeed();
+    // }
 
     private deletePost(id: number | string): void {
         console.log(id);
@@ -95,12 +148,13 @@ class FeedController extends IController<FeedView, FeedModel> {
     public setCurrentUser(user: IUser) {
         this.user = user;
     }
+    //
 
     private async getFeeds(): Promise<{ page: number, feeds: IFeedData[], currentUserId: number }> {
         let data: IFeedData[] = [];
         let page = 0;
 
-        await this.model.getFeeds(this.currentFeedType)
+        await this.model.getFeeds(this.feedType)
             .then(({ feeds }) => {
                 data = feeds;
                 page = 1; // TODO
@@ -108,7 +162,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             .catch(({ status, body }) => {
                 const item: IFeedData = {
                     id: 321,
-                    author: { id: 0, url: '/testuser123', avatar: '../src/img/test_avatar.jpg', name: 'Неопознанный Капи' },
+                    author: { id: 0, url: '/testuser123', avatar: '../src/img/test_avatar.jpg', first_name: 'Неопознанный', last_name: 'Капи' },
                     date: 'В будующем...',
                     text: 'Ваши друзья еще не выложили свой первый пост. Напомните им об этом!',
                     likes: 100500,
@@ -118,13 +172,14 @@ class FeedController extends IController<FeedView, FeedModel> {
                 page = 1; // TODO
             });
 
-
         return { page: page, feeds: data, currentUserId: this.user.id };
     }
 
     public mountComponent(): void {
         if (!this.isMounted) {
             if (this.currentPage == 0) {
+                console.log('Feed is empty');
+
                 this.getFeeds()
                     .then(({ page, feeds, currentUserId }) => {
                         this.view.pushContentToFeed(feeds, currentUserId);
@@ -172,6 +227,10 @@ class FeedController extends IController<FeedView, FeedModel> {
             }
 
             switch (action) {
+                case 'sumbit_edited_post': {
+                    this.submitEditedPost();
+                    return;
+                }
                 case 'sumbit_new_post': {
                     this.submitNewPost();
                     return;
@@ -194,6 +253,18 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                 case 'edit': {
                     console.log('edit');
+                    if (!cardId) {
+                        console.log('Edit feed: null cardID');
+                        return;
+                    }
+
+                    this.model.getPost(cardId)
+                        .then((feed) => {
+                            this.view.showFeedCardCreation(this.user, feed);
+                        })
+                        .catch(() => {
+                            console.log('edit open, err');
+                        });
                     return;
                 }
 
@@ -206,8 +277,18 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                 case 'profile_page': {
                     if (data) {
-                        console.log('profile ', data);
-                        router.goToPath(data);
+                        console.log(' T0 ', data);
+
+
+                        // TODO убрать отсюда
+                        console.log('Conf 0: ', config.api.userProfile);
+
+                        let url = config.api.userProfile.url;
+                        url = url.replace('{:id}', data.toString());
+                        console.log('Conf 0: ', config.api.userProfile);
+
+                        console.log(' T1: ', url);
+                        router.goToPath(url);
                     }
                     return;
                 }
@@ -224,7 +305,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 default: {
-                    console.log('action unknown');
+                    console.log('action unknown', action);
                     return;
                 }
             }
