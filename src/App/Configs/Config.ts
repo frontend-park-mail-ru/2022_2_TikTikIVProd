@@ -72,6 +72,19 @@ const config: IConfig = {
                 failure: failureDefaultStatuses,
             },
         },
+        csrf: {
+            url: '/create_csrf',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Успешно'
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
         signin: {
             url: '/signin',
             method: REQUEST_TYPE.POST,
