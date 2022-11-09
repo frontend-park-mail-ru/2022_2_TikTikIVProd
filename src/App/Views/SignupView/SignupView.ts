@@ -69,14 +69,12 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
      * @return {void}
      */
     public showErrorMsg(id: string, msg: string) : void {
-        const inpt = <HTMLElement>this.element.querySelector('#'+id);
-        const msgField = <HTMLElement>this.element.querySelector('#'+id+'-msg');
-        if(!inpt || !msgField){
+        const inpt = <HTMLElement>this.element.querySelector('#' + id)?.closest('.input-with-title');
+        if (!inpt) {
             return;
         }
-        inpt.classList.add('invalid');
-        msgField.innerText = msg;
-        msgField.style.visibility = 'visible';
+        inpt.classList.add('input-with-title--error');
+        (<HTMLElement>inpt.querySelector('.input-with-title__error-msg')).innerHTML = msg;
     }
     
     /**
@@ -85,14 +83,11 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
      * @return {void}
      */
     public hideErrorMsg(id: string) : void {
-        const inpt = <HTMLElement>this.element.querySelector('#'+id);
-        const msgField = <HTMLElement>this.element.querySelector('#'+id+'-msg');
-        if(!inpt || !msgField){
+        const inpt = <HTMLElement>this.element.querySelector('#' + id)?.closest('.input-with-title');
+        if (!inpt) {
             return;
         }
-        inpt.classList.remove('invalid');
-        msgField.innerText = '';
-        msgField.style.visibility = 'hidden';
+        inpt.classList.remove('input-with-title--error');
     }
 }
 

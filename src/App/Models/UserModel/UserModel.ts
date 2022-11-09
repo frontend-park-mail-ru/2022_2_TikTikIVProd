@@ -373,6 +373,40 @@ class UserModel extends IModel {
             body: response.parsedBody,
         });
     }
+
+    public async updateUserData(newData : IUser) {
+        if(JSON.stringify(newData) === JSON.stringify(this.currentUser))
+        {
+            // Данные не были изменены
+            return Promise.reject({
+                status: 0,
+                msg: 'Данные не были изменены',
+                body: {},
+            });
+        }
+
+        const response = await ajax(config.api.userUpdate, JSON.stringify(newData));
+
+        if (response.status.toString() in config.api.deleteFriend.statuses.success) {
+            return Promise.resolve();
+        }
+
+        if (response.status.toString() in config.api.deleteFriend.statuses.failure) {
+            const keyStatus = response.status.toString() as keyof typeof config.api.deleteFriend.statuses.failure;
+
+            return Promise.reject({
+                status: response.status,
+                msg: config.api.deleteFriend.statuses.failure[keyStatus],
+                body: response.parsedBody
+            });
+        }
+
+        return Promise.reject({
+            status: response.status,
+            msg: 'Неожиданная ошибка',
+            body: response.parsedBody,
+        });
+    }
 }
 
 export default UserModel;

@@ -207,12 +207,35 @@ const config: IConfig = {
                     '200': 'Получение постов успешно'
                 },
                 failure: {
+                    '401': 'no cookie',
+                    '403': 'no csrf',
+                    '404': 'Пользователь не найден',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+
+        userUpdate: {
+            url: '/users/update',
+            method: REQUEST_TYPE.PUT,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Данные обновлены'
+                },
+                failure: {
                     '404': 'Записи не найдены',
                     '405': 'Неверный HTTP метод',
                     '500': 'Ошибка сервера',
                 },
             },
         },
+
+
         postDelete: {
             url: '/post/{:id}',
             method: REQUEST_TYPE.DELETE,

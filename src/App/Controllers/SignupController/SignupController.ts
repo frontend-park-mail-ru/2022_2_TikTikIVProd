@@ -82,7 +82,7 @@ class SignupController extends IController<SignupView, UserModel> {
                 ref = data.get('password');
             }
 
-            const { isValid, msg } = validateInput(id, value);
+            const { isValid, msg } = validateInput(id, value, ref);
             if (!isValid) {
                 isValidData = false;
                 this.view.showErrorMsg(id, msg);
