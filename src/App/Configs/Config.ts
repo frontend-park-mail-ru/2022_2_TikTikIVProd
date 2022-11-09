@@ -27,10 +27,10 @@ const REQUEST_TYPE = {
 export interface IApiItem {
     url: string;
     method: string;
-    headers: {[index: string]: string};
+    headers: { [index: string]: string };
     statuses: {
-        success: {[index: string]: string};
-        failure: {[index: string]: string};
+        success: { [index: string]: string };
+        failure: { [index: string]: string };
     }
 }
 
@@ -41,7 +41,7 @@ export interface IConfig {
     }
 }
 
-const config : IConfig = {
+const config: IConfig = {
     host: 'http://89.208.197.127:8080',
     // host: 'http://127.0.0.1:8080',
     // host: 'http://localhost:8080',
@@ -68,6 +68,19 @@ const config : IConfig = {
             statuses: {
                 success: {
                     '200': 'Успешно'
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
+        csrf: {
+            url: '/create_csrf',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Успешно'
                 },
                 failure: failureDefaultStatuses,
             },
