@@ -1,3 +1,4 @@
+import config from "../../Configs/Config";
 import UserModel, { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
@@ -72,6 +73,11 @@ class ProfileController extends IController<ProfileView, UserModel>{
                 }
                 case 'message': {
                     console.log('message');
+
+                    let url = Object.assign({}, {url: paths.chat}).url;
+                    url = url.replace('{:id}', userId);
+                    console.log(url);
+                    router.goToPath(url);
                     return;
                 }
                 case 'add_to_friends': {

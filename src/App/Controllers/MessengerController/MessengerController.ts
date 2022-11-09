@@ -1,12 +1,84 @@
-import MessengerModel from "../../Models/MessengerModel/MessengerModel";
+import config from "../../Configs/Config";
+import MessengerModel, { IDialog } from "../../Models/MessengerModel/MessengerModel";
+import UserModel, { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
+import router from "../../Router/Router";
 import MessengerView from "../../Views/MessengerView/MessengerView";
 import IController from "../IController/IController";
 
-class MessengerController extends IController<MessengerView, MessengerModel> {
-    constructor(view: MessengerView, model: MessengerModel) {
+
+export interface IDialogData {
+    dialog_id: string;
+    user_id: string;
+    user_first_name: string;
+    user_last_name: string;
+    user_avatar: string;
+}
+
+
+class MessengerController extends IController<MessengerView, { user: UserModel, messenger: MessengerModel }> {
+
+    constructor(view: MessengerView, model: { user: UserModel, messenger: MessengerModel }) {
         super(view, model);
+        this.view.bindClick(this.handleClick.bind(this));
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
+    }
+
+    private handleClick(e: Event): void {
+        e.preventDefault();
+        const target = <HTMLElement>e.target;
+
+        const dialogId = (<HTMLElement>target.closest('.dialog')).dataset['dialog_id'];
+        const userId = (<HTMLElement>target.closest('dialog'))?.dataset['user_id'];
+
+        if (!dialogId) {
+            console.log('dialogid null');
+            return;
+        }
+
+        console.log(dialogId, userId);
+
+        let url = Object.assign({}, config.api.chat.url)
+        url = url.replace('{:id}', dialogId.toString());
+        router.goToPath(url);
+    }
+
+
+    private async processData(data: IDialog[]) {
+        const dialogsData: IDialogData[] = [];
+        const currentUser = this.model.user.getCurrentUser();
+        if (!currentUser) {
+            console.log('No current user');
+            return;
+        }
+
+        data.forEach(async (item): Promise<any> => {
+            const userId = item.userId1 === currentUser.id ? item.userId1 : item.userId2;
+            const user = await this.model.user.getUser(userId);
+            dialogsData.push({
+                dialog_id: item.dialog_id.toString(),
+                user_id: user.id.toString(),
+                user_first_name: user.first_name,
+                user_last_name: user.last_name,
+                user_avatar: user.avatar,
+            });
+        });
+
+        return Promise.resolve(dialogsData);
+    }
+
+    public async updateDialogs() {
+        const data = await this.model.messenger.getDialogs();
+        console.log('Messenger: update dialogs: ', data);
+        
+        const processedData = await this.processData(data);
+        console.log('Messenger: update dialogs: ', processedData);
+        if (!processedData) {
+            console.log('err while procc dialogs data');
+            return;
+        }
+
+        this.view.pushDialogsToList(processedData);
     }
 }
 

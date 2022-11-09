@@ -42,8 +42,8 @@ export interface IConfig {
 }
 
 const config: IConfig = {
-    host: 'http://89.208.197.127:8080',
-    // host: 'http://127.0.0.1:8080',
+    // host: 'http://89.208.197.127:8080',
+    host: 'http://127.0.0.1:8080',
     // host: 'http://localhost:8080',
     api: {
         logout: {
@@ -331,6 +331,84 @@ const config: IConfig = {
                     '401': 'Нет кук',
                     '403': 'Нет csrf',
                     '404': 'Нет в друзьях',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+        dialogs: {
+            url: '/chat',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Список диалогов получен'
+                },
+                failure: {
+                    '401': 'Нет кук',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+        chat: {
+            url: '/chat/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Список диалогов получен'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '404': 'Чат не найден',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+        chatSend: {
+            url: '/chat/send_message',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Сообщение отправлено'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '404': 'Чат не найден',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+        checkChat: {
+            url: '/chat/user/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Сообщение отправлено'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '404': 'Чат не найден',
                     '405': 'Неверный метод',
                     '500': 'Ошибка сервера',
                 },
