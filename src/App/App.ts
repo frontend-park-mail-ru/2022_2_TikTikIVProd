@@ -182,13 +182,8 @@ class App {
     private handleLogout(): void {
         EventDispatcher.emit('redirect', paths.logout);
 
-        this.userModel.logoutUser()
-            .then(() => {
-                router.goToPath(paths.signinPage);
-            })
-            .catch(({ status, body, msg }) => {
-                console.log(status, body, msg);
-            });
+        this.userModel.logoutUser();
+        router.goToPath(paths.signinPage);
     }
 
     /**
@@ -221,8 +216,8 @@ class App {
                 this.profileController.mountComponent();
 
                 // Если без параметров - наш профиль
-                let userId : number | string =  this.userModel.getCurrentUser()?.id ?? -1;
-        console.log(' T3 ', userId);
+                let userId: number | string = this.userModel.getCurrentUser()?.id ?? -1;
+                console.log(' T3 ', userId);
 
 
                 // Если есть параметр, достаем его
@@ -232,11 +227,11 @@ class App {
 
                 console.log(' T4 ', userId);
 
-                if(!userId || userId === -1) {
+                if (!userId || userId === -1) {
                     console.log('App: show profile- current user null');
                     return;
                 }
-                
+
                 this.profileController.changeProfileUser(userId)
                     .then(() => {
                         // Нарисовали профиль
