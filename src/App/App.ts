@@ -186,13 +186,8 @@ class App {
     private handleLogout(): void {
         EventDispatcher.emit('redirect', paths.logout);
 
-        this.userModel.logoutUser()
-            .then(() => {
-                router.goToPath(paths.signinPage);
-            })
-            .catch(({ status, body, msg }) => {
-                console.log(status, body, msg);
-            });
+        this.userModel.logoutUser();
+        router.goToPath(paths.signinPage);
     }
 
     /**

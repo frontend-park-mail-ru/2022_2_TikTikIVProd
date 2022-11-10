@@ -6,6 +6,7 @@ interface IParamsProps {
     headers: {};
 };
 
+
 /**
  * Функция асинхронного запроса на сервер
  * @param  {IParamsProps} params - параметры подключения
@@ -13,10 +14,24 @@ interface IParamsProps {
  * @return {Promise} - промис запроса 
  */
 export async function ajax(params: IParamsProps, body?: string) {
-    const response = await fetch(`${config.host}${params.url}`,
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json;charset=utf-8');
+
+    const csrfResponse = await fetch(`${config.host}${config.api.csrf.url}`, {
+        method: config.api.csrf.method,
+        credentials: 'include',
+    });
+
+    const csrfToken = csrfResponse.headers.get('X-CSRF-Token');
+    if (csrfToken !== null) {
+        headers.append('X-CSRF-Token', csrfToken);
+    }
+
+
+    let response = await fetch(`${config.host}${params.url}`,
         {
             method: params.method,
-            headers: params.headers,
+            headers: headers,
             body: body,
             credentials: 'include',
         }
@@ -26,7 +41,6 @@ export async function ajax(params: IParamsProps, body?: string) {
     try {
         parsedBody = await response.json();
     } catch (error) {
-        // console.log('Ajax: parsing json error: ', error);
         parsedBody = {};
     }
 
