@@ -32,9 +32,9 @@ export async function ajax(params: IParamsProps, body?: string) {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json;charset=utf-8');
 
-    const csrfToken = getCookie('CSRF-TOKEN');
+    const csrfToken = getCookie('CSRF-Token');
     if (csrfToken !== null) {
-        headers.append('X-CSRFToken', csrfToken);
+        headers.append('X-CSRF-Token', csrfToken);
     }
 
     let response = await fetch(`${config.host}${params.url}`,
