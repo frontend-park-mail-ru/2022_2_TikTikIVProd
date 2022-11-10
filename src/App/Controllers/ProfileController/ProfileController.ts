@@ -63,7 +63,7 @@ class ProfileController extends IController<ProfileView, UserModel>{
                 return;
             }
 
-            console.log('profile click on: ', action);
+            // console.log('profile click on: ', action);
             
             switch (action) {
                 default: return;
@@ -72,7 +72,7 @@ class ProfileController extends IController<ProfileView, UserModel>{
                     return;
                 }
                 case 'message': {
-                    console.log('message');
+                    // console.log('message');
 
                     let url = Object.assign({}, {url: paths.chat}).url;
                     url = url.replace('{:id}', userId);
@@ -87,7 +87,7 @@ class ProfileController extends IController<ProfileView, UserModel>{
                     }
                     this.model.addFriend(userId)
                     .then(()=>{
-                        console.log('succ');
+                        // console.log('succ');
                         this.changeProfileUser(userId);
                     })
                     .catch((data) => {
@@ -103,7 +103,7 @@ class ProfileController extends IController<ProfileView, UserModel>{
 
                     this.model.removeFriend(userId)
                     .then(()=>{
-                        console.log('succ');
+                        // console.log('succ');
                         this.changeProfileUser(userId);
                     })
                     .catch((data) => {

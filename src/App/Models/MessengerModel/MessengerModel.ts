@@ -37,7 +37,7 @@ class MessengerModel extends IModel {
         super();
         this.websockets = new Map<string, WebSocket>();//= [];
 
-        EventDispatcher.subscribe('wsshow', ((data : any) => console.log(data)));
+        // EventDispatcher.subscribe('wsshow', ((data : any) => console.log(data)));
     }
 
     public async getDialogs() {
@@ -116,11 +116,9 @@ class MessengerModel extends IModel {
     }
 
     public async createChatEventListener(chatId: string | number, opts?: { onclose?: Function, onmessage?: Function }) {
-        console.log('Create ws');
-        
-        
+        // console.log('Create ws');
         if(this.websockets.has(chatId.toString())){
-            console.log('ws ', chatId, ' alr exst');
+            // console.log('ws ', chatId, ' alr exst');
             
             return Promise.resolve();
         }
@@ -159,28 +157,28 @@ class MessengerModel extends IModel {
                             try {
                                 const msg: IMessage = JSON.parse(evt.data);
                                 _callback(msg); //_chatId, 
-                                console.log(msg);
+                                // console.log(msg);
                                 
                             } catch (error) { console.log(error); }
                         }
                     })(chatId, opts.onmessage);
             }
-            newSocket.onerror = (error) => console.log(error);
-            newSocket.onclose = (error) => console.log(error);
-            newSocket.onopen = (error) => console.log(error);
+            // newSocket.onerror = (error) => console.log(error);
+            // newSocket.onclose = (error) => console.log(error);
+            // newSocket.onopen = (error) => console.log(error);
             // newSocket.onmessage = (error) => console.log(error);
             
         }
 
         this.removeChatEventListener(chatId);
         this.websockets.set(chatId.toString(), newSocket);
-        EventDispatcher.emit('wsshow', this.websockets);
+        // EventDispatcher.emit('wsshow', this.websockets);
     }
 
     public removeChatEventListener(chatId: string | number) {
         this.websockets.get(chatId.toString())?.close();
         this.websockets.delete(chatId.toString());
-        EventDispatcher.emit('wsshow', this.websockets);
+        // EventDispatcher.emit('wsshow', this.websockets);
         
     }
 
@@ -197,7 +195,7 @@ class MessengerModel extends IModel {
                 receiver_id: rawMsg.receiver_id,
                 sender_id: rawMsg.sender_id,
             }
-            console.log('init msg: ', msg);
+            // console.log('init msg: ', msg);
 
             return Promise.resolve(msg);
         }
@@ -227,12 +225,12 @@ class MessengerModel extends IModel {
             return;
         }
 
-        console.log('Send model: ', ws);
-        console.log(' msg: ', JSON.stringify({
-            body: text,
-            sender_id: receiver_id,
-            receiver_id: sender_id ,
-        }));
+        // console.log('Send model: ', ws);
+        // console.log(' msg: ', JSON.stringify({
+            // body: text,
+            // sender_id: receiver_id,
+            // receiver_id: sender_id ,
+        // }));
         
         
         ws.send(JSON.stringify({
@@ -240,7 +238,7 @@ class MessengerModel extends IModel {
             sender_id: Number(sender_id),
             receiver_id: Number(receiver_id) ,
         }));
-        console.log('Send model res: ', ws);
+        // console.log('Send model res: ', ws);
 
     }
 

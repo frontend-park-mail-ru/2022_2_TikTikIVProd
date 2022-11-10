@@ -36,7 +36,7 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
             return;
         }
 
-        console.log(dialogId, userId);
+        // console.log(dialogId, userId);
 
         let url = Object.assign({}, config.api.chat).url;
         url = url.replace('{:id}', userId.toString());
@@ -74,7 +74,7 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
         const processedData = await this.processData(data);
 
         if (!processedData) {
-            console.log('err while procc dialogs data');
+            // console.log('err while procc dialogs data');
             return;
         }
 

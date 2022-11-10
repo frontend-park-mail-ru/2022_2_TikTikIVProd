@@ -51,15 +51,15 @@ class ChatController extends
             (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
         switch (action) {
             default: {
-                console.log('No action: ', action);
+                // console.log('No action: ', action);
                 return;
             }
 
             case 'send': {
-                console.log('send');
+                // console.log('send');
 
                 if (this.emptyChat) {
-                    console.log('Empty chat');
+                    // console.log('Empty chat');
 
                     if (!this.userID) {
                         console.log('USer id is null');
@@ -69,7 +69,7 @@ class ChatController extends
                     const text = this.view.getNewMessage();
                     this.model.messenger.initChat(text, this.userID)
                         .then((data: IMessage) => {
-                            console.log('Init chat succ');
+                            // console.log('Init chat succ');
 
                             this.currentDialogId = data.dialog_id;
                             this.emptyChat = false;
@@ -105,7 +105,7 @@ class ChatController extends
                     }
 
                     const text = this.view.getNewMessage();
-                    console.log('text');
+                    // console.log('text');
 
                     this.model.messenger.sendMessage(this.currentDialogId, text, cid, this.userID)
                     this.view.clearNewMsgForm();
@@ -115,7 +115,7 @@ class ChatController extends
     }
 
     private fillDialog(data: IDialog): void {
-        console.log(data);
+        // console.log(data);
 
         // this.model.messenger.createChatEventListener(
         // data.dialog_id, { onmessage: this.view.pushMessage.bind(this) });
@@ -125,7 +125,7 @@ class ChatController extends
 
             return;
         }
-        console.log('Empty chat');
+        // console.log('Empty chat');
     }
 
     public async mountComponent(
@@ -141,7 +141,7 @@ class ChatController extends
             this.isMounted = true;
 
             if (opts.dialogId) {
-                console.log('Chat: mode: dialog');
+                // console.log('Chat: mode: dialog');
 
                 const dialogId = opts.dialogId;
 
@@ -149,7 +149,7 @@ class ChatController extends
 
                 this.model.messenger.getDialog(dialogId)
                     .then((data) => {
-                        console.log('Chat: mode: dialog', data);
+                        // console.log('Chat: mode: dialog', data);
                         this.fillDialog(data);
                         this.emptyChat = false;
                         this.model.messenger.createChatEventListener(
@@ -185,7 +185,7 @@ class ChatController extends
                         );
                     })
                     .catch(data => {
-                        console.log(data);
+                        // console.log(data);
                         this.emptyChat = true;
                     });
                 this.setProfileData();
@@ -254,51 +254,3 @@ class ChatController extends
 }
 
 export default ChatController;
-
-
-
-// if (!opts) {
-//     router.showUnknownPage();
-//     return
-// }
-
-// if (!this.isMounted) {
-//     this.view.show();
-//     this.isMounted = true;
-
-//     let dialogId : string | number | null = null;
-
-//     if(opts.dialogId){
-//         dialogId = opts.dialogId;
-//     }
-
-//     if(opts.userId){
-//         const userId = opts.userId;
-//         const {isExists, dialogId} = await
-//         this.model.messenger.checkChatExist();
-//     }
-
-//     if(!dialogId) {
-//         router.showUnknownPage();
-//         return;
-//     }
-
-//     this.currentDialogId = dialogId;
-
-//     this.model.messenger.getDialog(dialogId)
-//         .then((data) => {
-//             console.log(data);
-//             this.emptyChat = false;
-
-//             if (!data.messages) {
-//                 return;
-//             }
-//             this.view.pushMessages(data.messages);
-//             this.model.messenger.createChatEventListener(dialogId, {
-//             onmessage: this.view.pushMessage.bind(this) })
-//         })
-//         .catch((data) => {
-//             console.log('NEW CHAT!!!!!');
-//             this.emptyChat = true;
-//         });
-// }

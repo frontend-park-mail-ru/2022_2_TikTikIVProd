@@ -13,7 +13,7 @@ import "../../Components/ChatNavbar/ChatNavbar.scss"
 
 import { IDialog, IMessage } from "../../Models/MessengerModel/MessengerModel";
 import { IDialogData } from "../../Controllers/MessengerController/MessengerController";
-import { IMessageData } from "../../Controllers/ChatController/ChatController";
+import { IChatNavbar, IMessageData } from "../../Controllers/ChatController/ChatController";
 
 class ChatView extends IView {
     private messagesList: HTMLElement;
