@@ -212,7 +212,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.avatar}`,
+                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
             };
             return Promise.resolve(user);
         }
