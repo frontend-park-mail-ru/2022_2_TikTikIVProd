@@ -116,7 +116,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: '../src/img/test_avatar.jpg',
+                avatar: response.parsedBody.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.avatar}`,
             };
             EventDispatcher.emit('user-changed', this.currentUser);
             const keyStatus = response.status.toString() as keyof typeof config.api.signin.statuses.success;
@@ -295,7 +295,7 @@ class UserModel extends IModel {
                     nick_name: rawUser.nick_name,
                     email: rawUser.email,
                     id: rawUser.id,
-                    avatar: '../src/img/test_avatar.jpg',
+                    avatar: rawUser.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${rawUser.avatar}`,
                 };
             });
 
