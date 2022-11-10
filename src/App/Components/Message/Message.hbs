@@ -1,16 +1,17 @@
 <div class="message">
-    <div class="author-message">
-        <img src="../src/img/test_avatar.jpg" class="author-message__avatar" alt="">
-    </div>
-    <div class="message__content">
+    <img src="{{user.avatar}}" class="author-message__avatar" alt="">
+    <div class="message__wrapper">
+        <div class="author-message__name">{{user.first_name}} {{user.last_name}}</div>
         <div class="message__date">
-            23.11.2001
+            {{date}}
         </div>
-        <div class="message__text">
-            dajw ndwjka ndjkadn jkwand jknawdjk akdwal;d kawdm jkwandj kawnd jkawd nawjdk wa
-        </div>
-        <div class="message__attachments">
+        <div class="message__content">
+            <div class="message__text">
+                {{text}}
+            </div>
+            <div class="message__attachments">
 
+            </div>
         </div>
     </div>
 </div>

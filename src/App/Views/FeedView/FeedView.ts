@@ -88,11 +88,7 @@ class FeedView extends IView {
         }
 
         const textar = <HTMLTextAreaElement>form.querySelector('.feed-card-create__text')
-        console.log(textar);
-
         const text = textar.value;
-        console.log(text);
-
 
         return { text: text };
     }
@@ -105,7 +101,7 @@ class FeedView extends IView {
     public pushContentToFeed(data: IFeedData[], currentUserId: number): void {
         // TODO
         // const parser = new DOMParser();
-        console.log(data);
+        // console.log(data);
 
         data.forEach((item) => {
             const card = feedCardTemplate(currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true }));
@@ -120,7 +116,7 @@ class FeedView extends IView {
 
     public deletePost(id: number | string): void {
         const feed = this.cards.querySelector(`[id="${id}"]`);
-        console.log(feed);
+        // console.log(feed);
 
         if (!feed) {
             return;

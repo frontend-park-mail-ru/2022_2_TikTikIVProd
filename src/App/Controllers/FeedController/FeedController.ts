@@ -39,7 +39,7 @@ class FeedController extends IController<FeedView, FeedModel> {
     public setFeedContent(feedType: IFeedType) {
         if (JSON.stringify(this.feedType) === JSON.stringify(feedType)) {
             // НЕ поменялся тип фида;
-            console.log('feed type no changes');
+            // console.log('feed type no changes');
 
             return;
         }
@@ -58,11 +58,11 @@ class FeedController extends IController<FeedView, FeedModel> {
     }
 
     private submitNewPost(): void {
-        console.log('submit new post');
+        // console.log('submit new post');
 
         const content = this.view.getNewPostData();
         if (content.text.length < 1) {
-            console.log('Post create empty form');
+            // console.log('Post create empty form');
             return;
         }
 
@@ -92,7 +92,7 @@ class FeedController extends IController<FeedView, FeedModel> {
     }
 
     private submitEditedPost(): void {
-        console.log('submit edited post');
+        // console.log('submit edited post');
 
         const content = this.view.getEditedPostData();
         if (!content.id || !content.text || content.text.length < 1) {
@@ -133,8 +133,6 @@ class FeedController extends IController<FeedView, FeedModel> {
     // }
 
     private deletePost(id: number | string): void {
-        console.log(id);
-
         this.model.deletePost(id)
             .then(() => {
                 this.view.deletePost(id);
@@ -178,8 +176,6 @@ class FeedController extends IController<FeedView, FeedModel> {
     public mountComponent(): void {
         if (!this.isMounted) {
             if (this.currentPage == 0) {
-                console.log('Feed is empty');
-
                 this.getFeeds()
                     .then(({ page, feeds, currentUserId }) => {
                         this.view.pushContentToFeed(feeds, currentUserId);
@@ -222,7 +218,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             const data = (<HTMLElement>target.closest("[data-data]"))?.dataset['data'];
 
             if (!action) {
-                console.log('No handler: ', target);
+                // console.log('No handler: ', target);
                 return;
             }
 
@@ -237,7 +233,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
                 case 'submit_search': {
                     // TODO to to model to search posts;
-                    console.log('seatch posts');
+                    // console.log('seatch posts');
                     return;
                 }
 
@@ -247,12 +243,12 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'like': {
-                    console.log('like');
+                    // console.log('like');
                     return;
                 }
 
                 case 'edit': {
-                    console.log('edit');
+                    // console.log('edit');
                     if (!cardId) {
                         console.log('Edit feed: null cardID');
                         return;
@@ -269,7 +265,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'delete': {
-                    console.log('click delete post');
+                    // console.log('click delete post');
 
                     this.deletePost(cardId);
                     return;
@@ -277,24 +273,18 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                 case 'profile_page': {
                     if (data) {
-                        console.log(' T0 ', data);
-
 
                         // TODO убрать отсюда
-                        console.log('Conf 0: ', config.api.userProfile);
 
-                        let url = config.api.userProfile.url;
+                        let url = Object.assign({}, config.api.userProfile).url;
                         url = url.replace('{:id}', data.toString());
-                        console.log('Conf 0: ', config.api.userProfile);
-
-                        console.log(' T1: ', url);
                         router.goToPath(url);
                     }
                     return;
                 }
 
                 case 'share': {
-                    console.log('share');
+                    // console.log('share');
                     return;
                 }
 
@@ -305,7 +295,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 default: {
-                    console.log('action unknown', action);
+                    // console.log('action unknown', action);
                     return;
                 }
             }

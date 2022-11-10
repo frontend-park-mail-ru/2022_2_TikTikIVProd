@@ -1,3 +1,4 @@
+import config from "../../Configs/Config";
 import UserModel, { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
@@ -62,7 +63,7 @@ class ProfileController extends IController<ProfileView, UserModel>{
                 return;
             }
 
-            console.log('profile click on: ', action);
+            // console.log('profile click on: ', action);
             
             switch (action) {
                 default: return;
@@ -71,7 +72,12 @@ class ProfileController extends IController<ProfileView, UserModel>{
                     return;
                 }
                 case 'message': {
-                    console.log('message');
+                    // console.log('message');
+
+                    let url = Object.assign({}, {url: paths.chat}).url;
+                    url = url.replace('{:id}', userId);
+                    console.log(url);
+                    router.goToPath(url);
                     return;
                 }
                 case 'add_to_friends': {
@@ -81,7 +87,7 @@ class ProfileController extends IController<ProfileView, UserModel>{
                     }
                     this.model.addFriend(userId)
                     .then(()=>{
-                        console.log('succ');
+                        // console.log('succ');
                         this.changeProfileUser(userId);
                     })
                     .catch((data) => {
@@ -97,7 +103,7 @@ class ProfileController extends IController<ProfileView, UserModel>{
 
                     this.model.removeFriend(userId)
                     .then(()=>{
-                        console.log('succ');
+                        // console.log('succ');
                         this.changeProfileUser(userId);
                     })
                     .catch((data) => {

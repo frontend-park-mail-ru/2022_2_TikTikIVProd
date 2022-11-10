@@ -43,6 +43,8 @@ import FriendsController from "./Controllers/FriendsController/FriendsController
 
 import MessengerController from "./Controllers/MessengerController/MessengerController";
 import MessengerView from "./Views/MessengerView/MessengerView";
+import ChatView from "./Views/ChatView/ChatView";
+import ChatController from "./Controllers/ChatController/ChatController";
 
 
 /**
@@ -62,6 +64,7 @@ class App {
     private settingsView: SettingsView;
     private friendsView: FriendsView;
     private messengerView: MessengerView;
+    private chatView: ChatView;
 
     // Models
     private userModel: UserModel;
@@ -80,6 +83,7 @@ class App {
     private settingsController: SettingsController;
     private friendsController: FriendsController;
     private messengerController: MessengerController;
+    private chatController: ChatController;
 
     // Elements
     private root: HTMLElement;
@@ -217,15 +221,11 @@ class App {
 
                 // Если без параметров - наш профиль
                 let userId: number | string = this.userModel.getCurrentUser()?.id ?? -1;
-                console.log(' T3 ', userId);
-
 
                 // Если есть параметр, достаем его
                 if (data && data[0]) {
                     userId = data[0]; // Если передали id, то профиль юзера
                 }
-
-                console.log(' T4 ', userId);
 
                 if (!userId || userId === -1) {
                     console.log('App: show profile- current user null');
@@ -299,12 +299,37 @@ class App {
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
                 this.messengerController.mountComponent();
+                this.messengerController.updateDialogs();
             })
             .catch(({ status, body }) => {
                 router.goToPath(paths.signinPage);
             });
     }
 
+
+    private handleChat(data: any) {
+        this.userModel.authUserByCookie()
+            .then(() => {
+                EventDispatcher.emit('unmount-all');
+                EventDispatcher.emit('redirect', paths.chat);
+
+                // mount
+                this.headerController.mountComponent();
+                this.menuController.mountComponent();
+
+                // Если есть параметр, достаем его
+                if (!data || !data[0]) {
+                    router.showUnknownPage();
+                    return;
+                }
+
+                const userId = data[0];
+                this.chatController.mountComponent({userId: userId});
+            })
+            .catch(() => {
+                router.goToPath(paths.signinPage);
+            });
+    }
     /**
      * Функция инициализирует базовую вёрстку страницы
      * (приватное поле класса)
@@ -337,7 +362,7 @@ class App {
         this.settingsView = new SettingsView(this.content);
         this.friendsView = new FriendsView(this.content);
         this.messengerView = new MessengerView(this.content);
-
+        this.chatView = new ChatView(this.content);
     }
 
     /**
@@ -349,7 +374,6 @@ class App {
         this.userModel = new UserModel();
         this.feedModel = new FeedModel();
         this.messengerModel = new MessengerModel();
-
     }
 
     /**
@@ -372,8 +396,8 @@ class App {
         this.profileController = new ProfileController(this.profileView, this.userModel);
         this.settingsController = new SettingsController(this.settingsView, this.userModel);
         this.friendsController = new FriendsController(this.friendsView, this.userModel);
-        this.messengerController = new MessengerController(this.messengerView, this.messengerModel);
-
+        this.messengerController = new MessengerController(this.messengerView, { user: this.userModel, messenger: this.messengerModel });
+        this.chatController = new ChatController(this.chatView, { user: this.userModel, messenger: this.messengerModel });
     }
 
     /**
@@ -393,6 +417,7 @@ class App {
         router.addRule(paths.friends, this.handleRedirectToFriends.bind(this));
         router.addRule(paths.userProfie, this.handleProfile.bind(this));
         router.addRule(paths.messenger, this.handleMessenger.bind(this));
+        router.addRule(paths.chat, this.handleChat.bind(this));
     }
 
     /**

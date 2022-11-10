@@ -349,6 +349,104 @@ const config: IConfig = {
                 },
             },
         },
+
+        dialogs: {
+            url: '/chat',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Список диалогов получен'
+                },
+                failure: {
+                    '401': 'Нет кук',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+        chat: {
+            url: '/chat/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Список диалогов получен'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '404': 'Чат не найден',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+        chatSend: {
+            url: '/chat/send_message',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Сообщение отправлено'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '404': 'Чат не найден',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+        checkChat: {
+            url: '/chat/user/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Сообщение отправлено'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '404': 'Чат не найден',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+        initws: {
+            url: '/ws/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Сообщение отправлено'
+                },
+                failure: {
+                    '400': 'Неверный запрос',
+                    '401': 'Нет кук',
+                    '404': 'Чат не найден',
+                    '405': 'Неверный метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
     }
 
 }

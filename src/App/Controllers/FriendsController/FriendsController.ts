@@ -2,6 +2,7 @@ import config from "../../Configs/Config";
 import UserModel from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
+import paths from "../../Router/RouterPaths";
 import FriendsView from "../../Views/FriendsView/FriendsView";
 import IController from "../IController/IController";
 
@@ -20,7 +21,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
             const userId = (<HTMLElement>target.closest('.friend')).id;
 
             if (!userId) {
-                console.log('No user id in ', target);
+                // console.log('No user id in ', target);
                 return;
             }
 
@@ -34,7 +35,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
                 }
 
                 case 'add_friend': {
-                    console.log('add');
+                    // console.log('add');
                     this.model.addFriend(userId)
                         .then(() => {
                             this.updateFriendsList();
@@ -44,7 +45,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
                 }
 
                 case 'remove_friend': {
-                    console.log('remove');
+                    // console.log('remove');
                     this.model.removeFriend(userId)
                         .then(() => {
                             this.updateFriendsList();
@@ -54,7 +55,10 @@ class FriendsController extends IController<FriendsView, UserModel> {
                 }
 
                 case 'message': {
-                    console.log('message');
+                    // console.log('message');
+                    let url = Object.assign({}, {url: paths.chat}).url;
+                    url = url.replace('{:id}', userId);
+                    router.goToPath(url);
                     return;
                 }
             }

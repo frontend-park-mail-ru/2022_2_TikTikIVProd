@@ -119,7 +119,7 @@ class FeedModel extends IModel {
 
             return Promise.resolve(feed);
         }
-        console.log(response);
+        // console.log(response);
         return Promise.reject();
     }
 
@@ -166,11 +166,11 @@ class FeedModel extends IModel {
 
         if (response.status.toString() in config.api.postCreate.statuses.failure) {
             const keyCode = response.status.toString() as keyof typeof config.api.postCreate.statuses.failure;
-            console.log(keyCode, config.api.postCreate.statuses.failure[keyCode]);
+            // console.log(keyCode, config.api.postCreate.statuses.failure[keyCode]);
             return Promise.reject({});
         }
 
-        console.log('Create post err');
+        // console.log('Create post err');
         return Promise.reject({});
     }
 
@@ -183,11 +183,11 @@ class FeedModel extends IModel {
 
         if (response.status.toString() in config.api.postCreate.statuses.failure) {
             const keyCode = response.status.toString() as keyof typeof config.api.postCreate.statuses.failure;
-            console.log(keyCode, config.api.postCreate.statuses.failure[keyCode]);
+            // console.log(keyCode, config.api.postCreate.statuses.failure[keyCode]);
             return Promise.reject({});
         }
 
-        console.log('Create post err');
+        // console.log('Create post err');
         return Promise.reject({});
     }
     /**
