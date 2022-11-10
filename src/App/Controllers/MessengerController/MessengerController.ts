@@ -29,17 +29,17 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
         const target = <HTMLElement>e.target;
 
         const dialogId = (<HTMLElement>target.closest('.dialog')).dataset['dialog_id'];
-        const userId = (<HTMLElement>target.closest('dialog'))?.dataset['user_id'];
+        const userId = (<HTMLElement>target.closest('.dialog'))?.dataset['user_id'];
 
-        if (!dialogId) {
-            console.log('dialogid null');
+        if (!userId) {
+            console.log('user null');
             return;
         }
 
         console.log(dialogId, userId);
 
-        let url = Object.assign({}, config.api.chat.url)
-        url = url.replace('{:id}', dialogId.toString());
+        let url = Object.assign({}, config.api.chat).url;
+        url = url.replace('{:id}', userId.toString());
         router.goToPath(url);
     }
 
@@ -47,42 +47,46 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
     private async processData(data: IDialog[]) {
         const dialogsData: IDialogData[] = [];
         const currentUser = this.model.user.getCurrentUser();
+
         if (!currentUser) {
             console.log('No current user');
             return;
         }
 
-        data.forEach(async function(item): Promise<any>  {
-            const userId = item.userId1 === currentUser.id ? item.userId1 : item.userId2;
-            console.log('Process: ', userId);
-            
+        for (let i = 0; i < data.length; i++) {
+            const userId = data[i].userId1 !== currentUser.id ? data[i].userId1 : data[i].userId2;
             const user = await this.model.user.getUser(userId);
-            console.log('Process: user: ', user);
             
             dialogsData.push({
-                dialog_id: item.dialog_id.toString(),
+                dialog_id: data[i].dialog_id.toString(),
                 user_id: user.id.toString(),
                 user_first_name: user.first_name,
                 user_last_name: user.last_name,
                 user_avatar: user.avatar,
             });
-        });
+        }
 
         return Promise.resolve(dialogsData);
     }
 
     public async updateDialogs() {
         const data = await this.model.messenger.getDialogs();
-        console.log('Messenger: update dialogs: ', data);
-        
         const processedData = await this.processData(data);
-        console.log('Messenger: update dialogs: ', processedData);
+
         if (!processedData) {
             console.log('err while procc dialogs data');
             return;
         }
 
         this.view.pushDialogsToList(processedData);
+    }
+
+    public mountComponent(): void {
+        if (!this.isMounted) {
+            this.view.clearList();
+            this.view.show();
+            this.isMounted = true;
+        }
     }
 }
 

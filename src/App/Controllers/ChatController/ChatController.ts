@@ -9,22 +9,34 @@ import IController from '../IController/IController';
 import { IDialogData } from '../MessengerController/MessengerController';
 
 
+export interface IMessageData {
+    user: {
+        first_name: string;
+        last_name: string;
+        avatar: string;
+    };
+    text: string;
+    date: string;
+}
+
+export interface IChatNavbar {
+    first_name: string;
+    last_name: string;
+    avatar: string;
+}
 
 class ChatController extends
     IController<ChatView, { user: UserModel, messenger: MessengerModel }> {
-    // private websocket: WebSocket | undefined;
-    // private dialogId: string | number | undefined;
+
     private currentDialogId: string | number | undefined;
     private userID: string | number | undefined;
-    private emptyChat: boolean;
+    private emptyChat: boolean | undefined;
 
     constructor(
         view: ChatView, model: { user: UserModel, messenger: MessengerModel }) {
         super(view, model);
 
-        // this.websocket = undefined;
-        // this.dialogId: string | number | undefined;
-        this.emptyChat = false;
+        this.emptyChat = undefined;
         this.currentDialogId = undefined;
         this.userID = undefined;
 
@@ -54,7 +66,8 @@ class ChatController extends
                         return;
                     }
 
-                    this.model.messenger.initChat(this.userID)
+                    const text = this.view.getNewMessage();
+                    this.model.messenger.initChat(text, this.userID)
                         .then((data: IMessage) => {
                             console.log('Init chat succ');
 
@@ -68,7 +81,8 @@ class ChatController extends
                                 },
                             );
 
-                            this.view.pushMessage(data);
+                            this.handleMessages(data);
+                            this.view.clearNewMsgForm();
                         })
                         .catch(data => {
                             console.log('init chat err');
@@ -78,21 +92,23 @@ class ChatController extends
                 } else {
 
                     const cid = this.model.user.getCurrentUser()?.id;
-                    if(!cid)
-                    {
+                    if (!cid) {
                         return;
                     }
 
-                    if(!this.currentDialogId){
+                    if (!this.currentDialogId) {
                         return;
                     }
 
-                    if(!this.userID)
-                    {
+                    if (!this.userID) {
                         return;
                     }
 
-                    this.model.messenger.sendMessage(this.currentDialogId, 'Test msg', cid ,this.userID)
+                    const text = this.view.getNewMessage();
+                    console.log('text');
+
+                    this.model.messenger.sendMessage(this.currentDialogId, text, cid, this.userID)
+                    this.view.clearNewMsgForm();
                 }
             }
         }
@@ -101,11 +117,11 @@ class ChatController extends
     private fillDialog(data: IDialog): void {
         console.log(data);
 
-        this.model.messenger.createChatEventListener(
-            data.dialog_id, { onmessage: this.view.pushMessage.bind(this) });
+        // this.model.messenger.createChatEventListener(
+        // data.dialog_id, { onmessage: this.view.pushMessage.bind(this) });
 
         if (data.messages) {
-            this.view.pushMessages(data.messages);
+            this.handleMessages(data.messages);
 
             return;
         }
@@ -120,6 +136,7 @@ class ChatController extends
         }
 
         if (!this.isMounted) {
+            this.view.clearChat();
             this.view.show();
             this.isMounted = true;
 
@@ -148,23 +165,22 @@ class ChatController extends
                         router.showUnknownPage();
                         return;
                     });
+                this.setProfileData();
                 return;
             }
 
             if (opts.userId) {
-                console.log('Chat: mode: user');
                 this.userID = opts.userId;
 
                 this.model.messenger.checkChatExist(opts.userId)
                     .then((data) => {
-                        console.log('Chat: mode: user', data);
                         this.emptyChat = false;
                         this.fillDialog(data);
                         this.currentDialogId = data.dialog_id;
                         this.model.messenger.createChatEventListener(
                             data.dialog_id,
                             {
-                                onmessage: this.view.pushMessage.bind(this)
+                                onmessage: this.handleMessages.bind(this)
                             }
                         );
                     })
@@ -172,10 +188,53 @@ class ChatController extends
                         console.log(data);
                         this.emptyChat = true;
                     });
+                this.setProfileData();
                 return;
             }
             console.log('Mount chat err');
         }
+    }
+
+    private async setProfileData() {
+        const user = await this.model.user.getUser(this.userID ?? '-1');
+        if(!user) return;
+
+        const data : IChatNavbar = {
+            avatar: user.avatar ?? '../src/img/test_avatar.jpg',
+            first_name: user.first_name ?? 'Капи',
+            last_name: user.last_name ?? 'Неопознаный',
+        }
+        this.view.setNavbarData(data);
+    }
+
+    private async handleMessages(data: IMessage | IMessage[]) {
+
+        if (!Array.isArray(data)) {
+            const ndata: IMessage[] = [];
+            ndata.push(data);
+            data = ndata;
+        }
+
+        const msgs: IMessageData[] = [];
+        for (let i = 0; i < data.length; i++) {
+            const item = data[i];
+
+            const user = await this.model.user.getUser(item.sender_id);
+
+            const formatted: IMessageData = {
+                user: {
+                    avatar: user.avatar ?? '../src/img/test_avatar.jpg',
+                    first_name: user.first_name ?? 'Капи',
+                    last_name: user.last_name ?? 'Неопознаный',
+                },
+                text: item.body ?? 'Здесь было сообщение...',
+                date: `${new Date(item.created_at).toJSON().slice(0, 10).replace(/-/g, '/')}`,
+            };
+
+            msgs.push(formatted);
+        }
+
+        this.view.pushMessages(msgs);
     }
 
     public unmountComponent(): void {
@@ -185,8 +244,11 @@ class ChatController extends
 
             if (this.currentDialogId) {
                 this.model.messenger.removeChatEventListener(this.currentDialogId);
-                this.currentDialogId = undefined;
             }
+
+            this.currentDialogId = undefined;
+            this.emptyChat = undefined;
+            this.userID = undefined;
         }
     }
 }

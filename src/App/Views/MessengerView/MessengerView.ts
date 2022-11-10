@@ -46,6 +46,11 @@ class MessengerView extends IView {
             this.dialogsList.innerHTML += dialogTemplate(item);
         })
     }
+
+    public clearList() : void {
+        this.dialogsList.innerHTML = '';
+    }
+     
 }
 
 export default MessengerView; 

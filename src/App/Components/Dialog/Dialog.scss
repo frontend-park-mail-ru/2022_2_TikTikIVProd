@@ -1,8 +1,10 @@
 .dialog {
     display: flex;
+    align-items: center;
     gap: 10px;
     padding: 10px 15px;
-    border: 1px solid red;
+    border: 2px solid lightgray;
+    border-radius: 10px;
 
     &__wrapper {
         display: flex;

@@ -1,6 +1,7 @@
 import { Value } from "sass";
 import ajax from "../../Ajax/Ajax";
 import config from "../../Configs/Config";
+import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import IModel from "../IModel/IModel"
 
 // Message
@@ -35,18 +36,18 @@ class MessengerModel extends IModel {
     constructor() {
         super();
         this.websockets = new Map<string, WebSocket>();//= [];
+
+        EventDispatcher.subscribe('wsshow', ((data : any) => console.log(data)));
     }
 
     public async getDialogs() {
         const response = await ajax(config.api.dialogs);
-
         if (response.status.toString() in config.api.dialogs.statuses.success) {
-
             const rawDialogs: IDialog[] = response.parsedBody.body.map((rawDialog: any) => {
                 return {
                     dialog_id: rawDialog.dialog_id,
-                    userId1: rawDialog.userId1,
-                    userId2: rawDialog.userId2,
+                    userId1: rawDialog.UserId1,
+                    userId2: rawDialog.UserId2,
                 }
             });
 
@@ -76,7 +77,7 @@ class MessengerModel extends IModel {
 
         const response = await ajax(conf);
         if (response.status.toString() in config.api.chat.statuses.success) {
-
+            
             const rawDialog: IDialog = {
                 dialog_id: response.parsedBody.body.dialog_id,
                 userId1: response.parsedBody.body.userId1,
@@ -115,6 +116,15 @@ class MessengerModel extends IModel {
     }
 
     public async createChatEventListener(chatId: string | number, opts?: { onclose?: Function, onmessage?: Function }) {
+        console.log('Create ws');
+        
+        
+        if(this.websockets.has(chatId.toString())){
+            console.log('ws ', chatId, ' alr exst');
+            
+            return Promise.resolve();
+        }
+        
         if (!window["WebSocket"]) {
             console.log('Websocket is not supported');
             return;
@@ -148,28 +158,34 @@ class MessengerModel extends IModel {
                         return (evt: MessageEvent<any>) => {
                             try {
                                 const msg: IMessage = JSON.parse(evt.data);
-                                _callback(_chatId, msg);
+                                _callback(msg); //_chatId, 
                                 console.log(msg);
                                 
                             } catch (error) { console.log(error); }
                         }
                     })(chatId, opts.onmessage);
             }
+            newSocket.onerror = (error) => console.log(error);
+            newSocket.onclose = (error) => console.log(error);
+            newSocket.onopen = (error) => console.log(error);
+            // newSocket.onmessage = (error) => console.log(error);
+            
         }
 
         this.removeChatEventListener(chatId);
         this.websockets.set(chatId.toString(), newSocket);
+        EventDispatcher.emit('wsshow', this.websockets);
     }
 
     public removeChatEventListener(chatId: string | number) {
         this.websockets.get(chatId.toString())?.close();
+        this.websockets.delete(chatId.toString());
+        EventDispatcher.emit('wsshow', this.websockets);
+        
     }
 
-    public async initChat(userId: string | number) {
-        console.log('init: ', JSON.stringify({ body: '', receiver_id: Number(userId) }));
-
-        const response = await ajax(config.api.chatSend, JSON.stringify({ body: '', receiver_id: Number(userId) }));
-        console.log('init resp: ', response);
+    public async initChat(msg: string, userId: string | number) {
+        const response = await ajax(config.api.chatSend, JSON.stringify({ body: msg, receiver_id: Number(userId) }));
 
         if (response.status.toString() in config.api.chatSend.statuses.success) {
             const rawMsg = response.parsedBody.body;
@@ -211,11 +227,21 @@ class MessengerModel extends IModel {
             return;
         }
 
+        console.log('Send model: ', ws);
+        console.log(' msg: ', JSON.stringify({
+            body: text,
+            sender_id: receiver_id,
+            receiver_id: sender_id ,
+        }));
+        
+        
         ws.send(JSON.stringify({
             body: text,
-            sender_id: sender_id,
-            receiver_id: receiver_id,
+            sender_id: Number(sender_id),
+            receiver_id: Number(receiver_id) ,
         }));
+        console.log('Send model res: ', ws);
+
     }
 
     public async checkChatExist(userId: string | number) {
