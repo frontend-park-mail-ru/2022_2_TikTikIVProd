@@ -17,18 +17,21 @@ export async function ajax(params: IParamsProps, body?: string) {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json;charset=utf-8');
 
-    const csrfResponse = await fetch(`${config.host}${config.api.csrf.url}`, {
-        method: config.api.csrf.method,
-        headers: headers,
-        credentials: 'include',
-    });
+    /** Получение CSRF токена для небезопасных запросов */
+    if (params.method !== 'GET') {
+        const csrfResponse = await fetch(`${config.host}${config.api.csrf.url}`, {
+            method: config.api.csrf.method,
+            headers: headers,
+            credentials: 'include',
+        });
 
-    const csrfToken = csrfResponse.headers.get('X-CSRF-Token');
-    if (csrfToken !== null) {
-        headers.append('X-CSRF-Token', csrfToken);
+        const csrfToken = csrfResponse.headers.get('X-CSRF-Token');
+        if (csrfToken !== null) {
+            headers.append('X-CSRF-Token', csrfToken);
+        }
     }
 
-
+    /** Основной запрос в сеть */
     let response = await fetch(`${config.host}${params.url}`,
         {
             method: params.method,
