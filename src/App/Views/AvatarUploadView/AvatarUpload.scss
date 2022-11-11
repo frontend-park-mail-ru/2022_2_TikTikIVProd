@@ -1,0 +1,121 @@
+.avatar-upload {
+    width: 40%;
+    height: 40%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+
+    padding: 15px 20px;
+
+    background-color: white;
+    border-radius: 10px;
+
+    &__wrapper{
+        height: min-content;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    &__choose {
+        width: 100%;
+        outline: 2px dashed black;
+        outline-offset: -2px;
+        border-radius: 10px;
+    }
+
+    &__preview {
+        object-fit: cover;
+        width: 100%;
+    }
+
+    &__tools{
+        display: flex;
+        gap: 10px;
+    }
+
+    &--hide {
+        display: none !important;
+    }
+
+    &--show {
+        display: block;
+    }
+}
+
+.avatar-upload-mock {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    &__icon {
+        object-fit: contain;
+        width: 40px;
+    }
+
+    &__text {
+        color: gray;
+        text-overflow: ellipsis;
+        font-size: 16px;
+        text-align: center;
+    }
+}
+
+.avatar-upload-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    width: min-content;
+
+    cursor: pointer;
+
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+
+
+    &__icon {
+        object-fit: contain;
+        width: 24px;
+    }
+
+    &__text {
+        color: var(--color-button-value);
+        text-overflow: ellipsis;
+        font-weight: bolder;
+        font-size: 16px;
+    }
+
+    &--green {
+        background-color: var(--color-button-background);
+    }
+
+    &--green:hover {
+        background-color: #24dc83;
+    }
+
+    &--green:active {
+        background-color: #24B66F;
+    }
+
+    &--red {
+        background-color: #F44848;
+    }
+
+    &--red:hover {
+        background-color: #f64f4f;
+    }
+
+    &--red:active {
+        background-color: #e03f3f;
+    }
+}

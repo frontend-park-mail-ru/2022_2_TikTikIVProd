@@ -13,10 +13,12 @@ interface IParamsProps {
  * @param  {string} body - тело запроса
  * @return {Promise} - промис запроса 
  */
-export async function ajax(params: IParamsProps, body?: string) {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json;charset=utf-8');
+export async function ajax(params: IParamsProps, body?: string | FormData) {
+    // const headers = new Headers();
+    // headers.append('Content-Type', 'application/json;charset=utf-8');
 
+    const headers = new Headers(params.headers);
+    
     // const csrfResponse = await fetch(`${config.host}${config.api.csrf.url}`, {
     //     method: config.api.csrf.method,
     //     headers: headers,
@@ -35,6 +37,7 @@ export async function ajax(params: IParamsProps, body?: string) {
             headers: headers,
             body: body,
             credentials: 'include',
+            
         }
     );
 

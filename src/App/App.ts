@@ -30,6 +30,8 @@ import FooterController from "./Controllers/FooterController/FooterController";
 import UserModel from "./Models/UserModel/UserModel";
 import FeedModel from "./Models/FeedModel/FeedModel";
 import MessengerModel from "./Models/MessengerModel/MessengerModel";
+import ImageUploadModel from "./Models/ImageUploadModel/ImageUploadModel";
+
 
 import ProfileController from "./Controllers/ProfileController/ProfileController";
 import ProfileView from "./Views/ProfileView/ProfileView";
@@ -43,8 +45,11 @@ import FriendsController from "./Controllers/FriendsController/FriendsController
 
 import MessengerController from "./Controllers/MessengerController/MessengerController";
 import MessengerView from "./Views/MessengerView/MessengerView";
+
 import ChatView from "./Views/ChatView/ChatView";
 import ChatController from "./Controllers/ChatController/ChatController";
+import AvatarUploadView from "./Views/AvatarUploadView/AvatarUploadView";
+import AvatarUploadController from "./Controllers/AvatarUploadController/AvatarUploadController";
 
 
 /**
@@ -65,11 +70,13 @@ class App {
     private friendsView: FriendsView;
     private messengerView: MessengerView;
     private chatView: ChatView;
+    private avatarUploadView : AvatarUploadView;
 
     // Models
     private userModel: UserModel;
     private feedModel: FeedModel;
     private messengerModel: MessengerModel;
+    private imagesModel: ImageUploadModel;
 
     // Controllers
     private signinController: SigninController;
@@ -84,6 +91,7 @@ class App {
     private friendsController: FriendsController;
     private messengerController: MessengerController;
     private chatController: ChatController;
+    private avatarUploadController : AvatarUploadController;
 
     // Elements
     private root: HTMLElement;
@@ -267,6 +275,7 @@ class App {
                 // mount
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
+                this.avatarUploadController.mountComponent();
                 this.settingsController.mountComponent();
             })
             .catch(() => {
@@ -363,6 +372,7 @@ class App {
         this.friendsView = new FriendsView(this.content);
         this.messengerView = new MessengerView(this.content);
         this.chatView = new ChatView(this.content);
+        this.avatarUploadView = new AvatarUploadView(this.content);
     }
 
     /**
@@ -374,6 +384,7 @@ class App {
         this.userModel = new UserModel();
         this.feedModel = new FeedModel();
         this.messengerModel = new MessengerModel();
+        this.imagesModel = new ImageUploadModel();
     }
 
     /**
@@ -394,10 +405,11 @@ class App {
         this.pageNotFoundController =
             new PageNotFoundController(this.pageNotFoundView);
         this.profileController = new ProfileController(this.profileView, this.userModel);
-        this.settingsController = new SettingsController(this.settingsView, this.userModel);
+        this.settingsController = new SettingsController(this.settingsView, {user: this.userModel, images: this.imagesModel});
         this.friendsController = new FriendsController(this.friendsView, this.userModel);
         this.messengerController = new MessengerController(this.messengerView, { user: this.userModel, messenger: this.messengerModel });
         this.chatController = new ChatController(this.chatView, { user: this.userModel, messenger: this.messengerModel });
+        this.avatarUploadController = new AvatarUploadController(this.avatarUploadView, {images: this.imagesModel, user: this.userModel});
     }
 
     /**
