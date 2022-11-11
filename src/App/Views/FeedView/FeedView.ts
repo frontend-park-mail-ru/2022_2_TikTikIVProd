@@ -70,7 +70,7 @@ class FeedView extends IView {
 
         const form = this.overlay.querySelector('.feed-card-create');
         if (!form) {
-            console.log('Post create no form');
+            // console.log('Post create no form');
             return { id: undefined, text: undefined };
         }
 
@@ -83,7 +83,7 @@ class FeedView extends IView {
     public getNewPostData(): { text: string } {
         const form = this.overlay.querySelector('.feed-card-create');
         if (!form) {
-            console.log('Post create no form');
+            // console.log('Post create no form');
             return { text: '' };
         }
 
@@ -101,7 +101,7 @@ class FeedView extends IView {
     public pushContentToFeed(data: IFeedData[], currentUserId: number): void {
         // TODO
         // const parser = new DOMParser();
-        // console.log(data);
+        // // console.log(data);
 
         data.forEach((item) => {
             const card = feedCardTemplate(currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true }));
@@ -116,7 +116,7 @@ class FeedView extends IView {
 
     public deletePost(id: number | string): void {
         const feed = this.cards.querySelector(`[id="${id}"]`);
-        // console.log(feed);
+        // // console.log(feed);
 
         if (!feed) {
             return;

@@ -33,7 +33,7 @@ import headerItems from "./HeaderViewConfig";
     public changeHeaderItem(itemName: string, data?: any): void {
         const headerItem = this.element.querySelector('#header__item');
         if (headerItem === null) {
-            // console.log('Header: no header item');
+            // // console.log('Header: no header item');
             return;
         }
 

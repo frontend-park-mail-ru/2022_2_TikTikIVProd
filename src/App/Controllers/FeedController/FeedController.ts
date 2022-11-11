@@ -39,7 +39,7 @@ class FeedController extends IController<FeedView, FeedModel> {
     public setFeedContent(feedType: IFeedType) {
         if (JSON.stringify(this.feedType) === JSON.stringify(feedType)) {
             // НЕ поменялся тип фида;
-            // console.log('feed type no changes');
+            // // console.log('feed type no changes');
 
             return;
         }
@@ -58,11 +58,11 @@ class FeedController extends IController<FeedView, FeedModel> {
     }
 
     private submitNewPost(): void {
-        // console.log('submit new post');
+        // // console.log('submit new post');
 
         const content = this.view.getNewPostData();
         if (content.text.length < 1) {
-            // console.log('Post create empty form');
+            // // console.log('Post create empty form');
             return;
         }
 
@@ -86,17 +86,17 @@ class FeedController extends IController<FeedView, FeedModel> {
                 this.view.hideFeedCardCreation();
             })
             .catch(() => {
-                console.log('Post create show err to view');
+                // console.log('Post create show err to view');
                 // TODO Post create show err to view
             });
     }
 
     private submitEditedPost(): void {
-        // console.log('submit edited post');
+        // // console.log('submit edited post');
 
         const content = this.view.getEditedPostData();
         if (!content.id || !content.text || content.text.length < 1) {
-            console.log('Post create empty form');
+            // console.log('Post create empty form');
             return;
         }
 
@@ -117,7 +117,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 this.view.hideFeedCardCreation();
             })
             .catch(() => {
-                console.log('Post edit show err to view');
+                // console.log('Post edit show err to view');
                 // TODO Post create show err to view
             });
     }
@@ -138,7 +138,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 this.view.deletePost(id);
             })
             .catch(({ status, body }) => {
-                console.log('Delete post err: ', status, body);
+                // console.log('Delete post err: ', status, body);
             })
     }
 
@@ -218,7 +218,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             const data = (<HTMLElement>target.closest("[data-data]"))?.dataset['data'];
 
             if (!action) {
-                // console.log('No handler: ', target);
+                // // console.log('No handler: ', target);
                 return;
             }
 
@@ -233,7 +233,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
                 case 'submit_search': {
                     // TODO to to model to search posts;
-                    // console.log('seatch posts');
+                    // // console.log('seatch posts');
                     return;
                 }
 
@@ -243,14 +243,14 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'like': {
-                    // console.log('like');
+                    // // console.log('like');
                     return;
                 }
 
                 case 'edit': {
-                    // console.log('edit');
+                    // // console.log('edit');
                     if (!cardId) {
-                        console.log('Edit feed: null cardID');
+                        // console.log('Edit feed: null cardID');
                         return;
                     }
 
@@ -259,13 +259,13 @@ class FeedController extends IController<FeedView, FeedModel> {
                             this.view.showFeedCardCreation(this.user, feed);
                         })
                         .catch(() => {
-                            console.log('edit open, err');
+                            // console.log('edit open, err');
                         });
                     return;
                 }
 
                 case 'delete': {
-                    // console.log('click delete post');
+                    // // console.log('click delete post');
 
                     this.deletePost(cardId);
                     return;
@@ -284,7 +284,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'share': {
-                    // console.log('share');
+                    // // console.log('share');
                     return;
                 }
 
@@ -295,7 +295,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 default: {
-                    // console.log('action unknown', action);
+                    // // console.log('action unknown', action);
                     return;
                 }
             }

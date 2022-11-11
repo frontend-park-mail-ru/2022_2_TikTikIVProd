@@ -32,11 +32,11 @@ class Router {
         const rawPath = history.state?.path;
         
         if (!rawPath) {
-            console.log('No path');
+            // console.log('No path');
             return;
         }
         const path = this.sanitizeUrl(rawPath);
-        // console.log(' T2 ', path);
+        // // console.log(' T2 ', path);
 
         // TODO break when found
         const found = this.routes.find(route => {
@@ -50,7 +50,7 @@ class Router {
         });
 
         if (!found) {
-            // console.log('route() err indefined url: ', rawPath);
+            // // console.log('route() err indefined url: ', rawPath);
             this.unknownPageHandler();
             return;
         }
@@ -151,7 +151,7 @@ export default router;
 //             this.route();
 //         });
 
-//         // console.log('start: ', this.current, ' hist: ',
+//         // // console.log('start: ', this.current, ' hist: ',
 //         history.state?.path);
 
 //         this.route();
@@ -173,7 +173,7 @@ export default router;
 //      * @return void
 //      */
 //     public goToPath(path: string) : void {
-//         // console.log('go to path: ', path);
+//         // // console.log('go to path: ', path);
 
 //         history.pushState({ path: path }, '', path);
 //         this.route();
@@ -185,12 +185,12 @@ export default router;
 //      */
 //     private route(): void {
 //         const path = history.state?.path;
-//         // console.log('route: ', path);
+//         // // console.log('route: ', path);
 
 
 //         const item = this.routes.find((item) => item.path == path);
 //         if (item === undefined) {
-//             // console.log('route not found. Call default ', path );
+//             // // console.log('route not found. Call default ', path );
 //             this.defaultHandler();
 //             return;
 //         }

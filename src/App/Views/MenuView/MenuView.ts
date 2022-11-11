@@ -26,7 +26,7 @@ import menuConfig from "./MenuViewConfig"
      * @param  {string} href - URL адрес активного элемента меню
      */
     public changeActiveMenuItem(href: string) {
-        // console.log(href);
+        // // console.log(href);
         this.element.querySelector(`[href="${this.currentActiveItem}"]`)?.classList.remove('menu-left-item--active');
         this.currentActiveItem = href;
         this.element.querySelector(`[href="${href}"]`)?.classList.add('menu-left-item--active');

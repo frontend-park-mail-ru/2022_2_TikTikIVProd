@@ -10,7 +10,7 @@ class AvatarUploadView extends IView {
 
     constructor(parent: HTMLElement) {
         super(parent, avatarUploadTemplate({}), '.avatar-upload__wrapper');
-        // console.log(this.element);
+        // // console.log(this.element);
 
         this.mock = <HTMLElement>this.element.querySelector('.avatar-upload-mock');
         this.preview = <HTMLImageElement>this.element.querySelector('.avatar-upload__preview');
@@ -23,9 +23,9 @@ class AvatarUploadView extends IView {
 
     public showPreview(src: string): void {
         this.preview.src = src;
-        console.log(this.preview.src);
+        // console.log(this.preview.src);
         this.preview.classList.remove('avatar-upload--hide');
-        console.log(this.element);
+        // console.log(this.element);
         
     }
 

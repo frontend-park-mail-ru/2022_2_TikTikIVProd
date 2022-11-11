@@ -37,7 +37,7 @@ class MessengerModel extends IModel {
         super();
         this.websockets = new Map<string, WebSocket>();//= [];
 
-        // EventDispatcher.subscribe('wsshow', ((data : any) => console.log(data)));
+        // EventDispatcher.subscribe('wsshow', ((data : any) => // console.log(data)));
     }
 
     public async getDialogs() {
@@ -77,7 +77,7 @@ class MessengerModel extends IModel {
 
         const response = await ajax(conf);
         if (response.status.toString() in config.api.chat.statuses.success) {
-            
+
             const rawDialog: IDialog = {
                 dialog_id: response.parsedBody.body.dialog_id,
                 userId1: response.parsedBody.body.userId1,
@@ -116,19 +116,19 @@ class MessengerModel extends IModel {
     }
 
     public async createChatEventListener(chatId: string | number, opts?: { onclose?: Function, onmessage?: Function }) {
-        // console.log('Create ws');
-        if(this.websockets.has(chatId.toString())){
-            // console.log('ws ', chatId, ' alr exst');
-            
+        // // console.log('Create ws');
+        if (this.websockets.has(chatId.toString())) {
+            // // console.log('ws ', chatId, ' alr exst');
+
             return Promise.resolve();
         }
-        
+
         if (!window["WebSocket"]) {
-            console.log('Websocket is not supported');
+            // console.log('Websocket is not supported');
             return;
         }
 
-        let host = Object.assign({url: config.host}).url;
+        let host = Object.assign({ url: config.host }).url;
         host = host.replace('http://', '');
 
         let conf = Object.assign({}, config.api.initws);
@@ -136,7 +136,7 @@ class MessengerModel extends IModel {
 
         const _ = await ajax(conf);
 
-        const newSocket = new WebSocket("ws://"+host+"/ws/" + chatId);
+        const newSocket = new WebSocket("ws://" + host + "/ws/" + chatId);
 
         if (opts) {
             if (opts.onclose) {
@@ -157,17 +157,19 @@ class MessengerModel extends IModel {
                             try {
                                 const msg: IMessage = JSON.parse(evt.data);
                                 _callback(msg); //_chatId, 
-                                // console.log(msg);
-                                
-                            } catch (error) { console.log(error); }
+                                // // console.log(msg);
+
+                            } catch (error) {
+                                console.log(error);
+                            }
                         }
                     })(chatId, opts.onmessage);
             }
-            // newSocket.onerror = (error) => console.log(error);
-            // newSocket.onclose = (error) => console.log(error);
-            // newSocket.onopen = (error) => console.log(error);
-            // newSocket.onmessage = (error) => console.log(error);
-            
+            // newSocket.onerror = (error) => // console.log(error);
+            // newSocket.onclose = (error) => // console.log(error);
+            // newSocket.onopen = (error) => // console.log(error);
+            // newSocket.onmessage = (error) => // console.log(error);
+
         }
 
         this.removeChatEventListener(chatId);
@@ -179,7 +181,7 @@ class MessengerModel extends IModel {
         this.websockets.get(chatId.toString())?.close();
         this.websockets.delete(chatId.toString());
         // EventDispatcher.emit('wsshow', this.websockets);
-        
+
     }
 
     public async initChat(msg: string, userId: string | number) {
@@ -195,7 +197,7 @@ class MessengerModel extends IModel {
                 receiver_id: rawMsg.receiver_id,
                 sender_id: rawMsg.sender_id,
             }
-            // console.log('init msg: ', msg);
+            // // console.log('init msg: ', msg);
 
             return Promise.resolve(msg);
         }
@@ -218,27 +220,27 @@ class MessengerModel extends IModel {
 
     }
 
-    public sendMessage(dialogId : string | number, text: string, sender_id : string | number, receiver_id : string | number) {
+    public sendMessage(dialogId: string | number, text: string, sender_id: string | number, receiver_id: string | number) {
         const ws = this.websockets.get(dialogId.toString());
-        if(!ws){
-            console.log('No ws for ', dialogId);
+        if (!ws) {
+            // console.log('No ws for ', dialogId);
             return;
         }
 
-        // console.log('Send model: ', ws);
-        // console.log(' msg: ', JSON.stringify({
-            // body: text,
-            // sender_id: receiver_id,
-            // receiver_id: sender_id ,
+        // // console.log('Send model: ', ws);
+        // // console.log(' msg: ', JSON.stringify({
+        // body: text,
+        // sender_id: receiver_id,
+        // receiver_id: sender_id ,
         // }));
-        
-        
+
+
         ws.send(JSON.stringify({
             body: text,
             sender_id: Number(sender_id),
-            receiver_id: Number(receiver_id) ,
+            receiver_id: Number(receiver_id),
         }));
-        // console.log('Send model res: ', ws);
+        // // console.log('Send model res: ', ws);
 
     }
 

@@ -236,7 +236,7 @@ class App {
                 }
 
                 if (!userId || userId === -1) {
-                    console.log('App: show profile- current user null');
+                    // console.log('App: show profile- current user null');
                     return;
                 }
 
@@ -469,7 +469,7 @@ class App {
      */
     private initPrefferedColorTheme(): void {
         if (!window.matchMedia) {
-            // console.log('Браузер не поддерживает matchMedia');
+            // // console.log('Браузер не поддерживает matchMedia');
             return;
         }
         window.matchMedia('(prefers-color-scheme: dark)')

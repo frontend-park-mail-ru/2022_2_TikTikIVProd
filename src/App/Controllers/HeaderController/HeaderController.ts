@@ -19,7 +19,7 @@ class HeaderController extends IController<HeaderView, null> {
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         EventDispatcher.subscribe('user-changed', (user : IUser) => {
             if(user){
-                console.log('Header: ', user);
+                // console.log('Header: ', user);
                 
                this.view.changeHeaderItem('profile', user);
             }

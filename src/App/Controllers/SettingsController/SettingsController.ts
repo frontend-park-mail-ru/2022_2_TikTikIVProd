@@ -27,8 +27,8 @@ class SettingsController extends IController<SettingsView, {user: UserModel, ima
     }
 
     private test() {
-        // console.log(this.view.getAvatarUploadView().view.preview);
-        // console.log(this.view.)
+        // // console.log(this.view.getAvatarUploadView().view.preview);
+        // // console.log(this.view.)
     }
 
     public unmountComponent(): void {
@@ -47,7 +47,7 @@ class SettingsController extends IController<SettingsView, {user: UserModel, ima
         if (!this.isMounted) {
             const user = this.model.user.getCurrentUser();
             if (!user) {
-                console.log('Settings contr error no user');
+                // console.log('Settings contr error no user');
                 return;
             }
 
@@ -73,13 +73,13 @@ class SettingsController extends IController<SettingsView, {user: UserModel, ima
             const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
 
             if (!action) {
-                console.log('No action ', target);
+                // console.log('No action ', target);
                 return;
             }
 
             switch (action) {
                 default: {
-                    console.log('Settings No action ', action, ' in ', target);
+                    // console.log('Settings No action ', action, ' in ', target);
                     // this.avatarUploadController.handleClick(target);
                     return;
                 }
@@ -89,14 +89,14 @@ class SettingsController extends IController<SettingsView, {user: UserModel, ima
                     const isValidData = this.validateData(data);
 
                     if (!isValidData) {
-                        // console.log('Settings: invalid data');
+                        // // console.log('Settings: invalid data');
                         return;
                     }
 
                     let params: IProfileSettings = Object.fromEntries(data);
                     this.model.user.updateUserData(params)
                         .catch(data => {
-                            console.log(data, ' fail');
+                            // console.log(data, ' fail');
                         });
                 }
             }

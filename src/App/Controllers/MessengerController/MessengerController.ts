@@ -32,11 +32,11 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
         const userId = (<HTMLElement>target.closest('.dialog'))?.dataset['user_id'];
 
         if (!userId) {
-            console.log('user null');
+            // console.log('user null');
             return;
         }
 
-        // console.log(dialogId, userId);
+        // // console.log(dialogId, userId);
 
         let url = Object.assign({}, config.api.chat).url;
         url = url.replace('{:id}', userId.toString());
@@ -49,7 +49,7 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
         const currentUser = this.model.user.getCurrentUser();
 
         if (!currentUser) {
-            console.log('No current user');
+            // console.log('No current user');
             return;
         }
 
@@ -74,7 +74,7 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
         const processedData = await this.processData(data);
 
         if (!processedData) {
-            // console.log('err while procc dialogs data');
+            // // console.log('err while procc dialogs data');
             return;
         }
 

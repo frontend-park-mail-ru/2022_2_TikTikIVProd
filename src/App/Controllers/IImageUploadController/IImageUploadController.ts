@@ -17,7 +17,7 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
         this.virtInput.type = 'file';
         this.virtInput.accept = 'image/*';
         this.virtInput.onchange = () => {
-            console.log('onchange');
+            // console.log('onchange');
             
             const imgs = this.virtInput.files;
             if (imgs) {
@@ -25,7 +25,7 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
                 this.imgsStore.set(key, { file: imgs[0], uploaded: false });
                 this.loadImagePreview(key);
                 if (this.autoUpload) {
-                    console.log('auto upload');
+                    // console.log('auto upload');
                     this.uploadImage(key);
                 }
             }
@@ -35,7 +35,7 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
     public uploadImage(url: string) {
         const img = this.imgsStore.get(url);
         if (!img) {
-            console.log('No img ', url);
+            // console.log('No img ', url);
             return;
         }
 
@@ -53,7 +53,7 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
 
         const data = new FormData();
         data.append('image', img.file);
-        console.log(data);
+        // console.log(data);
         
         this.model.uploadImage(data)
             .then(({id}) => {
@@ -61,7 +61,7 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
                 this.onSucceccUpload(id.toString());
             })
             .catch(err => {
-                console.log(err);
+                // console.log(err);
                 this.onFailUpload(url);
             });
     }
@@ -162,7 +162,7 @@ export default IImageUploadController;
 //                 // return Promise.resolve();
 //             })
 //             .catch(data => {
-//                 console.log(data);
+//                 // console.log(data);
 
 
 //                 this.view.hidePreview(this.localURL);

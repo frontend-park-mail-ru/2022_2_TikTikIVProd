@@ -25,19 +25,19 @@ class ProfileController extends IController<ProfileView, UserModel>{
     public async changeProfileUser(userId: number | string) {
         const currentUser = this.model.getCurrentUser();
         if (!currentUser) {
-            console.log('ProfileContr: current user null');
+            // console.log('ProfileContr: current user null');
             return Promise.reject();
         }
 
         const user = await this.model.getUser(userId);
         if (!user) {
-            console.log('ProfileContr: User ', userId, ' does not exist');
+            // console.log('ProfileContr: User ', userId, ' does not exist');
             return Promise.reject();
         }
 
         const isFriend = await this.model.isFriend(userId); // TODO;
 
-        console.log(' T5 ', user.id, isFriend);
+        // console.log(' T5 ', user.id, isFriend);
 
         this.view.redrawProfile(user, currentUser, isFriend);
 
@@ -59,11 +59,11 @@ class ProfileController extends IController<ProfileView, UserModel>{
             const userId = (<HTMLElement>target.closest('.profile')?.querySelector('.profile-user'))?.dataset['user_id'];
             
             if(!userId) {
-                console.log('usr id frield empty');
+                // console.log('usr id frield empty');
                 return;
             }
 
-            // console.log('profile click on: ', action);
+            // // console.log('profile click on: ', action);
             
             switch (action) {
                 default: return;
@@ -72,42 +72,42 @@ class ProfileController extends IController<ProfileView, UserModel>{
                     return;
                 }
                 case 'message': {
-                    // console.log('message');
+                    // // console.log('message');
 
                     let url = Object.assign({}, {url: paths.chat}).url;
                     url = url.replace('{:id}', userId);
-                    console.log(url);
+                    // console.log(url);
                     router.goToPath(url);
                     return;
                 }
                 case 'add_to_friends': {
                     if (!userId) {
-                        console.log('add friend err');
+                        // console.log('add friend err');
                         return;
                     }
                     this.model.addFriend(userId)
                     .then(()=>{
-                        // console.log('succ');
+                        // // console.log('succ');
                         this.changeProfileUser(userId);
                     })
                     .catch((data) => {
-                        console.log(data);
+                        // console.log(data);
                     })
                     return;
                 }
                 case 'remove_friend': {
                     if (!userId) {
-                        console.log('remove friend err');
+                        // console.log('remove friend err');
                         return;
                     }
 
                     this.model.removeFriend(userId)
                     .then(()=>{
-                        // console.log('succ');
+                        // // console.log('succ');
                         this.changeProfileUser(userId);
                     })
                     .catch((data) => {
-                        console.log(data);
+                        // console.log(data);
                     })
                     return;
                 }

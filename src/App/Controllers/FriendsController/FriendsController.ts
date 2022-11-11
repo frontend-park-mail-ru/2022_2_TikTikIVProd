@@ -21,7 +21,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
             const userId = (<HTMLElement>target.closest('.friend')).id;
 
             if (!userId) {
-                // console.log('No user id in ', target);
+                // // console.log('No user id in ', target);
                 return;
             }
 
@@ -35,27 +35,27 @@ class FriendsController extends IController<FriendsView, UserModel> {
                 }
 
                 case 'add_friend': {
-                    // console.log('add');
+                    // // console.log('add');
                     this.model.addFriend(userId)
                         .then(() => {
                             this.updateFriendsList();
                         })
-                        .catch((data) => console.log(data));
+                        .catch((data) =>  console.log(data));
                     return;
                 }
 
                 case 'remove_friend': {
-                    // console.log('remove');
+                    // // console.log('remove');
                     this.model.removeFriend(userId)
                         .then(() => {
                             this.updateFriendsList();
                         })
-                        .catch((data) => console.log(data));
+                        .catch((data) =>  console.log(data));
                     return;
                 }
 
                 case 'message': {
-                    // console.log('message');
+                    // // console.log('message');
                     let url = Object.assign({}, {url: paths.chat}).url;
                     url = url.replace('{:id}', userId);
                     router.goToPath(url);
@@ -69,18 +69,18 @@ class FriendsController extends IController<FriendsView, UserModel> {
         const userId = this.model.getCurrentUser()?.id;
 
         if (!userId) {
-            console.log('Friends err: user id null');
+            // console.log('Friends err: user id null');
             return;
         }
 
         this.model.getFriends(userId)
             .then(({ users }) => {
-                console.log(users);
+                // console.log(users);
                 this.view.clearList(); //TODO
                 this.view.fillList(users);
             })
             .catch((resp) => {
-                console.log('Friends err: ', resp);
+                // console.log('Friends err: ', resp);
             });
     }
 

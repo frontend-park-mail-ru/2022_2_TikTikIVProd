@@ -28,11 +28,11 @@ export async function ajax(params: IParamsProps, body?: string | FormData) {
         if (csrfToken !== null) {
             mainHeaders.append('X-CSRF-Token', csrfToken);
         }
-        console.log(csrfToken);
+        // console.log(csrfToken);
         
     }
 
-    console.log(mainHeaders.keys, mainHeaders.values);
+    // console.log(mainHeaders.keys, mainHeaders.values);
     
     /** Основной запрос в сеть */
     let response = await fetch(`${config.host}${params.url}`,

@@ -42,7 +42,7 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
     public bindSubmit(listener: any): void {
         const submit = this.element.querySelector('#' + signupViewConfig.submit.id);
         if (submit === null) {
-            // console.log('No submit btn signup view');
+            // // console.log('No submit btn signup view');
             return;
         }
 

@@ -88,7 +88,7 @@ class UserModel extends IModel {
      */
     public async logoutUser() {
         const response = await ajax(config.api.logout);
-        // console.log(
+        // // console.log(
         // 'logout (succ, failed else err)',
         // response.status.toString() in config.api.logout.statuses.success,
         // response.status.toString() in config.api.logout.statuses.failure
@@ -109,7 +109,7 @@ class UserModel extends IModel {
         const response = await ajax(config.api.signin, JSON.stringify(authData));
 
         if (response.status.toString() in config.api.signin.statuses.success) {
-            // console.log('signin success');
+            // // console.log('signin success');
 
             this.currentUser = {
                 first_name: response.parsedBody.body.first_name,
@@ -133,7 +133,7 @@ class UserModel extends IModel {
         EventDispatcher.emit('user-changed', this.currentUser);
 
         if (response.status.toString() in config.api.signin.statuses.failure) {
-            // console.log('signin fail');
+            // // console.log('signin fail');
 
             const keyStatus = response.status.toString() as keyof typeof config.api.signin.statuses.failure;
             return Promise.reject({
@@ -142,7 +142,7 @@ class UserModel extends IModel {
                 body: response.parsedBody
             })
         }
-        // console.log('signin err');
+        // // console.log('signin err');
 
         return Promise.reject({
             status: response.status,
@@ -160,7 +160,7 @@ class UserModel extends IModel {
         const response = await ajax(config.api.signup, JSON.stringify(user));
 
         if (response.status.toString() in config.api.signup.statuses.success) {
-            // console.log('signup success');
+            // // console.log('signup success');
 
             this.currentUser = {
                 first_name: response.parsedBody.body.first_name,
@@ -183,7 +183,7 @@ class UserModel extends IModel {
         EventDispatcher.emit('user-changed', this.currentUser);
 
         if (response.status.toString() in config.api.signup.statuses.failure) {
-            // console.log('signup fail');
+            // // console.log('signup fail');
 
             const keyStatus = response.status.toString() as keyof typeof config.api.signup.statuses.failure;
             return Promise.reject({
@@ -192,7 +192,7 @@ class UserModel extends IModel {
                 body: response.parsedBody
             })
         }
-        // console.log('signup err');
+        // // console.log('signup err');
 
         return Promise.reject({
             status: response.status,
@@ -207,7 +207,7 @@ class UserModel extends IModel {
         const response = await ajax(conf);
 
         if (response.status.toString() in config.api.userProfile.statuses.success) {
-            console.log(`${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`);
+            // console.log(`${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`);
 
             const user: IUser = {
                 first_name: response.parsedBody.body.first_name,
@@ -240,7 +240,7 @@ class UserModel extends IModel {
         const response = await ajax(config.api.auth);
 
         if (response.status.toString() in config.api.auth.statuses.success) {
-            // console.log('auth success');
+            // // console.log('auth success');
 
             this.currentUser = {
                 first_name: response.parsedBody.body.first_name,
@@ -263,7 +263,7 @@ class UserModel extends IModel {
         EventDispatcher.emit('user-changed', this.currentUser);
 
         if (response.status.toString() in config.api.auth.statuses.failure) {
-            // console.log('auth fail');
+            // // console.log('auth fail');
 
             const keyStatus = response.status.toString() as keyof typeof config.api.auth.statuses.failure;
             return Promise.reject({
@@ -273,7 +273,7 @@ class UserModel extends IModel {
             })
         }
 
-        // console.log('auth err');
+        // // console.log('auth err');
         return Promise.reject({
             status: response.status,
             msg: 'Неожиданная ошибка',
@@ -286,11 +286,11 @@ class UserModel extends IModel {
         conf.url = conf.url.replace('{:id}', userId.toString());
 
         const response = await ajax(conf);
-        console.log(response);
+        // console.log(response);
 
         if (response.status.toString() in config.api.userFriends.statuses.success) {
             let users: IUser[] = response.parsedBody.body.map((rawUser: any) => {
-                console.log(rawUser);
+                // console.log(rawUser);
 
                 return {
                     first_name: rawUser.first_name,
@@ -389,7 +389,7 @@ class UserModel extends IModel {
     }
 
     public async updateUserData(newData: IProfileSettings) {
-        console.log(JSON.stringify(newData));
+        // console.log(JSON.stringify(newData));
 
         const response = await ajax(config.api.userUpdate, JSON.stringify(newData));
 
@@ -410,7 +410,7 @@ class UserModel extends IModel {
 
             }
             catch (error) {
-                console.log(error);
+                // console.log(error);
             }
 
             return Promise.resolve();

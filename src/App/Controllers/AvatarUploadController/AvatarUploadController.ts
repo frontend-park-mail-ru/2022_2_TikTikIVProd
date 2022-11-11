@@ -19,7 +19,7 @@ class AvatarUploadController extends IImageUploadController<AvatarUploadView> {
         const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
         const src = (<HTMLImageElement>target.closest('.avatar-upload')?.querySelector('.avatar-upload__preview'))?.src;
 
-        console.log(src);
+        // console.log(src);
         switch (action) {
             default: return;
             case 'choose': {
@@ -28,7 +28,7 @@ class AvatarUploadController extends IImageUploadController<AvatarUploadView> {
             }
             case 'upload': {
                 if (!src) {
-                    console.log('no src');
+                    // console.log('no src');
                     return;
                 }
                 this.uploadImage(src);
@@ -52,20 +52,20 @@ class AvatarUploadController extends IImageUploadController<AvatarUploadView> {
     }
 
     public onSucceccUpload(avatarRemoveId: string): void {
-        console.log('succ');
+        // console.log('succ');
         this.userModel.updateUserData({avatar: Number(avatarRemoveId)})
         .then(() => {
-            console.log('user updated');
+            // console.log('user updated');
             this.loadImageMock();
         })
         .catch((data)=>{
-            console.log(data);
-            console.log('user not upd');
+            // console.log(data);
+            // console.log('user not upd');
         });
     }
 
     public onFailUpload(url: string): void {
-        console.log('fail');
+        // console.log('fail');
     }
 }
 
