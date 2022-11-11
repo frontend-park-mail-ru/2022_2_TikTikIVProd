@@ -1,0 +1,20 @@
+.profile-user {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+
+    &__avatar {
+        object-fit: cover;
+        height: 80px;
+        width: 80px;
+        
+        background-color: var(--color-profile-img-background);
+        outline: 1px solid var(--color-profile-img-border);
+        border-radius: 50%;
+    }
+
+    &__name {
+        font-size: 16px;
+        color: var(--color-profile-name);
+    }
+}

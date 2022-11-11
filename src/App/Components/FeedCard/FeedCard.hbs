@@ -1,0 +1,34 @@
+<div class="feed-card" data-action="card_page" id="{{id}}">
+  <div class="feed-card__header">
+    <div class="feed-card-author" data-action="profile_page" data-data="{{author.id}}">
+      <img src="{{author.avatar}}" alt="" class="feed-card-author__avatar" />
+      <div>
+        <div class="feed-card-author__name">{{author.first_name}} {{author.last_name}}</div>
+        <div class="feed-card__date">{{date}}</div>
+      </div>
+    </div>
+    {{#if showTools}}
+    <div class="feed-card__buttons">
+      <img src="../src/img/pen_icon.svg" alt="" class="feed-card__button" data-action="edit" />
+      <img src="../src/img/trash_icon.svg" alt="" class="feed-card__button" data-action="delete" />
+    </div>
+    {{/if}}
+  </div>
+  <div class="feed-card__content"> {{text}}</div>
+  <div class="feed-card__attachments">
+    {{#each attachments as |attachment|}}
+    <img src="{{attachment}}" alt="image" class="feed-card__picture" />
+    {{/each}}
+  </div>
+  <div class="feed-card__footer">
+    <div class="feed-card-likes">
+      <img src="../src/img/like_filled_icon.svg" alt="" class="feed-card-likes__icon">
+      <div class="feed-card-likes__count">{{likes}}</div>
+    </div>
+    <div class="feed-card__buttons">
+      <img src="../src/img/like_icon.svg" alt="" class="feed-card__button" data-action="like" />
+      <img src="../src/img/comment_icon.svg" alt="" class="feed-card__button" data-action="comment" />
+      <img src="../src/img/link_icon.svg" alt="" class="feed-card__button" data-action="share" />
+    </div>
+  </div>
+</div>

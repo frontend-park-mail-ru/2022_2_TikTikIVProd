@@ -1,0 +1,27 @@
+<div class="feed-card-create" {{#if data}} id="{{data.id}}" {{/if}}>
+    <div class="feed-card-create-author">
+        <img src="{{user.avatar}}" alt="" class="feed-card-create-author__avatar">
+    </div>
+    <div class="feed-card-create__content">
+        <textarea class="feed-card-create__text"> {{#if data}} {{data.text}} {{/if}}</textarea>
+        <div class="feed-card-create__attachments"></div>
+
+        {{#if data}}
+        <div class="feed-card-create__button feed-card-create__button--submit" data-action="sumbit_edited_post">
+            Сохранить
+        </div>
+        {{else}}
+        <div class="feed-card-create__button feed-card-create__button--submit" data-action="sumbit_new_post">
+            Опубликовать
+        </div>
+        {{/if}}
+    </div>
+    <div class="feed-card-create__tools">
+        <img src="../src/img/camera_icon.svg" alt="" class="feed-card-create__button feed-card-create__button--tool"
+            data-action="add_attachment">
+        <img src="../src/img/image_icon.svg" alt="" class="feed-card-create__button feed-card-create__button--tool"
+            data-action="">
+        <img src="../src/img/smile_icon.svg" alt="" class="feed-card-create__button feed-card-create__button--tool"
+            data-action="add_smile">
+    </div>
+</div>

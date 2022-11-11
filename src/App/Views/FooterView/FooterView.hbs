@@ -1,0 +1,14 @@
+<div class="footer__container">
+    <img src="{{logo.src}}" class="footer__logo">
+    <div class="footer__contacts">
+        Contacts:
+        {{#each contacts}}
+        <a id="{{id}}" href="{{href}}" class="footer-contact">
+            <img id="{{icon.id}}" src="{{icon.src}}" class="footer-contact__icon">
+        </a>
+        {{/each}}
+        <div class="footer__company-name">
+            {{company.name}}
+        </div>
+    </div>
+</div>

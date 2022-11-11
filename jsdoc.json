@@ -1,0 +1,18 @@
+{
+    "opts": {
+        "template": "node_modules/better-docs"
+    },
+    "tags": {
+        "allowUnknownTags": [
+            "category"
+        ]
+    },
+    "plugins": [
+        "node_modules/better-docs/typescript",
+        "node_modules/better-docs/category"
+    ],
+    "source": {
+        "include": ["./src", "./README.md"],
+        "includePattern": "\\.(js|ts)$"
+    }
+}

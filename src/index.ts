@@ -1,7 +1,4 @@
-import App from "./App/App.ts";
-import './index.css';
+import App from "./App/App";
 
-(function () {
-    const app = new App();
-    app.run();
-})();
+const app = new App();
+app.run(location.pathname);

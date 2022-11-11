@@ -1,0 +1,13 @@
+<div class="menu-left">
+    <div class="menu-left__title">
+        {{title}}
+    </div>
+    <div class="menu-left__items">
+        {{#each items as |item|}}
+        <div href="{{item.href}}" class="menu-left-item {{#if item.style }} {{item.style}} {{/if}}">
+            <img src="{{item.icon}}" class="menu-left-item__icon">
+            <div class="menu-left-item__text">{{item.text}}</div>
+        </div>
+        {{/each}}
+    </div>
+</div>

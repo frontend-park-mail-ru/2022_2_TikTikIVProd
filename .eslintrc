@@ -1,38 +1,50 @@
 {
-    "extends": [
-        "typescript",
-        "plugin:prettier/recommended"
-    ],
+    "root": true,
+    "parser": "@typescript-eslint/parser",
     "plugins": [
-        "prettier"
+        "@typescript-eslint"
     ],
-    "rules": {
-        "no-// console": "error",
-        "prettier/prettier": "error",
-        "import/order": [
-            "error",
-            {
-                "groups": [
-                    "builtin",
-                    "external",
-                    "internal"
-                ],
-                "pathGroups": [
-                    {
-                        "pattern": "TypeScript",
-                        "group": "external",
-                        "position": "before"
-                    }
-                ],
-                "pathGroupsExcludedImportTypes": [
-                    "typescript"
-                ],
-                "newlines-between": "always",
-                "alphabetize": {
-                    "order": "asc",
-                    "caseInsensitive": true
-                }
-            }
-        ]
-    }
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ]
 }
+// {
+//     "extends": [
+//         "typescript",
+//         "plugin:prettier/recommended"
+//     ],
+//     "plugins": [
+//         "prettier"
+//     ],
+//     "rules": {
+//         "no-// console": "error",
+//         "prettier/prettier": "error",
+//         "import/order": [
+//             "error",
+//             {
+//                 "groups": [
+//                     "builtin",
+//                     "external",
+//                     "internal"
+//                 ],
+//                 "pathGroups": [
+//                     {
+//                         "pattern": "TypeScript",
+//                         "group": "external",
+//                         "position": "before"
+//                     }
+//                 ],
+//                 "pathGroupsExcludedImportTypes": [
+//                     "typescript"
+//                 ],
+//                 "newlines-between": "always",
+//                 "alphabetize": {
+//                     "order": "asc",
+//                     "caseInsensitive": true
+//                 }
+//             }
+//         ]
+//     }
+// }

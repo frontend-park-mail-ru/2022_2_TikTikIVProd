@@ -1,0 +1,33 @@
+<div class="avatar-upload__wrapper">
+    <div class="avatar-upload">
+        <input type="file" id="choose-file" style="display: none;">
+        <div class="avatar-upload__choose" data-action="choose">
+            <img class="avatar-upload__preview avatar-upload--hide" src="../src/img/test_avatar.jpg" alt="">
+            <div class="avatar-upload-mock">
+                <img src="../src/img/camera_icon_black.svg" class="avatar-upload-mock__icon" alt="">
+                <div class="avatar-upload-mock__text">
+                    Выберите фотографию
+                </div>
+            </div>
+        </div>
+        <div class="avatar-upload__tools avatar-upload--hide">
+            <button class="avatar-upload-button avatar-upload-button--green" data-action="upload">
+                <img class="avatar-upload-button__icon" src="../src/img/plus_icon.svg" alt="">
+                <div class="avatar-upload-button__text">
+                    Загрузить
+                </div>
+            </button>
+            <button class="avatar-upload-button avatar-upload-button--red" data-action="clear">
+                <img class="avatar-upload-button__icon" src="../src/img/x_icon.svg" alt="">
+                <div class="avatar-upload-button__text">
+                    Отменить
+                </div>
+            </button>
+        </div>
+    </div>
+
+    {{!-- <form action="/test" method="post">
+        <input id="ti" type="file" onclick="document.getElementById('ti').dispatchEvent(new MouseEvent('click'));">
+        <input id="bs" type="submit" onclick="document.getElementById('bs').unbind('submit').submit()">
+    </form> --}}
+</div>

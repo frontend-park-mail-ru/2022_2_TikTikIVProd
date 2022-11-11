@@ -1,0 +1,25 @@
+.header-item-button {
+  height: min-content;
+  
+  display: flex;
+  align-items: center;
+
+  border: none;
+  outline: 2px solid var(--color-button-background);
+  outline-offset: -2px;
+  border-radius: 10px;
+
+  padding: 6px 10px;
+
+  cursor: pointer;
+
+  background-color: inherit;
+
+  &__text {
+    color: var(--color-button-background);
+    font-weight: bolder;
+    font-size: 16px;
+    text-decoration: none;
+    text-align: center;
+  }
+}

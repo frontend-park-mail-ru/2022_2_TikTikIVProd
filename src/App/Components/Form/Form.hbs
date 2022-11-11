@@ -1,0 +1,24 @@
+<form id={{formId}} class="form">
+    <div class="form__title">
+        {{formTitle}}
+    </div>
+    <div class="form__content">
+        {{#each inputs}}
+        <div class="input-with-title">
+            <div class="input-with-title__title">
+                {{title}}
+            </div>
+            <input type={{type}} id={{id}} placeholder={{placeholder}} class="input-with-title__input" />
+            <div id="{{id}}-msg" class="input-with-title__error-msg"></div>
+        </div>
+        {{/each}}
+        <button id={{submit.id}} class="form__button">
+            {{submit.text}}
+        </button>
+    </div>
+    <div class="form__footer">
+        {{#each links}}
+        <a id={{id}} href={{href}} class="form__link">{{text}}</a>
+        {{/each}}
+    </div>
+</form>

@@ -1,0 +1,32 @@
+<div class="profile-buttons">
+    {{#if status.isCurrent}}
+    <button class="profile-button profile-button--green" data-action="settings">
+        <img class="profile-button__icon" src="../src/img/settings_icon_white.svg" alt="">
+        <div class="profile-button__text">
+            Настройки
+        </div>
+    </button>
+    {{else}}
+    <button class="profile-button profile-button--green" data-action="message">
+        <img class="profile-button__icon" src="../src/img/message_icon.svg" alt="">
+        <div class="profile-button__text">
+            Сообщение
+        </div>
+    </button>
+    {{#if status.isFriend}}
+    <button class="profile-button profile-button--red" data-action="remove_friend">
+        <img class="profile-button__icon" src="../src/img/x_icon.svg" alt="">
+        <div class="profile-button__text">
+            Удалить
+        </div>
+    </button>
+    {{else}}
+    <button class="profile-button profile-button--green" data-action="add_to_friends">
+        <img class="profile-button__icon" src="../src/img/plus_icon.svg" alt="">
+        <div class="profile-button__text">
+            Добавить
+        </div>
+    </button>
+    {{/if}}
+    {{/if}}
+</div>

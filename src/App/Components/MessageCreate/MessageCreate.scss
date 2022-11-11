@@ -1,0 +1,154 @@
+.message-create {
+    display: grid;
+    grid-template-columns: min-content auto min-content;
+    gap: 8px;
+    padding: 10px 15px;
+    box-shadow: 0px -5px 10px rgb(0 0 0 / 15%);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    &__tools {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        min-width: 100px;
+        max-width: 100%;
+    }
+
+    &__textarea {
+        min-height: 80px;
+        resize: vertical;
+
+        padding: 5px 8px;
+
+        border-radius: 10px;
+        outline: 2px solid gray;
+        outline-offset: -2px;
+
+        font-size: 14px;
+    }
+
+    &__textarea:focus {
+        outline-color: red;
+    }
+
+    &__textarea::-webkit-scrollbar{
+        width: 0;
+        height: 0;
+    }
+
+    &__button {
+        cursor: pointer;
+    }
+
+    &__button--small {
+        width: 22px;
+        height: auto;
+        object-fit: cover;
+    }
+
+    &__button--small:hover {
+        transform: scale(1.05);
+    }
+
+    &__button--big {
+        padding: 3px 5px;
+        background-color: var(--color-button-background);
+
+        border-radius: 8px;
+
+        color: var(--color-button-value);
+        font-weight: bolder;
+        font-size: 14px;
+    }
+
+    &__button--big:hover {
+        background-color: rgb(30, 207, 80);
+    }
+
+    &__button--big:focus {
+        outline: 2px solid var(--color-button-border-focus);
+        outline-offset: -2px;
+    }
+}
+
+
+
+
+
+
+
+
+
+// .message__new {
+//     display: flex;
+//     flex-direction: row;
+//     gap: 10px;
+//     padding: 10px 20px;
+
+//     width: 100%;
+//     border-radius: 10px;
+//     background-color: white;
+// }
+
+// .message__new__tools {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 8px;
+// }
+
+// .message__new__tools__button {
+//     width: 22px;
+//     height: auto;
+//     object-fit: cover;
+//     cursor: pointer;
+// }
+
+// .message__new__tools__button--send {
+//     width: auto;
+//     cursor: pointer;
+//     border-radius: 8px;
+//     padding: 5px 8px;
+//     background-color: var(--color-button-background);
+//     color: var(--color-button-value);
+//     font-weight: bolder;
+//     font-size: 13px;
+// }
+
+// .message__new__content {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 10px;
+//     width: 100%;
+// }
+
+// .message__new__content__textarea {
+//     width: auto;
+//     font-size: 14px;
+//     resize: vertical;
+//     padding: 5px 8px;
+//     min-height: 100px;
+//     height: 100px;
+//     border-radius: 10px;
+//     outline: 2px solid var(--color-feed-card-border);
+//     outline-offset: -2px;
+// }
+
+// .message__new__content__textarea:focus {
+//     outline: 2px solid var(--color-feed-card-border);
+//     outline-offset: -2px;
+// }
+
+// .message__new__content__attachments {
+//     overflow-x: scroll;
+//     display: flex;
+//     flex-direction: row;
+//     gap: 10px;
+//     margin: auto;
+//     display: none;
+// }

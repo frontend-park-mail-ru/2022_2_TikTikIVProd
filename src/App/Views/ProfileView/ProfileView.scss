@@ -1,0 +1,51 @@
+.profile {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: center;
+
+  margin-bottom: 15px;
+  
+  &__container {
+    width: auto;
+
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: var(--color-profile-background);
+    border-radius: 10px;
+  }
+
+  &__user {
+    width: auto;
+    
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__button {
+    cursor: pointer;
+
+    padding: 10px 20px;
+
+    border: none;
+    outline: none;
+    border-radius: 8px;
+
+    background-color: var(--color-button-background);
+
+    color: var(--color-button-value);
+    font-weight: bolder;
+    font-size: 14px;
+  }
+}
