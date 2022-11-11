@@ -35,13 +35,10 @@
 
   &__picture {
     margin: 0 auto;
+
     object-fit: contain;
-
-    height: 100%;
-    max-height: 500px;
-    min-width: 150px;
-
-    width: auto;
+    width: 100%;
+    max-height: 250px;
 
     background-color: var(--color-feed-card-img-background);
     outline: 2px solid var(--color-feed-card-img-border);

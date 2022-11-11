@@ -52,7 +52,7 @@
     &__button--tool {
         width: 24px;
         height: auto;
-        object-fit: cover;
+        object-fit: contain;
     }
 
     &__button--tool:hover {
@@ -84,9 +84,10 @@
     gap: 8px;
 
     &__avatar {
-        object-fit: contain;
+        object-fit: cover;
         height: 42px;
-        width: auto;
+        width: 42px;
+        
         background-color: var(--color-profile-img-background);
         outline: 1px solid var(--color-profile-img-border);
         border-radius: 50%;

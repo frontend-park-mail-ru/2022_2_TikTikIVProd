@@ -24,9 +24,10 @@
         background-color: var(--color-profile-img-background);
         outline: 1px solid var(--color-profile-img-border);
         border-radius: 50%;
-        height: 80px;
         cursor: pointer;
         object-fit: cover;
+        height: 80px;
+        width: 80px;
     }
 
     &__name {

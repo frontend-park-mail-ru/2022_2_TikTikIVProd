@@ -15,8 +15,10 @@
 
 .dialog-user {
     &__avatar {
-        object-fit: contain;
-        height: 30px;
+        object-fit: cover;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
     }
 
     &__name {
