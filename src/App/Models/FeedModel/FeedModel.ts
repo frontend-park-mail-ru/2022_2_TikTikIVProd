@@ -161,7 +161,22 @@ class FeedModel extends IModel {
         const response = await ajax(config.api.postEdit, JSON.stringify(data));
 
         if (response.status.toString() in config.api.postCreate.statuses.success) {
-            return Promise.resolve({});
+            const rawPost = response.parsedBody.body;
+            const data : IFeedData = {
+                id: rawPost.id,
+                author: {
+                    id: rawPost.user_id,
+                    url: '',
+                    avatar: rawPost.avatar_id === 0 ? './src/img/avatar_pavel.jpg' : `${config.host}${config.api.image.url}/${rawPost.avatar_id}`,
+                    first_name: rawPost.user_first_name,
+                    last_name: rawPost.user_last_name,
+                },
+                date: `${new Date(rawPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
+                text: rawPost.message,
+                likes: 228,
+                attachments: rawPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
+            };
+            return Promise.resolve(data);
         }
 
         if (response.status.toString() in config.api.postCreate.statuses.failure) {
@@ -174,11 +189,26 @@ class FeedModel extends IModel {
         return Promise.reject({});
     }
 
-    public async sendNewFeed(data: IFeedNewPost): Promise<{}> {
+    public async sendNewFeed(data: IFeedNewPost) {
         const response = await ajax(config.api.postCreate, JSON.stringify(data));
 
         if (response.status.toString() in config.api.postCreate.statuses.success) {
-            return Promise.resolve({});
+            const rawPost = response.parsedBody.body;
+            const data : IFeedData = {
+                id: rawPost.id,
+                author: {
+                    id: rawPost.user_id,
+                    url: '',
+                    avatar: rawPost.avatar_id === 0 ? './src/img/avatar_pavel.jpg' : `${config.host}${config.api.image.url}/${rawPost.avatar_id}`,
+                    first_name: rawPost.user_first_name,
+                    last_name: rawPost.user_last_name,
+                },
+                date: `${new Date(rawPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
+                text: rawPost.message,
+                likes: 228,
+                attachments: rawPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
+            };
+            return Promise.resolve(data);
         }
 
         if (response.status.toString() in config.api.postCreate.statuses.failure) {

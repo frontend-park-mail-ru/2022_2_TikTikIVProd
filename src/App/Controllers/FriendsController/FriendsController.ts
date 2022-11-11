@@ -18,7 +18,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
         if (this.isMounted) {
             const target = <HTMLElement>e.target;
             const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
-            const userId = (<HTMLElement>target.closest('.friend')).id;
+            const userId = (<HTMLElement>target.closest('.friend'))?.id;
 
             if (!userId) {
                 // // console.log('No user id in ', target);

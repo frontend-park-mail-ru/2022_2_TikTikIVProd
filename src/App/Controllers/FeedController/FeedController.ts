@@ -82,8 +82,9 @@ class FeedController extends IController<FeedView, FeedModel> {
         };
 
         this.model.sendNewFeed(data)
-            .then(() => {
+            .then((resp) => {
                 this.view.hideFeedCardCreation();
+                this.view.pushContentToFeed(resp, this.user.id);
             })
             .catch(() => {
                 // console.log('Post create show err to view');
@@ -113,11 +114,12 @@ class FeedController extends IController<FeedView, FeedModel> {
         };
 
         this.model.sendEditedFeed(data)
-            .then(() => {
+            .then((data) => {
                 this.view.hideFeedCardCreation();
+                this.view.changePost(data);
             })
-            .catch(() => {
-                // console.log('Post edit show err to view');
+            .catch((data) => {
+                console.log(data);
                 // TODO Post create show err to view
             });
     }

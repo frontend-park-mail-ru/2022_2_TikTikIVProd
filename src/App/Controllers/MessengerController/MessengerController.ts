@@ -28,7 +28,7 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
         e.preventDefault();
         const target = <HTMLElement>e.target;
 
-        const dialogId = (<HTMLElement>target.closest('.dialog')).dataset['dialog_id'];
+        const dialogId = (<HTMLElement>target.closest('.dialog'))?.dataset['dialog_id'];
         const userId = (<HTMLElement>target.closest('.dialog'))?.dataset['user_id'];
 
         if (!userId) {
