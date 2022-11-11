@@ -42,8 +42,8 @@ export interface IConfig {
 }
 
 const config: IConfig = {
-    host: 'http://89.208.197.127:8080',
-    // host: 'http://127.0.0.1:8080',
+    // host: 'http://89.208.197.127:8080',
+    host: 'http://127.0.0.1:8080',
     // host: 'http://localhost:8080',
     api: {
         logout: {
@@ -156,6 +156,27 @@ const config: IConfig = {
                 },
             },
         },
+
+        imageUpload: {
+            url: '/image/upload',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                // 'Content-Type': 'multipart/form-data',
+            },
+            statuses: {
+                success: {
+                    '200': 'Картинка загружена'
+                },
+                failure: {
+                    '401': 'No cookie',
+                    '400': 'No csrf',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+
+
         post: {
             url: '/post/{:id}',
             method: REQUEST_TYPE.GET,

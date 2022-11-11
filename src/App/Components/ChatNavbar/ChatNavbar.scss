@@ -11,9 +11,10 @@
     }
 
     &__avatar {
-        object-fit: contain;
+        object-fit: cover;
         height: 40px;
-        width: auto;
+        width: 40px;
+
         background-color: lightgray;
         outline: 1px solid darkgray;
         outline-offset: -1px;
@@ -37,7 +38,7 @@
     &__icon{
         object-fit: cover;
         height: 24px;
-        width: auto;
+        width: 24px;
     }
 
     &__text{

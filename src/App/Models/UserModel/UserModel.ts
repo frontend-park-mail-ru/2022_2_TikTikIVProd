@@ -61,7 +61,7 @@ export interface IProfileSettings {
     nick_name?: string;
     email?: string;
     password?: string;
-    avatar?: string;
+    avatar?: number;
 }
 /**
  * Модель пользователя
@@ -96,6 +96,7 @@ class UserModel extends IModel {
 
         this.currentUser = null;
         EventDispatcher.emit('user-changed', this.currentUser);
+        EventDispatcher.subscribe('user-update', this.updateUserData.bind(this));
     }
 
     /**
@@ -116,7 +117,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.avatar}`,
+                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
             };
             EventDispatcher.emit('user-changed', this.currentUser);
             const keyStatus = response.status.toString() as keyof typeof config.api.signin.statuses.success;
@@ -206,6 +207,8 @@ class UserModel extends IModel {
         const response = await ajax(conf);
 
         if (response.status.toString() in config.api.userProfile.statuses.success) {
+            console.log(`${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`);
+
             const user: IUser = {
                 first_name: response.parsedBody.body.first_name,
                 last_name: response.parsedBody.body.last_name,
@@ -245,7 +248,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.avatar}`,
+                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
             };
             EventDispatcher.emit('user-changed', this.currentUser);
             const keyStatus = response.status.toString() as keyof typeof config.api.auth.statuses.success;
@@ -386,6 +389,8 @@ class UserModel extends IModel {
     }
 
     public async updateUserData(newData: IProfileSettings) {
+        console.log(JSON.stringify(newData));
+
         const response = await ajax(config.api.userUpdate, JSON.stringify(newData));
 
         if (response.status.toString() in config.api.deleteFriend.statuses.success) {
@@ -393,6 +398,11 @@ class UserModel extends IModel {
             try {
                 let newCurrentUser = Object.assign({}, this.currentUser);
                 Object.keys(newData).forEach(key => {
+                    if (key === 'avatar') {
+                        const id = newData[key] ?? 0;
+                        newCurrentUser[key] =  id !== 0 ?  `${config.host}${config.api.image.url}/${id}` : '../src/img/test_avatar.jpg';
+                        return;
+                    }
                     newCurrentUser[key] = newData[key];
                 });
                 this.currentUser = newCurrentUser;
