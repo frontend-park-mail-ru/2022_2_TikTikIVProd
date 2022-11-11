@@ -27,3 +27,9 @@ yarn-error.log*
 .vscode
 node_modules/
 docs/
+
+#debug
+tsconfig.json
+
+yarn.lock
+package-lock.json
