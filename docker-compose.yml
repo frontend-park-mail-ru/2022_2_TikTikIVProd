@@ -6,7 +6,8 @@ web:
     - ./build:/etc/nginx/templates/app/build
     - ./src:/etc/nginx/templates/app/src
   ports:
-    - "7000:80"
+    - "80:80"
+    # - "5500:80"
   environment:
     - NGINX_HOST=foobar.com
     - NGINX_PORT=80=
