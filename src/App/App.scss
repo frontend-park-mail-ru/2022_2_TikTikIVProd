@@ -2,7 +2,13 @@
 @import url('./Themes/Dark/DarkTheme.css');
 
 body {
-  font-family: Helvetica, Arial, sans-serif;
-  padding: 0;
-  margin: 0;
+    font-family: Helvetica, Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+
+    // standart gap 
+    --gap-beetween-blocks: 5px;
+
+    // big gap
+    --big-gap-beetween-blocks: 10px;
 }

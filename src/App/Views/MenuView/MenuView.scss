@@ -14,7 +14,7 @@
 
 .menu-left-item {
   display: flex;
-  gap: 5px;
+  gap: var(--gap-beetween-blocks);
   align-items: center;
   overflow: hidden;
   width: auto;
@@ -55,5 +55,3 @@
     color: var(--color-menu-item-logout-text);
   }
 }
-
-

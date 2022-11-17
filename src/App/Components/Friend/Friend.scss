@@ -1,6 +1,6 @@
 .friend {
     display: flex;
-    gap: 10px;
+    gap: var(--big-gap-beetween-blocks);
     width: auto;
     padding: 10px 20px;
     border-radius: 10px;
@@ -10,14 +10,14 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        gap: 10px;
+        gap: var(--big-gap-beetween-blocks);
     }
 
     &__tools {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: var(--gap-beetween-blocks);
     }
 
     &__avatar {
