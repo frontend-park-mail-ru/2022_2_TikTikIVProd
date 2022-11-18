@@ -75,6 +75,7 @@
     width: 20px;
     height: auto;
     cursor: pointer;
+    filter: var(--current-theme-invert-value);
   }
 
   &__button:hover {

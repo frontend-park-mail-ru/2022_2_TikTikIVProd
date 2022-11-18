@@ -10,7 +10,7 @@ $scrollbar-width: 8px;
 
     margin: 15px 20px;
 
-    background-color: white;
+    background-color: var(--color-chat-background);
     border-radius: 10px;
 
     &__navbar {

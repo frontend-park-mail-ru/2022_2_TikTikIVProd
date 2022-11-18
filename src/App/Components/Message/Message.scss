@@ -25,7 +25,7 @@
     }
 
     &__text {
-        color: black;
+        color: var(--coloor-chat-message-text);
         font-size: 14px;
     }
 
@@ -39,7 +39,7 @@
 
     &__name {
         font-size: 13px;
-        color: black;
+        color: var(--color-chat-author-message-name);
     }
 
     &__avatar {

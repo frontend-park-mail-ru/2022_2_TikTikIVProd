@@ -17,11 +17,11 @@ class HeaderController extends IController<HeaderView, null> {
         super(view, null);
         this.view.bindClickEvent(this.handleRedirect.bind(this));
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
-        EventDispatcher.subscribe('user-changed', (user : IUser) => {
-            if(user){
+        EventDispatcher.subscribe('user-changed', (user: IUser) => {
+            if (user) {
                 // console.log('Header: ', user);
-                
-               this.view.changeHeaderItem('profile', user);
+
+                this.view.changeHeaderItem('profile', user);
             }
         });
 
@@ -46,6 +46,12 @@ class HeaderController extends IController<HeaderView, null> {
             const href = (<HTMLElement>e.target).closest('[href]')?.getAttribute('href');
             if (href !== undefined && href !== null) {
                 router.goToPath(href);
+            }
+            else {
+                const root = document.getElementById('root');
+                if (root !== undefined && root != null) {
+                    root.classList.toggle('dark-mode')
+                }
             }
         }
     }

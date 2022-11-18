@@ -6,7 +6,7 @@
     height: min-content;
 
     padding: 10px 15px;
-    background-color: white;
+    background-color: var(--color-feed-navbar-backgroung);
     border-radius: 10px;
 }
 
@@ -78,6 +78,8 @@
         font-size: 14px;
         cursor: text;
         text-overflow: ellipsis;
+        background-color: var(--color-feed-navbar-backgroung);
+        color: var(--color-feed-navbar-text);
     }
 
     &__input:focus {
@@ -90,5 +92,6 @@
         height: 20px;
         width: auto;
         cursor: pointer;
+        filter: var(--current-theme-invert-value);
     }
 }

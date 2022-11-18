@@ -1,11 +1,11 @@
-.navbar-chat{
+.navbar-chat {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 5px;
 
 
-    &__nav{
+    &__nav {
         display: flex;
         align-items: center;
     }
@@ -21,33 +21,32 @@
         border-radius: 50%;
     }
 
-    &__name{
+    &__name {
         word-wrap: break-word;
         font-size: 18px;
         font-weight: bolder;
-        color: #303030;
+        color: var(--color-chat-navbar-name);
     }
 }
 
-.navbar-chat-button { 
+.navbar-chat-button {
     display: flex;
     align-items: center;
     cursor: pointer;
     gap: 5px;
 
-    &__icon{
+    &__icon {
         object-fit: cover;
         height: 24px;
         width: 24px;
     }
 
-    &__text{
+    &__text {
         color: gray;
         font-size: 13px;
     }
 }
 
-.navbar-chat-button:hover{
+.navbar-chat-button:hover {
     transform: scale(1.05);
 }
-

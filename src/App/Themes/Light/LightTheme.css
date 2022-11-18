@@ -1,4 +1,7 @@
-:root, :root[theme='light'] {
+:root,
+:root[theme='light'] {
+  --current-theme-invert-value: invert(0);
+
   --color-root-background: #f0f2f5;
 
   --color-footer-background: #eaecf0;
@@ -50,10 +53,25 @@
   --color-feed-card-text: #000000;
   --color-feed-card-likes: #818c99;
 
+  --color-feed-navbar-backgroung: #ffffff;
+  --color-feed-navbar-text: #000000;
+
   --color-profile-background: #ffffff;
   --color-button-background: #21cf7a;
   --color-button-value: #ffffff;
   --color-profile-name: #000000;
   --color-profile-img-border: #d8d8d8;
   --color-profile-img-background: #ebebeb;
+
+  --color-messenger-background: #ffffff;
+
+  --color-friend-block-background: #ffffff;
+
+  --color-chat-background: #ffffff;
+  --color-chat-author-message-name: #000000;
+  --color-chat-navbar-name: #303030;
+  --coloor-chat-message-text: #000000;
+  --color-chat-message-create-background: #ffffff;
+  --color-chat-message-create-text: #000000;
+
 }

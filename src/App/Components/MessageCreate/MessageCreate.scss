@@ -31,13 +31,16 @@
         outline-offset: -2px;
 
         font-size: 14px;
+
+        background-color: var(--color-chat-message-create-background);
+        color: var(--color-chat-message-create-text);
     }
 
     &__textarea:focus {
-        outline-color: red;
+        outline-color: white;
     }
 
-    &__textarea::-webkit-scrollbar{
+    &__textarea::-webkit-scrollbar {
         width: 0;
         height: 0;
     }
