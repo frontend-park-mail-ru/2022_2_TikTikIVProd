@@ -72,6 +72,10 @@
     background-color: var(--color-button-background-pressed);
   }
 
+  &__button:disabled{
+    background-color: var(--color-button-background-disabled);
+  }
+
   &__link {
     text-decoration: none;
     color: var(--color-link-value);
@@ -87,6 +91,10 @@
     text-decoration: underline var(--color-limk-underline-pressed);
   }
 
+  fieldset{
+    border: none;
+    outline: none;
+  }
 }
 
 .input-with-title {
@@ -109,6 +117,10 @@
     border-radius: 8px;
     font-size: 16px;
     color: inherit;
+  }
+
+  &__input:disabled{
+    background-color: var(--color-input-disabled);
   }
 
   &__input:focus {

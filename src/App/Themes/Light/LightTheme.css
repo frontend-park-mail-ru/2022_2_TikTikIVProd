@@ -11,6 +11,7 @@
   --color-form-background: #ffffff;
   --color-form-border: #ebebeb;
 
+  --color-input-disabled: #d8d8d8;
   --color-input-title: #6f6f6f;
   --color-input-placeholder: #d8d8d8;
   --color-input-border: #d8d8d8;
@@ -20,6 +21,7 @@
   --color-input-border-error: #f66363;
   --color-input-border-focus-error: #b04c4c;
 
+  --color-button-background-disabled: #1a9258;
   --color-button-background: #21cf7a;
   --color-button-value: #ffffff;
   --color-button-background-pressed: #24b66f;

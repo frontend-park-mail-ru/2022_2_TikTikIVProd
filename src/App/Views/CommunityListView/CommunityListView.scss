@@ -13,7 +13,7 @@
     &__navbar {
         display: flex;
         gap: 10px;
-        width: auto;
+        width: 100%;
     }
     
     &__overlay {
@@ -25,7 +25,6 @@
 
         overflow-y: scroll;
 
-        visibility: collapse;
         z-index: 1001;
 
         display: flex;
