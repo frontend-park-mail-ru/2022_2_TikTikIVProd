@@ -1,14 +1,26 @@
 {{#each this.config.groups as |group|}}
 <div class="settings-group">
-        {{#each group.inputs as |inpt|}}
-        <div class="settings-input-with-title">
-            <div class="settings-input-with-title__title">
-                {{inpt.title}}
-            </div>
-            <input type={{inpt.type}} id={{inpt.id}} value="{{lookup ../../this.data inpt.id}}" class="settings-input-with-title__input" />
-            <div id="{{inpt.id}}-msg" class="settings-input-with-title__error-msg"></div>
+    {{#each group.inputs as |inpt|}}
+    <div class="settings-input-with-title">
+        <div class="settings-input-with-title__title">
+            {{inpt.title}}
         </div>
-        {{/each}}
+        <input type={{inpt.type}} id={{inpt.id}} value="{{lookup ../../this.data inpt.id}}"
+            class="settings-input-with-title__input" />
+        <div id="{{inpt.id}}-msg" class="settings-input-with-title__error-msg"></div>
+    </div>
+    {{/each}}
+    {{#each group.textareas as |textar|}}
+    <div class="settings-input-with-title">
+        <div class="settings-input-with-title__title">
+            {{inpt.title}}
+        </div>
+        <textarea class="settings-input-with-title__input" name="{{textar.name}}" id="{{textar.id}}" rows="{{textar.rows}}">
+            {{lookup ../../this.data textar.id}}
+        </textarea>
+        <div id="{{inpt.id}}-msg" class="settings-input-with-title__error-msg"></div>
+    </div>
+    {{/each}}
     <button class="settings-group__button settings-group__button--small" data-action="submit">
         ok
     </button>

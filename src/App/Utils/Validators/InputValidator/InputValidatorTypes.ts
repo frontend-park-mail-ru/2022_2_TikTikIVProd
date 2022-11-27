@@ -31,6 +31,18 @@ const inputValidatorTypes = {
         regExp: /^[\w]{1,10}$/igd,
         msg: 'Псевдоним может состоять из английских букв и цифр без пробелов',
     },
+    'description': {
+        regExp: /^\S{5,}$/igd,
+        msg: 'Описание должно содержать минимум 5 символов',
+    },
+    'category': {
+        regExp: /^\S{5,}$/igd,
+        msg: 'Категория должна содержать минимум 5 символов',
+    },
+    'name': {
+        regExp: /^\S{5,}$/igd,
+        msg: 'Название сообщества должно иметь длину не менее 5 символов',
+    },
 }
 
 export default inputValidatorTypes;

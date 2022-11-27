@@ -1,4 +1,3 @@
-import config from "../../Configs/Config";
 import UserModel from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
@@ -28,7 +27,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
             switch (action) {
                 default: return;
                 case 'profile': {
-                    let url = `${config.api.userProfile.url}`;
+                    let url = `${paths.userProfie}`;
                     url = url.replace('{:id}', userId.toString());
                     router.goToPath(url);
                     return;

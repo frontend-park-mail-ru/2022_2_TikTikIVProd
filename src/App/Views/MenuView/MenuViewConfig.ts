@@ -28,11 +28,11 @@ const menuConfig = {
             text: 'Друзья',
             icon: '../src/img/friends_icon.svg',
         },
-        // {
-        //     href: paths.groups,
-        //     text: 'Сообщества',
-        //     icon: '../src/img/groups_icon.svg',
-        // },
+        {
+            href: paths.communities,
+            text: 'Сообщества',
+            icon: '../src/img/groups_icon.svg',
+        },
         {
             href: paths.logout,
             text: 'Выйти',

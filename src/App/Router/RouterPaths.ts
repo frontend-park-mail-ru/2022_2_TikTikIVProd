@@ -15,7 +15,9 @@ const paths = {
     friends: '/friends',
     userProfie: '/users/{:number}',
     messenger: '/messenger',
-    chat: '/chat/{:id}'
+    chat: '/chat/{:id}',
+    communities: '/communities',
+    community: '/community/{:id}',
 }
 
 export default paths;

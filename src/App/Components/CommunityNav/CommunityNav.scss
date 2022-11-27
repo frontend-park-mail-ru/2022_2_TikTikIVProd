@@ -1,0 +1,64 @@
+.community-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    width: max-content;
+    height: min-content;
+}
+
+.community-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    width: 100%;
+
+    cursor: pointer;
+
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    padding: 8px 15px;
+
+
+    &__icon {
+        object-fit: contain;
+        width: 24px;
+    }
+
+    &__text {
+        color: var(--color-button-value);
+        text-overflow: ellipsis;
+        font-weight: bolder;
+        font-size: 16px;
+
+        @media screen and (max-device-width:799px) {
+            display: none;
+        }
+    }
+
+    &--green {
+        background-color: var(--color-button-background);
+    }
+
+    &--green:hover {
+        background-color: #24dc83;
+    }
+
+    &--green:active {
+        background-color: #24B66F;
+    }
+
+    &--red {
+        background-color: #F44848;
+    }
+
+    &--red:hover {
+        background-color: #f64f4f;
+    }
+
+    &--red:active {
+        background-color: #e03f3f;
+    }
+}

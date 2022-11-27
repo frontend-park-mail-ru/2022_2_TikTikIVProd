@@ -1,0 +1,25 @@
+<div class="community-list-item" id="{{id}}">
+    <img src="{{avatar}}" class="community-list-item__avatar" data-action="community">
+    <div class="community-list-item__wrapper">
+        <div class="community-list-item__name" data-action="community">{{name}}</div>
+        {{!-- <div class="community-list-item__category" data-action="community">{{category}}</div> --}}
+        {{!-- <div class="community-list-item__subscribers" data-action="community">{{subscribers}}</div> --}}
+        <div class="community-list-item__tools">
+            {{#if isMember}}
+            <button class="community-list-item-button community-list-item-button--red" data-action="left">
+                <img class="community-list-item-button__icon" src="../src/img/x_icon.svg" alt="">
+                <div class="community-list-item-button__text">
+                    Покинуть
+                </div>
+            </button>
+            {{else}}
+            <button class="community-list-item-button community-list-item-button--green" data-action="join">
+                <img class="community-list-item-button__icon" src="../src/img/plus_icon.svg" alt="">
+                <div class="community-list-item-button__text">
+                    Вступить
+                </div>
+            </button>
+            {{/if}}
+        </div>
+    </div>
+</div>
