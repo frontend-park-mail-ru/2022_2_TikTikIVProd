@@ -1,3 +1,4 @@
+{{log this}}
 <div class="community-buttons">
     {{#if status.isAdmin}}
     <button class="community-button community-button--green" data-action="settings">
@@ -6,7 +7,7 @@
             Настройки
         </div>
     </button>
-
+    {{else}}
     {{#if status.isMember}}
     <button class="community-button community-button--red" data-action="left">
         <img class="community-button__icon" src="../src/img/x_icon.svg" alt="">
@@ -15,7 +16,7 @@
         </div>
     </button>
     {{else}}
-    <button class="community-button community-button--red" data-action="join">
+    <button class="community-button community-button--green" data-action="join">
         <img class="community-button__icon" src="../src/img/plus_icon.svg" alt="">
         <div class="community-button__text">
             Вступить

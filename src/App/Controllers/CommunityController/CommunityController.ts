@@ -2,7 +2,7 @@ import CommunityModel, { ICommunityEditData } from "../../Models/CommunityModel/
 import UserModel from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import validateInput from "../../Utils/Validators/InputValidator/InputValidator";
-import CommunityView from "../../Views/CommunityView/CommunityView";
+import CommunityView, { ICommunityNavbaParams } from "../../Views/CommunityView/CommunityView";
 import IController from "../IController/IController";
 
 /**
@@ -29,10 +29,16 @@ class CommunityController extends IController<CommunityView, {community: Communi
             
             this.model.community.get(communityId)
             .then(data => {
-                // if(currentUser) { 
-                    // data.
-                // }
+                let navbarParams : ICommunityNavbaParams = {
+                    isAdmin: false,
+                    isMember: false,
+                };
+
+                if(currentUser) { 
+                    navbarParams.isAdmin = data.owner_id === currentUser.id ? true : false;
+                }
                 this.view.setCommunityData(data);
+                this.view.setCommunityNavbar(navbarParams);
             })
             .catch(data => {
                 console.log(data);

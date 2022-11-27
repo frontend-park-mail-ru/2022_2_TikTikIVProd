@@ -110,7 +110,7 @@ class CommunityView extends IView {
     }
 
     public setCommunityNavbar(data : ICommunityNavbaParams) : void { 
-        this.navbar.innerHTML = communityNavbarTemplate({data});
+        this.navbar.innerHTML = communityNavbarTemplate({status: data});
     }
 }
 
