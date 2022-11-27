@@ -42,8 +42,8 @@ export interface IConfig {
 }
 
 const config: IConfig = {
-    // host: 'http://89.208.197.127:8080',
-    host: 'http://127.0.0.1:8080',
+    host: 'http://89.208.197.127:8080',
+    // host: 'http://127.0.0.1:8080',
     // host: 'http://localhost:8080',
     api: {
         logout: {
@@ -469,7 +469,7 @@ const config: IConfig = {
             },
         },
 
-        communitiesAll:{
+        communitiesAll: {
             url: '/communities',
             method: REQUEST_TYPE.GET,
             headers: {
@@ -483,7 +483,7 @@ const config: IConfig = {
             },
         },
 
-        communitiesCreate:{
+        communitiesCreate: {
             url: '/communities/create',
             method: REQUEST_TYPE.POST,
             headers: {
@@ -500,7 +500,7 @@ const config: IConfig = {
         },
 
 
-        communitiesEdit:{
+        communitiesEdit: {
             url: '/communities/edit',
             method: REQUEST_TYPE.POST,
             headers: {
@@ -516,7 +516,7 @@ const config: IConfig = {
             },
         },
 
-        communitiesGet:{
+        communitiesGet: {
             url: '/communities/{:id}',
             method: REQUEST_TYPE.GET,
             headers: {
@@ -526,11 +526,11 @@ const config: IConfig = {
                 success: {
                     '200': 'Сообщество данные получены'
                 },
-                failure:  failureDefaultStatuses,
+                failure: failureDefaultStatuses,
             },
         },
 
-        communitiesDelete:{
+        communitiesDelete: {
             url: '/communities/{:id}',
             method: REQUEST_TYPE.DELETE,
             headers: {
@@ -540,7 +540,7 @@ const config: IConfig = {
                 success: {
                     '204': 'Сообщество удалено'
                 },
-                failure:  Object.assign({
+                failure: Object.assign({
                     '404': 'Сообщество не найдено',
                 }, failureDefaultStatuses),
             },

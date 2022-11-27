@@ -18,6 +18,7 @@ const paths = {
     chat: '/chat/{:id}',
     communities: '/communities',
     community: '/community/{:id}',
+    aboutWS: '/aboutWS'
 }
 
 export default paths;

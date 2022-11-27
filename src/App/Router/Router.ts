@@ -30,13 +30,11 @@ class Router {
 
     private route(): void {
         const rawPath = history.state?.path;
-        
+
         if (!rawPath) {
-            // console.log('No path');
             return;
         }
         const path = this.sanitizeUrl(rawPath);
-        // // console.log(' T2 ', path);
 
         // TODO break when found
         const found = this.routes.find(route => {
@@ -50,13 +48,12 @@ class Router {
         });
 
         if (!found) {
-            // // console.log('route() err indefined url: ', rawPath);
             this.unknownPageHandler();
             return;
         }
     }
 
-    public showUnknownPage() : void {
+    public showUnknownPage(): void {
         this.unknownPageHandler();
     }
 

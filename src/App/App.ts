@@ -55,6 +55,8 @@ import CommunityView from "./Views/CommunityView/CommunityView";
 import CommunityModel from "./Models/CommunityModel/CommunityModel";
 import CommunityListController from "./Controllers/CommunityListController/CommunityListController";
 import CommunityController from "./Controllers/CommunityController/CommunityController";
+import AboutWSView from "./Views/AboutWSView/AboutWSView";
+import AboutWSController from "./Controllers/AboutWSController/AboutWSController";
 
 
 /**
@@ -78,6 +80,7 @@ class App {
     private avatarUploadView: AvatarUploadView;
     private communityListView: CommunityListView;
     private communityView: CommunityView;
+    private aboutWSView: AboutWSView;
 
     // Models
     private userModel: UserModel;
@@ -102,6 +105,7 @@ class App {
     private avatarUploadController: AvatarUploadController;
     private communityListController: CommunityListController;
     private communityController: CommunityController;
+    private aboutWSController: AboutWSController;
 
     // Elements
     private root: HTMLElement;
@@ -367,30 +371,33 @@ class App {
             });
     }
 
-    private handleCommunityPage(data : any): void {
+    private handleCommunityPage(data: any): void {
         this.userModel.authUserByCookie()
-        .then(() => {
-            EventDispatcher.emit('unmount-all');
-            EventDispatcher.emit('redirect', paths.community);
+            .then(() => {
+                EventDispatcher.emit('unmount-all');
+                EventDispatcher.emit('redirect', paths.community);
 
-            // mount
-            this.headerController.mountComponent();
-            this.menuController.mountComponent();
+                // mount
+                this.headerController.mountComponent();
+                this.menuController.mountComponent();
 
-            // Если есть параметр, достаем его
-            if (!data || !data[0]) {
-                router.showUnknownPage();
-                return;
-            }
+                // Если есть параметр, достаем его
+                if (!data || !data[0]) {
+                    router.showUnknownPage();
+                    return;
+                }
 
-            const communityId = data[0];
-            this.communityController.mountComponent(communityId);
-        })
-        .catch(() => {
-            router.goToPath(paths.signinPage);
-        });
+                const communityId = data[0];
+                this.communityController.mountComponent(communityId);
+            })
+            .catch(() => {
+                router.goToPath(paths.signinPage);
+            });
     }
 
+    private handleAboutWS(): void {
+        router.goToPath(paths.aboutWS);
+    }
     /**
      * Функция инициализирует базовую вёрстку страницы
      * (приватное поле класса)
@@ -427,6 +434,7 @@ class App {
         this.avatarUploadView = new AvatarUploadView(this.content);
         this.communityListView = new CommunityListView(this.content);
         this.communityView = new CommunityView(this.content);
+        this.aboutWSView = new AboutWSView(this.content);
     }
 
     /**
@@ -467,6 +475,7 @@ class App {
         this.avatarUploadController = new AvatarUploadController(this.avatarUploadView, { images: this.imagesModel, user: this.userModel });
         this.communityListController = new CommunityListController(this.communityListView, { community: this.communityModel, user: this.userModel });
         this.communityController = new CommunityController(this.communityView, { community: this.communityModel, user: this.userModel });
+        this.aboutWSController = new AboutWSController(this.aboutWSView);
     }
 
     /**
@@ -489,6 +498,7 @@ class App {
         router.addRule(paths.chat, this.handleChat.bind(this));
         router.addRule(paths.communities, this.handleCommunities.bind(this));
         router.addRule(paths.community, this.handleCommunityPage.bind(this));
+        router.addRule(paths.aboutWS, this.handleAboutWS.bind(this));
     }
 
     /**

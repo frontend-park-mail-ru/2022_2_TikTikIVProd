@@ -1,0 +1,128 @@
+.about-ws-block {
+
+    /* DEMO-SPECIFIC STYLES */
+    .typewriter h1 {
+        display: block;
+        color: rgb(33, 199, 0);
+        font-family: monospace;
+        font-style: bold;
+        font-size: 65px;
+        overflow: hidden;
+        /* Ensures the content is not revealed until the animation */
+        border-right: .15em solid orange;
+        /* The typwriter cursor */
+        white-space: nowrap;
+        /* Keeps the content on a single line */
+        margin: 0 auto;
+        /* Gives that scrolling effect as the typing happens */
+        letter-spacing: .15em;
+        /* Adjust as needed */
+        animation:
+            typing 3.5s steps(30, end),
+            blink-caret .5s step-end infinite;
+    }
+
+    .typewriter-wrapper {
+        display: flex;
+    }
+
+    /* The typing effect */
+    @keyframes typing {
+        from {
+            width: 0
+        }
+
+        to {
+            width: 100%
+        }
+    }
+
+    /* The typewriter cursor effect */
+    @keyframes blink-caret {
+
+        from,
+        to {
+            border-color: transparent
+        }
+
+        50% {
+            border-color: orange
+        }
+    }
+
+    .info-flex {
+        color: var(--color-menu-item-text);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin: 50px;
+    }
+
+    .info-block {
+        font-size: 15px;
+        text-align: center;
+        padding: 10px;
+        margin: 5px;
+
+        overflow: hidden;
+        display: block;
+
+        width: 220px;
+        height: 100px;
+
+        background-color: white;
+
+        border-radius: 5px;
+
+        transform-style: preserve-3d;
+        transform: rotate3d(0, 0, 0);
+
+        transition: font-size 2s,
+            width 2s,
+            height 2s,
+            transform 2s;
+
+        box-shadow:
+            1px 1px 0 1px #f9f9fb,
+            -1px 0 28px 0 rgba(34, 33, 81, 0.01),
+            54px 54px 28px -10px rgba(34, 33, 81, 0.15);
+    }
+
+    @media screen and (max-device-width:650px) {
+        .info-block {
+            width: 100%;
+            font-size: 35px;
+        }
+    }
+
+    @media screen and (max-width:760px) {
+        .info-block {
+            width: 100%;
+            height: 60px;
+        }
+    }
+
+    .description {
+        margin: 25px;
+    }
+
+    .block-links {
+        margin-left: 25px;
+    }
+
+    .button {
+        cursor: pointer;
+        width: min-content;
+        height: min-content;
+        border: none;
+        outline: none;
+        border-radius: 8px;
+        padding: 8px 15px;
+        background-color: var(--color-button-background);
+        color: var(--color-button-value);
+        text-overflow: ellipsis;
+        font-weight: bolder;
+        font-size: 16px;
+        text-decoration: none;
+    }
+}
