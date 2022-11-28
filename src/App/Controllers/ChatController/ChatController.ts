@@ -3,6 +3,7 @@ import MessengerModel, { IDialog, IMessage } from '../../Models/MessengerModel/M
 import UserModel, { IUser } from '../../Models/UserModel/UserModel';
 import EventDispatcher from '../../Modules/EventDispatcher/EventDispatcher';
 import router from '../../Router/Router';
+import paths from '../../Router/RouterPaths';
 import ChatView from '../../Views/ChatView/ChatView';
 import MessengerView from '../../Views/MessengerView/MessengerView';
 import IController from '../IController/IController';
@@ -23,6 +24,7 @@ export interface IChatNavbar {
     first_name: string;
     last_name: string;
     avatar: string;
+    id: string | number;
 }
 
 class ChatController extends
@@ -52,6 +54,24 @@ class ChatController extends
         switch (action) {
             default: {
                 // // console.log('No action: ', action);
+                return;
+            }
+
+            case 'back':{
+                router.goToPath(paths.messenger);
+                return;
+            }
+            
+            case 'user_profile':{
+                const user_id = (<HTMLElement>target.closest('[data-user_id]'))?.dataset['user_id'];
+                console.log(user_id);
+                
+                if(!user_id) return;
+
+                let url = `${paths.userProfie}`;
+                url = url.replace('{:number}', user_id);
+
+                router.goToPath(url);
                 return;
             }
 
@@ -203,6 +223,7 @@ class ChatController extends
             avatar: user.avatar ?? '../src/img/test_avatar.jpg',
             first_name: user.first_name ?? 'Капи',
             last_name: user.last_name ?? 'Неопознаный',
+            id: user.id ?? '',
         }
         this.view.setNavbarData(data);
     }

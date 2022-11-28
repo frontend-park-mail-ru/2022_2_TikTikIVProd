@@ -1,12 +1,11 @@
 .avatar-upload {
     width: 40%;
-    height: 40%;
-    height: auto;
 
     display: flex;
     flex-direction: column;
     gap: 10px;
     align-items: center;
+    overflow: hidden;
 
     padding: 15px 20px;
 
@@ -21,19 +20,23 @@
     }
 
     &__choose {
-        width: 100%;
+        width: fit-content;
+        height: fit-content;;
         outline: 2px dashed black;
-        outline-offset: -2px;
         border-radius: 10px;
+        overflow: hidden;
     }
 
     &__preview {
-        object-fit: cover;
-        width: 100%;
+        object-fit: contain;
+        min-height: 80px;
+        max-height: 150px;
     }
 
     &__tools{
         display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
         gap: 10px;
     }
 
@@ -93,6 +96,10 @@
         text-overflow: ellipsis;
         font-weight: bolder;
         font-size: 16px;
+
+        @media screen and (max-width: 300px) {
+                display: none;
+        }
     }
 
     &--green {
