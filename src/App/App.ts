@@ -196,7 +196,7 @@ class App {
                 this.feedController.mountComponent();
             })
             .catch(() => {
-                router.goToPath(paths.signinPage);
+                router.goToPath(paths.aboutWS);
             });
     }
 
@@ -396,7 +396,14 @@ class App {
     }
 
     private handleAboutWS(): void {
-        router.goToPath(paths.aboutWS);
+        EventDispatcher.emit('unmount-all');
+        EventDispatcher.emit('redirect', paths.feedPage);
+        // mount
+        this.headerController.mountComponent();
+        this.aboutWSController.mountComponent();
+        // this.menuController.mountComponent();
+        // this.feedController.setFeedContent({});
+        // this.feedController.mountComponent();
     }
     /**
      * Функция инициализирует базовую вёрстку страницы

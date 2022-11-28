@@ -39,7 +39,7 @@ class AboutWSController extends IController<AboutWSView, null>{
 
             switch (linkId) {
                 default: return;
-                case 'about-ws-block-link-signup': {
+                case 'about-ws-block-link-signin': {
                     router.goToPath(paths.signinPage);
                     return;
                 }
