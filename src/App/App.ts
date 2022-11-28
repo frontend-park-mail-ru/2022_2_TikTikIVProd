@@ -401,9 +401,7 @@ class App {
         // mount
         this.headerController.mountComponent();
         this.aboutWSController.mountComponent();
-        // this.menuController.mountComponent();
-        // this.feedController.setFeedContent({});
-        // this.feedController.mountComponent();
+        this.footerController.mountComponent();
     }
     /**
      * Функция инициализирует базовую вёрстку страницы
