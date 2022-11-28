@@ -162,7 +162,7 @@ class FeedModel extends IModel {
 
         if (response.status.toString() in config.api.postCreate.statuses.success) {
             const rawPost = response.parsedBody.body;
-            const data : IFeedData = {
+            const data: IFeedData = {
                 id: rawPost.id,
                 author: {
                     id: rawPost.user_id,
@@ -194,7 +194,7 @@ class FeedModel extends IModel {
 
         if (response.status.toString() in config.api.postCreate.statuses.success) {
             const rawPost = response.parsedBody.body;
-            const data : IFeedData = {
+            const data: IFeedData = {
                 id: rawPost.id,
                 author: {
                     id: rawPost.user_id,
@@ -250,7 +250,8 @@ class FeedModel extends IModel {
                     },
                     date: `${new Date(rawFeed.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
                     text: rawFeed.message,
-                    likes: 228,
+                    likes: rawFeed.count_likes,
+                    isLiked: rawFeed.is_liked ? "liked" : "unliked",
                     attachments: rawFeed.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
                 }
             });
@@ -258,6 +259,45 @@ class FeedModel extends IModel {
         }
         else {
             return Promise.reject({ status: response.status, feeds: [] });
+        }
+    }
+
+    /**
+     * Функция лайка поста по его id.
+     * @async
+     * @return {Promise}
+     */
+    public async likePost(postId: string) {
+        let conf = Object.assign({}, config.api.postLike);
+        conf.url = conf.url.replace('{:id}', postId);
+
+
+        let response = await ajax(conf);
+
+        if (response.status in config.api.postLike.statuses.success) {
+            return Promise.resolve({ status: response.status });
+        }
+        else {
+            return Promise.reject({ status: response.status });
+        }
+    }
+
+    /**
+     * Функция анлайка поста по его id.
+     * @async
+     * @return {Promise}
+     */
+    public async unlikePost(postId: string) {
+        let conf = Object.assign({}, config.api.postUnlike);
+        conf.url = conf.url.replace('{:id}', postId);
+
+        let response = await ajax(conf);
+
+        if (response.status in config.api.postLike.statuses.success) {
+            return Promise.resolve({ status: response.status });
+        }
+        else {
+            return Promise.reject({ status: response.status });
         }
     }
 }

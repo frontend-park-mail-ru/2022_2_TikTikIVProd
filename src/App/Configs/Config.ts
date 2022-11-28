@@ -229,6 +229,42 @@ const config: IConfig = {
                 },
             },
         },
+        postLike: {
+            url: '/post/like/{:id}',
+            method: REQUEST_TYPE.PUT,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Лайк поста успешно'
+                },
+                failure: {
+                    '401': 'no cookie',
+                    '403': 'no csrf',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+        postUnlike: {
+            url: '/post/unlike/{:id}',
+            method: REQUEST_TYPE.PUT,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Анлайк поста успешно'
+                },
+                failure: {
+                    '401': 'no cookie',
+                    '403': 'no csrf',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
 
         userPosts: {
             url: '/users/{:id}/posts',

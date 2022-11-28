@@ -160,15 +160,15 @@ class FeedController extends IController<FeedView, FeedModel> {
                 page = 1; // TODO
             })
             .catch(({ status, body }) => {
-                const item: IFeedData = {
-                    id: 321,
-                    author: { id: 0, url: '/testuser123', avatar: '../src/img/test_avatar.jpg', first_name: 'Неопознанный', last_name: 'Капи' },
-                    date: 'В будующем...',
-                    text: 'Ваши друзья еще не выложили свой первый пост. Напомните им об этом!',
-                    likes: 100500,
-                    attachments: [{ src: '../src/img/test_post_img.jpg' }],
-                }
-                data.push(item);
+                // const item: IFeedData = {
+                //     id: 321,
+                //     author: { id: 0, url: '/testuser123', avatar: '../src/img/test_avatar.jpg', first_name: 'Неопознанный', last_name: 'Капи' },
+                //     date: 'В будующем...',
+                //     text: 'Ваши друзья еще не выложили свой первый пост. Напомните им об этом!',
+                //     likes: 100500,
+                //     attachments: [{ src: '../src/img/test_post_img.jpg' }],
+                // }
+                // data.push(item);
                 page = 1; // TODO
             });
 
@@ -245,7 +245,37 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'like': {
-                    // // console.log('like');
+                    const likesCountElement = document.getElementById(`feed-card-likes__count-${cardId}`);
+                    if (target.firstElementChild !== undefined && target.firstElementChild !== null) {
+                        if ("feed-card__button__unliked" === target.firstElementChild.classList[0]) {
+                            this.model.likePost(cardId).then(({ status }) => {
+                                if (target.firstElementChild !== undefined && target.firstElementChild !== null) {
+                                    target.firstElementChild.classList.toggle("feed-card__button__liked");
+                                    target.firstElementChild.classList.remove("feed-card__button__unliked")
+                                    if (likesCountElement !== null) {
+                                        if (likesCountElement.innerText !== "0")
+                                            likesCountElement.innerText = String(Number(likesCountElement.innerText) + 1);
+                                    }
+
+                                }
+                            });
+                        }
+
+                        if ("feed-card__button__liked" === target.firstElementChild.classList[0]) {
+                            this.model.likePost(cardId).then(({ status }) => {
+                                if (target.firstElementChild !== undefined && target.firstElementChild !== null) {
+                                    target.firstElementChild.classList.toggle("feed-card__button__unliked");
+                                    target.firstElementChild.classList.remove("feed-card__button__liked")
+                                    if (likesCountElement !== null) {
+                                        if (likesCountElement.innerText !== "0")
+                                            likesCountElement.innerText = String(Number(likesCountElement.innerText) - 1);
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+
                     return;
                 }
 
