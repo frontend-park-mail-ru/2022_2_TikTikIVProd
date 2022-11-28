@@ -21,7 +21,7 @@
     &__text {
         min-width: 50vw;
         min-height: 20vh;
-        
+
         font-size: 14px;
         resize: vertical;
         padding: 5px 8px;
@@ -29,6 +29,8 @@
         border-radius: 10px;
         outline: 2px solid var(--color-feed-card-border);
         outline-offset: -2px;
+        background-color: var(--color-feed-card-create-text-background);
+        color: var(--color-feed-card-create-text);
     }
 
     &__text:focus {
@@ -87,7 +89,7 @@
         object-fit: cover;
         height: 42px;
         width: 42px;
-        
+
         background-color: var(--color-profile-img-background);
         outline: 1px solid var(--color-profile-img-border);
         border-radius: 50%;

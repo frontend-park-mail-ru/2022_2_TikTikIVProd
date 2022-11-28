@@ -30,7 +30,7 @@
     display: grid;
 
     @media screen and (max-device-width:799px) {
-        grid-template-columns: 1fr 5fr;
+        grid-template-columns: 1fr;
     }
 
     @media screen and (min-width:800px) {
@@ -45,6 +45,12 @@
     &__menu {
         display: flex;
         flex-direction: column;
+
+        @media screen and (max-device-width: 700px) {
+            // flex-direction: row;
+            position: absolute;
+            bottom: 0;
+        }
     }
 
     &__menu--left {
@@ -62,6 +68,15 @@
     &__main {
         height: 100%;
         width: 100%;
+
+        @media screen and (max-width:700px) {
+            height: calc(100% - var(--tablet-menu-height));
+        }
+
+        @media screen and (max-device-width:700px) {
+            height: calc(100% - var(--phone-menu-height));
+        }
+
 
         display: flex;
         flex-direction: column;

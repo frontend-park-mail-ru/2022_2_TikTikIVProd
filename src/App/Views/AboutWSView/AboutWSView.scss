@@ -1,4 +1,5 @@
 .about-ws {
+    overflow: auto;
 
     /* DEMO-SPECIFIC STYLES */
     .typewriter h1 {
@@ -7,6 +8,12 @@
         font-family: monospace;
         font-style: bold;
         font-size: 65px;
+
+        @media screen and (max-device-width:650px) {
+            font-size: 35px;
+            margin: 0 10px;
+        }
+
         overflow: hidden;
         /* Ensures the content is not revealed until the animation */
         border-right: .15em solid orange;
@@ -17,9 +24,8 @@
         /* Gives that scrolling effect as the typing happens */
         letter-spacing: .15em;
         /* Adjust as needed */
-        animation:
-            typing 3.5s steps(30, end),
-            blink-caret .5s step-end infinite;
+        animation: typing 3.5s steps(30, end),
+        blink-caret .5s step-end infinite;
     }
 
     .typewriter-wrapper {
@@ -86,21 +92,19 @@
             1px 1px 0 1px #f9f9fb,
             -1px 0 28px 0 rgba(34, 33, 81, 0.01),
             54px 54px 28px -10px rgba(34, 33, 81, 0.15);
-    }
 
-    @media screen and (max-device-width:650px) {
-        .info-block {
+        @media screen and (max-device-width:650px) {
             width: 100%;
-            font-size: 35px;
+            font-size: 20px;
+            box-shadow: none;
         }
-    }
 
-    @media screen and (max-width:760px) {
-        .info-block {
+        @media screen and (max-width:760px) {
             width: 100%;
             height: 60px;
         }
     }
+
 
     .description {
         margin: 25px;
