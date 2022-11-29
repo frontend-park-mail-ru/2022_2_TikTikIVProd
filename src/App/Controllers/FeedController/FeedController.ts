@@ -262,7 +262,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                         }
 
                         if ("feed-card__button__liked" === target.firstElementChild.classList[0]) {
-                            this.model.likePost(cardId).then(({ status }) => {
+                            this.model.unlikePost(cardId).then(({ status }) => {
                                 if (target.firstElementChild !== undefined && target.firstElementChild !== null) {
                                     target.firstElementChild.classList.toggle("feed-card__button__unliked");
                                     target.firstElementChild.classList.remove("feed-card__button__liked")
