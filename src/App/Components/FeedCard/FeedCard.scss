@@ -76,6 +76,14 @@
     height: auto;
     cursor: pointer;
     filter: var(--current-theme-invert-value);
+
+    &__liked {
+      fill: red;
+    }
+
+    &__unliked {
+      fill: black;
+    }
   }
 
   &__button:hover {

@@ -32,22 +32,36 @@
     overflow: hidden;
     padding: 0 10px;
 
-    @media screen and (max-device-width:799px) {
+    @media screen and (max-device-width:699px) {
         grid-template-columns: 1fr;
     }
 
-    @media screen and (min-width:700px) {
+    <<<<<<< HEAD @media screen and (max-width:699px) {
+        grid-template-columns: 1fr;
+    }
+
+    =======>>>>>>>RK2_Merge @media screen and (min-width:700px) {
         grid-template-columns: 1fr 5fr 1fr;
     }
 
     &__menu {
         display: flex;
         flex-direction: column;
+
+        @media screen and (max-device-width: 700px) {
+            position: absolute;
+            bottom: 0;
+        }
+
+        @media screen and (max-width: 700px) {
+            position: absolute;
+            bottom: 0;
+        }
     }
 
     &__menu--left {
-        align-items: flex-end; 
-        
+        align-items: flex-end;
+
         @media screen and (max-device-width: 700px),
         screen and (max-width: 700px) {
             position: absolute;
@@ -60,8 +74,13 @@
 
     &__menu--right {
         align-items: flex-start;
-        @media screen and (max-device-width:799px) {
-            display: none !important;
+
+        @media screen and (max-device-width:700px) {
+            display: none;
+        }
+
+        @media screen and (max-width:700px) {
+            display: none;
         }
     }
 
