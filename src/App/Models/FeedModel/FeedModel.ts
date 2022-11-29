@@ -1,6 +1,7 @@
 import config, { IApiItem } from "../../Configs/Config";
 import ajax from "../../Ajax/Ajax";
 import IModel from "../IModel/IModel"
+import dateParser from "../../Utils/DateParser/DateParser";
 
 // export type UserFeed = {
 //     userId: number,
@@ -203,9 +204,9 @@ class FeedModel extends IModel {
                     first_name: rawPost.user_first_name,
                     last_name: rawPost.user_last_name,
                 },
-                date: `${new Date(rawPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
+                date: dateParser(rawPost.create_date),
                 text: rawPost.message,
-                likes: 228,
+                likes: rawPost.count_likes,
                 attachments: rawPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
             };
             return Promise.resolve(data);
@@ -248,7 +249,7 @@ class FeedModel extends IModel {
                         first_name: rawFeed.user_first_name,
                         last_name: rawFeed.user_last_name,
                     },
-                    date: `${new Date(rawFeed.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
+                    date: dateParser(rawFeed.create_date),
                     text: rawFeed.message,
                     likes: rawFeed.count_likes,
                     isLiked: rawFeed.is_liked ? "liked" : "unliked",
