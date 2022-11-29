@@ -19,6 +19,7 @@
         outline: 1px solid darkgray;
         outline-offset: -1px;
         border-radius: 50%;
+        cursor: pointer;
     }
 
     &__name {
@@ -26,6 +27,7 @@
         font-size: 18px;
         font-weight: bolder;
         color: var(--color-chat-navbar-name);
+        cursor: pointer;
     }
 }
 

@@ -8,8 +8,6 @@
     
     overflow:hidden;
     
-    padding-bottom: 10px;
-
     &__navbar {
         display: flex;
         gap: 10px;
@@ -53,8 +51,8 @@
     }
 
     &__list::-webkit-scrollbar-thumb{
-        background-color: gray;
-        border: 5px solid lightgray;
+        background-color: lightgray;
+        border: 5px solid var(--color-root-background);
         border-radius: 9999px;
     } 
 

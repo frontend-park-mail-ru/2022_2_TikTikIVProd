@@ -26,25 +26,23 @@
 
 
 .root-content {
-    overflow: hidden;
+    height: 100%;
     display: grid;
+    gap: 10px;
+    overflow: hidden;
+    padding: 0 10px;
 
     @media screen and (max-device-width:699px) {
         grid-template-columns: 1fr;
     }
 
-    @media screen and (max-width:699px) {
+    <<<<<<< HEAD @media screen and (max-width:699px) {
         grid-template-columns: 1fr;
     }
 
-    @media screen and (min-width:700px) {
+    =======>>>>>>>RK2_Merge @media screen and (min-width:700px) {
         grid-template-columns: 1fr 5fr 1fr;
     }
-
-    height: 100%;
-
-    // padding: 10px 20px;
-    gap: 10px;
 
     &__menu {
         display: flex;
@@ -63,6 +61,15 @@
 
     &__menu--left {
         align-items: flex-end;
+
+        @media screen and (max-device-width: 700px),
+        screen and (max-width: 700px) {
+            position: absolute;
+            align-items: center;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+        }
     }
 
     &__menu--right {
