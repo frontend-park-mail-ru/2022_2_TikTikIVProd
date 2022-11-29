@@ -6,7 +6,7 @@
         height: 100vh;
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        gap: var(--big-gap-beetween-blocks);
     }
 
     &__header {
@@ -30,7 +30,7 @@
     display: grid;
     gap: 10px;
     overflow: hidden;
-    padding: 0 10px;
+    padding: 0;
 
     @media screen and (max-device-width:699px) {
         grid-template-columns: 1fr;
