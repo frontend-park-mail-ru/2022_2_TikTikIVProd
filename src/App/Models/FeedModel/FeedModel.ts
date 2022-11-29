@@ -233,6 +233,10 @@ class FeedModel extends IModel {
             conf.url = conf.url.replace('{:id}', feedType.user.id.toString());
         }
 
+        if (feedType.group) { // Посты сообщества
+            conf = Object.assign({}, config.api.communitiesPosts);
+            conf.url = conf.url.replace('{:id}', feedType.group.id.toString());
+        }
         // if(feedType.group){} // TODO
 
         let response = await ajax(conf);

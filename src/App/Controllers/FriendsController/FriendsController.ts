@@ -28,7 +28,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
                 default: return;
                 case 'profile': {
                     let url = `${paths.userProfie}`;
-                    url = url.replace('{:id}', userId.toString());
+                    url = url.replace('{:number}', userId.toString());
                     router.goToPath(url);
                     return;
                 }

@@ -21,7 +21,7 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
     constructor(view: MessengerView, model: { user: UserModel, messenger: MessengerModel }) {
         super(view, model);
         this.view.bindClick(this.handleClick.bind(this));
-        EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
+         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
     }
 
     private handleClick(e: Event): void {

@@ -581,6 +581,22 @@ const config: IConfig = {
                 }, failureDefaultStatuses),
             },
         },
+
+        communitiesPosts: {
+            url: '/communities/{:id}/posts',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Записи сообщества получены'
+                },
+                failure: Object.assign({
+                    '404': 'Сообщество не найдено',
+                }, failureDefaultStatuses),
+            },
+        }
     }
 
 }

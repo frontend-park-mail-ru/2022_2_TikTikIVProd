@@ -389,6 +389,14 @@ class App {
 
                 const communityId = data[0];
                 this.communityController.mountComponent(communityId);
+
+                // Рисуем фид сообщества
+                this.feedController.setFeedContent({
+                    group: {
+                        id: communityId,
+                    },
+                });
+                this.feedController.mountComponent();
             })
             .catch(() => {
                 router.goToPath(paths.signinPage);

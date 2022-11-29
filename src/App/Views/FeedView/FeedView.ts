@@ -37,8 +37,6 @@ class FeedView extends IView {
 
 
     private checkFeedCards() {
-        console.log('cards changed', this.cards.querySelector('.feed-card'));
-
         if (!this.cards.querySelector('.feed-card')) {
             this.element.querySelector('.feed-mock')?.classList.remove('feed--hide');
         } else {

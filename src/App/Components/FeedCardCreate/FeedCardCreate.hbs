@@ -6,22 +6,40 @@
         <textarea class="feed-card-create__text">{{#if data}}{{data.text}}{{/if}}</textarea>
         <div class="feed-card-create__attachments"></div>
 
-        {{#if data}}
-        <div class="feed-card-create__button feed-card-create__button--submit" data-action="sumbit_edited_post">
-            Сохранить
+        <div class="feed-card-create__tools feed-card-create__tools--row">
+            <button class="feed-card-create-button feed-card-create-button--big feed-card-create-button--red"
+                data-action="close_overlay">
+                <div class="feed-card-create-button__text">
+                    Закрыть
+                </div>
+            </button>
+
+            {{#if data}}
+            <button class="feed-card-create-button feed-card-create-button--big" data-action="sumbit_edited_post">
+                <img class="feed-card-create-button__icon" src="../src/img/send_icon.svg" alt="">
+                <div class="feed-card-create-button__text">
+                    Сохранить
+                </div>
+            </button>
+            {{else}}
+            <button class="feed-card-create-button feed-card-create-button--big" data-action="sumbit_edited_post">
+                <img class="feed-card-create-button__icon" src="../src/img/send_icon.svg" alt="">
+                <div class="feed-card-create-button__text">
+                    Опубликовать
+                </div>
+            </button>
+            {{/if}}
         </div>
-        {{else}}
-        <div class="feed-card-create__button feed-card-create__button--submit" data-action="sumbit_new_post">
-            Опубликовать
-        </div>
-        {{/if}}
     </div>
     <div class="feed-card-create__tools">
-        <img src="../src/img/camera_icon.svg" alt="" class="feed-card-create__button feed-card-create__button--tool"
-            data-action="add_attachment">
-        <img src="../src/img/image_icon.svg" alt="" class="feed-card-create__button feed-card-create__button--tool"
-            data-action="">
-        <img src="../src/img/smile_icon.svg" alt="" class="feed-card-create__button feed-card-create__button--tool"
-            data-action="add_smile">
+        <button class="feed-card-create-button feed-card-create-button--small" data-action="photo">
+            <img class="feed-card-create-button__icon" src="../src/img/camera_icon.svg" alt="">
+        </button>
+        <button class="feed-card-create-button feed-card-create-button--small" data-action="sticker">
+            <img class="feed-card-create-button__icon" src="../src/img/image_icon.svg" alt="">
+        </button>
+        <button class="feed-card-create-button feed-card-create-button--small" data-action="smile">
+            <img class="feed-card-create-button__icon" src="../src/img/smile_icon.svg" alt="">
+        </button>
     </div>
 </div>

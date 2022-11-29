@@ -97,7 +97,7 @@ class ChatController extends
                             this.model.messenger.createChatEventListener(
                                 this.currentDialogId,
                                 {
-                                    onmessage: this.view.pushMessage.bind(this),
+                                    onmessage: this.handleMessages.bind(this),
                                 },
                             );
 
@@ -175,7 +175,7 @@ class ChatController extends
                         this.model.messenger.createChatEventListener(
                             data.dialog_id,
                             {
-                                onmessage: this.view.pushMessage.bind(this)
+                                onmessage: this.handleMessages.bind(this)
                             }
                         );
                     })

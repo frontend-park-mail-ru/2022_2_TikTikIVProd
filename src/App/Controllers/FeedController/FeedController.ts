@@ -244,6 +244,11 @@ class FeedController extends IController<FeedView, FeedModel> {
                     return;
                 }
 
+                case 'close_overlay':{
+                    this.view.hideFeedCardCreation();
+                    return;
+                }
+
                 case 'like': {
                     const likesCountElement = document.getElementById(`feed-card-likes__count-${cardId}`);
                     if (target.firstElementChild !== undefined && target.firstElementChild !== null) {

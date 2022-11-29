@@ -75,6 +75,8 @@
   --coloor-chat-message-text: #000000;
   --color-chat-message-create-background: #ffffff;
   --color-chat-message-create-text: #000000;
+  --color-chat-message-create-border: #d8d8d8;
+  --color-chat-message-create-border-focus: #6f6f6f;
 
   --color-menu-border: #d8d8d8;
 
