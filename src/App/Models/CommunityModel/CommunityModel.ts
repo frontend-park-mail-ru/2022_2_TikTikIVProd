@@ -24,6 +24,7 @@ export interface ICommunityEditData {
     description?: string;
     name?: string;
     owner_id?: number;
+    id?: number;
 }
 /**
  * Модель сообществ 

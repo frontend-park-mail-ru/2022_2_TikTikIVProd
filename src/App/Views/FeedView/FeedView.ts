@@ -77,31 +77,31 @@ class FeedView extends IView {
     }
 
 
-    public getEditedPostData(): { id: string | undefined, text: string | undefined } {
+    public getEditedPostData(): { id: string | undefined, text: string | undefined, community_id: number | undefined } {
 
         const form = this.overlay.querySelector('.feed-card-create');
         if (!form) {
             // console.log('Post create no form');
-            return { id: undefined, text: undefined };
+            return { id: undefined, text: undefined, community_id: undefined };
         }
 
         const id = form?.id;
         const text = (<HTMLTextAreaElement>form.querySelector('.feed-card-create__text')).value;
-
-        return { id: id, text: text };
+        const community_id = (<HTMLElement>form)?.dataset['community_id'];
+        return { id: id, text: text, community_id: community_id ? Number(community_id) : undefined};
     }
 
-    public getNewPostData(): { text: string } {
+    public getNewPostData(): { text: string, community_id: number | undefined } {
         const form = this.overlay.querySelector('.feed-card-create');
         if (!form) {
             // console.log('Post create no form');
-            return { text: '' };
+            return { text: '', community_id: undefined };
         }
 
         const textar = <HTMLTextAreaElement>form.querySelector('.feed-card-create__text')
         const text = textar.value;
-
-        return { text: text };
+        const community_id = (<HTMLElement>form).dataset['community_id'];
+        return { text: text , community_id: community_id ? Number(community_id) : undefined};
     }
 
     /**
@@ -144,8 +144,8 @@ class FeedView extends IView {
         this.cards.removeChild(oldCard);
     }
 
-    public showFeedCardCreation(user: IUser, exsData?: IFeedData): void {
-        this.overlay.innerHTML = feedCardCreationTemplate({ user: user, data: exsData });
+    public showFeedCardCreation(user: IUser, exsData?: IFeedData, community_id ?: string | number | undefined): void {
+        this.overlay.innerHTML = feedCardCreationTemplate({ user: user, data: exsData, community_id: community_id });
         this.overlay.style.visibility = 'visible';
     }
 

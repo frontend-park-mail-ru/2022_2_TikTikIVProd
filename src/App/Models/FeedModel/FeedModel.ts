@@ -54,6 +54,7 @@ export interface IFeedData {
     text: string;
     likes: number;
     attachments: { src: string }[];
+    community_id: number,
 }
 
 export interface IFeedNewPost {
@@ -66,6 +67,8 @@ export interface IFeedNewPost {
 
     create_date: string; // TODO
     id: number; //TODO
+
+    community_id: number,
 }
 
 /**
@@ -115,6 +118,7 @@ class FeedModel extends IModel {
                 text: feedPost.message,
                 likes: 228,
                 attachments: feedPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
+                community_id: feedPost.community_id,
             }
 
             return Promise.resolve(feed);
@@ -175,6 +179,7 @@ class FeedModel extends IModel {
                 text: rawPost.message,
                 likes: 228,
                 attachments: rawPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
+                community_id: rawPost.community_id,
             };
             return Promise.resolve(data);
         }
@@ -207,6 +212,7 @@ class FeedModel extends IModel {
                 text: rawPost.message,
                 likes: 228,
                 attachments: rawPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
+                community_id: rawPost.community_id,
             };
             return Promise.resolve(data);
         }

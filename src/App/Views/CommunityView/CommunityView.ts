@@ -90,7 +90,8 @@ class CommunityView extends IView {
     }
 
     public showOverlaySettings(data: ICommunityData): void {
-        this.overlay.innerHTML = communitySettingsFormTemplate({data});
+        
+        this.overlay.innerHTML = communitySettingsFormTemplate({config: communitySettingsConfig, data: data});
         this.overlay.classList.remove('community--hidden');
     }
 

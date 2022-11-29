@@ -1,4 +1,4 @@
-<div class="feed-card-create" {{#if data}} id="{{data.id}}" {{/if}}>
+<div class="feed-card-create" {{#if data}} id="{{data.id}}" {{/if}} {{#if community_id}}data-community_id="{{community_id}}"{{/if}}>
     <div class="feed-card-create-author">
         <img src="{{user.avatar}}" alt="" class="feed-card-create-author__avatar">
     </div>
@@ -16,13 +16,13 @@
 
             {{#if data}}
             <button class="feed-card-create-button feed-card-create-button--big" data-action="sumbit_edited_post">
-                <img class="feed-card-create-button__icon" src="../src/img/send_icon.svg" alt="">
+                <img class="feed-card-create-button__icon" src="../src/img/ok_icon.svg" alt="">
                 <div class="feed-card-create-button__text">
                     Сохранить
                 </div>
             </button>
             {{else}}
-            <button class="feed-card-create-button feed-card-create-button--big" data-action="sumbit_edited_post">
+            <button class="feed-card-create-button feed-card-create-button--big" data-action="sumbit_new_post">
                 <img class="feed-card-create-button__icon" src="../src/img/send_icon.svg" alt="">
                 <div class="feed-card-create-button__text">
                     Опубликовать

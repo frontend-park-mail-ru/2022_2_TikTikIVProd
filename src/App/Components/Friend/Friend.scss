@@ -13,6 +13,12 @@
         gap: var(--big-gap-beetween-blocks);
     }
 
+    &__info {
+        font-size: 14px;
+        font-weight: bolder;
+        color: #d8d8d8;
+    }
+
     &__tools {
         display: flex;
         flex-direction: row;

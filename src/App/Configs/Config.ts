@@ -305,6 +305,19 @@ const config: IConfig = {
             },
         },
 
+        usersSearch: {
+            url: '/users/search/{:name}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Пользователи найдены'
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
 
         postDelete: {
             url: '/post/{:id}',
@@ -362,6 +375,21 @@ const config: IConfig = {
             },
         },
 
+        userCheckFriend: {
+            url: '/friends/check/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Проверка прошла успешно'
+                },
+                failure: Object.assign({
+                    '404': 'Пользователь не найден',
+                }, failureDefaultStatuses),
+            },
+        },
 
         addFriend: {
             url: '/friends/add/{:id}',

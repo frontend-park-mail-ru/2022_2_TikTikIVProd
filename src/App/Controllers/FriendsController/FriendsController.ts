@@ -10,23 +10,34 @@ class FriendsController extends IController<FriendsView, UserModel> {
         super(view, model);
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         this.view.bindClick(this.handleClick.bind(this));
+        this.view.bindSearchChange(this.handleSearchChange.bind(this));
     }
+
+    private handleSearchChange(e: Event) : void {
+        console.log('eve');
+        
+        const searchQuery = this.view.getSearchData();
+        if(searchQuery.length < 1){
+            this.updateFriendsList();
+        }
+    }
+
 
     private handleClick(e: Event): void {
         e.preventDefault();
         if (this.isMounted) {
             const target = <HTMLElement>e.target;
+
             const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
             const userId = (<HTMLElement>target.closest('.friend'))?.id;
 
-            if (!userId) {
-                // // console.log('No user id in ', target);
-                return;
-            }
+
 
             switch (action) {
                 default: return;
                 case 'profile': {
+                    if (!userId) return;
+
                     let url = `${paths.userProfie}`;
                     url = url.replace('{:number}', userId.toString());
                     router.goToPath(url);
@@ -34,52 +45,86 @@ class FriendsController extends IController<FriendsView, UserModel> {
                 }
 
                 case 'add_friend': {
-                    // // console.log('add');
+                    if (!userId) return;
                     this.model.addFriend(userId)
                         .then(() => {
-                            this.updateFriendsList();
+                            this.updateFriendsList(userId);
                         })
-                        .catch((data) =>  console.log(data));
+                        .catch((data) => console.log(data));
                     return;
                 }
 
                 case 'remove_friend': {
-                    // // console.log('remove');
+                    if (!userId) return;
+
                     this.model.removeFriend(userId)
                         .then(() => {
-                            this.updateFriendsList();
+                            this.updateFriendsList(userId);
                         })
-                        .catch((data) =>  console.log(data));
+                        .catch((data) => console.log(data));
                     return;
                 }
 
                 case 'message': {
-                    // // console.log('message');
-                    let url = Object.assign({}, {url: paths.chat}).url;
+                    if (!userId) return;
+                    let url = Object.assign({}, { url: paths.chat }).url;
                     url = url.replace('{:id}', userId);
                     router.goToPath(url);
+                    return;
+                }
+
+                case 'submit_search': {
+                    const name = this.view.getSearchData();
+                    if (name.length < 1) return;
+                    this.model.findUsers(name)
+                        .then(users => {
+                            const currentUserId = this.model.getCurrentUser()?.id;
+                            if (!currentUserId) return;
+
+                            this.model.getFriends(currentUserId)
+                                .then(friends => {
+                                    users.forEach(user => {
+                                        user.isCurrent = user.id === currentUserId ? 1 : 0;
+                                        user.isFriend = friends.users.find(friend => friend.id === user.id) ? 1 : 0;
+                                    });
+                                    this.view.clearList(); //TODO
+                                    this.view.fillList(users);
+                                })
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
                     return;
                 }
             }
         }
     }
 
-    public updateFriendsList() {
-        const userId = this.model.getCurrentUser()?.id;
+    public updateFriendsList(userId?: string | number) {
 
-        if (!userId) {
-            // console.log('Friends err: user id null');
+        if(userId) { 
+            this.model.isFriend(userId)
+            .then(res => {
+                this.model.getUser(userId)
+                .then(user => {
+                    this.view.changeUserFriendshipStatus(user, res);
+                });
+            });
             return;
         }
 
-        this.model.getFriends(userId)
+        const currentUserId = this.model.getCurrentUser()?.id;
+
+        if (!currentUserId) return;
+
+        this.model.getFriends(currentUserId)
             .then(({ users }) => {
-                // console.log(users);
+                users.forEach(user => {
+                    user.isFriend = 1;
+                    user.isCurrent = 0;
+                });
                 this.view.clearList(); //TODO
                 this.view.fillList(users);
-            })
-            .catch((resp) => {
-                // console.log('Friends err: ', resp);
             });
     }
 

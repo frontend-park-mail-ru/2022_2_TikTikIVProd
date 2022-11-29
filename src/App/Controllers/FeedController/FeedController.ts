@@ -79,6 +79,8 @@ class FeedController extends IController<FeedView, FeedModel> {
             create_date: '2022-08-15T00:00:00Z',
             id: 0,
             // TODO
+
+            community_id: content.community_id ?? 0,  
         };
 
         this.model.sendNewFeed(data)
@@ -111,6 +113,8 @@ class FeedController extends IController<FeedView, FeedModel> {
             user_first_name: this.user.first_name,
             user_last_name: this.user.last_name,
             create_date: '2022-08-15T00:00:00Z',
+
+            community_id: content.community_id ?? 0,
         };
 
         this.model.sendEditedFeed(data)
@@ -240,7 +244,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'create_feed': {
-                    this.view.showFeedCardCreation(this.user);
+                    this.view.showFeedCardCreation(this.user, undefined, this.feedType?.group?.id);
                     return;
                 }
 
@@ -293,7 +297,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                     this.model.getPost(cardId)
                         .then((feed) => {
-                            this.view.showFeedCardCreation(this.user, feed);
+                            this.view.showFeedCardCreation(this.user, feed, feed.community_id);
                         })
                         .catch(() => {
                             // console.log('edit open, err');

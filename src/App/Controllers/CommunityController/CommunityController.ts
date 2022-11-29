@@ -72,6 +72,12 @@ class CommunityController extends IController<CommunityView, {community: Communi
         const target = <HTMLElement>e.target;
         const communityId = (<HTMLElement>target.closest('.community')?.querySelector('[data-community_id]'))?.dataset['community_id'];
         const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
+
+        if (target.classList.contains('community__overlay')) {
+            this.view.hideOverlay();
+            return;
+        }
+
         switch (action) {
             default: return;
             case 'join': {
@@ -105,9 +111,10 @@ class CommunityController extends IController<CommunityView, {community: Communi
                     return;
                 }
 
-                let params: ICommunityEditData = Object.fromEntries(data);
+                let params: ICommunityEditData = Object.assign({id: Number(communityId)}, Object.fromEntries(data));
                 this.model.community.edit(params)
-                    .then(() => {
+                    .then((data) => {
+                        this.view.setCommunityData(data);
                         this.view.hideOverlay();
                     })
                     .catch(data => {
