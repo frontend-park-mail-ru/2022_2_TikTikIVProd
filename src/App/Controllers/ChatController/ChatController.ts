@@ -4,6 +4,7 @@ import UserModel, { IUser } from '../../Models/UserModel/UserModel';
 import EventDispatcher from '../../Modules/EventDispatcher/EventDispatcher';
 import router from '../../Router/Router';
 import paths from '../../Router/RouterPaths';
+import dateParser from '../../Utils/DateParser/DateParser';
 import ChatView from '../../Views/ChatView/ChatView';
 import MessengerView from '../../Views/MessengerView/MessengerView';
 import IController from '../IController/IController';
@@ -15,6 +16,7 @@ export interface IMessageData {
         first_name: string;
         last_name: string;
         avatar: string;
+        id: string | number;
     };
     text: string;
     date: string;
@@ -43,7 +45,53 @@ class ChatController extends
         this.userID = undefined;
 
         this.view.bindClick(this.handleClick.bind(this));
+        this.view.bindKeyClick(this.handleKeyClick.bind(this));
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
+    }
+
+    private sendMessage() : void {
+        if (this.emptyChat) {
+            if (!this.userID) return;
+            const text = this.view.getNewMessage();
+            this.model.messenger.initChat(text, this.userID)
+                .then((data: IMessage) => {
+                    this.currentDialogId = data.dialog_id;
+                    this.emptyChat = false;
+                    this.model.messenger.createChatEventListener(
+                        this.currentDialogId,
+                        {
+                            onmessage: this.handleMessages.bind(this),
+                        },
+                    );
+                    this.handleMessages(data);
+                    this.view.clearNewMsgForm();
+                });
+        } else {
+            const cid = this.model.user.getCurrentUser()?.id;
+            if (!cid) return;
+            if (!this.currentDialogId) return;
+            if (!this.userID) return;
+            const text = this.view.getNewMessage();
+            this.model.messenger.sendMessage(this.currentDialogId, text, cid, this.userID)
+            this.view.clearNewMsgForm();
+        }
+    }
+
+    private handleKeyClick(e: KeyboardEvent): void {
+        const target = <HTMLElement>e.target;
+        const action =
+            (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
+
+        e.preventDefault();
+        if (!e.ctrlKey) return;
+
+        switch (e.key) {
+            default: return;
+            case 'Enter': {
+                this.sendMessage();
+                return;
+            }
+        }
     }
 
     private handleClick(e: Event): void {
@@ -57,16 +105,16 @@ class ChatController extends
                 return;
             }
 
-            case 'back':{
+            case 'back': {
                 router.goToPath(paths.messenger);
                 return;
             }
-            
-            case 'user_profile':{
+
+            case 'user_profile': {
                 const user_id = (<HTMLElement>target.closest('[data-user_id]'))?.dataset['user_id'];
                 console.log(user_id);
-                
-                if(!user_id) return;
+
+                if (!user_id) return;
 
                 let url = `${paths.userProfie}`;
                 url = url.replace('{:number}', user_id);
@@ -76,76 +124,17 @@ class ChatController extends
             }
 
             case 'send': {
-                // // console.log('send');
-
-                if (this.emptyChat) {
-                    // // console.log('Empty chat');
-
-                    if (!this.userID) {
-                        // console.log('USer id is null');
-                        return;
-                    }
-
-                    const text = this.view.getNewMessage();
-                    this.model.messenger.initChat(text, this.userID)
-                        .then((data: IMessage) => {
-                            // // console.log('Init chat succ');
-
-                            this.currentDialogId = data.dialog_id;
-                            this.emptyChat = false;
-
-                            this.model.messenger.createChatEventListener(
-                                this.currentDialogId,
-                                {
-                                    onmessage: this.handleMessages.bind(this),
-                                },
-                            );
-
-                            this.handleMessages(data);
-                            this.view.clearNewMsgForm();
-                        })
-                        .catch(data => {
-                            // console.log('init chat err');
-
-                            // console.log(data);
-                        });
-                } else {
-
-                    const cid = this.model.user.getCurrentUser()?.id;
-                    if (!cid) {
-                        return;
-                    }
-
-                    if (!this.currentDialogId) {
-                        return;
-                    }
-
-                    if (!this.userID) {
-                        return;
-                    }
-
-                    const text = this.view.getNewMessage();
-                    // // console.log('text');
-
-                    this.model.messenger.sendMessage(this.currentDialogId, text, cid, this.userID)
-                    this.view.clearNewMsgForm();
-                }
+               this.sendMessage();
+               return;
             }
         }
     }
 
     private fillDialog(data: IDialog): void {
-        // // console.log(data);
-
-        // this.model.messenger.createChatEventListener(
-        // data.dialog_id, { onmessage: this.view.pushMessage.bind(this) });
-
         if (data.messages) {
             this.handleMessages(data.messages);
-
             return;
         }
-        // // console.log('Empty chat');
     }
 
     public async mountComponent(
@@ -161,15 +150,12 @@ class ChatController extends
             this.isMounted = true;
 
             if (opts.dialogId) {
-                // // console.log('Chat: mode: dialog');
-
                 const dialogId = opts.dialogId;
 
                 this.currentDialogId = dialogId;
 
                 this.model.messenger.getDialog(dialogId)
                     .then((data) => {
-                        // // console.log('Chat: mode: dialog', data);
                         this.fillDialog(data);
                         this.emptyChat = false;
                         this.model.messenger.createChatEventListener(
@@ -180,8 +166,6 @@ class ChatController extends
                         );
                     })
                     .catch((data) => {
-                        // console.log('Error getting chat by chat id');
-                        // this.emptyChat = true;
                         router.showUnknownPage();
                         return;
                     });
@@ -205,21 +189,19 @@ class ChatController extends
                         );
                     })
                     .catch(data => {
-                        // // console.log(data);
                         this.emptyChat = true;
                     });
                 this.setProfileData();
                 return;
             }
-            // console.log('Mount chat err');
         }
     }
 
     private async setProfileData() {
         const user = await this.model.user.getUser(this.userID ?? '-1');
-        if(!user) return;
+        if (!user) return;
 
-        const data : IChatNavbar = {
+        const data: IChatNavbar = {
             avatar: user.avatar ?? '../src/img/default_avatar.png',
             first_name: user.first_name ?? 'Капи',
             last_name: user.last_name ?? 'Неопознаный',
@@ -247,9 +229,10 @@ class ChatController extends
                     avatar: user.avatar ?? '../src/img/default_avatar.png',
                     first_name: user.first_name ?? 'Капи',
                     last_name: user.last_name ?? 'Неопознаный',
+                    id: user.id ?? 0,
                 },
                 text: item.body ?? 'Здесь было сообщение...',
-                date: `${new Date(item.created_at).toJSON().slice(0, 10).replace(/-/g, '/')}`,
+                date: dateParser(item.created_at),
             };
 
             msgs.push(formatted);

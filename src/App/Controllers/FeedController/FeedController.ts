@@ -1,5 +1,5 @@
 import config from "../../Configs/Config";
-import FeedModel, { /*FeedType,*/ IFeedData, IFeedNewPost, IFeedType } from "../../Models/FeedModel/FeedModel";
+import FeedModel, { IFeedData, IFeedNewPost, IFeedType } from "../../Models/FeedModel/FeedModel";
 import { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
@@ -21,7 +21,6 @@ class FeedController extends IController<FeedView, FeedModel> {
         super(view, model);
 
         this.currentPage = 0;
-        // this.currentFeedType = {};
 
         //
         this.feedType = {};
@@ -35,14 +34,8 @@ class FeedController extends IController<FeedView, FeedModel> {
         EventDispatcher.subscribe('user-changed', this.setCurrentUser.bind(this)); // TODO delete
     }
 
-
     public setFeedContent(feedType: IFeedType) {
-        if (JSON.stringify(this.feedType) === JSON.stringify(feedType)) {
-            // НЕ поменялся тип фида;
-            // // console.log('feed type no changes');
-
-            return;
-        }
+        if (JSON.stringify(this.feedType) === JSON.stringify(feedType)) return; // НЕ поменялся тип фида;
 
         this.feedType = feedType;
         this.view.clearFeed();
@@ -50,100 +43,69 @@ class FeedController extends IController<FeedView, FeedModel> {
     }
 
     private openFeedCard(id: string | undefined): void {
-        if (!id) {
-            return;
-        }
+        // TODO!
+        if (!id) return;
+        this.model.getPost(id)
+            .then(feedCard => {
+                console.log(feedCard);
+            })
+            .catch(msg => {
+                console.log(msg);
 
-        this.model.getPost(id);
+            })
     }
 
-    private submitNewPost(): void {
-        // // console.log('submit new post');
-
+    private submitNewFeedCard(): void {
         const content = this.view.getNewPostData();
-        if (content.text.length < 1) {
-            // // console.log('Post create empty form');
-            return;
-        }
+        if (content.text.length < 1) return;
 
-        const data: IFeedNewPost = {
-
+        const feedCardData: IFeedNewPost = {
             images: [],
             message: content.text,
-
-            // TODO  delete this shit
-            user_id: this.user.id,
-            user_first_name: this.user.first_name,
-            user_last_name: this.user.last_name,
-
-            create_date: '2022-08-15T00:00:00Z',
-            id: 0,
-            // TODO
-
-            community_id: content.community_id ?? 0,  
+            community_id: content.community_id ?? 0,
         };
 
-        this.model.sendNewFeed(data)
-            .then((resp) => {
+        this.model.sendNewFeed(feedCardData)
+            .then(feedCard => {
                 this.view.hideFeedCardCreation();
-                this.view.pushContentToFeed(resp, this.user.id);
+                this.view.pushContentToFeed(feedCard, this.user.id);
             })
-            .catch(() => {
-                // console.log('Post create show err to view');
+            .catch(msg => {
                 // TODO Post create show err to view
             });
     }
 
-    private submitEditedPost(): void {
-        // // console.log('submit edited post');
-
+    private submitEditedFeedCard(): void {
         const content = this.view.getEditedPostData();
-        if (!content.id || !content.text || content.text.length < 1) {
-            // console.log('Post create empty form');
-            return;
-        }
+        if (!content.id || !content.text || content.text.length < 1) return;
 
-        const data: IFeedNewPost = {
+        const feedCardData: IFeedNewPost = {
             id: Number(content.id), // TODO errors
             message: content.text,
 
             images: [], // TODO
-            // TODO  delete this shit
-            user_id: this.user.id,
-            user_first_name: this.user.first_name,
-            user_last_name: this.user.last_name,
-            create_date: '2022-08-15T00:00:00Z',
-
             community_id: content.community_id ?? 0,
         };
 
-        this.model.sendEditedFeed(data)
-            .then((data) => {
+        this.model.sendEditedFeed(feedCardData)
+            .then(feedCard => {
                 this.view.hideFeedCardCreation();
-                this.view.changePost(data);
+                this.view.changePost(feedCard);
             })
-            .catch((data) => {
-                console.log(data);
+            .catch(msg => {
+                console.log(msg);
                 // TODO Post create show err to view
             });
     }
-
-    // public changeFeedType(feedType: FeedType): void {
-    //     if (JSON.stringify(this.currentFeedType) === JSON.stringify(feedType)) {
-    //         return;
-    //     }
-
-    //     this.currentFeedType = feedType;
-    //     this.currentPage = 0;
-    //     this.view.clearFeed();
-    // }
 
     private deletePost(id: number | string): void {
         this.model.deletePost(id)
             .then(() => {
                 this.view.deletePost(id);
+                console.log('delete');
+                
             })
-            .catch(({ status, body }) => {
+            .catch(msg => {
                 // console.log('Delete post err: ', status, body);
             })
     }
@@ -159,20 +121,11 @@ class FeedController extends IController<FeedView, FeedModel> {
         let page = 0;
 
         await this.model.getFeeds(this.feedType)
-            .then(({ feeds }) => {
-                data = feeds;
+            .then(feedCards => {
+                data = feedCards;
                 page = 1; // TODO
             })
-            .catch(({ status, body }) => {
-                // const item: IFeedData = {
-                //     id: 321,
-                //     author: { id: 0, url: '/testuser123', avatar: '../src/img/default_avatar.png', first_name: 'Неопознанный', last_name: 'Капи' },
-                //     date: 'В будующем...',
-                //     text: 'Ваши друзья еще не выложили свой первый пост. Напомните им об этом!',
-                //     likes: 100500,
-                //     attachments: [{ src: '../src/img/test_post_img.jpg' }],
-                // }
-                // data.push(item);
+            .catch(msg => {
                 page = 1; // TODO
             });
 
@@ -189,7 +142,11 @@ class FeedController extends IController<FeedView, FeedModel> {
                     });
             }
             this.view.show();
-            this.view.showNavbar();
+            let showFeedCreationButton = true;
+            if(this.feedType.user && this.feedType.user.id !== this.user.id){
+                showFeedCreationButton = false;
+            } 
+            this.view.showNavbar(showFeedCreationButton);
             this.isMounted = true;
         }
     }
@@ -213,28 +170,25 @@ class FeedController extends IController<FeedView, FeedModel> {
         event.preventDefault();
         if (this.isMounted) {
             const target = <HTMLElement>event.target;
-
             if (target.classList.contains('feed__overlay')) {
                 this.view.hideFeedCardCreation();
                 return;
             }
 
             const action = (<HTMLElement>target.closest("[data-action]"))?.dataset['action'];
+
+            if (!action) return;
+
             const cardId = (<HTMLElement>target.closest(".feed-card"))?.id;
             const data = (<HTMLElement>target.closest("[data-data]"))?.dataset['data'];
 
-            if (!action) {
-                // // console.log('No handler: ', target);
-                return;
-            }
-
             switch (action) {
                 case 'sumbit_edited_post': {
-                    this.submitEditedPost();
+                    this.submitEditedFeedCard();
                     return;
                 }
                 case 'sumbit_new_post': {
-                    this.submitNewPost();
+                    this.submitNewFeedCard();
                     return;
                 }
                 case 'submit_search': {
@@ -248,66 +202,63 @@ class FeedController extends IController<FeedView, FeedModel> {
                     return;
                 }
 
-                case 'close_overlay':{
+                case 'close_overlay': {
                     this.view.hideFeedCardCreation();
                     return;
                 }
 
                 case 'like': {
                     const likesCountElement = document.getElementById(`feed-card-likes__count-${cardId}`);
-                    if (target.firstElementChild !== undefined && target.firstElementChild !== null) {
-                        if ("feed-card__button__unliked" === target.firstElementChild.classList[0]) {
-                            this.model.likePost(cardId).then(({ status }) => {
-                                if (target.firstElementChild !== undefined && target.firstElementChild !== null) {
-                                    target.firstElementChild.classList.toggle("feed-card__button__liked");
-                                    target.firstElementChild.classList.remove("feed-card__button__unliked")
-                                    if (likesCountElement !== null) {
-                                        // if (likesCountElement.innerText !== "0")
-                                            likesCountElement.innerText = String(Number(likesCountElement.innerText) + 1);
-                                    }
 
+                    if (target.firstElementChild === undefined || target.firstElementChild === null) return;
+
+                    if (target.firstElementChild.classList.contains('feed-card__button__unliked')) {
+                        this.model.likePost(cardId)
+                            .then(() => {
+                                if (target.firstElementChild === undefined || target.firstElementChild === null)
+                                    return;
+
+                                target.firstElementChild.classList.toggle("feed-card__button__liked");
+                                target.firstElementChild.classList.remove("feed-card__button__unliked")
+                                if (likesCountElement !== null) {
+                                    likesCountElement.innerText = String(Number(likesCountElement.innerText) + 1);
                                 }
                             });
-                        }
+                    }
 
-                        if ("feed-card__button__liked" === target.firstElementChild.classList[0]) {
-                            this.model.unlikePost(cardId).then(({ status }) => {
-                                if (target.firstElementChild !== undefined && target.firstElementChild !== null) {
-                                    target.firstElementChild.classList.toggle("feed-card__button__unliked");
-                                    target.firstElementChild.classList.remove("feed-card__button__liked")
-                                    if (likesCountElement !== null) {
-                                        if (likesCountElement.innerText !== "0")
-                                            likesCountElement.innerText = String(Number(likesCountElement.innerText) - 1);
+                    if (target.firstElementChild.classList.contains('feed-card__button__liked')) {
+                        this.model.unlikePost(cardId)
+                            .then(() => {
+                                if (target.firstElementChild === undefined || target.firstElementChild === null)
+                                    return;
+
+                                target.firstElementChild.classList.toggle("feed-card__button__unliked");
+                                target.firstElementChild.classList.remove("feed-card__button__liked")
+                                if (likesCountElement !== null) {
+                                    if (likesCountElement.innerText !== "0") {
+                                        likesCountElement.innerText = String(Number(likesCountElement.innerText) - 1);
                                     }
                                 }
                             });
-                        }
-
                     }
 
                     return;
                 }
 
                 case 'edit': {
-                    // // console.log('edit');
-                    if (!cardId) {
-                        // console.log('Edit feed: null cardID');
-                        return;
-                    }
+                    if (!cardId) return;
 
                     this.model.getPost(cardId)
-                        .then((feed) => {
-                            this.view.showFeedCardCreation(this.user, feed, feed.community_id);
+                        .then(feedCard => {
+                            this.view.showFeedCardCreation(this.user, feedCard, feedCard.community_id);
                         })
-                        .catch(() => {
+                        .catch(msg => {
                             // console.log('edit open, err');
                         });
                     return;
                 }
 
                 case 'delete': {
-                    // // console.log('click delete post');
-
                     this.deletePost(cardId);
                     return;
                 }
@@ -325,7 +276,6 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'share': {
-                    // // console.log('share');
                     return;
                 }
 
@@ -336,7 +286,6 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 default: {
-                    // // console.log('action unknown', action);
                     return;
                 }
             }
@@ -350,16 +299,14 @@ class FeedController extends IController<FeedView, FeedModel> {
      * @returns {void}
      */
     private handleScroll(e: Event): void {
-        if (this.isMounted) {
-            const target = <HTMLElement>e.target;
-            if (checkScrollEnd(target, 2)) {
-                this.getFeeds()
-                    .then(({ page, feeds }) => {
-                        this.view.pushContentToFeed(feeds, this.user.id);
-                        this.currentPage = page; // TODO
-                    });
-            }
-        }
+        if (!this.isMounted) return;
+        const target = <HTMLElement>e.target;
+        if (!checkScrollEnd(target, 2)) return;
+        this.getFeeds()
+            .then(({ page, feeds }) => {
+                this.view.pushContentToFeed(feeds, this.user.id);
+                this.currentPage = page; // TODO
+            });
     }
 
     /**

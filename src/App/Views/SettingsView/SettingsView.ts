@@ -8,9 +8,6 @@ import settingsFormTemplate from "../../Components/SettingsForm/SettingsForm.hbs
 import "../../Components/SettingsForm/SettingsForm.scss"
 import AvatarUploadView from "../AvatarUploadView/AvatarUploadView";
 
-// import avatarUploadTemplate from "../../Components/AvatarUpload/AvatarUpload.hbs"
-// import "../../Components/AvatarUpload/AvatarUpload.scss"
-
 /**
  * Отображение для настроек пользователя
  * @category Settings
@@ -22,13 +19,8 @@ class SettingsView extends IView{
 
     constructor(parent : HTMLElement) {
         super(parent, settingsViewTemplate({}), '.settings');
-        // this.avatarUploadView = new AvatarUploadView(this.parent);
-        
     }
 
-    // public getAvatarUploadView() : AvatarUploadView {
-        // return this.avatarUploadView;
-    // }
     /**
      * Функция отрисовки компонента настроек
      * @param  {?any} opts - Аргументы
@@ -36,20 +28,8 @@ class SettingsView extends IView{
      */
     public show(opts?: any): void {
         // TODO avatar upload;
-        // this.element.innerHTML = avatarUploadTemplate({});
-        //
         this.element.innerHTML = '';
 
-        // TODO переписать 
-        // settingsViewConfig.groups.forEach(gr => {
-        //     gr.inputs.forEach(inp => {
-        //         const el =  this.element.querySelector('#'+inp.id);
-        //         if(el){
-        //             this.element.removeChild(el);
-        //         }
-        //     });
-        // });
-        //
         this.element.innerHTML += settingsFormTemplate({data: opts, config: settingsViewConfig});
 
         this.parent.appendChild(this.element);

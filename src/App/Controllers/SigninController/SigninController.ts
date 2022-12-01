@@ -56,11 +56,11 @@ class SigninController extends IController<SigninView, UserModel> {
                 password: data.get('password') || '',
             };
 
-            this.model.signInUser(user).then(({ status, body, msg }) => {
+            this.model.signInUser(user).then(() => {
                 // console.log('signin success');
                 
                 router.goToPath(paths.feedPage);
-            }).catch(({ status, body, msg }) => {
+            }).catch(msg => {
                 this.view.showErrorMsg('email', msg);
             });
         }

@@ -154,8 +154,8 @@ class FeedView extends IView {
         this.overlay.style.visibility = 'collapse';
     }
 
-    public showNavbar(): void {
-        this.navbar.innerHTML = feedNavbarTemplate({});
+    public showNavbar(showCreationButton : boolean): void {
+        this.navbar.innerHTML = feedNavbarTemplate({showCreationButton : showCreationButton});
         this.navbar.style.visibility = 'visible';
     }
 

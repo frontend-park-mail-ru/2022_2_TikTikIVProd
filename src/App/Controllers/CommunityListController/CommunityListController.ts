@@ -74,13 +74,13 @@ class CommunityListController extends IController<CommunityListView, { community
 
                 this.view.lockForm();
                 this.model.community.create(params)
-                    .then(data => {
+                    .then(communityData => {
                         this.view.unlockForm();
                         this.view.hideCommunityCreationForm();
                     })
-                    .catch(data => {
+                    .catch(msg => {
                         this.view.unlockForm();
-                        console.log('err ', data);
+                        console.log('err ', msg);
                     });
 
                 return;
@@ -90,12 +90,12 @@ class CommunityListController extends IController<CommunityListView, { community
                 console.log(name);
                 if (name.length < 1) return;
                 this.model.community.findCommunities(name)
-                    .then(communities => {
+                    .then(communitiesData => {
                         this.view.clearList(); //TODO
-                        this.view.fillList(communities);
+                        this.view.fillList(communitiesData);
                     })
-                    .catch(err => {
-                        console.log(err);
+                    .catch(msg => {
+                        console.log(msg);
                     })
                 return;
             }
@@ -120,12 +120,12 @@ class CommunityListController extends IController<CommunityListView, { community
 
     public updateList() {
         this.model.community.getAll()
-            .then((data) => {
+            .then(communitiesData => {
                 this.view.clearList(); //TODO
-                this.view.fillList(data);
+                this.view.fillList(communitiesData);
             })
-            .catch((resp) => {
-                console.log('Friends err: ', resp);
+            .catch(msg => {
+                console.log('Friends err: ', msg);
             });
     }
 

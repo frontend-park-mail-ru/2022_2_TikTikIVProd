@@ -1,4 +1,4 @@
-import config from "../Configs/Config";
+import config, { IApiItem } from "../Configs/Config";
 
 interface IParamsProps {
     url: string;
@@ -6,6 +6,10 @@ interface IParamsProps {
     headers: {};
 };
 
+export interface IResponse {
+    status: number;
+    parsedBody: Object;
+}
 
 /**
  * Функция асинхронного запроса на сервер
@@ -13,7 +17,7 @@ interface IParamsProps {
  * @param  {string} body - тело запроса
  * @return {Promise} - промис запроса 
  */
-export async function ajax(params: IParamsProps, body?: string | FormData) {
+export default async function ajax(params: IParamsProps, body?: string | FormData) {
     const mainHeaders = new Headers(params.headers);
 
     /** Получение CSRF токена для небезопасных запросов */
@@ -58,4 +62,20 @@ export async function ajax(params: IParamsProps, body?: string | FormData) {
     };
 }
 
-export default ajax;
+
+export async function checkResponseStatus(response : IResponse, conf : IApiItem) {
+    if (response.status.toString() in conf.statuses.success) {
+        return Promise.resolve();
+    }
+
+    if (response.status.toString() in conf.statuses.failure) {
+        const keyStatus = response.status.toString() as keyof typeof conf.statuses.failure;
+        return Promise.reject({
+            msg: config.api.signin.statuses.failure[keyStatus],
+        });
+    }
+
+    return Promise.reject({
+        msg: 'Неожиданная ошибка',
+    });    
+}

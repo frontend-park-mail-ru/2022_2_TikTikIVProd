@@ -40,6 +40,7 @@
     &__name {
         font-size: 13px;
         color: var(--color-chat-author-message-name);
+        cursor: pointer;
     }
 
     &__avatar {
@@ -50,5 +51,6 @@
         background-color: gray;
         outline: 1px solid darken($color: gray, $amount: 10);
         outline-offset: -1px;
+        cursor: pointer;
     }
 }

@@ -67,7 +67,7 @@ const config: IConfig = {
             },
             statuses: {
                 success: {
-                    '200': 'Успешно'
+                    '200': 'Успешно',
                 },
                 failure: failureDefaultStatuses,
             },
@@ -130,7 +130,7 @@ const config: IConfig = {
             },
             statuses: {
                 success: {
-                    '201': 'Получение постов успешно'
+                    '200': 'Получение постов успешно'
                 },
                 failure: {
                     '400': 'Неверный запрос',
@@ -327,7 +327,7 @@ const config: IConfig = {
             },
             statuses: {
                 success: {
-                    '200': 'Удаление поста успешно'
+                    '204': 'Удаление поста успешно'
                 },
                 failure: {
                     '405': 'Неверный HTTP метод',
@@ -521,7 +521,7 @@ const config: IConfig = {
             },
             statuses: {
                 success: {
-                    '200': 'Сообщение отправлено'
+                    '400': 'Сообщение отправлено'
                 },
                 failure: {
                     '400': 'Неверный запрос',

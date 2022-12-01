@@ -59,9 +59,9 @@ class SignupController extends IController<SignupView, UserModel> {
                 password: data.get('password') || ''
             };
 
-            this.model.signUpUser(user).then(({ status, body, msg }) => {
+            this.model.signUpUser(user).then(() => {
                 router.goToPath(paths.feedPage);
-            }).catch(({ status, body, msg }) => {
+            }).catch(msg => {
                 this.view.showErrorMsg('email', msg);
             });
         }

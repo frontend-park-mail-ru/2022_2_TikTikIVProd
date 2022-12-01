@@ -28,20 +28,20 @@ class CommunityController extends IController<CommunityView, {community: Communi
             const currentUser = this.model.user.getCurrentUser();
             
             this.model.community.get(communityId)
-            .then(data => {
+            .then(communityData => {
                 let navbarParams : ICommunityNavbaParams = {
                     isAdmin: false,
                     isMember: false,
                 };
 
                 if(currentUser) { 
-                    navbarParams.isAdmin = data.owner_id === currentUser.id ? true : false;
+                    navbarParams.isAdmin = communityData.owner_id === currentUser.id ? true : false;
                 }
-                this.view.setCommunityData(data);
+                this.view.setCommunityData(communityData);
                 this.view.setCommunityNavbar(navbarParams);
             })
-            .catch(data => {
-                console.log(data);
+            .catch(msg => {
+                console.log(msg);
             });
         }
     }
@@ -93,11 +93,11 @@ class CommunityController extends IController<CommunityView, {community: Communi
             case 'settings': {
                 if (!communityId) return;
                 const data = this.model.community.get(communityId)
-                    .then(data => {
-                        this.view.showOverlaySettings(data);
+                    .then(communityData => {
+                        this.view.showOverlaySettings(communityData);
                     })
-                    .catch(data => {
-                        console.log(data);
+                    .catch(msg => {
+                        console.log(msg);
                     });
                 return;
             }
@@ -113,12 +113,12 @@ class CommunityController extends IController<CommunityView, {community: Communi
 
                 let params: ICommunityEditData = Object.assign({id: Number(communityId)}, Object.fromEntries(data));
                 this.model.community.edit(params)
-                    .then((data) => {
-                        this.view.setCommunityData(data);
+                    .then(communityData => {
+                        this.view.setCommunityData(communityData);
                         this.view.hideOverlay();
                     })
-                    .catch(data => {
-                        console.log(data, ' fail');
+                    .catch(msg => {
+                        console.log(msg, ' fail');
                     });
             }
         }

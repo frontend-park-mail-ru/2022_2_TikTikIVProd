@@ -43,7 +43,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
                     .then(friends => {
                         users.forEach(user => {
                             user.isCurrent = user.id === currentUserId ? 1 : 0;
-                            user.isFriend = friends.users.find(friend => friend.id === user.id) ? 1 : 0;
+                            user.isFriend = friends.find(friend => friend.id === user.id) ? 1 : 0;
                         });
                         this.view.clearList(); //TODO
                         this.view.fillList(users);
@@ -131,7 +131,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
         if (!currentUserId) return;
 
         this.model.getFriends(currentUserId)
-            .then(({ users }) => {
+            .then(users => {
                 users.forEach(user => {
                     user.isFriend = 1;
                     user.isCurrent = 0;

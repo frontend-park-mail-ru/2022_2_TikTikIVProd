@@ -315,7 +315,7 @@ class App {
 
     private handleMessenger(): void {
         this.userModel.authUserByCookie()
-            .then(({ status, body }) => {
+            .then(() => {
                 EventDispatcher.emit('unmount-all');
                 EventDispatcher.emit('redirect', paths.messenger);
                 // mount

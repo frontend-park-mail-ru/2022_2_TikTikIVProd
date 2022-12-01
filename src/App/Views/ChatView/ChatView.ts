@@ -34,6 +34,10 @@ class ChatView extends IView {
         this.parent.appendChild(this.element);
     }
     
+    public bindKeyClick(callback : Function) : void {
+        this.element.addEventListener('keyup', callback.bind(this));
+    }
+
     public bindClick(callback: Function): void {
         this.element.addEventListener('click', callback.bind(this));
     }

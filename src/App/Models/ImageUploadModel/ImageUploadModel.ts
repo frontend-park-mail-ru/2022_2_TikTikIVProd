@@ -1,4 +1,4 @@
-import ajax from "../../Ajax/Ajax";
+import ajax, { checkResponseStatus } from "../../Ajax/Ajax";
 import config from "../../Configs/Config";
 import IModel from "../IModel/IModel";
 
@@ -18,57 +18,24 @@ class ImageUploadModel extends IModel {
     //     conf.url = conf.url.replace('{:id}', id.toString());
 
     //     const response = await ajax(conf);
+    //     await checkResponseStatus(response, conf);
 
-    //     if (response.status.toString() in config.api.imageUpload.statuses.success) {
-    //         const img: IImage = {
-    //             id: response.parsedBody.body.id,
-    //             src: 
-    //         }
-
-    //         return Promise.resolve();
+    //     const img: IImage = {
+    //         id: response.parsedBody.body.id,
+    //         src: '', // TODO
     //     }
 
-    //     if (response.status.toString() in config.api.imageUpload.statuses.failure) {
-    //         const keyStatus = response.status.toString() as keyof typeof config.api.imageUpload.statuses.failure;
-    //         return Promise.reject({
-    //             status: response.status,
-    //             msg: config.api.imageUpload.statuses.failure[keyStatus],
-    //             body: response.parsedBody
-    //         });
-    //     }
-
-    //     return Promise.reject({
-    //         status: response.status,
-    //         msg: 'Неожиданная ошибка',
-    //     });
+    //     return Promise.resolve(img);
     // }
 
     public async uploadImage(data: FormData) {
         const response = await ajax(config.api.imageUpload, data);
-
-        if (response.status.toString() in config.api.imageUpload.statuses.success) {
-
-            const img: IImage = {
-                id: response.parsedBody.body.id,
-                src: config.host + config.api.image.url + '/' + response.parsedBody.body.id,
-            };
-
-            return Promise.resolve(img);
-        }
-
-        if (response.status.toString() in config.api.imageUpload.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.imageUpload.statuses.failure;
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.imageUpload.statuses.failure[keyStatus],
-                body: response.parsedBody
-            });
-        }
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-        });
+        await checkResponseStatus(response, config.api.imageUpload);
+        const img: IImage = {
+            id: response.parsedBody.body.id,
+            src: config.host + config.api.image.url + '/' + response.parsedBody.body.id,
+        };
+        return Promise.resolve(img);
     }
 };
 

@@ -1,5 +1,5 @@
 import config from "../../Configs/Config";
-import ajax from "../../Ajax/Ajax";
+import ajax, { checkResponseStatus } from "../../Ajax/Ajax";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import IModel from "../IModel/IModel"
 
@@ -81,6 +81,23 @@ class UserModel extends IModel {
         this.currentUser = null;
     }
 
+    private parseUser(json: any): IUser {
+        return {
+            first_name: json.first_name,
+            last_name: json.last_name,
+            nick_name: json.nick_name,
+            email: json.email,
+            id: json.id,
+            avatar: json.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${json.avatar}`,
+        };
+    }
+
+    private parseUsers(json: any): IUser[] {
+        return json.map((rawUser: any) => {
+            return this.parseUser(rawUser);
+        });
+    }
+
     /**
      * Функция деавторизации пользователя. Сообщает серверу что пользователь вышел из аккаунта
      * @async
@@ -88,12 +105,7 @@ class UserModel extends IModel {
      */
     public async logoutUser() {
         const response = await ajax(config.api.logout);
-        // // console.log(
-        // 'logout (succ, failed else err)',
-        // response.status.toString() in config.api.logout.statuses.success,
-        // response.status.toString() in config.api.logout.statuses.failure
-        // );
-
+        await checkResponseStatus(response, config.api.logoutUser);
         this.currentUser = null;
         EventDispatcher.emit('user-changed', this.currentUser);
         EventDispatcher.subscribe('user-update', this.updateUserData.bind(this));
@@ -107,47 +119,15 @@ class UserModel extends IModel {
      */
     public async signInUser(authData: IUserSignIn) {
         const response = await ajax(config.api.signin, JSON.stringify(authData));
-
-        if (response.status.toString() in config.api.signin.statuses.success) {
-            // // console.log('signin success');
-
-            this.currentUser = {
-                first_name: response.parsedBody.body.first_name,
-                last_name: response.parsedBody.body.last_name,
-                nick_name: response.parsedBody.body.nick_name,
-                email: response.parsedBody.body.email,
-                id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
-            };
-            EventDispatcher.emit('user-changed', this.currentUser);
-            const keyStatus = response.status.toString() as keyof typeof config.api.signin.statuses.success;
-            return Promise.resolve({
-                status: response.status,
-                msg: config.api.signin.statuses.success[keyStatus],
-                body: response.parsedBody
-            })
+        try {
+            await checkResponseStatus(response, config.api.signInUser);
+            const userData = this.parseUser(response.parsedBody.body);
+            this.currentUser = userData;
         }
-
-
-        this.currentUser = null;
+        catch {
+            this.currentUser = null;
+        }
         EventDispatcher.emit('user-changed', this.currentUser);
-
-        if (response.status.toString() in config.api.signin.statuses.failure) {
-            // // console.log('signin fail');
-
-            const keyStatus = response.status.toString() as keyof typeof config.api.signin.statuses.failure;
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.signin.statuses.failure[keyStatus],
-                body: response.parsedBody
-            })
-        }
-        // // console.log('signin err');
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-        });
     }
 
     /**
@@ -158,69 +138,24 @@ class UserModel extends IModel {
      */
     public async signUpUser(user: IUserSignUp) {
         const response = await ajax(config.api.signup, JSON.stringify(user));
-
-        if (response.status.toString() in config.api.signup.statuses.success) {
-            // // console.log('signup success');
-
-            this.currentUser = {
-                first_name: response.parsedBody.body.first_name,
-                last_name: response.parsedBody.body.last_name,
-                nick_name: response.parsedBody.body.nick_name,
-                email: response.parsedBody.body.email,
-                id: response.parsedBody.body.id,
-                avatar: '../src/img/default_avatar.png',
-            };
-            EventDispatcher.emit('user-changed', this.currentUser);
-            const keyStatus = response.status.toString() as keyof typeof config.api.signup.statuses.success;
-            return Promise.resolve({
-                status: response.status,
-                msg: config.api.signup.statuses.success[keyStatus],
-                body: response.parsedBody
-            })
+        try {
+            await checkResponseStatus(response, config.api.signUpUser);
+            const userData = this.parseUser(response.parsedBody.body);
+            this.currentUser = userData;
         }
-
-        this.currentUser = null;
+        catch {
+            this.currentUser = null;
+        }
         EventDispatcher.emit('user-changed', this.currentUser);
-
-        if (response.status.toString() in config.api.signup.statuses.failure) {
-            // // console.log('signup fail');
-
-            const keyStatus = response.status.toString() as keyof typeof config.api.signup.statuses.failure;
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.signup.statuses.failure[keyStatus],
-                body: response.parsedBody
-            })
-        }
-        // // console.log('signup err');
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-        });
     }
 
     public async getUser(id: number | string) {
         let conf = Object.assign({}, config.api.userProfile);
         conf.url = conf.url.replace('{:id}', id.toString());
-
         const response = await ajax(conf);
-
-        if (response.status.toString() in config.api.userProfile.statuses.success) {
-            // console.log(`${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`);
-
-            const user: IUser = {
-                first_name: response.parsedBody.body.first_name,
-                last_name: response.parsedBody.body.last_name,
-                nick_name: response.parsedBody.body.nick_name,
-                email: response.parsedBody.body.email,
-                id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
-            };
-            return Promise.resolve(user);
-        }
-
-        return Promise.reject({ status: response.status, body: response.parsedBody });
+        await checkResponseStatus(response, conf);
+        const user: IUser = this.parseUser(response.parsedBody.body);
+        return Promise.resolve(user);
     }
 
     /**
@@ -239,88 +174,25 @@ class UserModel extends IModel {
     public async authUserByCookie() {
         const response = await ajax(config.api.auth);
 
-        if (response.status.toString() in config.api.auth.statuses.success) {
-            // // console.log('auth success');
-
-            this.currentUser = {
-                first_name: response.parsedBody.body.first_name,
-                last_name: response.parsedBody.body.last_name,
-                nick_name: response.parsedBody.body.nick_name,
-                email: response.parsedBody.body.email,
-                id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
-            };
-            EventDispatcher.emit('user-changed', this.currentUser);
-            const keyStatus = response.status.toString() as keyof typeof config.api.auth.statuses.success;
-            return Promise.resolve({
-                status: response.status,
-                msg: config.api.auth.statuses.success[keyStatus],
-                body: response.parsedBody
-            })
+        try {
+            await checkResponseStatus(response, config.api.auth);
+            const userData = this.parseUser(response.parsedBody.body);
+            this.currentUser = userData;
         }
-
-        this.currentUser = null;
+        catch {
+            this.currentUser = null;
+        }
         EventDispatcher.emit('user-changed', this.currentUser);
-
-        if (response.status.toString() in config.api.auth.statuses.failure) {
-            // // console.log('auth fail');
-
-            const keyStatus = response.status.toString() as keyof typeof config.api.auth.statuses.failure;
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.auth.statuses.failure[keyStatus],
-                body: response.parsedBody
-            })
-        }
-
-        // // console.log('auth err');
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-        });
     }
 
 
     public async getFriends(userId: string | number) {
         let conf = Object.assign({}, config.api.userFriends);
         conf.url = conf.url.replace('{:id}', userId.toString());
-
         const response = await ajax(conf);
-        // console.log(response);
-
-        if (response.status.toString() in config.api.userFriends.statuses.success) {
-            let users: IUser[] = response.parsedBody.body.map((rawUser: any) => {
-                // console.log(rawUser);
-
-                return {
-                    first_name: rawUser.first_name,
-                    last_name: rawUser.last_name,
-                    nick_name: rawUser.nick_name,
-                    email: rawUser.email,
-                    id: rawUser.id,
-                    avatar: rawUser.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawUser.avatar}`,
-                };
-            });
-
-
-            return Promise.resolve({ status: response.status, users: users });
-        }
-
-        if (response.status.toString() in config.api.userFriends.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.userFriends.statuses.failure;
-
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.userFriends.statuses.failure[keyStatus],
-                body: response.parsedBody
-            });
-        }
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-            body: response.parsedBody,
-        });
+        await checkResponseStatus(response, conf);
+        const users = this.parseUsers(response.parsedBody.body);
+        return Promise.resolve(users);
     }
 
     public async isFriend(userId: number | string) {
@@ -334,12 +206,10 @@ class UserModel extends IModel {
 
         const response = await ajax(conf);
 
-        if (response.status.toString() in config.api.userCheckFriend.statuses.success) {
-            const res = Boolean(response.parsedBody.body);
-            return Promise.resolve(res);
-        }
+        await checkResponseStatus(response, conf);
+        const res = Boolean(response.parsedBody.body);
+        return Promise.resolve(res);
 
-        return Promise.reject();
 
         // const currentUserId = this.currentUser?.id;
         // if (!currentUserId) {
@@ -354,28 +224,9 @@ class UserModel extends IModel {
     public async addFriend(userId: string | number) {
         let conf = Object.assign({}, config.api.addFriend);
         conf.url = conf.url.replace('{:id}', userId.toString());
-
         const response = await ajax(conf);
-
-        if (response.status.toString() in config.api.addFriend.statuses.success) {
-            return Promise.resolve();
-        }
-
-        if (response.status.toString() in config.api.addFriend.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.addFriend.statuses.failure;
-
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.addFriend.statuses.failure[keyStatus],
-                body: response.parsedBody
-            });
-        }
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-            body: response.parsedBody,
-        });
+        await checkResponseStatus(response, conf);
+        return Promise.resolve();
     }
 
     public async removeFriend(userId: string | number) {
@@ -383,115 +234,43 @@ class UserModel extends IModel {
         conf.url = conf.url.replace('{:id}', userId.toString());
 
         const response = await ajax(conf);
-
-        if (response.status.toString() in config.api.deleteFriend.statuses.success) {
-            return Promise.resolve();
-        }
-
-        if (response.status.toString() in config.api.deleteFriend.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.deleteFriend.statuses.failure;
-
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.deleteFriend.statuses.failure[keyStatus],
-                body: response.parsedBody
-            });
-        }
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-            body: response.parsedBody,
-        });
+        await checkResponseStatus(response, conf);
+        return Promise.resolve();
     }
 
     public async findUsers(searchQuery: string) {
         let conf = Object.assign({}, config.api.usersSearch);
         conf.url = conf.url.replace('{:name}', searchQuery);
-
         const response = await ajax(conf);
-        // console.log(response);
-
-        if (response.status.toString() in config.api.usersSearch.statuses.success) {
-            let users: IUser[] = response.parsedBody.body.map((rawUser: any) => {
-                // console.log(rawUser);
-
-                return {
-                    first_name: rawUser.first_name,
-                    last_name: rawUser.last_name,
-                    nick_name: rawUser.nick_name,
-                    email: rawUser.email,
-                    id: rawUser.id,
-                    avatar: rawUser.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawUser.avatar}`,
-                };
-            });
-
-
-            return Promise.resolve(users);
-        }
-
-        if (response.status.toString() in config.api.usersSearch.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.usersSearch.statuses.failure;
-
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.usersSearch.statuses.failure[keyStatus],
-                body: response.parsedBody
-            });
-        }
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-            body: response.parsedBody,
-        });
+        await checkResponseStatus(response, conf);
+        const users = this.parseUsers(response.parsedBody.body);
+        return Promise.resolve(users);
     }
 
 
 
     public async updateUserData(newData: IProfileSettings) {
-        // console.log(JSON.stringify(newData));
-
         const response = await ajax(config.api.userUpdate, JSON.stringify(newData));
-
-        if (response.status.toString() in config.api.deleteFriend.statuses.success) {
-
-            try {
-                let newCurrentUser = Object.assign({}, this.currentUser);
-                Object.keys(newData).forEach(key => {
-                    if (key === 'avatar') {
-                        const id = newData[key] ?? 0;
-                        newCurrentUser[key] = id !== 0 ? `${config.host}${config.api.image.url}/${id}` : '../src/img/default_avatar.png';
-                        return;
-                    }
-                    newCurrentUser[key] = newData[key];
-                });
-                this.currentUser = newCurrentUser;
-                EventDispatcher.emit('user-changed', this.currentUser);
-
-            }
-            catch (error) {
-                // console.log(error);
-            }
-
-            return Promise.resolve();
-        }
-
-        if (response.status.toString() in config.api.deleteFriend.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.deleteFriend.statuses.failure;
-
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.deleteFriend.statuses.failure[keyStatus],
-                body: response.parsedBody
+        await checkResponseStatus(response, config.api.userUpdate);
+        try {
+            let newCurrentUser = Object.assign({}, this.currentUser);
+            Object.keys(newData).forEach(key => {
+                if (key === 'avatar') {
+                    const id = newData[key] ?? 0;
+                    newCurrentUser[key] = id !== 0 ? `${config.host}${config.api.image.url}/${id}` : '../src/img/default_avatar.png';
+                    return;
+                }
+                newCurrentUser[key] = newData[key];
             });
+            this.currentUser = newCurrentUser;
+            EventDispatcher.emit('user-changed', this.currentUser);
+
+        }
+        catch (error) {
+            console.log(error);
         }
 
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-            body: response.parsedBody,
-        });
+        return Promise.resolve();
     }
 }
 
