@@ -16,7 +16,6 @@ export const dateParser = (dateString: string): string => {
         }
     }
     const diffMonth = now.getMonth() - date.getMonth();
-    console.log("md: ", diffMonth);
     if (diffMonth !== 0) {
         const lastNumber = diffMonth % 10;
         if ((10 <= diffMonth && diffMonth <= 20) || lastNumber === 0 || (5 <= lastNumber && lastNumber <= 9)) {
@@ -30,7 +29,6 @@ export const dateParser = (dateString: string): string => {
         }
     }
     const diffDate = now.getDate() - date.getDate();
-    console.log("dd: ", diffDate);
 
     if (diffDate !== 0) {
         const lastNumber = diffDate % 10;
