@@ -111,7 +111,7 @@ class FeedModel extends IModel {
                 id: feedPost.id,
                 author: {
                     url: '',
-                    avatar: feedPost.avatar_id === 0 ? './src/img/avatar_pavel.jpg' : `${config.host}${config.api.image.url}/${feedPost.avatar_id}`,
+                    avatar: feedPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${feedPost.avatar_id}`,
                     first_name: feedPost.user_first_name,
                     last_name: feedPost.user_last_name,
                     id: feedPost.user_id,
@@ -140,7 +140,7 @@ class FeedModel extends IModel {
                 id: feedPost.id,
                 author: {
                     url: '',
-                    avatar: feedPost.avatar_id === 0 ? './src/img/avatar_pavel.jpg' : `${config.host}${config.api.image.url}/${feedPost.avatar_id}`,
+                    avatar: feedPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${feedPost.avatar_id}`,
                     first_name: feedPost.user_first_name,
                     last_name: feedPost.user_last_name,
                 },
@@ -175,7 +175,7 @@ class FeedModel extends IModel {
                 author: {
                     id: rawPost.user_id,
                     url: '',
-                    avatar: rawPost.avatar_id === 0 ? './src/img/avatar_pavel.jpg' : `${config.host}${config.api.image.url}/${rawPost.avatar_id}`,
+                    avatar: rawPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawPost.avatar_id}`,
                     first_name: rawPost.user_first_name,
                     last_name: rawPost.user_last_name,
                 },
@@ -209,7 +209,7 @@ class FeedModel extends IModel {
                 author: {
                     id: rawPost.user_id,
                     url: '',
-                    avatar: rawPost.avatar_id === 0 ? './src/img/avatar_pavel.jpg' : `${config.host}${config.api.image.url}/${rawPost.avatar_id}`,
+                    avatar: rawPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawPost.avatar_id}`,
                     first_name: rawPost.user_first_name,
                     last_name: rawPost.user_last_name,
                 },
@@ -260,7 +260,7 @@ class FeedModel extends IModel {
                     author: {
                         id: rawFeed.user_id,
                         url: '',
-                        avatar: rawFeed.avatar_id === 0 ? './src/img/avatar_pavel.jpg' : `${config.host}${config.api.image.url}/${rawFeed.avatar_id}`,
+                        avatar: rawFeed.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawFeed.avatar_id}`,
                         first_name: rawFeed.user_first_name,
                         last_name: rawFeed.user_last_name,
                     },

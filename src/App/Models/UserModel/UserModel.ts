@@ -117,7 +117,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
+                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
             };
             EventDispatcher.emit('user-changed', this.currentUser);
             const keyStatus = response.status.toString() as keyof typeof config.api.signin.statuses.success;
@@ -168,7 +168,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: '../src/img/test_avatar.jpg',
+                avatar: '../src/img/default_avatar.png',
             };
             EventDispatcher.emit('user-changed', this.currentUser);
             const keyStatus = response.status.toString() as keyof typeof config.api.signup.statuses.success;
@@ -215,7 +215,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
+                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
             };
             return Promise.resolve(user);
         }
@@ -248,7 +248,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
+                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
             };
             EventDispatcher.emit('user-changed', this.currentUser);
             const keyStatus = response.status.toString() as keyof typeof config.api.auth.statuses.success;
@@ -298,7 +298,7 @@ class UserModel extends IModel {
                     nick_name: rawUser.nick_name,
                     email: rawUser.email,
                     id: rawUser.id,
-                    avatar: rawUser.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${rawUser.avatar}`,
+                    avatar: rawUser.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawUser.avatar}`,
                 };
             });
 
@@ -422,7 +422,7 @@ class UserModel extends IModel {
                     nick_name: rawUser.nick_name,
                     email: rawUser.email,
                     id: rawUser.id,
-                    avatar: rawUser.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${rawUser.avatar}`,
+                    avatar: rawUser.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawUser.avatar}`,
                 };
             });
 
@@ -461,7 +461,7 @@ class UserModel extends IModel {
                 Object.keys(newData).forEach(key => {
                     if (key === 'avatar') {
                         const id = newData[key] ?? 0;
-                        newCurrentUser[key] = id !== 0 ? `${config.host}${config.api.image.url}/${id}` : '../src/img/test_avatar.jpg';
+                        newCurrentUser[key] = id !== 0 ? `${config.host}${config.api.image.url}/${id}` : '../src/img/default_avatar.png';
                         return;
                     }
                     newCurrentUser[key] = newData[key];

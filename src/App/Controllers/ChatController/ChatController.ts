@@ -220,7 +220,7 @@ class ChatController extends
         if(!user) return;
 
         const data : IChatNavbar = {
-            avatar: user.avatar ?? '../src/img/test_avatar.jpg',
+            avatar: user.avatar ?? '../src/img/default_avatar.png',
             first_name: user.first_name ?? 'Капи',
             last_name: user.last_name ?? 'Неопознаный',
             id: user.id ?? '',
@@ -244,7 +244,7 @@ class ChatController extends
 
             const formatted: IMessageData = {
                 user: {
-                    avatar: user.avatar ?? '../src/img/test_avatar.jpg',
+                    avatar: user.avatar ?? '../src/img/default_avatar.png',
                     first_name: user.first_name ?? 'Капи',
                     last_name: user.last_name ?? 'Неопознаный',
                 },

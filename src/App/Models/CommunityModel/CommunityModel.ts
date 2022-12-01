@@ -43,7 +43,7 @@ class CommunityModel extends IModel {
             const community = response.parsedBody.body;
             const data: ICommunityData = {
                 avatar: community.avatar_id === 0 ?
-                    '../src/img/test_avatar.jpg'
+                    '../src/img/default_avatar.png'
                     :
                     `${config.host}${config.api.image.url}/${community.avatar_id}`,
                 create_date: community.create_date,
@@ -104,7 +104,7 @@ class CommunityModel extends IModel {
             const community = response.parsedBody.body;
             const data: ICommunityData = {
                 avatar: community.avatar_id === 0 ?
-                    '../src/img/test_avatar.jpg'
+                    '../src/img/default_avatar.png'
                     :
                     `${config.host}${config.api.image.url}/${community.avatar_id}`,
                 create_date: community.create_date,
@@ -139,7 +139,7 @@ class CommunityModel extends IModel {
             let data: ICommunityData[] = response.parsedBody.body.map((community: any) => {
                 const item: ICommunityData = {
                     avatar: community.avatar_id === 0 ?
-                        '../src/img/test_avatar.jpg'
+                        '../src/img/default_avatar.png'
                         :
                         `${config.host}${config.api.image.url}/${community.avatar_id}`,
                     create_date: community.create_date,
@@ -179,7 +179,7 @@ class CommunityModel extends IModel {
             const community = response.parsedBody.body;
             let data: ICommunityData = {
                 avatar: community.avatar_id === 0 ?
-                    '../src/img/test_avatar.jpg'
+                    '../src/img/default_avatar.png'
                     :
                     `${config.host}${config.api.image.url}/${community.avatar_id}`,
                 create_date: community.create_date,
@@ -217,7 +217,7 @@ class CommunityModel extends IModel {
             let communities: ICommunityData[] = response.parsedBody.body.map((rawCommunity: any) => {
                 return {
                     avatar: rawCommunity.avatar_id === 0 ?
-                        '../src/img/test_avatar.jpg'
+                        '../src/img/default_avatar.png'
                         :
                         `${config.host}${config.api.image.url}/${rawCommunity.avatar_id}`,
                     create_date: rawCommunity.create_date,

@@ -26,8 +26,6 @@ class FriendsView extends IView {
     }
 
     private checkFriends() {
-        console.log('frineds changed', this.friendList.querySelector('.friend'));
-
         if (!this.friendList.querySelector('.friend')) {
             this.showMock('Пользователи не найдены');
         } else {

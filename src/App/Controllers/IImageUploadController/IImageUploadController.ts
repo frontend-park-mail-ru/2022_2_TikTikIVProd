@@ -18,7 +18,7 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
         this.virtInput.accept = 'image/*';
         this.virtInput.onchange = () => {
             // console.log('onchange');
-            
+
             const imgs = this.virtInput.files;
             if (imgs) {
                 const key: string = URL.createObjectURL(imgs[0]);
@@ -54,9 +54,9 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
         const data = new FormData();
         data.append('image', img.file);
         // console.log(data);
-        
+
         this.model.uploadImage(data)
-            .then(({id}) => {
+            .then(({ id }) => {
                 img.uploaded = true;
                 this.onSucceccUpload(id.toString());
             })
@@ -76,6 +76,22 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
 
     public remove(url: string) {
         URL.revokeObjectURL(url);
+
+        // changed: also delete in input
+        const img = this.imgsStore.get(url);
+        if (img && this.virtInput.files) {
+            let dt = new DataTransfer();
+
+            // Copy all besides deleted
+            for (let i = 0; i <= this.virtInput.files.length - 1; i++)
+                if (this.virtInput.files[i] !== img.file){
+                    dt.items.add(this.virtInput.files[i]);
+                }
+            // Replace
+            this.virtInput.files = dt.files;
+        }
+        // Changed end
+
         this.imgsStore.delete(url);
         if (this.imgsStore.size === 0) {
             this.loadImageMock();

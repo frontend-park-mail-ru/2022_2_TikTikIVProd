@@ -166,7 +166,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             .catch(({ status, body }) => {
                 // const item: IFeedData = {
                 //     id: 321,
-                //     author: { id: 0, url: '/testuser123', avatar: '../src/img/test_avatar.jpg', first_name: 'Неопознанный', last_name: 'Капи' },
+                //     author: { id: 0, url: '/testuser123', avatar: '../src/img/default_avatar.png', first_name: 'Неопознанный', last_name: 'Капи' },
                 //     date: 'В будующем...',
                 //     text: 'Ваши друзья еще не выложили свой первый пост. Напомните им об этом!',
                 //     likes: 100500,

@@ -2,26 +2,57 @@ import UserModel from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
 import paths from "../../Router/RouterPaths";
+import throttle from "../../Utils/Throttle/Throttle";
 import FriendsView from "../../Views/FriendsView/FriendsView";
 import IController from "../IController/IController";
 
+
 class FriendsController extends IController<FriendsView, UserModel> {
+    private ignoreSearch: boolean;
     constructor(view: FriendsView, model: UserModel) {
         super(view, model);
+        this.ignoreSearch = false;
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         this.view.bindClick(this.handleClick.bind(this));
-        this.view.bindSearchChange(this.handleSearchChange.bind(this));
+        this.view.bindSearchChange(throttle(this.handleSearchChange.bind(this), 1000));
     }
 
-    private handleSearchChange(e: Event) : void {
+    private handleSearchChange(e: Event): void {
         console.log('eve');
-        
+
         const searchQuery = this.view.getSearchData();
-        if(searchQuery.length < 1){
-            this.updateFriendsList();
-        }
+        this.searchUsers(searchQuery);
     }
 
+    private searchUsers(name: string): void {
+        if (name.length < 1) {
+            this.updateFriendsList();
+            this.ignoreSearch = true;
+            return;
+        }
+        this.ignoreSearch = false;
+        
+        this.model.findUsers(name)
+            .then(users => {
+                if(this.ignoreSearch) return;
+
+                const currentUserId = this.model.getCurrentUser()?.id;
+                if (!currentUserId) return;
+
+                this.model.getFriends(currentUserId)
+                    .then(friends => {
+                        users.forEach(user => {
+                            user.isCurrent = user.id === currentUserId ? 1 : 0;
+                            user.isFriend = friends.users.find(friend => friend.id === user.id) ? 1 : 0;
+                        });
+                        this.view.clearList(); //TODO
+                        this.view.fillList(users);
+                    });
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
 
     private handleClick(e: Event): void {
         e.preventDefault();
@@ -75,25 +106,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
 
                 case 'submit_search': {
                     const name = this.view.getSearchData();
-                    if (name.length < 1) return;
-                    this.model.findUsers(name)
-                        .then(users => {
-                            const currentUserId = this.model.getCurrentUser()?.id;
-                            if (!currentUserId) return;
-
-                            this.model.getFriends(currentUserId)
-                                .then(friends => {
-                                    users.forEach(user => {
-                                        user.isCurrent = user.id === currentUserId ? 1 : 0;
-                                        user.isFriend = friends.users.find(friend => friend.id === user.id) ? 1 : 0;
-                                    });
-                                    this.view.clearList(); //TODO
-                                    this.view.fillList(users);
-                                })
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        })
+                    this.searchUsers(name);
                     return;
                 }
             }
@@ -102,14 +115,14 @@ class FriendsController extends IController<FriendsView, UserModel> {
 
     public updateFriendsList(userId?: string | number) {
 
-        if(userId) { 
+        if (userId) {
             this.model.isFriend(userId)
-            .then(res => {
-                this.model.getUser(userId)
-                .then(user => {
-                    this.view.changeUserFriendshipStatus(user, res);
+                .then(res => {
+                    this.model.getUser(userId)
+                        .then(user => {
+                            this.view.changeUserFriendshipStatus(user, res);
+                        });
                 });
-            });
             return;
         }
 
