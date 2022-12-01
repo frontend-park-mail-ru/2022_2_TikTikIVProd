@@ -56,21 +56,21 @@ class CommunityListView extends IView {
 
     public fillList(data: ICommunityData[]): void {
         data.forEach(item => {
-            this.communitiesList.innerHTML += communityListItemTemplate(Object.assign(item, { isMember: true}));
+            this.communitiesList.innerHTML += communityListItemTemplate(Object.assign(item, { isMember: true }));
         });
     }
 
-    public showCommunityCreationForm() : void{
+    public showCommunityCreationForm(): void {
         this.overlay.innerHTML = communityCreationFormTemplate(communityCreationFormConfig);
         this.overlay.classList.remove('communities--hide');
     }
 
 
-    public hideCommunityCreationForm() : void {
+    public hideCommunityCreationForm(): void {
         this.overlay.classList.add('communities--hide');
     }
 
-    public showErrorMsg(id: string, msg: string) : void {
+    public showErrorMsg(id: string, msg: string): void {
         const inpt = <HTMLElement>this.element.querySelector('#' + id)?.closest('.input-with-title');
         if (!inpt) {
             return;
@@ -79,31 +79,31 @@ class CommunityListView extends IView {
         (<HTMLElement>inpt.querySelector('.input-with-title__error-msg')).innerHTML = msg;
     }
 
-    public hideErrorMsg(id: string) : void {
+    public hideErrorMsg(id: string): void {
         console.log(id);
-        
+
         const inpt = <HTMLElement>this.element.querySelector('#' + id)?.closest('.input-with-title');
         console.log(inpt);
-        
+
         if (!inpt) {
             return;
         }
         inpt.classList.remove('input-with-title--error');
     }
 
-    public getFormData(): Map<string, string> { 
+    public getFormData(): Map<string, string> {
         const data = new Map();
-        this.overlay.querySelectorAll('input').forEach((item) =>{
+        this.overlay.querySelectorAll('input').forEach((item) => {
             data.set(item.id, item.value);
         });
-        this.overlay.querySelectorAll('textarea').forEach((item) =>{
+        this.overlay.querySelectorAll('textarea').forEach((item) => {
             data.set(item.id, item.value);
         });
         return data;
     }
 
-    public lockForm() : void{
-        
+    public lockForm(): void {
+
         console.log(<HTMLFieldSetElement>this.overlay.querySelector('fieldset'));
         (<HTMLFieldSetElement>this.overlay.querySelector('fieldset')).disabled = true;
     }
@@ -114,6 +114,12 @@ class CommunityListView extends IView {
         (<HTMLFieldSetElement>this.overlay.querySelector('fieldset')).disabled = false;
 
     }
+
+    public getSearchData(): string {
+        const name = this.navbar.querySelector('input')?.value;
+        return name ?? '';
+    }
+
 }
 
 export default CommunityListView; 

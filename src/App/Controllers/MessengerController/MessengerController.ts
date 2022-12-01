@@ -21,7 +21,7 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
     constructor(view: MessengerView, model: { user: UserModel, messenger: MessengerModel }) {
         super(view, model);
         this.view.bindClick(this.handleClick.bind(this));
-         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
+        EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
     }
 
     private handleClick(e: Event): void {
@@ -30,17 +30,22 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
 
         const dialogId = (<HTMLElement>target.closest('.dialog'))?.dataset['dialog_id'];
         const userId = (<HTMLElement>target.closest('.dialog'))?.dataset['user_id'];
+        const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
+
 
         if (!userId) {
             // console.log('user null');
             return;
         }
+        switch (action) {
+            default: return;
 
-        // // console.log(dialogId, userId);
-
-        let url = Object.assign({}, config.api.chat).url;
-        url = url.replace('{:id}', userId.toString());
-        router.goToPath(url);
+            case "open-dialog": {
+                let url = Object.assign({}, config.api.chat).url;
+                url = url.replace('{:id}', userId.toString());
+                router.goToPath(url);
+            }
+        }
     }
 
 
@@ -56,7 +61,7 @@ class MessengerController extends IController<MessengerView, { user: UserModel, 
         for (let i = 0; i < data.length; i++) {
             const userId = data[i].userId1 !== currentUser.id ? data[i].userId1 : data[i].userId2;
             const user = await this.model.user.getUser(userId);
-            
+
             dialogsData.push({
                 dialog_id: data[i].dialog_id.toString(),
                 user_id: user.id.toString(),

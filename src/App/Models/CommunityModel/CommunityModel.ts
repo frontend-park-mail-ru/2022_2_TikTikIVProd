@@ -206,6 +206,46 @@ class CommunityModel extends IModel {
             msg: 'Неожиданная ошибка',
         });
     }
+
+    public async findCommunities(searchQuery: string) {
+        let conf = Object.assign({}, config.api.communitiesSearch);
+        conf.url = conf.url.replace('{:name}', searchQuery);
+
+        const response = await ajax(conf);
+
+        if (response.status.toString() in config.api.communitiesSearch.statuses.success) {
+            let communities: ICommunityData[] = response.parsedBody.body.map((rawCommunity: any) => {
+                return {
+                    avatar: rawCommunity.avatar_id === 0 ?
+                        '../src/img/test_avatar.jpg'
+                        :
+                        `${config.host}${config.api.image.url}/${rawCommunity.avatar_id}`,
+                    create_date: rawCommunity.create_date,
+                    description: rawCommunity.description,
+                    id: rawCommunity.id,
+                    name: rawCommunity.name,
+                    owner_id: rawCommunity.owner_id,
+                }
+            })
+
+            return Promise.resolve(communities);
+        }
+        if (response.status.toString() in config.api.communitiesSearch.statuses.failure) {
+            const keyStatus = response.status.toString() as keyof typeof config.api.communitiesSearch.statuses.failure;
+
+            return Promise.reject({
+                status: response.status,
+                msg: config.api.communitiesSearch.statuses.failure[keyStatus],
+                body: response.parsedBody
+            });
+        }
+
+        return Promise.reject({
+            status: response.status,
+            msg: 'Неожиданная ошибка',
+            body: response.parsedBody,
+        });
+    }
 };
 
 export default CommunityModel;

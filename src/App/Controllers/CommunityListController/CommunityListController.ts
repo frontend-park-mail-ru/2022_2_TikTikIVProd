@@ -66,7 +66,7 @@ class CommunityListController extends IController<CommunityListView, { community
                     return;
                 }
 
-                const params : ICommunityCreateData = {
+                const params: ICommunityCreateData = {
                     name: data.get('name') ?? '',
                     description: data.get('description') ?? '',
                     avatar_id: 1, // TODO
@@ -74,15 +74,29 @@ class CommunityListController extends IController<CommunityListView, { community
 
                 this.view.lockForm();
                 this.model.community.create(params)
-                .then(data => {
-                    this.view.unlockForm();
-                    this.view.hideCommunityCreationForm();
-                })
-                .catch(data => {
-                    this.view.unlockForm();
-                    console.log('err ', data);
-                });
+                    .then(data => {
+                        this.view.unlockForm();
+                        this.view.hideCommunityCreationForm();
+                    })
+                    .catch(data => {
+                        this.view.unlockForm();
+                        console.log('err ', data);
+                    });
 
+                return;
+            }
+            case 'submit_search': {
+                const name = this.view.getSearchData().replace(/\s+/g, ' ').trim().replace(" ", "+");
+                console.log(name);
+                if (name.length < 1) return;
+                this.model.community.findCommunities(name)
+                    .then(communities => {
+                        this.view.clearList(); //TODO
+                        this.view.fillList(communities);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
                 return;
             }
         }

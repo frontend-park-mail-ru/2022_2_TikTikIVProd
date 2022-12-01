@@ -624,7 +624,23 @@ const config: IConfig = {
                     '404': 'Сообщество не найдено',
                 }, failureDefaultStatuses),
             },
-        }
+        },
+
+        communitiesSearch: {
+            url: '/communities/search?q={:name}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Пользователи найдены'
+                },
+                failure: Object.assign({
+                    '404': 'Сообщество не найдено',
+                }, failureDefaultStatuses),
+            },
+        },
     }
 
 }

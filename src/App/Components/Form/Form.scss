@@ -19,6 +19,7 @@
     text-align: center;
     word-wrap: break-word;
     color: var(--color-form-title);
+    margin-bottom: 10px;
   }
 
   &__content {
@@ -72,11 +73,12 @@
     background-color: var(--color-button-background-pressed);
   }
 
-  &__button:disabled{
+  &__button:disabled {
     background-color: var(--color-button-background-disabled);
   }
 
   &__link {
+    margin-top: 5px;
     text-decoration: none;
     color: var(--color-link-value);
     font-size: 16px;
@@ -91,7 +93,7 @@
     text-decoration: underline var(--color-limk-underline-pressed);
   }
 
-  fieldset{
+  fieldset {
     border: none;
     outline: none;
   }
@@ -119,7 +121,7 @@
     color: inherit;
   }
 
-  &__input:disabled{
+  &__input:disabled {
     background-color: var(--color-input-disabled);
   }
 
