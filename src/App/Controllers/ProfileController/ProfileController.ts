@@ -35,7 +35,10 @@ class ProfileController extends IController<ProfileView, UserModel>{
             return Promise.reject();
         }
 
-        const isFriend = await this.model.isFriend(userId); // TODO;
+        let isFriend = false;
+        if(user.id !== currentUser.id){
+            isFriend = await this.model.isFriend(userId); // TODO;
+        } 
 
         // console.log(' T5 ', user.id, isFriend);
 

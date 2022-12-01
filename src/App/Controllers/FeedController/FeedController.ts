@@ -262,7 +262,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                                     target.firstElementChild.classList.toggle("feed-card__button__liked");
                                     target.firstElementChild.classList.remove("feed-card__button__unliked")
                                     if (likesCountElement !== null) {
-                                        if (likesCountElement.innerText !== "0")
+                                        // if (likesCountElement.innerText !== "0")
                                             likesCountElement.innerText = String(Number(likesCountElement.innerText) + 1);
                                     }
 

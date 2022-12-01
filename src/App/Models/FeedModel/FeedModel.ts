@@ -54,6 +54,7 @@ export interface IFeedData {
     date: string;
     text: string;
     likes: number;
+    isLiked: string;
     attachments: { src: string }[];
     community_id: number,
 }
@@ -117,7 +118,8 @@ class FeedModel extends IModel {
                 },
                 date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
                 text: feedPost.message,
-                likes: 228,
+                likes: feedPost.count_likes,
+                isLiked: feedPost.is_liked ? "liked" : "unliked",
                 attachments: feedPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
                 community_id: feedPost.community_id,
             }
@@ -144,7 +146,8 @@ class FeedModel extends IModel {
                 },
                 date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
                 text: feedPost.message,
-                likes: 228,
+                isLiked: feedPost.is_liked ? "liked" : "unliked",
+                likes: feedPost.likes__count,
                 attachments: feedPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
             }
         });
@@ -178,7 +181,8 @@ class FeedModel extends IModel {
                 },
                 date: `${new Date(rawPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
                 text: rawPost.message,
-                likes: 228,
+                likes: rawPost.count_likes,
+                isLiked: rawPost.is_liked ? "liked" : "unliked",
                 attachments: rawPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
                 community_id: rawPost.community_id,
             };
@@ -212,6 +216,7 @@ class FeedModel extends IModel {
                 date: dateParser(rawPost.create_date),
                 text: rawPost.message,
                 likes: rawPost.count_likes,
+                isLiked: rawPost.is_liked ? "liked" : "unliked",
                 attachments: rawPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
                 community_id: rawPost.community_id,
             };
