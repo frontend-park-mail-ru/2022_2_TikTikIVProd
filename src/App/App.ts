@@ -410,6 +410,9 @@ class App {
         this.headerController.mountComponent();
         this.aboutWSController.mountComponent();
         this.footerController.mountComponent();
+
+        this.headerView.changeHeaderItem('signupButton');
+
     }
     /**
      * Функция инициализирует базовую вёрстку страницы
