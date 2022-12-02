@@ -6,7 +6,7 @@
         height: 100vh;
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        gap: var(--big-gap-beetween-blocks);
     }
 
     &__header {
@@ -26,37 +26,82 @@
 
 
 .root-content {
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 5fr 1fr;
-
     height: 100%;
-
-    // padding: 10px 20px;
+    display: grid;
     gap: 10px;
+    overflow: hidden;
+    padding: 0;
+
+    @media screen and (max-device-width:699px) {
+        grid-template-columns: 1fr;
+    }
+
+    @media screen and (max-width:699px) {
+        grid-template-columns: 1fr;
+    }
+
+    @media screen and (min-width:700px) {
+        grid-template-columns: 1fr 5fr 1fr;
+    }
 
     &__menu {
         display: flex;
         flex-direction: column;
+
+        @media screen and (max-device-width: 700px) {
+            position: absolute;
+            bottom: 0;
+        }
+
+        @media screen and (max-width: 700px) {
+            position: absolute;
+            bottom: 0;
+        }
     }
 
-    &__menu--left{
+    &__menu--left {
         align-items: flex-end;
+
+        @media screen and (max-device-width: 700px),
+        screen and (max-width: 700px) {
+            position: absolute;
+            align-items: center;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+        }
     }
 
-    &__menu--right{
+    &__menu--right {
         align-items: flex-start;
+
+        @media screen and (max-device-width:700px) {
+            display: none;
+        }
+
+        @media screen and (max-width:700px) {
+            display: none;
+        }
     }
 
     &__main {
         height: 100%;
         width: 100%;
 
+        @media screen and (max-width:700px) {
+            height: calc(100% - var(--tablet-menu-height));
+        }
+
+        @media screen and (max-device-width:700px) {
+            height: calc(100% - var(--phone-menu-height));
+        }
+
+
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 15px;
-        
+        gap: var(--big-gap-beetween-blocks);
+
         overflow: hidden;
     }
 }

@@ -1,12 +1,12 @@
 <div class="navbar-chat">
     <div class="navbar-chat__nav">
-        {{!-- <div class="navbar-chat-button">
+        <div class="navbar-chat-button" data-action="back">
             <img class="navbar-chat-button__icon" src="../src/img/back_arrow_icon.svg" alt="">
             <div class="navbar-chat-button__text">Назад</div>
-        </div> --}}
+        </div>
     </div>
-    <div class="navbar-chat__name">
+    <div class="navbar-chat__name" data-user_id="{{id}}" data-action="user_profile">
         {{first_name}} {{last_name}}
     </div>
-    <img src="{{avatar}}" class="navbar-chat__avatar">
+    <img src="{{avatar}}" class="navbar-chat__avatar" data-user_id="{{id}}" data-action="user_profile">
 </div>

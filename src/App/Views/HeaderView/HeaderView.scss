@@ -5,7 +5,7 @@
   align-items: center;
   gap: 8px;
 
-  
+
   &__logo {
     display: flex;
     justify-content: center;
@@ -16,15 +16,15 @@
     font-size: 20px;
     font-weight: bold;
     text-decoration: none;
-    
+
     background-color: var(--color-logo-background);
-    
+
     padding: 8px;
-    
+
     cursor: pointer;
   }
 
-  &__logo:hover{
+  &__logo:hover {
     transform: scale(1.05);
   }
 
@@ -33,6 +33,6 @@
     // align-items: center;
     // justify-content: center;
     // margin: 0px 10% 0 15px;
-    gap: 10px;
+    gap: var(--gap-beetween-blocks);
   }
 }

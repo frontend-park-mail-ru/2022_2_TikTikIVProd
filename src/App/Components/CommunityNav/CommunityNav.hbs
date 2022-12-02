@@ -1,0 +1,27 @@
+{{log this}}
+<div class="community-buttons">
+    {{#if status.isAdmin}}
+    <button class="community-button community-button--green" data-action="settings">
+        <img class="community-button__icon" src="../src/img/settings_icon_white.svg" alt="">
+        <div class="community-button__text">
+            Настройки
+        </div>
+    </button>
+    {{else}}
+    {{#if status.isMember}}
+    <button class="community-button community-button--red" data-action="left">
+        <img class="community-button__icon" src="../src/img/x_icon.svg" alt="">
+        <div class="community-button__text">
+            Покинуть
+        </div>
+    </button>
+    {{else}}
+    <button class="community-button community-button--green" data-action="join">
+        <img class="community-button__icon" src="../src/img/plus_icon.svg" alt="">
+        <div class="community-button__text">
+            Вступить
+        </div>
+    </button>
+    {{/if}}
+    {{/if}}
+</div>

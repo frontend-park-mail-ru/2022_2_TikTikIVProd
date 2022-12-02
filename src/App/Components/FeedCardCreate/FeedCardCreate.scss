@@ -21,7 +21,7 @@
     &__text {
         min-width: 50vw;
         min-height: 20vh;
-        
+
         font-size: 14px;
         resize: vertical;
         padding: 5px 8px;
@@ -29,6 +29,8 @@
         border-radius: 10px;
         outline: 2px solid var(--color-feed-card-border);
         outline-offset: -2px;
+        background-color: var(--color-feed-card-create-text-background);
+        color: var(--color-feed-card-create-text);
     }
 
     &__text:focus {
@@ -45,38 +47,88 @@
         display: none;
     }
 
-    &__button {
-        cursor: pointer;
-    }
-
-    &__button--tool {
-        width: 24px;
-        height: auto;
-        object-fit: contain;
-    }
-
-    &__button--tool:hover {
-        transform: scale(1.05);
-    }
-
-    &__button--submit {
-        border-radius: 8px;
-        padding: 5px 10px;
-        background-color: var(--color-button-background);
-        color: var(--color-button-value);
-        font-weight: bolder;
-        font-size: 13px;
-    }
-
-    &__button--submit:hover {
-        background-color: rgb(6, 188, 6);
-    }
-
     &__tools {
         display: flex;
         flex-direction: column;
         gap: 8px;
+
+        &--row{
+            flex-direction: row;
+        }
     }
+}
+
+.feed-card-create-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: min-content;
+
+    cursor: pointer;
+
+    border: none;
+    outline: none;
+    border-radius: 8px;
+
+    &--big {
+        background-color: var(--color-button-background);
+        padding: 4px 8px;
+
+
+        &:hover {
+            background-color: #24dc83;
+        }
+
+        &:active {
+            background-color: #24B66F;
+        }
+
+        @media screen and (max-device-width:799px) {
+            width: 10%;
+            min-width: min-content;
+            max-width: 150px;
+            padding: 12px;
+        }
+    }
+
+    &--small {
+        background-color: inherit;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+
+    &__icon {
+        object-fit: contain;
+        width: 20px;
+    }
+
+    &__text {
+        color: var(--color-button-value);
+        text-overflow: ellipsis;
+        font-weight: bolder;
+        font-size: 14px;
+
+        @media screen and (max-device-width:799px) {
+            display: none;
+        }
+    }
+
+
+    &--red {
+        background-color: #F44848;
+    }
+
+    &--red:hover {
+        background-color: #f64f4f;
+    }
+
+
 }
 
 .feed-card-create-author {
@@ -87,7 +139,7 @@
         object-fit: cover;
         height: 42px;
         width: 42px;
-        
+
         background-color: var(--color-profile-img-background);
         outline: 1px solid var(--color-profile-img-border);
         border-radius: 50%;

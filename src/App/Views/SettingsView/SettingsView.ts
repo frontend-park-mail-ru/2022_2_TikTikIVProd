@@ -23,6 +23,7 @@ class SettingsView extends IView{
     constructor(parent : HTMLElement) {
         super(parent, settingsViewTemplate({}), '.settings');
         // this.avatarUploadView = new AvatarUploadView(this.parent);
+        
     }
 
     // public getAvatarUploadView() : AvatarUploadView {
@@ -36,6 +37,18 @@ class SettingsView extends IView{
     public show(opts?: any): void {
         // TODO avatar upload;
         // this.element.innerHTML = avatarUploadTemplate({});
+        //
+        this.element.innerHTML = '';
+
+        // TODO переписать 
+        // settingsViewConfig.groups.forEach(gr => {
+        //     gr.inputs.forEach(inp => {
+        //         const el =  this.element.querySelector('#'+inp.id);
+        //         if(el){
+        //             this.element.removeChild(el);
+        //         }
+        //     });
+        // });
         //
         this.element.innerHTML += settingsFormTemplate({data: opts, config: settingsViewConfig});
 
@@ -91,6 +104,12 @@ class SettingsView extends IView{
             return;
         }
         inpt.classList.remove('settings-input-with-title--error');
+    }
+
+
+    //TODO delete
+    public getElement() : HTMLElement {
+        return this.element;
     }
 }
 

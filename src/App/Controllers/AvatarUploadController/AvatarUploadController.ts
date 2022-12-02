@@ -34,6 +34,12 @@ class AvatarUploadController extends IImageUploadController<AvatarUploadView> {
                 this.uploadImage(src);
                 return;
             }
+            case 'clear':{
+                this.flush();
+                this.view.hidePreview();
+                this.view.hideTools();
+                this.view.showMock();
+            }
         }
 
     }

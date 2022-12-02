@@ -21,6 +21,7 @@
         flex-direction: column;
         gap: 10px;
         width: auto;
+        height: 100%;
 
         overflow-x: hidden;
         overflow-y: scroll;
@@ -35,10 +36,34 @@
     }
 
     &__content::-webkit-scrollbar-thumb{
-        background-color: gray;
-        border: 5px solid lightgray;
+        background-color: lightgray;
+        border: 5px solid var(--color-root-background);
         border-radius: 9999px;
     } 
 
-
+    &--hide {
+        display: none !important;
+    }
 }
+
+.friend-mock{
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+
+    height: min-content;
+  
+    padding: 20px 25px;
+  
+    &__icon {
+      object-fit: cover;
+      width: 80px;
+    }
+  
+    &__text {
+      font-size: 18px;
+      color: #b4b4b4;
+      font-weight: bolder;
+    }
+  }

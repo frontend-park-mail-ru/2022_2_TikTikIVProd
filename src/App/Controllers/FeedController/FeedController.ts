@@ -79,11 +79,14 @@ class FeedController extends IController<FeedView, FeedModel> {
             create_date: '2022-08-15T00:00:00Z',
             id: 0,
             // TODO
+
+            community_id: content.community_id ?? 0,  
         };
 
         this.model.sendNewFeed(data)
-            .then(() => {
+            .then((resp) => {
                 this.view.hideFeedCardCreation();
+                this.view.pushContentToFeed(resp, this.user.id);
             })
             .catch(() => {
                 // console.log('Post create show err to view');
@@ -110,14 +113,17 @@ class FeedController extends IController<FeedView, FeedModel> {
             user_first_name: this.user.first_name,
             user_last_name: this.user.last_name,
             create_date: '2022-08-15T00:00:00Z',
+
+            community_id: content.community_id ?? 0,
         };
 
         this.model.sendEditedFeed(data)
-            .then(() => {
+            .then((data) => {
                 this.view.hideFeedCardCreation();
+                this.view.changePost(data);
             })
-            .catch(() => {
-                // console.log('Post edit show err to view');
+            .catch((data) => {
+                console.log(data);
                 // TODO Post create show err to view
             });
     }
@@ -158,15 +164,15 @@ class FeedController extends IController<FeedView, FeedModel> {
                 page = 1; // TODO
             })
             .catch(({ status, body }) => {
-                const item: IFeedData = {
-                    id: 321,
-                    author: { id: 0, url: '/testuser123', avatar: '../src/img/test_avatar.jpg', first_name: 'Неопознанный', last_name: 'Капи' },
-                    date: 'В будующем...',
-                    text: 'Ваши друзья еще не выложили свой первый пост. Напомните им об этом!',
-                    likes: 100500,
-                    attachments: [{ src: '../src/img/test_post_img.jpg' }],
-                }
-                data.push(item);
+                // const item: IFeedData = {
+                //     id: 321,
+                //     author: { id: 0, url: '/testuser123', avatar: '../src/img/default_avatar.png', first_name: 'Неопознанный', last_name: 'Капи' },
+                //     date: 'В будующем...',
+                //     text: 'Ваши друзья еще не выложили свой первый пост. Напомните им об этом!',
+                //     likes: 100500,
+                //     attachments: [{ src: '../src/img/test_post_img.jpg' }],
+                // }
+                // data.push(item);
                 page = 1; // TODO
             });
 
@@ -238,12 +244,47 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'create_feed': {
-                    this.view.showFeedCardCreation(this.user);
+                    this.view.showFeedCardCreation(this.user, undefined, this.feedType?.group?.id);
+                    return;
+                }
+
+                case 'close_overlay':{
+                    this.view.hideFeedCardCreation();
                     return;
                 }
 
                 case 'like': {
-                    // // console.log('like');
+                    const likesCountElement = document.getElementById(`feed-card-likes__count-${cardId}`);
+                    if (target.firstElementChild !== undefined && target.firstElementChild !== null) {
+                        if ("feed-card__button__unliked" === target.firstElementChild.classList[0]) {
+                            this.model.likePost(cardId).then(({ status }) => {
+                                if (target.firstElementChild !== undefined && target.firstElementChild !== null) {
+                                    target.firstElementChild.classList.toggle("feed-card__button__liked");
+                                    target.firstElementChild.classList.remove("feed-card__button__unliked")
+                                    if (likesCountElement !== null) {
+                                        // if (likesCountElement.innerText !== "0")
+                                            likesCountElement.innerText = String(Number(likesCountElement.innerText) + 1);
+                                    }
+
+                                }
+                            });
+                        }
+
+                        if ("feed-card__button__liked" === target.firstElementChild.classList[0]) {
+                            this.model.unlikePost(cardId).then(({ status }) => {
+                                if (target.firstElementChild !== undefined && target.firstElementChild !== null) {
+                                    target.firstElementChild.classList.toggle("feed-card__button__unliked");
+                                    target.firstElementChild.classList.remove("feed-card__button__liked")
+                                    if (likesCountElement !== null) {
+                                        if (likesCountElement.innerText !== "0")
+                                            likesCountElement.innerText = String(Number(likesCountElement.innerText) - 1);
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+
                     return;
                 }
 
@@ -256,7 +297,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                     this.model.getPost(cardId)
                         .then((feed) => {
-                            this.view.showFeedCardCreation(this.user, feed);
+                            this.view.showFeedCardCreation(this.user, feed, feed.community_id);
                         })
                         .catch(() => {
                             // console.log('edit open, err');

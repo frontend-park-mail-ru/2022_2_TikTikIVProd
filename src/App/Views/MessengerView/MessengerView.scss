@@ -6,11 +6,10 @@ $scrollbar-width: 8px;
     height: 100%;
     overflow: hidden;
     display: grid;
-    grid-template-rows: min-content auto min-content;
 
-    margin: 15px 20px;
+    margin-bottom: 15px;
 
-    background-color: white;
+    background-color: var(--color-messenger-background);
     border-radius: 10px;
 
     &__navbar {
@@ -21,26 +20,61 @@ $scrollbar-width: 8px;
     &__content {
         display: flex;
         flex-direction: column;
-        max-height: 100%;
+        gap: 10px;
+        width: auto;
         overflow-x: hidden;
         overflow-y: scroll;
-        gap: 5px;
-        padding: 10px 15px;
+        padding: 15px 0 15px 15px;
+
+        @media screen and (max-device-width:799px) {
+            padding: 15px;
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        &::-webkit-scrollbar {
+            width: calc(2 * $scrollbar-padding + $scrollbar-width);
+        }
+
+        &::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            border: $scrollbar-padding solid white;
+            border-radius: 9999px;
+            background-color: lightgray;
+            min-height: 30px;
+        }
     }
 
-    &__content::-webkit-scrollbar {
-        width: calc(2 * $scrollbar-padding + $scrollbar-width);
-    }
-
-    &__content::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0);
-    }
-
-    &__content::-webkit-scrollbar-thumb {
-        border: $scrollbar-padding solid white;
-        border-radius: 9999px;
-        background-color: lightgray;
-    }
 
     &__footer {}
+
+    &--hide {
+        display: none !important;
+    }
+}
+
+.messenger-mock {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+
+    padding: 20px 25px;
+
+    &__icon {
+        object-fit: cover;
+        width: 80px;
+    }
+
+    &__text {
+        font-size: 18px;
+        color: #b4b4b4;
+        font-weight: bolder;
+    }
 }

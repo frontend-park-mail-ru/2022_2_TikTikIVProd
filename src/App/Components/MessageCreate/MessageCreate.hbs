@@ -1,9 +1,14 @@
 <div class="message-create">
     <div class="message-create__tools">
-        <img src="../src/img/camera_icon.svg" alt="" class="message-create__button message-create__button--small" data-action="photo">
-        <img src="../src/img/image_icon.svg" alt="" class="message-create__button message-create__button--small" data-action="sticker">
-        <img src="../src/img/smile_icon.svg" alt="" class="message-create__button message-create__button--small" data-action="smile">
-
+        <button class="message-create-button message-create-button--small" data-action="photo">
+            <img class="message-create-button__icon" src="../src/img/camera_icon.svg" alt="">
+        </button>
+        <button class="message-create-button message-create-button--small" data-action="sticker">
+            <img class="message-create-button__icon" src="../src/img/image_icon.svg" alt="">
+        </button>
+        <button class="message-create-button message-create-button--small" data-action="smile">
+            <img class="message-create-button__icon" src="../src/img/smile_icon.svg" alt="">
+        </button>
     </div>
 
     <div class="message-create__form">
@@ -11,7 +16,12 @@
         <div class="message-create__attachments"></div>
     </div>
 
-    <div class="message__new__tools">
-        <div class="message-create__button message-create__button--big" data-action="send">Отправить</div>
+    <div class="message-create__tools">
+        <button class="message-create-button message-create-button--big" data-action="send">
+            <img class="message-create-button__icon" src="../src/img/send_icon.svg" alt="">
+            <div class="message-create-button__text">
+                Отправить
+            </div>
+        </button>
     </div>
 </div>

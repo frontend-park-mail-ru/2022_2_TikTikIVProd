@@ -30,6 +30,7 @@ const _headerItems = {
             href_profile: '/profile',
             href_settings: '/settings',
             settings_icon: '../src/img/settings_icon.svg',
+            theme_icon: '../src/img/theme_icon.svg',
         },
         render: headerProfileTemplate,
     },

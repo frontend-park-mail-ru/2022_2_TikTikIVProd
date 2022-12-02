@@ -8,9 +8,9 @@ $scrollbar-width: 8px;
     display: grid;
     grid-template-rows: min-content auto min-content;
 
-    margin: 15px 20px;
+    margin-bottom: 15px;
 
-    background-color: white;
+    background-color: var(--color-chat-background);
     border-radius: 10px;
 
     &__navbar {

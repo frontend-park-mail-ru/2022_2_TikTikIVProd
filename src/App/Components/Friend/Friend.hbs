@@ -3,6 +3,9 @@
     <div class="friend__wrapper">
         <div class="friend__name" data-action="profile">{{first_name}} {{last_name}}</div>
         <div class="friend__tools">
+            {{#if isCurrent}}
+            <div class="friend__info">Это вы</div>
+            {{else}}
             <button class="friend-button friend-button--green" data-action="message">
                 <img class="friend-button__icon" src="../src/img/message_icon.svg" alt="">
                 <div class="friend-button__text">
@@ -23,6 +26,7 @@
                     Добавить
                 </div>
             </button>
+            {{/if}}
             {{/if}}
         </div>
     </div>

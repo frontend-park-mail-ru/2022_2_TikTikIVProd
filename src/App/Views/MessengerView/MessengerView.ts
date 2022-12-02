@@ -1,19 +1,11 @@
 import IView from "../IView/IView";
+
 import messengerViewTemplate from "./MessengerView.hbs"
 import "./MessengerView.scss"
 
-import messageCreateTemplate from "../../Components/MessageCreate/MessageCreate.hbs"
-import "../../Components/MessageCreate/MessageCreate.scss"
-
-import messageTemplate from "../../Components/Message/Message.hbs"
-import "../../Components/Message/Message.scss"
-
-import chatNavbarTemplate from "../../Components/ChatNavbar/ChatNavbar.hbs"
-import "../../Components/ChatNavbar/ChatNavbar.scss"
-
 import dialogTemplate from "../../Components/Dialog/Dialog.hbs"
 import "../../Components/Dialog/Dialog.scss"
-import { IDialog } from "../../Models/MessengerModel/MessengerModel";
+
 import { IDialogData } from "../../Controllers/MessengerController/MessengerController";
 
 class MessengerView extends IView {
@@ -35,6 +27,19 @@ class MessengerView extends IView {
 
         const msgs = this.element.querySelector('.messenger__content');
         if (!msgs) { return; }
+
+        const observer = new MutationObserver(this.checkDialogs.bind(this));
+        observer.observe(this.dialogsList, { childList: true });
+    }
+    
+    private checkDialogs() {
+        console.log('dialogs changed', this.dialogsList.querySelector('.dialog'));
+
+        if (!this.dialogsList.querySelector('.dialog')) {
+            this.element.querySelector('.messenger-mock')?.classList.remove('messenger--hide');
+        } else {
+            this.element.querySelector('.messenger-mock')?.classList.add('messenger--hide');
+        }
     }
 
     public bindClick(callback: Function): void {

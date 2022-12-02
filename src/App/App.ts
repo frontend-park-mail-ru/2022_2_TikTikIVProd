@@ -50,6 +50,13 @@ import ChatView from "./Views/ChatView/ChatView";
 import ChatController from "./Controllers/ChatController/ChatController";
 import AvatarUploadView from "./Views/AvatarUploadView/AvatarUploadView";
 import AvatarUploadController from "./Controllers/AvatarUploadController/AvatarUploadController";
+import CommunityListView from "./Views/CommunityListView/CommunityListView";
+import CommunityView from "./Views/CommunityView/CommunityView";
+import CommunityModel from "./Models/CommunityModel/CommunityModel";
+import CommunityListController from "./Controllers/CommunityListController/CommunityListController";
+import CommunityController from "./Controllers/CommunityController/CommunityController";
+import AboutWSView from "./Views/AboutWSView/AboutWSView";
+import AboutWSController from "./Controllers/AboutWSController/AboutWSController";
 
 
 /**
@@ -70,13 +77,17 @@ class App {
     private friendsView: FriendsView;
     private messengerView: MessengerView;
     private chatView: ChatView;
-    private avatarUploadView : AvatarUploadView;
+    private avatarUploadView: AvatarUploadView;
+    private communityListView: CommunityListView;
+    private communityView: CommunityView;
+    private aboutWSView: AboutWSView;
 
     // Models
     private userModel: UserModel;
     private feedModel: FeedModel;
     private messengerModel: MessengerModel;
     private imagesModel: ImageUploadModel;
+    private communityModel: CommunityModel;
 
     // Controllers
     private signinController: SigninController;
@@ -91,7 +102,10 @@ class App {
     private friendsController: FriendsController;
     private messengerController: MessengerController;
     private chatController: ChatController;
-    private avatarUploadController : AvatarUploadController;
+    private avatarUploadController: AvatarUploadController;
+    private communityListController: CommunityListController;
+    private communityController: CommunityController;
+    private aboutWSController: AboutWSController;
 
     // Elements
     private root: HTMLElement;
@@ -182,7 +196,7 @@ class App {
                 this.feedController.mountComponent();
             })
             .catch(() => {
-                router.goToPath(paths.signinPage);
+                router.goToPath(paths.aboutWS);
             });
     }
 
@@ -333,11 +347,69 @@ class App {
                 }
 
                 const userId = data[0];
-                this.chatController.mountComponent({userId: userId});
+                this.chatController.mountComponent({ userId: userId });
             })
             .catch(() => {
                 router.goToPath(paths.signinPage);
             });
+    }
+
+    private handleCommunities(): void {
+        this.userModel.authUserByCookie()
+            .then(() => {
+                EventDispatcher.emit('unmount-all');
+                EventDispatcher.emit('redirect', paths.communities);
+
+                // mount
+                this.headerController.mountComponent();
+                this.menuController.mountComponent();
+
+                this.communityListController.mountComponent();
+            })
+            .catch(() => {
+                router.goToPath(paths.signinPage);
+            });
+    }
+
+    private handleCommunityPage(data: any): void {
+        this.userModel.authUserByCookie()
+            .then(() => {
+                EventDispatcher.emit('unmount-all');
+                EventDispatcher.emit('redirect', paths.community);
+
+                // mount
+                this.headerController.mountComponent();
+                this.menuController.mountComponent();
+
+                // Если есть параметр, достаем его
+                if (!data || !data[0]) {
+                    router.showUnknownPage();
+                    return;
+                }
+
+                const communityId = data[0];
+                this.communityController.mountComponent(communityId);
+
+                // Рисуем фид сообщества
+                this.feedController.setFeedContent({
+                    group: {
+                        id: communityId,
+                    },
+                });
+                this.feedController.mountComponent();
+            })
+            .catch(() => {
+                router.goToPath(paths.signinPage);
+            });
+    }
+
+    private handleAboutWS(): void {
+        EventDispatcher.emit('unmount-all');
+        EventDispatcher.emit('redirect', paths.feedPage);
+        // mount
+        this.headerController.mountComponent();
+        this.aboutWSController.mountComponent();
+        this.footerController.mountComponent();
     }
     /**
      * Функция инициализирует базовую вёрстку страницы
@@ -373,6 +445,9 @@ class App {
         this.messengerView = new MessengerView(this.content);
         this.chatView = new ChatView(this.content);
         this.avatarUploadView = new AvatarUploadView(this.content);
+        this.communityListView = new CommunityListView(this.content);
+        this.communityView = new CommunityView(this.content);
+        this.aboutWSView = new AboutWSView(this.content);
     }
 
     /**
@@ -385,6 +460,7 @@ class App {
         this.feedModel = new FeedModel();
         this.messengerModel = new MessengerModel();
         this.imagesModel = new ImageUploadModel();
+        this.communityModel = new CommunityModel();
     }
 
     /**
@@ -405,11 +481,14 @@ class App {
         this.pageNotFoundController =
             new PageNotFoundController(this.pageNotFoundView);
         this.profileController = new ProfileController(this.profileView, this.userModel);
-        this.settingsController = new SettingsController(this.settingsView, {user: this.userModel, images: this.imagesModel});
+        this.settingsController = new SettingsController(this.settingsView, { user: this.userModel, images: this.imagesModel });
         this.friendsController = new FriendsController(this.friendsView, this.userModel);
         this.messengerController = new MessengerController(this.messengerView, { user: this.userModel, messenger: this.messengerModel });
         this.chatController = new ChatController(this.chatView, { user: this.userModel, messenger: this.messengerModel });
-        this.avatarUploadController = new AvatarUploadController(this.avatarUploadView, {images: this.imagesModel, user: this.userModel});
+        this.avatarUploadController = new AvatarUploadController(this.avatarUploadView, { images: this.imagesModel, user: this.userModel });
+        this.communityListController = new CommunityListController(this.communityListView, { community: this.communityModel, user: this.userModel });
+        this.communityController = new CommunityController(this.communityView, { community: this.communityModel, user: this.userModel });
+        this.aboutWSController = new AboutWSController(this.aboutWSView);
     }
 
     /**
@@ -430,6 +509,9 @@ class App {
         router.addRule(paths.userProfie, this.handleProfile.bind(this));
         router.addRule(paths.messenger, this.handleMessenger.bind(this));
         router.addRule(paths.chat, this.handleChat.bind(this));
+        router.addRule(paths.communities, this.handleCommunities.bind(this));
+        router.addRule(paths.community, this.handleCommunityPage.bind(this));
+        router.addRule(paths.aboutWS, this.handleAboutWS.bind(this));
     }
 
     /**

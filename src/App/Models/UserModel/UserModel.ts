@@ -117,7 +117,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
+                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
             };
             EventDispatcher.emit('user-changed', this.currentUser);
             const keyStatus = response.status.toString() as keyof typeof config.api.signin.statuses.success;
@@ -168,7 +168,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: '../src/img/test_avatar.jpg',
+                avatar: '../src/img/default_avatar.png',
             };
             EventDispatcher.emit('user-changed', this.currentUser);
             const keyStatus = response.status.toString() as keyof typeof config.api.signup.statuses.success;
@@ -215,7 +215,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
+                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
             };
             return Promise.resolve(user);
         }
@@ -248,7 +248,7 @@ class UserModel extends IModel {
                 nick_name: response.parsedBody.body.nick_name,
                 email: response.parsedBody.body.email,
                 id: response.parsedBody.body.id,
-                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
+                avatar: response.parsedBody.body.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${response.parsedBody.body.avatar}`,
             };
             EventDispatcher.emit('user-changed', this.currentUser);
             const keyStatus = response.status.toString() as keyof typeof config.api.auth.statuses.success;
@@ -298,7 +298,7 @@ class UserModel extends IModel {
                     nick_name: rawUser.nick_name,
                     email: rawUser.email,
                     id: rawUser.id,
-                    avatar: rawUser.avatar === 0 ? '../src/img/test_avatar.jpg' : `${config.host}${config.api.image.url}/${rawUser.avatar}`,
+                    avatar: rawUser.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawUser.avatar}`,
                 };
             });
 
@@ -323,15 +323,32 @@ class UserModel extends IModel {
         });
     }
 
-    public async isFriend(userId: number | string): Promise<boolean> {
+    public async isFriend(userId: number | string) {
         const currentUserId = this.currentUser?.id;
         if (!currentUserId) {
             return Promise.reject();
         }
 
-        const friends = (await this.getFriends(currentUserId)).users;
+        let conf = Object.assign({}, config.api.userCheckFriend);
+        conf.url = conf.url.replace('{:id}', userId.toString());
 
-        return Promise.resolve(friends.find(user => user.id.toString() === userId.toString()) !== undefined ? true : false);
+        const response = await ajax(conf);
+
+        if (response.status.toString() in config.api.userCheckFriend.statuses.success) {
+            const res = Boolean(response.parsedBody.body);
+            return Promise.resolve(res);
+        }
+
+        return Promise.reject();
+
+        // const currentUserId = this.currentUser?.id;
+        // if (!currentUserId) {
+        //     return Promise.reject();
+        // }
+
+        // const friends = (await this.getFriends(currentUserId)).users;
+
+        // return Promise.resolve(friends.find(user => user.id.toString() === userId.toString()) !== undefined ? true : false);
     }
 
     public async addFriend(userId: string | number) {
@@ -388,6 +405,50 @@ class UserModel extends IModel {
         });
     }
 
+    public async findUsers(searchQuery: string) {
+        let conf = Object.assign({}, config.api.usersSearch);
+        conf.url = conf.url.replace('{:name}', searchQuery);
+
+        const response = await ajax(conf);
+        // console.log(response);
+
+        if (response.status.toString() in config.api.usersSearch.statuses.success) {
+            let users: IUser[] = response.parsedBody.body.map((rawUser: any) => {
+                // console.log(rawUser);
+
+                return {
+                    first_name: rawUser.first_name,
+                    last_name: rawUser.last_name,
+                    nick_name: rawUser.nick_name,
+                    email: rawUser.email,
+                    id: rawUser.id,
+                    avatar: rawUser.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawUser.avatar}`,
+                };
+            });
+
+
+            return Promise.resolve(users);
+        }
+
+        if (response.status.toString() in config.api.usersSearch.statuses.failure) {
+            const keyStatus = response.status.toString() as keyof typeof config.api.usersSearch.statuses.failure;
+
+            return Promise.reject({
+                status: response.status,
+                msg: config.api.usersSearch.statuses.failure[keyStatus],
+                body: response.parsedBody
+            });
+        }
+
+        return Promise.reject({
+            status: response.status,
+            msg: 'Неожиданная ошибка',
+            body: response.parsedBody,
+        });
+    }
+
+
+
     public async updateUserData(newData: IProfileSettings) {
         // console.log(JSON.stringify(newData));
 
@@ -400,7 +461,7 @@ class UserModel extends IModel {
                 Object.keys(newData).forEach(key => {
                     if (key === 'avatar') {
                         const id = newData[key] ?? 0;
-                        newCurrentUser[key] =  id !== 0 ?  `${config.host}${config.api.image.url}/${id}` : '../src/img/test_avatar.jpg';
+                        newCurrentUser[key] = id !== 0 ? `${config.host}${config.api.image.url}/${id}` : '../src/img/default_avatar.png';
                         return;
                     }
                     newCurrentUser[key] = newData[key];

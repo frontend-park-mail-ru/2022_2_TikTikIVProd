@@ -1,4 +1,7 @@
-:root, :root[theme='light'] {
+:root,
+:root[theme='light'] {
+  --current-theme-invert-value: invert(0);
+
   --color-root-background: #f0f2f5;
 
   --color-footer-background: #eaecf0;
@@ -8,6 +11,7 @@
   --color-form-background: #ffffff;
   --color-form-border: #ebebeb;
 
+  --color-input-disabled: #d8d8d8;
   --color-input-title: #6f6f6f;
   --color-input-placeholder: #d8d8d8;
   --color-input-border: #d8d8d8;
@@ -17,6 +21,7 @@
   --color-input-border-error: #f66363;
   --color-input-border-focus-error: #b04c4c;
 
+  --color-button-background-disabled: #1a9258;
   --color-button-background: #21cf7a;
   --color-button-value: #ffffff;
   --color-button-background-pressed: #24b66f;
@@ -50,10 +55,32 @@
   --color-feed-card-text: #000000;
   --color-feed-card-likes: #818c99;
 
+  --color-feed-navbar-backgroung: #ffffff;
+  --color-feed-navbar-text: #000000;
+
   --color-profile-background: #ffffff;
   --color-button-background: #21cf7a;
   --color-button-value: #ffffff;
   --color-profile-name: #000000;
   --color-profile-img-border: #d8d8d8;
   --color-profile-img-background: #ebebeb;
+
+  --color-messenger-background: #ffffff;
+
+  --color-friend-block-background: #ffffff;
+
+  --color-chat-background: #ffffff;
+  --color-chat-author-message-name: #000000;
+  --color-chat-navbar-name: #303030;
+  --coloor-chat-message-text: #000000;
+  --color-chat-message-create-background: #ffffff;
+  --color-chat-message-create-text: #000000;
+  --color-chat-message-create-border: #d8d8d8;
+  --color-chat-message-create-border-focus: #6f6f6f;
+
+  --color-menu-border: #d8d8d8;
+
+  --color-feed-card-create-text-background: #ffffff;
+  --color-feed-card-create-text: #000000;
+
 }

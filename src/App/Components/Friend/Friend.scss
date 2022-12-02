@@ -1,23 +1,29 @@
 .friend {
     display: flex;
-    gap: 10px;
+    gap: var(--big-gap-beetween-blocks);
     width: auto;
     padding: 10px 20px;
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--color-friend-block-background);
 
     &__wrapper {
         display: flex;
         flex-direction: column;
         width: 100%;
-        gap: 10px;
+        gap: var(--big-gap-beetween-blocks);
+    }
+
+    &__info {
+        font-size: 14px;
+        font-weight: bolder;
+        color: #d8d8d8;
     }
 
     &__tools {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: var(--gap-beetween-blocks);
     }
 
     &__avatar {

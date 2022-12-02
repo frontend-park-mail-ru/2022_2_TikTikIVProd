@@ -1,6 +1,7 @@
 import config, { IApiItem } from "../../Configs/Config";
 import ajax from "../../Ajax/Ajax";
 import IModel from "../IModel/IModel"
+import dateParser from "../../Utils/DateParser/DateParser";
 
 // export type UserFeed = {
 //     userId: number,
@@ -53,7 +54,9 @@ export interface IFeedData {
     date: string;
     text: string;
     likes: number;
+    isLiked: string;
     attachments: { src: string }[];
+    community_id: number,
 }
 
 export interface IFeedNewPost {
@@ -66,6 +69,8 @@ export interface IFeedNewPost {
 
     create_date: string; // TODO
     id: number; //TODO
+
+    community_id: number,
 }
 
 /**
@@ -106,15 +111,17 @@ class FeedModel extends IModel {
                 id: feedPost.id,
                 author: {
                     url: '',
-                    avatar: feedPost.avatar_id === 0 ? './src/img/avatar_pavel.jpg' : `${config.host}${config.api.image.url}/${feedPost.avatar_id}`,
+                    avatar: feedPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${feedPost.avatar_id}`,
                     first_name: feedPost.user_first_name,
                     last_name: feedPost.user_last_name,
                     id: feedPost.user_id,
                 },
                 date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
                 text: feedPost.message,
-                likes: 228,
+                likes: feedPost.count_likes,
+                isLiked: feedPost.is_liked ? "liked" : "unliked",
                 attachments: feedPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
+                community_id: feedPost.community_id,
             }
 
             return Promise.resolve(feed);
@@ -133,13 +140,14 @@ class FeedModel extends IModel {
                 id: feedPost.id,
                 author: {
                     url: '',
-                    avatar: feedPost.avatar_id === 0 ? './src/img/avatar_pavel.jpg' : `${config.host}${config.api.image.url}/${feedPost.avatar_id}`,
+                    avatar: feedPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${feedPost.avatar_id}`,
                     first_name: feedPost.user_first_name,
                     last_name: feedPost.user_last_name,
                 },
                 date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
                 text: feedPost.message,
-                likes: 228,
+                isLiked: feedPost.is_liked ? "liked" : "unliked",
+                likes: feedPost.likes__count,
                 attachments: feedPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
             }
         });
@@ -161,7 +169,24 @@ class FeedModel extends IModel {
         const response = await ajax(config.api.postEdit, JSON.stringify(data));
 
         if (response.status.toString() in config.api.postCreate.statuses.success) {
-            return Promise.resolve({});
+            const rawPost = response.parsedBody.body;
+            const data: IFeedData = {
+                id: rawPost.id,
+                author: {
+                    id: rawPost.user_id,
+                    url: '',
+                    avatar: rawPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawPost.avatar_id}`,
+                    first_name: rawPost.user_first_name,
+                    last_name: rawPost.user_last_name,
+                },
+                date: `${new Date(rawPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
+                text: rawPost.message,
+                likes: rawPost.count_likes,
+                isLiked: rawPost.is_liked ? "liked" : "unliked",
+                attachments: rawPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
+                community_id: rawPost.community_id,
+            };
+            return Promise.resolve(data);
         }
 
         if (response.status.toString() in config.api.postCreate.statuses.failure) {
@@ -174,11 +199,28 @@ class FeedModel extends IModel {
         return Promise.reject({});
     }
 
-    public async sendNewFeed(data: IFeedNewPost): Promise<{}> {
+    public async sendNewFeed(data: IFeedNewPost) {
         const response = await ajax(config.api.postCreate, JSON.stringify(data));
 
         if (response.status.toString() in config.api.postCreate.statuses.success) {
-            return Promise.resolve({});
+            const rawPost = response.parsedBody.body;
+            const data: IFeedData = {
+                id: rawPost.id,
+                author: {
+                    id: rawPost.user_id,
+                    url: '',
+                    avatar: rawPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawPost.avatar_id}`,
+                    first_name: rawPost.user_first_name,
+                    last_name: rawPost.user_last_name,
+                },
+                date: dateParser(rawPost.create_date),
+                text: rawPost.message,
+                likes: rawPost.count_likes,
+                isLiked: rawPost.is_liked ? "liked" : "unliked",
+                attachments: rawPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
+                community_id: rawPost.community_id,
+            };
+            return Promise.resolve(data);
         }
 
         if (response.status.toString() in config.api.postCreate.statuses.failure) {
@@ -203,6 +245,10 @@ class FeedModel extends IModel {
             conf.url = conf.url.replace('{:id}', feedType.user.id.toString());
         }
 
+        if (feedType.group) { // Посты сообщества
+            conf = Object.assign({}, config.api.communitiesPosts);
+            conf.url = conf.url.replace('{:id}', feedType.group.id.toString());
+        }
         // if(feedType.group){} // TODO
 
         let response = await ajax(conf);
@@ -214,13 +260,14 @@ class FeedModel extends IModel {
                     author: {
                         id: rawFeed.user_id,
                         url: '',
-                        avatar: rawFeed.avatar_id === 0 ? './src/img/avatar_pavel.jpg' : `${config.host}${config.api.image.url}/${rawFeed.avatar_id}`,
+                        avatar: rawFeed.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawFeed.avatar_id}`,
                         first_name: rawFeed.user_first_name,
                         last_name: rawFeed.user_last_name,
                     },
-                    date: `${new Date(rawFeed.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
+                    date: dateParser(rawFeed.create_date),
                     text: rawFeed.message,
-                    likes: 228,
+                    likes: rawFeed.count_likes,
+                    isLiked: rawFeed.is_liked ? "liked" : "unliked",
                     attachments: rawFeed.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
                 }
             });
@@ -228,6 +275,45 @@ class FeedModel extends IModel {
         }
         else {
             return Promise.reject({ status: response.status, feeds: [] });
+        }
+    }
+
+    /**
+     * Функция лайка поста по его id.
+     * @async
+     * @return {Promise}
+     */
+    public async likePost(postId: string) {
+        let conf = Object.assign({}, config.api.postLike);
+        conf.url = conf.url.replace('{:id}', postId);
+
+
+        let response = await ajax(conf);
+
+        if (response.status in config.api.postLike.statuses.success) {
+            return Promise.resolve({ status: response.status });
+        }
+        else {
+            return Promise.reject({ status: response.status });
+        }
+    }
+
+    /**
+     * Функция анлайка поста по его id.
+     * @async
+     * @return {Promise}
+     */
+    public async unlikePost(postId: string) {
+        let conf = Object.assign({}, config.api.postUnlike);
+        conf.url = conf.url.replace('{:id}', postId);
+
+        let response = await ajax(conf);
+
+        if (response.status in config.api.postLike.statuses.success) {
+            return Promise.resolve({ status: response.status });
+        }
+        else {
+            return Promise.reject({ status: response.status });
         }
     }
 }

@@ -229,6 +229,42 @@ const config: IConfig = {
                 },
             },
         },
+        postLike: {
+            url: '/post/like/{:id}',
+            method: REQUEST_TYPE.PUT,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Лайк поста успешно'
+                },
+                failure: {
+                    '401': 'no cookie',
+                    '403': 'no csrf',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
+        postUnlike: {
+            url: '/post/unlike/{:id}',
+            method: REQUEST_TYPE.PUT,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Анлайк поста успешно'
+                },
+                failure: {
+                    '401': 'no cookie',
+                    '403': 'no csrf',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
 
         userPosts: {
             url: '/users/{:id}/posts',
@@ -269,6 +305,19 @@ const config: IConfig = {
             },
         },
 
+        usersSearch: {
+            url: '/users/search/{:name}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Пользователи найдены'
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
 
         postDelete: {
             url: '/post/{:id}',
@@ -326,6 +375,21 @@ const config: IConfig = {
             },
         },
 
+        userCheckFriend: {
+            url: '/friends/check/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Проверка прошла успешно'
+                },
+                failure: Object.assign({
+                    '404': 'Пользователь не найден',
+                }, failureDefaultStatuses),
+            },
+        },
 
         addFriend: {
             url: '/friends/add/{:id}',
@@ -466,6 +530,115 @@ const config: IConfig = {
                     '405': 'Неверный метод',
                     '500': 'Ошибка сервера',
                 },
+            },
+        },
+
+        communitiesAll: {
+            url: '/communities',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Список сообществ получен'
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
+
+        communitiesCreate: {
+            url: '/communities/create',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Сообщество создано'
+                },
+                failure: Object.assign({
+                    '422': 'unprocessable entity',
+                }, failureDefaultStatuses),
+            },
+        },
+
+
+        communitiesEdit: {
+            url: '/communities/edit',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Сообщество изменено'
+                },
+                failure: Object.assign({
+                    '422': 'unprocessable entity',
+                }, failureDefaultStatuses),
+            },
+        },
+
+        communitiesGet: {
+            url: '/communities/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Сообщество данные получены'
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
+
+        communitiesDelete: {
+            url: '/communities/{:id}',
+            method: REQUEST_TYPE.DELETE,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Сообщество удалено'
+                },
+                failure: Object.assign({
+                    '404': 'Сообщество не найдено',
+                }, failureDefaultStatuses),
+            },
+        },
+
+        communitiesPosts: {
+            url: '/communities/{:id}/posts',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Записи сообщества получены'
+                },
+                failure: Object.assign({
+                    '404': 'Сообщество не найдено',
+                }, failureDefaultStatuses),
+            },
+        },
+
+        communitiesSearch: {
+            url: '/communities/search?q={:name}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Пользователи найдены'
+                },
+                failure: Object.assign({
+                    '404': 'Сообщество не найдено',
+                }, failureDefaultStatuses),
             },
         },
     }
