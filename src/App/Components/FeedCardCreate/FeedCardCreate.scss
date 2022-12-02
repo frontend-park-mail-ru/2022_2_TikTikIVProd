@@ -2,7 +2,7 @@
     display: flex;
     max-width: 90%;
     max-height: 90%;
-    gap: 10px;
+    gap: var(--gap-beetween-blocks);
     padding: 20px 25px;
 
     background: var(--color-feed-card-background);
@@ -52,7 +52,7 @@
         flex-direction: column;
         gap: 8px;
 
-        &--row{
+        &--row {
             flex-direction: row;
         }
     }
@@ -137,8 +137,8 @@
 
     &__avatar {
         object-fit: cover;
-        height: 42px;
-        width: 42px;
+        height: 25px;
+        width: 25px;
 
         background-color: var(--color-profile-img-background);
         outline: 1px solid var(--color-profile-img-border);
