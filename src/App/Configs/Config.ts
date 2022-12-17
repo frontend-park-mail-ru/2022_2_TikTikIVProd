@@ -42,8 +42,8 @@ export interface IConfig {
 }
 
 const config: IConfig = {
-    host: 'http://89.208.197.127:8080',
-    // host: 'http://127.0.0.1:8080',
+    // host: 'http://89.208.197.127:8080',
+    host: 'http://127.0.0.1:8080',
     // host: 'http://localhost:8080',
     api: {
         logout: {
@@ -641,6 +641,74 @@ const config: IConfig = {
                 }, failureDefaultStatuses),
             },
         },
+
+
+        // Comments
+        getComments: {
+
+            url: '/post/{:id}/comments',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Комментарии получены'
+                },
+                failure: Object.assign({
+                    '404': 'Комментарии не найдены',
+                }, failureDefaultStatuses),
+            },
+        },
+
+        deleteComment: {
+
+            url: '/post/comment/{:id}',
+            method: REQUEST_TYPE.DELETE,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Комментарий удалён'
+                },
+                failure: Object.assign({
+                    '404': 'Комментарий не найден',
+                }, failureDefaultStatuses),
+            },
+        },
+        addComment: {
+
+            url: '/post/comment/add',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Комментарий создан'
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
+
+        editComment: {
+
+            url: '/post/comment/edit',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Комментарий изменён',
+                },
+                failure: failureDefaultStatuses,
+            },
+        }
+
+
+
     }
 
 }

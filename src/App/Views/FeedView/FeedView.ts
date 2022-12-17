@@ -10,7 +10,16 @@ import "../../Components/FeedNavbar/FeedNavbar.scss"
 import feedTemplate from "./FeedView.hbs"
 import "./FeedView.scss"
 
-import { IFeedData } from "../../Models/FeedModel/FeedModel";
+import commentSectionTemplate from "../../Components/CommentSection/CommentSection.hbs"
+import "../../Components/CommentSection/CommentSection.scss"
+
+import commentTemplate from "../../Components/Comment/Comment.hbs"
+import "../../Components/Comment/Comment.scss"
+
+import commentCreationTemplate from "../../Components/CommentCreate/CommentCreate.hbs"
+import "../../Components/CommentCreate/CommentCreate.scss"
+
+import { IComment, IFeedData } from "../../Models/FeedModel/FeedModel";
 import IView from "../IView/IView";
 import { IUser } from "../../Models/UserModel/UserModel"
 
@@ -88,7 +97,7 @@ class FeedView extends IView {
         const id = form?.id;
         const text = (<HTMLTextAreaElement>form.querySelector('.feed-card-create__text')).value;
         const community_id = (<HTMLElement>form)?.dataset['community_id'];
-        return { id: id, text: text, community_id: community_id ? Number(community_id) : undefined};
+        return { id: id, text: text, community_id: community_id ? Number(community_id) : undefined };
     }
 
     public getNewPostData(): { text: string, community_id: number | undefined } {
@@ -101,7 +110,7 @@ class FeedView extends IView {
         const textar = <HTMLTextAreaElement>form.querySelector('.feed-card-create__text')
         const text = textar.value;
         const community_id = (<HTMLElement>form).dataset['community_id'];
-        return { text: text , community_id: community_id ? Number(community_id) : undefined};
+        return { text: text, community_id: community_id ? Number(community_id) : undefined };
     }
 
     /**
@@ -111,11 +120,11 @@ class FeedView extends IView {
      */
     public pushContentToFeed(data: IFeedData | IFeedData[], currentUserId: number): void {
         // TODO
-        const f = (item : IFeedData) => {
+        const f = (item: IFeedData) => {
             const card = feedCardTemplate(currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true }));
             this.cards.innerHTML += card;
         }
-        if(Array.isArray(data)){
+        if (Array.isArray(data)) {
             data.forEach((item) => f(item));
         } else {
             f(data);
@@ -137,14 +146,14 @@ class FeedView extends IView {
         }
         const parser = new DOMParser();
         const newCard = parser.parseFromString(feedCardTemplate(Object.assign(data, { showTools: true })), 'text/html').querySelector('.feed-card');
-        if(!newCard) {
+        if (!newCard) {
             return;
         }
         this.cards.insertBefore(newCard, oldCard);
         this.cards.removeChild(oldCard);
     }
 
-    public showFeedCardCreation(user: IUser, exsData?: IFeedData, community_id ?: string | number | undefined): void {
+    public showFeedCardCreation(user: IUser, exsData?: IFeedData, community_id?: string | number | undefined): void {
         this.overlay.innerHTML = feedCardCreationTemplate({ user: user, data: exsData, community_id: community_id });
         this.overlay.style.visibility = 'visible';
     }
@@ -154,13 +163,69 @@ class FeedView extends IView {
         this.overlay.style.visibility = 'collapse';
     }
 
-    public showNavbar(showCreationButton : boolean): void {
-        this.navbar.innerHTML = feedNavbarTemplate({showCreationButton : showCreationButton});
+    public showNavbar(showCreationButton: boolean): void {
+        this.navbar.innerHTML = feedNavbarTemplate({ showCreationButton: showCreationButton });
         this.navbar.style.visibility = 'visible';
     }
 
     public hideNavbar(): void {
         this.navbar.style.visibility = 'collapse';
+    }
+
+    public pushCommentToFeedCard(postId: number | string, currentUserId: number | string, comment: IComment): void {
+        const commentsArea = this.cards.querySelector(`.comment-section[data-feed_card_id="${postId}"] .comment-section__comments`);
+        if (!commentsArea) return;
+        commentsArea.innerHTML += commentTemplate(Object.assign(comment, { showTools: comment.user_id === currentUserId }));
+    }
+
+    public showCommentsForFeedCard(postId: number | string, currentUserId: number | string, comments: IComment[]): void {
+        let commentSection = this.cards.querySelector(`.comment-section[data-feed_card_id="${postId}"]`);
+        if (commentSection) {
+            this.hideCommentsForFeedCard(postId);
+            return;
+        }
+
+        const temp = document.createElement('template');
+        temp.innerHTML = commentSectionTemplate({ postId });
+
+        const newCommentSection = temp.content.querySelector(`.comment-section`);
+        if (!newCommentSection) return;
+
+        const createArea = newCommentSection.querySelector('.comment-section__creation');
+        if (!createArea) return;
+        createArea.innerHTML = commentCreationTemplate({ postId });
+
+        const feedCard = this.cards.querySelector(`[data-feed_card_id="${postId}"]`);
+        if (!feedCard) return;
+
+        feedCard.parentNode?.insertBefore(newCommentSection, feedCard.nextSibling);
+
+        comments.forEach(comment => {
+            this.pushCommentToFeedCard(postId, currentUserId, comment);
+        });
+    }
+
+    public hideCommentsForFeedCard(postId: number | string): void {
+        const commentSection = this.cards.querySelector(`.comment-section[data-feed_card_id="${postId}"]`);
+        if(!commentSection) return;
+        this.cards.removeChild(commentSection);
+    }
+
+    public getNewCommentData(postId: number | string): string {
+        const textar = <HTMLTextAreaElement>this.cards.querySelector(`.comment-create[data-post_id="${postId}"] textarea`);
+        return textar.value;
+    }
+
+    public clearCommentCreation(postId : number | string) : void {
+        const textar = <HTMLTextAreaElement>this.cards.querySelector(`.comment-create[data-post_id="${postId}"] textarea`);
+        textar.value = '';
+    }
+
+    public removeComment(postId : number | string, commentId : number | string ): void {
+        const comments = <HTMLElement>this.cards.querySelector(`.comment-section[data-feed_card_id="${postId}"] .comment-section__comments`);
+        const comment = comments.querySelector(`.comment[data-id="${commentId}"][data-post_id="${postId}"]`);
+        if(!comment) return;
+        comments.removeChild(comment);
     }
 }
 

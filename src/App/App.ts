@@ -168,6 +168,8 @@ class App {
                 router.goToPath(paths.feedPage);
             })
             .catch(() => {
+                console.log('dwadawdwa');
+                
                 EventDispatcher.emit('unmount-all');
                 EventDispatcher.emit('redirect', paths.signupPage);
                 // mount

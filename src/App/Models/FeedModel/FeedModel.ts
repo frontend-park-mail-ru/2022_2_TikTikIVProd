@@ -3,6 +3,23 @@ import ajax, { checkResponseStatus } from "../../Ajax/Ajax";
 import IModel from "../IModel/IModel"
 import dateParser from "../../Utils/DateParser/DateParser";
 
+export interface INewComment {
+        message: string;
+        post_id: number;
+}
+
+export interface IComment {
+    avatar_id: string,
+    create_date: string;
+    id: number;
+    message: string;
+    post_id: number;
+    user_first_name: string;
+    user_id: number;
+    user_last_name: string;
+}
+
+
 export interface IFeedType {
     user?: { id: string | number },
     group?: { id: string | number },
@@ -57,6 +74,25 @@ export interface IFeedNewPost {
 class FeedModel extends IModel {
     constructor() {
         super();
+    }
+
+    private parseComment(json : any) : IComment {
+        return {
+            avatar_id: json.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${json.avatar_id}`,
+            create_date: dateParser(json.create_date),
+            id: json.id,
+            message: json.message,
+            post_id: json.post_id,
+            user_first_name: json.user_first_name,
+            user_id: json.user_id,
+            user_last_name: json.user_last_name,
+        }
+    }
+
+    private parseComments(json: any) : IComment[] {
+        return json.map((rawComment: any) => {
+            return this.parseComment(rawComment);
+        });
     }
 
     private parseFeedCard(json: any): IFeedData {
@@ -173,6 +209,33 @@ class FeedModel extends IModel {
         await checkResponseStatus(response, conf);
         return Promise.resolve();
     }
+
+
+    public async addComment(postID : number | string, content : INewComment) {
+        let conf = Object.assign({}, config.api.addComment);
+        conf.url = conf.url.replace('{:id}', postID.toString());
+        let response = await ajax(conf, JSON.stringify(content));
+        await checkResponseStatus(response, conf);
+        const comment = this.parseComment(response.parsedBody.body);
+        return Promise.resolve(comment);
+     }
+
+     public async deleteComment(commentID : number | string ) { 
+        let conf = Object.assign({}, config.api.deleteComment);
+        conf.url = conf.url.replace('{:id}', commentID.toString());
+        let response = await ajax(conf);
+        await checkResponseStatus(response, conf);
+        return Promise.resolve();
+     }
+
+     public async getComments(postID : number | string ) {
+        let conf = Object.assign({}, config.api.getComments);
+        conf.url = conf.url.replace('{:id}', postID.toString());
+        let response = await ajax(conf);
+        await checkResponseStatus(response, conf);
+        const comments : IComment[] = this.parseComments(response.parsedBody.body);
+        return Promise.resolve(comments);
+     }
 }
 
 export default FeedModel;

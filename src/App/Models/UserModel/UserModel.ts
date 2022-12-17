@@ -181,6 +181,7 @@ class UserModel extends IModel {
         }
         catch {
             this.currentUser = null;
+            return Promise.reject();
         }
         EventDispatcher.emit('user-changed', this.currentUser);
     }

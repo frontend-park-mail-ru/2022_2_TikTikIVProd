@@ -1,5 +1,5 @@
 import config from "../../Configs/Config";
-import FeedModel, { IFeedData, IFeedNewPost, IFeedType } from "../../Models/FeedModel/FeedModel";
+import FeedModel, { IFeedData, IFeedNewPost, IFeedType, INewComment } from "../../Models/FeedModel/FeedModel";
 import { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
@@ -103,7 +103,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             .then(() => {
                 this.view.deletePost(id);
                 console.log('delete');
-                
+
             })
             .catch(msg => {
                 // console.log('Delete post err: ', status, body);
@@ -143,9 +143,9 @@ class FeedController extends IController<FeedView, FeedModel> {
             }
             this.view.show();
             let showFeedCreationButton = true;
-            if(this.feedType.user && this.feedType.user.id !== this.user.id){
+            if (this.feedType.user && this.feedType.user.id !== this.user.id) {
                 showFeedCreationButton = false;
-            } 
+            }
             this.view.showNavbar(showFeedCreationButton);
             this.isMounted = true;
         }
@@ -176,10 +176,9 @@ class FeedController extends IController<FeedView, FeedModel> {
             }
 
             const action = (<HTMLElement>target.closest("[data-action]"))?.dataset['action'];
-
             if (!action) return;
 
-            const cardId = (<HTMLElement>target.closest(".feed-card"))?.id;
+            const cardId = (<HTMLElement>target.closest("[data-feed_card_id"))?.dataset['feed_card_id'];
             const data = (<HTMLElement>target.closest("[data-data]"))?.dataset['data'];
 
             switch (action) {
@@ -208,6 +207,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'like': {
+                    if (!cardId) return;
                     const likesCountElement = document.getElementById(`feed-card-likes__count-${cardId}`);
 
                     if (target.firstElementChild === undefined || target.firstElementChild === null) return;
@@ -259,6 +259,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'delete': {
+                    if (!cardId) return;
                     this.deletePost(cardId);
                     return;
                 }
@@ -279,9 +280,50 @@ class FeedController extends IController<FeedView, FeedModel> {
                     return;
                 }
 
-                case 'card_page':
-                case 'comment': {
+                case 'card_page': {
                     this.openFeedCard(cardId);
+                    return;
+                }
+                case 'comment': {
+                    if (!cardId) return;
+                    this.openComments(cardId);
+                    return;
+                }
+
+                case 'send_comment': {
+                    if (!cardId) return;
+                    const text = this.view.getNewCommentData(cardId);
+                    const newComment: INewComment = {
+                        message: text,
+                        post_id: Number(cardId),
+                    };
+                    console.log(newComment);
+
+                    this.model.addComment(cardId, newComment)
+                        .then(comment => {
+                            console.log(comment);
+                            this.view.pushCommentToFeedCard(cardId, this.user.id, comment);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                    return;
+                }
+
+                case 'comment_delete': {
+                    const commentId = (<HTMLElement>target.closest('.comment'))?.dataset['id'];
+                    if (!commentId || !cardId) return;
+                    this.model.deleteComment(commentId)
+                        .then(() => {
+                            this.view.removeComment(cardId, commentId);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                    return;
+                }
+
+                case 'comment_edit': {
                     return;
                 }
 
@@ -309,11 +351,23 @@ class FeedController extends IController<FeedView, FeedModel> {
             });
     }
 
-    /**
-     * Функция получения постов ленты из модели
-     * (приватный метод класса)
-     * @returns {IFeedData[]}
-     */
+    private openPost(postId: number | string): void {
+
+    }
+
+    private openComments(postId: number | string): void {
+        this.model.getComments(postId)
+            .then(comments => {
+                this.view.showCommentsForFeedCard(postId, this.user.id, comments);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    private closeComments(postId: number | string): void {
+
+    }
 }
 
 export default FeedController;
