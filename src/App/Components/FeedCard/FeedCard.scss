@@ -40,7 +40,7 @@
         max-height: 250px;
 
         background-color: var(--color-feed-card-img-background);
-        outline: 2px solid var(--color-feed-card-img-border);
+        border: 2px solid var(--color-feed-card-img-border);
         outline-offset: -2px;
         border-radius: 10px;
     }
@@ -111,7 +111,7 @@
 
         background-color: var(--color-feed-card-img-background);
 
-        outline: 1px solid var(--color-feed-card-img-border);
+        border: 1px solid var(--color-feed-card-img-border);
         outline-offset: -1px;
 
     }
