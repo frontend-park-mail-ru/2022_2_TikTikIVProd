@@ -3,6 +3,7 @@ import FeedModel, { IFeedData, IFeedNewPost, IFeedType, INewComment } from "../.
 import { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
+import debounce from "../../Utils/Debounce/Debounce";
 import { checkScrollEnd } from "../../Utils/Scrollbar/CheckPosition/CheckPosition";
 import throttle from "../../Utils/Throttle/Throttle";
 import FeedView from "../../Views/FeedView/FeedView";
@@ -211,6 +212,8 @@ class FeedController extends IController<FeedView, FeedModel> {
                     const likesCountElement = document.getElementById(`feed-card-likes__count-${cardId}`);
 
                     if (target.firstElementChild === undefined || target.firstElementChild === null) return;
+
+                    debounce(this.model.likePost, 500);
 
                     if (target.firstElementChild.classList.contains('feed-card__button__unliked')) {
                         this.model.likePost(cardId)

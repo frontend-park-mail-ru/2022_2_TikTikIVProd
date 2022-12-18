@@ -169,7 +169,7 @@ class App {
             })
             .catch(() => {
                 console.log('dwadawdwa');
-                
+
                 EventDispatcher.emit('unmount-all');
                 EventDispatcher.emit('redirect', paths.signupPage);
                 // mount
@@ -410,6 +410,7 @@ class App {
         EventDispatcher.emit('redirect', paths.feedPage);
         // mount
         this.headerController.mountComponent();
+        this.headerView.changeHeaderItem('За')
         this.aboutWSController.mountComponent();
         this.footerController.mountComponent();
     }

@@ -7,10 +7,12 @@
         object-fit: cover;
         height: 80px;
         width: 80px;
-        
+
         background-color: var(--color-profile-img-background);
         outline: 1px solid var(--color-profile-img-border);
         border-radius: 50%;
+        -webkit-border-radius: 50%;
+
     }
 
     &__name {

@@ -35,7 +35,7 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    gap: 5px;
+    gap: var(--big-gap-beetween-blocks);
 
     &__icon {
         object-fit: cover;

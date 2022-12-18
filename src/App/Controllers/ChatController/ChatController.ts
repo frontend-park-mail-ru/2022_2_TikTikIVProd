@@ -83,15 +83,15 @@ class ChatController extends
         const action =
             (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
 
-        e.preventDefault();
-
         if (e.key === 'Enter' && e.ctrlKey) {
+            e.preventDefault();
             const currentMessage = document.querySelector('textarea');
             if (currentMessage !== null && currentMessage !== undefined) {
                 currentMessage.value += '\n';
             }
         }
         else if (e.key === 'Enter') {
+            e.preventDefault();
             this.sendMessage();
             return;
         }
