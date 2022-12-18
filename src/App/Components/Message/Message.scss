@@ -27,6 +27,7 @@
     &__text {
         color: var(--coloor-chat-message-text);
         font-size: 14px;
+        white-space: pre;
     }
 
     &__attachments {}

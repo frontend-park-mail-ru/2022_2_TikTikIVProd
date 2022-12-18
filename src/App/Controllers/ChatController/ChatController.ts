@@ -49,10 +49,12 @@ class ChatController extends
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
     }
 
-    private sendMessage() : void {
+    private sendMessage(): void {
+        const text = this.view.getNewMessage();
+        if (text.replace('\n', ' ').trim() === '')
+            return;
         if (this.emptyChat) {
             if (!this.userID) return;
-            const text = this.view.getNewMessage();
             this.model.messenger.initChat(text, this.userID)
                 .then((data: IMessage) => {
                     this.currentDialogId = data.dialog_id;
@@ -71,7 +73,6 @@ class ChatController extends
             if (!cid) return;
             if (!this.currentDialogId) return;
             if (!this.userID) return;
-            const text = this.view.getNewMessage();
             this.model.messenger.sendMessage(this.currentDialogId, text, cid, this.userID)
             this.view.clearNewMsgForm();
         }
@@ -83,14 +84,16 @@ class ChatController extends
             (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
 
         e.preventDefault();
-        if (!e.ctrlKey) return;
 
-        switch (e.key) {
-            default: return;
-            case 'Enter': {
-                this.sendMessage();
-                return;
+        if (e.key === 'Enter' && e.ctrlKey) {
+            const currentMessage = document.querySelector('textarea');
+            if (currentMessage !== null && currentMessage !== undefined) {
+                currentMessage.value += '\n';
             }
+        }
+        else if (e.key === 'Enter') {
+            this.sendMessage();
+            return;
         }
     }
 
@@ -124,8 +127,8 @@ class ChatController extends
             }
 
             case 'send': {
-               this.sendMessage();
-               return;
+                this.sendMessage();
+                return;
             }
         }
     }

@@ -33,8 +33,8 @@ class ChatView extends IView {
         this.footer.innerHTML = messageCreateTemplate({});
         this.parent.appendChild(this.element);
     }
-    
-    public bindKeyClick(callback : Function) : void {
+
+    public bindKeyClick(callback: Function): void {
         this.element.addEventListener('keyup', callback.bind(this));
     }
 
@@ -51,16 +51,16 @@ class ChatView extends IView {
         this.scrollToEnd();
     }
 
-    public clearChat() : void {
+    public clearChat(): void {
         this.messagesList.innerHTML = '';
     }
 
-    public getNewMessage() : string {
-        const text = (<HTMLTextAreaElement>this.footer.querySelector('textarea')).value;
+    public getNewMessage(): string {
+        const text = (<HTMLTextAreaElement>this.footer.querySelector('textarea')).value.trim();
         return text;
     }
 
-    private scrollToEnd() : void{
+    private scrollToEnd(): void {
         this.messagesList.scrollTop = this.messagesList.scrollHeight - this.messagesList.clientHeight;
     }
 
@@ -68,7 +68,7 @@ class ChatView extends IView {
         this.navbar.innerHTML = chatNavbarTemplate(data);
     }
 
-    public clearNewMsgForm() : void {
+    public clearNewMsgForm(): void {
         (<HTMLTextAreaElement>this.footer.querySelector('textarea')).value = '';
     }
 }

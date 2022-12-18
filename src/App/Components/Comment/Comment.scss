@@ -1,4 +1,4 @@
-.comment{
+.comment {
     display: flex;
 
     padding: 15px 25px;
@@ -7,9 +7,8 @@
     outline-offset: -2px;
     border-radius: 10px;
 
-    &__wrapper{
-        display: flex;
-        flex-direction: column;
+    &-wrapper {
+        width: 100%;
     }
 
     &__content {
@@ -18,8 +17,8 @@
         color: var(--color-feed-card-text);
         font-size: 15px;
     }
-    
-    &__date{
+
+    &__date {
 
         font-size: 13px;
         color: var(--color-feed-card-date);
@@ -49,7 +48,7 @@
 }
 
 .comment-user {
-    &__avatar{
+    &__avatar {
 
         object-fit: cover;
         height: 40px;
@@ -60,9 +59,11 @@
 
         outline: 1px solid var(--color-feed-card-img-border);
         outline-offset: -1px;
+
+        margin-right: var(--big-gap-beetween-blocks);
     }
 
-    &__name{
+    &__name {
 
         color: var(--color-feed-card-author-name);
         font-size: 16px;

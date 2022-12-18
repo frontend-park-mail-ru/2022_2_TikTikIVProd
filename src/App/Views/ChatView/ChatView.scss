@@ -26,7 +26,8 @@ $scrollbar-width: 8px;
         overflow-x: hidden;
         overflow-y: scroll;
         gap: 12px;
-        padding: 5px 10px;
+        padding: var(--big-gap-beetween-blocks);
+        margin: var(--big-gap-beetween-blocks);
     }
 
     &__content::-webkit-scrollbar {
