@@ -1,15 +1,18 @@
 import IView from "../IView/IView";
-import messengerViewTemplate from "./ChatView.hbs"
-import "./ChatView.scss"
+import messengerViewTemplate from "./ChatView.hbs";
+import "./ChatView.scss";
 
-import messageCreateTemplate from "../../Components/MessageCreate/MessageCreate.hbs"
-import "../../Components/MessageCreate/MessageCreate.scss"
+import messageCreateTemplate from "../../Components/MessageCreate/MessageCreate.hbs";
+import "../../Components/MessageCreate/MessageCreate.scss";
 
-import messageTemplate from "../../Components/Message/Message.hbs"
-import "../../Components/Message/Message.scss"
+import smilesTemplate from "../../Components/Smiles/Smiles.hbs";
+import "../../Components/Smiles/Smiles.scss";
 
-import chatNavbarTemplate from "../../Components/ChatNavbar/ChatNavbar.hbs"
-import "../../Components/ChatNavbar/ChatNavbar.scss"
+import messageTemplate from "../../Components/Message/Message.hbs";
+import "../../Components/Message/Message.scss";
+
+import chatNavbarTemplate from "../../Components/ChatNavbar/ChatNavbar.hbs";
+import "../../Components/ChatNavbar/ChatNavbar.scss";
 
 import { IDialog, IMessage } from "../../Models/MessengerModel/MessengerModel";
 import { IDialogData } from "../../Controllers/MessengerController/MessengerController";
@@ -30,7 +33,8 @@ class ChatView extends IView {
 
     public show(opts?: any): void {
         // this.navbar.innerHTML = chatNavbarTemplate({});
-        this.footer.innerHTML = messageCreateTemplate({});
+        const smiles = smilesTemplate();
+        this.footer.innerHTML = messageCreateTemplate({ smiles });
         this.parent.appendChild(this.element);
     }
 

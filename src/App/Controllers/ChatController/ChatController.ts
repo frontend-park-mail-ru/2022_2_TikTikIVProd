@@ -104,6 +104,13 @@ class ChatController extends
             (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
         switch (action) {
             default: {
+                // ОБРАБОТКА СМАЙЛОВ
+                if (target.classList.contains("smiles-block__smile")) {
+                    const currentMessage = document.querySelector('textarea');
+                    if (currentMessage !== null && currentMessage !== undefined) {
+                        currentMessage.value += target.innerText;
+                    }
+                }
                 // // console.log('No action: ', action);
                 return;
             }
