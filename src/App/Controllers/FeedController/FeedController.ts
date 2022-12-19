@@ -103,8 +103,6 @@ class FeedController extends IController<FeedView, FeedModel> {
         this.model.deletePost(id)
             .then(() => {
                 this.view.deletePost(id);
-                console.log('delete');
-
             })
             .catch(msg => {
                 // console.log('Delete post err: ', status, body);
@@ -123,7 +121,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
         await this.model.getFeeds(this.feedType)
             .then(feedCards => {
-                data = feedCards;
+                data = feedCards.reverse();
                 page = 1; // TODO
             })
             .catch(msg => {
@@ -328,6 +326,14 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                 case 'comment_edit': {
                     return;
+                }
+
+                case 'smile': {
+                    // ОБРАБОТКА СМАЙЛОВ
+                    const currentMessage = document.querySelector('textarea');
+                    if (currentMessage !== null && currentMessage !== undefined) {
+                        currentMessage.value += target.innerText;
+                    }
                 }
 
                 default: {

@@ -1,23 +1,26 @@
-import feedCardTemplate from "../../Components/FeedCard/FeedCard.hbs"
-import "../../Components/FeedCard/FeedCard.scss"
+import feedCardTemplate from "../../Components/FeedCard/FeedCard.hbs";
+import "../../Components/FeedCard/FeedCard.scss";
 
-import feedCardCreationTemplate from "../../Components/FeedCardCreate/FeedCardCreate.hbs"
-import "../../Components/FeedCardCreate/FeedCardCreate.scss"
+import feedCardCreationTemplate from "../../Components/FeedCardCreate/FeedCardCreate.hbs";
+import "../../Components/FeedCardCreate/FeedCardCreate.scss";
 
-import feedNavbarTemplate from "../../Components/FeedNavbar/FeedNavbar.hbs"
-import "../../Components/FeedNavbar/FeedNavbar.scss"
+import smilesTemplate from "../../Components/Smiles/Smiles.hbs";
+import "../../Components/Smiles/Smiles.scss";
 
-import feedTemplate from "./FeedView.hbs"
-import "./FeedView.scss"
+import feedNavbarTemplate from "../../Components/FeedNavbar/FeedNavbar.hbs";
+import "../../Components/FeedNavbar/FeedNavbar.scss";
 
-import commentSectionTemplate from "../../Components/CommentSection/CommentSection.hbs"
-import "../../Components/CommentSection/CommentSection.scss"
+import feedTemplate from "./FeedView.hbs";
+import "./FeedView.scss";
 
-import commentTemplate from "../../Components/Comment/Comment.hbs"
-import "../../Components/Comment/Comment.scss"
+import commentSectionTemplate from "../../Components/CommentSection/CommentSection.hbs";
+import "../../Components/CommentSection/CommentSection.scss";
 
-import commentCreationTemplate from "../../Components/CommentCreate/CommentCreate.hbs"
-import "../../Components/CommentCreate/CommentCreate.scss"
+import commentTemplate from "../../Components/Comment/Comment.hbs";
+import "../../Components/Comment/Comment.scss";
+
+import commentCreationTemplate from "../../Components/CommentCreate/CommentCreate.hbs";
+import "../../Components/CommentCreate/CommentCreate.scss";
 
 import { IComment, IFeedData } from "../../Models/FeedModel/FeedModel";
 import IView from "../IView/IView";
@@ -122,7 +125,7 @@ class FeedView extends IView {
         // TODO
         const f = (item: IFeedData) => {
             const card = feedCardTemplate(currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true }));
-            this.cards.innerHTML += card;
+            this.cards.innerHTML = card + this.cards.innerHTML;
         }
         if (Array.isArray(data)) {
             data.forEach((item) => f(item));
@@ -132,7 +135,7 @@ class FeedView extends IView {
     }
 
     public deletePost(id: number | string): void {
-        const feed = this.cards.querySelector(`[id="${id}"]`);
+        const feed = this.cards.querySelector(`[data-feed_card_id="${id}"]`);
         if (!feed) {
             return;
         }
@@ -154,7 +157,8 @@ class FeedView extends IView {
     }
 
     public showFeedCardCreation(user: IUser, exsData?: IFeedData, community_id?: string | number | undefined): void {
-        this.overlay.innerHTML = feedCardCreationTemplate({ user: user, data: exsData, community_id: community_id });
+        const smiles = smilesTemplate();
+        this.overlay.innerHTML = feedCardCreationTemplate({ user: user, data: exsData, community_id: community_id, smiles: smiles });
         this.overlay.style.visibility = 'visible';
     }
 
@@ -207,7 +211,7 @@ class FeedView extends IView {
 
     public hideCommentsForFeedCard(postId: number | string): void {
         const commentSection = this.cards.querySelector(`.comment-section[data-feed_card_id="${postId}"]`);
-        if(!commentSection) return;
+        if (!commentSection) return;
         this.cards.removeChild(commentSection);
     }
 
@@ -216,15 +220,15 @@ class FeedView extends IView {
         return textar.value;
     }
 
-    public clearCommentCreation(postId : number | string) : void {
+    public clearCommentCreation(postId: number | string): void {
         const textar = <HTMLTextAreaElement>this.cards.querySelector(`.comment-create[data-post_id="${postId}"] textarea`);
         textar.value = '';
     }
 
-    public removeComment(postId : number | string, commentId : number | string ): void {
+    public removeComment(postId: number | string, commentId: number | string): void {
         const comments = <HTMLElement>this.cards.querySelector(`.comment-section[data-feed_card_id="${postId}"] .comment-section__comments`);
         const comment = comments.querySelector(`.comment[data-id="${commentId}"][data-post_id="${postId}"]`);
-        if(!comment) return;
+        if (!comment) return;
         comments.removeChild(comment);
     }
 }
