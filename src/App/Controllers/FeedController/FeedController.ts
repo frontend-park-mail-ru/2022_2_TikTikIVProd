@@ -121,7 +121,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
         await this.model.getFeeds(this.feedType)
             .then(feedCards => {
-                data = feedCards.reverse();
+                data = feedCards;
                 page = 1; // TODO
             })
             .catch(msg => {
