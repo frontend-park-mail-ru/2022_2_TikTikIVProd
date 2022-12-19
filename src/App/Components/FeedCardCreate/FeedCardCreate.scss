@@ -6,8 +6,7 @@
     padding: 20px 25px;
 
     background: var(--color-feed-card-background);
-    outline: 2px solid var(--color-feed-card-border);
-    outline-offset: -2px;
+    border: 2px solid var(--color-feed-card-border);
     border-radius: 10px;
 
     @media screen and (max-device-width: 700px) {
@@ -31,15 +30,13 @@
         padding: 5px 8px;
 
         border-radius: 10px;
-        outline: 2px solid var(--color-feed-card-border);
-        outline-offset: -2px;
+        border: 2px solid var(--color-feed-card-border);
         background-color: var(--color-feed-card-create-text-background);
         color: var(--color-feed-card-create-text);
     }
 
     &__text:focus {
-        outline: 2px solid var(--color-feed-card-border);
-        outline-offset: -2px;
+        border: 2px solid var(--color-feed-card-border);
     }
 
     &__attachments {
@@ -146,7 +143,7 @@
         }
 
         background-color: var(--color-profile-img-background);
-        outline: 1px solid var(--color-profile-img-border);
+        border: 1px solid var(--color-profile-img-border);
         border-radius: 50%;
     }
 }
