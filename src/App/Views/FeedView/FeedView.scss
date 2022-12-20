@@ -6,7 +6,7 @@
     width: 100%;
     overflow: scroll;
 
-    &::-webkit-scrollbar{
+    &::-webkit-scrollbar {
         width: 0;
         height: 0;
     }
@@ -28,7 +28,7 @@
         height: 100%;
 
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: overlay;
 
         @media screen and (max-device-width:799px) {
 

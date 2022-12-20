@@ -39,7 +39,7 @@
         width: auto;
 
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: overlay;
 
         @media screen and (max-device-width:799px) {
             &::-webkit-scrollbar {

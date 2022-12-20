@@ -15,7 +15,7 @@ import IController from "../IController/IController";
 class HeaderController extends IController<HeaderView, null> {
     constructor(view: HeaderView) {
         super(view, null);
-        this.view.bindClickEvent(this.handleRedirect.bind(this));
+        this.view.bindClickEvent(this.handleClick.bind(this));
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         EventDispatcher.subscribe('user-changed', (user: IUser) => {
             if (user) {
@@ -40,14 +40,14 @@ class HeaderController extends IController<HeaderView, null> {
      * @param  {Event} e
      * @returns {void}
      */
-    private handleRedirect(e: Event): void {
+    private handleClick(e: Event): void {
         e.preventDefault();
         if (this.isMounted) {
             const href = (<HTMLElement>e.target).closest('[href]')?.getAttribute('href');
             if (href !== undefined && href !== null) {
                 router.goToPath(href);
             }
-            else {
+            else if ((<HTMLElement>e.target).dataset.action === "change_theme") {
                 const root = document.getElementById('root');
                 if (root !== undefined && root != null) {
                     root.classList.toggle('dark-mode')

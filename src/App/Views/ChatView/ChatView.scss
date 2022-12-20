@@ -21,7 +21,7 @@ $scrollbar-width: 8px;
     &__content {
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
+        // TODO colum reverse
 
         max-height: 100%;
         overflow-x: hidden;

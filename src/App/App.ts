@@ -410,7 +410,7 @@ class App {
         EventDispatcher.emit('redirect', paths.feedPage);
         // mount
         this.headerController.mountComponent();
-        this.headerView.changeHeaderItem('За')
+        this.headerView.changeHeaderItem('signupButton');
         this.aboutWSController.mountComponent();
         this.footerController.mountComponent();
     }

@@ -23,11 +23,12 @@ $scrollbar-width: 8px;
         gap: 10px;
         width: auto;
         overflow-x: hidden;
-        overflow-y: scroll;
-        padding: 15px 0 15px 15px;
+        overflow-y: overlay;
+        padding: 15px;
 
         @media screen and (max-device-width:799px) {
             padding: 15px;
+
             &::-webkit-scrollbar {
                 display: none;
             }
