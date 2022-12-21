@@ -126,14 +126,40 @@ class FeedView extends IView {
     }
 
     /**
-     * Функция отрисовки контента (постов) в ленте новостей
+     * Функция отрисовки контента (постов) в ленте новостей снизу
      * @param  {IFeedData[]} data - Данные о постах
      * @return {void}
      */
     public pushContentToFeed(data: IFeedData | IFeedData[], currentUserId: number): void {
         // TODO
         const f = (item: IFeedData) => {
-            const card = feedCardTemplate(currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true }));
+
+            let tempItem = item.isLiked === 'liked' ? Object.assign(item, { isLikedIcon: true }) : item;
+            tempItem = currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true })
+
+            const card = feedCardTemplate(tempItem);
+            this.cards.innerHTML += card;
+        }
+        if (Array.isArray(data)) {
+            data.forEach((item) => f(item));
+        } else {
+            f(data);
+        }
+    }
+
+    /**
+     * Функция отрисовки контента (постов) в ленте новостей сверху
+     * @param  {IFeedData[]} data - Данные о постах
+     * @return {void}
+     */
+    public pushContentToFeedUp(data: IFeedData | IFeedData[], currentUserId: number): void {
+        // TODO
+        const f = (item: IFeedData) => {
+
+            let tempItem = item.isLiked === 'liked' ? Object.assign(item, { isLikedIcon: true }) : item;
+            tempItem = currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true })
+
+            const card = feedCardTemplate(tempItem);
             this.cards.innerHTML = card + this.cards.innerHTML;
         }
         if (Array.isArray(data)) {

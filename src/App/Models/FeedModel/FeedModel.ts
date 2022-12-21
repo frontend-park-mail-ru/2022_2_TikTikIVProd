@@ -109,7 +109,7 @@ class FeedModel extends IModel {
             text: json.message,
             likes: json.count_likes,
             isLiked: json.is_liked ? "liked" : "unliked",
-            attachments: json.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
+            attachments: json.attachment ? json.attachments.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }) : [],
             community_id: json.community_id,
         };
     }

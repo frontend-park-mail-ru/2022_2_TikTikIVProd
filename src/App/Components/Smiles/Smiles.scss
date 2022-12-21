@@ -23,9 +23,10 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
+    font-size: 20px;
 
     &__smile {
-        padding: 5px;
+        padding: 6px;
     }
 
     &__smile:hover {

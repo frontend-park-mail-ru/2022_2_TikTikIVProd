@@ -71,9 +71,10 @@ class FeedController extends IController<FeedView, FeedModel> {
         this.model.sendNewFeed(feedCardData)
             .then(feedCard => {
                 this.view.hideFeedCardCreation();
-                this.view.pushContentToFeed(feedCard, this.user.id);
+                this.view.pushContentToFeedUp(feedCard, this.user.id);
             })
             .catch(msg => {
+                console.log("FeedController, 77: ", msg);
                 // TODO Post create show err to view
             });
     }
