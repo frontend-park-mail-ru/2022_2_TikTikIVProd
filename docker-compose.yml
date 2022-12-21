@@ -1,21 +1,21 @@
 services:
-    web:
-        image: nginx
-        # container_name: web
-        volumes:
-            - ./nginx/new_conf.d:/etc/nginx/conf.d
-            - ./:/etc/nginx/templates/app
-            - ./build:/etc/nginx/templates/app/build
-            - ./src:/etc/nginx/templates/app/src
-            # - www-html:/var/www/html
-            # - etc-letsencrypt:/etc/letsencrypt
-        ports:
-            # - "80:80"
-            # - "7002:80"
-            - "5500:80"
-        environment:
-            - NGINX_HOST=foobar.com
-            - NGINX_PORT=80=
+  web:
+    image: nginx
+    # container_name: web
+    volumes:
+      - ./nginx/new_conf.d:/etc/nginx/conf.d
+      - ./:/etc/nginx/templates/app
+      - ./build:/etc/nginx/templates/app/build
+      - ./src:/etc/nginx/templates/app/src
+      # - www-html:/var/www/html
+      # - etc-letsencrypt:/etc/letsencrypt
+    ports:
+      # - "80:80"
+      # - "7002:80"
+      - "5500:80"
+    environment:
+      - NGINX_HOST=foobar.com
+      - NGINX_PORT=80=
 
 #         networks:
 #             - app
