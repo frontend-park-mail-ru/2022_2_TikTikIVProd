@@ -1,13 +1,13 @@
 import IView from "../IView/IView";
 
-import friendsViewTemplate from "./FriendsView.hbs"
-import "./FriendsView.scss"
+import friendsViewTemplate from "./FriendsView.hbs";
+import "./FriendsView.scss";
 
-import friendTemplate from "../../Components/Friend/Friend.hbs"
-import "../../Components/Friend/Friend.scss"
+import friendTemplate from "../../Components/Friend/Friend.hbs";
+import "../../Components/Friend/Friend.scss";
 
-import friendNavbarTemplate from "../../Components/FriendsNavbar/FriendsNavbar.hbs"
-import "../../Components/FriendsNavbar/FriendsNavbar.scss"
+import friendNavbarTemplate from "../../Components/FriendsNavbar/FriendsNavbar.hbs";
+import "../../Components/FriendsNavbar/FriendsNavbar.scss";
 
 import { IUser } from "../../Models/UserModel/UserModel";
 

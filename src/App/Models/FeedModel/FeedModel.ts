@@ -78,7 +78,7 @@ class FeedModel extends IModel {
 
     private parseComment(json: any): IComment {
         return {
-            avatar_id: json.avatar_id === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${json.avatar_id}`,
+            avatar_id: json.avatar_id === 0 ? config.default_img : `${config.host}${config.api.image.url}/${json.avatar_id}`,
             create_date: dateParser(json.create_date),
             id: json.id,
             message: json.message,
@@ -100,7 +100,7 @@ class FeedModel extends IModel {
             id: json.id,
             author: {
                 url: '',
-                avatar: json.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${json.avatar_id}`,
+                avatar: json.avatar_id === 0 ? config.default_img : `${config.host}${config.api.image.url}/${json.avatar_id}`,
                 first_name: json.user_first_name,
                 last_name: json.user_last_name,
                 id: json.user_id,

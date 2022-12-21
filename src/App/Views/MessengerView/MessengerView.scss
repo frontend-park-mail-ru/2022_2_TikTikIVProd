@@ -9,12 +9,17 @@ $scrollbar-width: 8px;
 
     margin-bottom: 15px;
 
-    background-color: var(--color-messenger-background);
     border-radius: 10px;
 
+    grid-template-rows: min-content auto;
+
+    gap: 10px;
+
+
     &__navbar {
-        padding: 5px 10px;
-        box-shadow: 0px 5px 10px rgb(0 0 0 / 15%);
+        display: flex;
+        gap: 10px;
+        width: auto;
     }
 
     &__content {
@@ -25,6 +30,8 @@ $scrollbar-width: 8px;
         overflow-x: hidden;
         overflow-y: overlay;
         padding: 15px;
+        background-color: var(--color-messenger-background);
+        border-radius: 10px;
 
         @media screen and (max-device-width:799px) {
             padding: 15px;

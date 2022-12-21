@@ -30,6 +30,8 @@ class FeedController extends IController<FeedView, FeedModel> {
         this.view.bindScrollEvent(throttle(this.handleScroll.bind(this), 250));
         this.view.bindResizeEvent(throttle(this.handleScroll.bind(this), 250));
         this.view.bindClickEvent(this.handleClickOnFeed.bind(this));
+        this.view.bindKeyClick(this.handleKeyClick.bind(this));
+
 
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         EventDispatcher.subscribe('user-changed', this.setCurrentUser.bind(this)); // TODO delete
@@ -209,32 +211,28 @@ class FeedController extends IController<FeedView, FeedModel> {
                     if (!cardId) return;
                     const likesCountElement = document.getElementById(`feed-card-likes__count-${cardId}`);
 
-                    if (target.firstElementChild === undefined || target.firstElementChild === null) return;
+                    const button = <HTMLImageElement>target;
 
                     debounce(this.model.likePost, 500);
 
-                    if (target.firstElementChild.classList.contains('feed-card__button__unliked')) {
+                    if (target.classList.contains('feed-card__button__unliked')) {
                         this.model.likePost(cardId)
                             .then(() => {
-                                if (target.firstElementChild === undefined || target.firstElementChild === null)
-                                    return;
-
-                                target.firstElementChild.classList.toggle("feed-card__button__liked");
-                                target.firstElementChild.classList.remove("feed-card__button__unliked")
+                                button.src = "../src/img/like_filled_icon.svg";
+                                target.classList.toggle("feed-card__button__liked");
+                                target.classList.remove("feed-card__button__unliked")
                                 if (likesCountElement !== null) {
                                     likesCountElement.innerText = String(Number(likesCountElement.innerText) + 1);
                                 }
                             });
                     }
 
-                    if (target.firstElementChild.classList.contains('feed-card__button__liked')) {
+                    if (target.classList.contains('feed-card__button__liked')) {
                         this.model.unlikePost(cardId)
                             .then(() => {
-                                if (target.firstElementChild === undefined || target.firstElementChild === null)
-                                    return;
-
-                                target.firstElementChild.classList.toggle("feed-card__button__unliked");
-                                target.firstElementChild.classList.remove("feed-card__button__liked")
+                                button.src = "../src/img/like_icon.svg";
+                                target.classList.toggle("feed-card__button__unliked");
+                                target.classList.remove("feed-card__button__liked")
                                 if (likesCountElement !== null) {
                                     if (likesCountElement.innerText !== "0") {
                                         likesCountElement.innerText = String(Number(likesCountElement.innerText) - 1);
@@ -340,6 +338,43 @@ class FeedController extends IController<FeedView, FeedModel> {
                     return;
                 }
             }
+        }
+    }
+
+    private handleKeyClick(event: KeyboardEvent): void {
+        if (event.key === 'Enter' && event.ctrlKey) {
+            event.preventDefault();
+            const currentMessage = document.querySelector('textarea');
+            if (currentMessage !== null && currentMessage !== undefined) {
+                currentMessage.value += '\n';
+            }
+        }
+        else if (event.key === 'Enter') {
+            event.preventDefault();
+            const currentMessage = document.querySelector('textarea');
+            if (currentMessage === null || currentMessage === undefined) return;
+            const cardId = (<HTMLElement>currentMessage.closest("[data-feed_card_id"))?.dataset['feed_card_id'];
+            if (!cardId) return;
+            const text = this.view.getNewCommentData(cardId);
+            const newComment: INewComment = {
+                message: text,
+                post_id: Number(cardId),
+            };
+            console.log(newComment);
+
+            this.model.addComment(cardId, newComment)
+                .then(comment => {
+                    console.log(comment);
+                    this.view.pushCommentToFeedCard(cardId, this.user.id, comment);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            return;
+        }
+        else if (event.key === "Esc" || event.key === "Escape") {
+            this.view.hideFeedCardCreation();
+            return;
         }
     }
 

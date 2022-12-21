@@ -10,35 +10,35 @@
     font-size: 12px;
   }
 
-  &__logo{
+  &__logo {
     max-width: 100%;
     max-height: 30px;
     object-fit: cover;
   }
 
-  &__contacts{
+  &__contacts {
     display: flex;
     gap: 8px;
     justify-content: center;
     align-items: center;
   }
 
-  &__company-name{
+  &__company-name {
     display: flex;
     flex-direction: row;
   }
 }
 
-.footer-contact{
+.footer-contact {
   display: flex;
   align-items: center;
 
-  &__icon{
+  &__icon {
     object-fit: cover;
     height: 16px;
     width: auto;
     padding: 4px;
-    outline: 1px solid var(--color-footer-text);
+    border: 1px solid var(--color-footer-text);
     outline-offset: -1px;
     border-radius: 8px;
   }

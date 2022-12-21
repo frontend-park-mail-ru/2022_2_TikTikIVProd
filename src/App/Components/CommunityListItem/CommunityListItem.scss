@@ -18,6 +18,7 @@
         flex-direction: row;
         flex-wrap: wrap;
         gap: var(--gap-beetween-blocks);
+        justify-content: right;
     }
 
     &__avatar {
@@ -57,14 +58,14 @@
 
     &__icon {
         object-fit: contain;
-        width: 24px;
+        width: 20px;
     }
 
     &__text {
         color: var(--color-button-value);
         text-overflow: ellipsis;
         font-weight: bolder;
-        font-size: 16px;
+        font-size: 14px;
     }
 
     &--green {

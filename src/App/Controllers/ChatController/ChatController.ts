@@ -79,10 +79,6 @@ class ChatController extends
     }
 
     private handleKeyClick(e: KeyboardEvent): void {
-        const target = <HTMLElement>e.target;
-        const action =
-            (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
-
         if (e.key === 'Enter' && e.ctrlKey) {
             e.preventDefault();
             const currentMessage = document.querySelector('textarea');
@@ -212,7 +208,7 @@ class ChatController extends
         if (!user) return;
 
         const data: IChatNavbar = {
-            avatar: user.avatar ?? '../src/img/default_avatar.png',
+            avatar: user.avatar ?? config.default_img,
             first_name: user.first_name ?? 'Капи',
             last_name: user.last_name ?? 'Неопознаный',
             id: user.id ?? '',
@@ -236,7 +232,7 @@ class ChatController extends
 
             const formatted: IMessageData = {
                 user: {
-                    avatar: user.avatar ?? '../src/img/default_avatar.png',
+                    avatar: user.avatar ?? config.default_img,
                     first_name: user.first_name ?? 'Капи',
                     last_name: user.last_name ?? 'Неопознаный',
                     id: user.id ?? 0,

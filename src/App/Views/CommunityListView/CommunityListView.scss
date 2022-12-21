@@ -48,7 +48,7 @@
         }
 
         &::-webkit-scrollbar {
-            width: 20px;
+            width: 15px;
         }
 
         &::-webkit-scrollbar-track {
@@ -57,7 +57,7 @@
 
         &::-webkit-scrollbar-thumb {
             background-color: lightgray;
-            border: 5px solid var(--color-root-background);
+            border: 5px solid var(--color-feed-card-background);
             border-radius: 9999px;
         }
     }

@@ -36,6 +36,8 @@ class FeedView extends IView {
     private navbar: HTMLElement;
     private cards: HTMLElement;
     private overlay: HTMLElement;
+    private currentOpenedCommentId: string | number;
+
 
     constructor(parent: HTMLElement) {
         super(parent, feedTemplate({}), '.feed');
@@ -45,6 +47,8 @@ class FeedView extends IView {
 
         const observer = new MutationObserver(this.checkFeedCards.bind(this));
         observer.observe(this.cards, { childList: true });
+
+        this.currentOpenedCommentId = -1;
     }
 
 
@@ -81,6 +85,11 @@ class FeedView extends IView {
     public bindClickEvent(callback: Function): void {
         this.element.addEventListener('click', callback.bind(this));
     }
+
+    public bindKeyClick(callback: Function): void {
+        this.element.addEventListener('keydown', callback.bind(this));
+    }
+
 
     // Specific
 
@@ -139,6 +148,7 @@ class FeedView extends IView {
         if (!feed) {
             return;
         }
+        this.hideCommentsForFeedCard(id);
         this.cards.removeChild(feed);
     }
 
@@ -202,11 +212,15 @@ class FeedView extends IView {
         const feedCard = this.cards.querySelector(`[data-feed_card_id="${postId}"]`);
         if (!feedCard) return;
 
+        this.hideCommentsForFeedCard(this.currentOpenedCommentId);
+
         feedCard.parentNode?.insertBefore(newCommentSection, feedCard.nextSibling);
 
         comments.forEach(comment => {
             this.pushCommentToFeedCard(postId, currentUserId, comment);
         });
+
+        this.currentOpenedCommentId = postId;
     }
 
     public hideCommentsForFeedCard(postId: number | string): void {

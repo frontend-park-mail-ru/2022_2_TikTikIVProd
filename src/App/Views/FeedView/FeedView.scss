@@ -46,7 +46,7 @@
 
 
     &__cards::-webkit-scrollbar {
-        width: 18px;
+        width: 15px;
     }
 
     &__cards::-webkit-scrollbar-track {
@@ -54,7 +54,7 @@
     }
 
     &__cards::-webkit-scrollbar-thumb {
-        border: 5px solid var(--color-root-background);
+        border: 5px solid var(--color-feed-card-background);
         border-radius: 9999px;
         background-color: lightgray;
         min-height: 30px;

@@ -14,7 +14,8 @@
 
     overflow-y: scroll;
 
-    background-color: white;
+    background-color: var(--color-feed-card-background);
+    color: var(--color-feed-card-text);
 }
 
 .smiles-block {

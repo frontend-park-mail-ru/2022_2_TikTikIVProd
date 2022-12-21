@@ -38,7 +38,8 @@ export interface IConfig {
     host: string;
     api: {
         [index: string]: IApiItem;
-    }
+    },
+    default_img: string,
 }
 
 const config: IConfig = {
@@ -710,7 +711,8 @@ const config: IConfig = {
 
 
 
-    }
+    },
+    default_img: '../src/img/default_avatar.png',
 
 }
 

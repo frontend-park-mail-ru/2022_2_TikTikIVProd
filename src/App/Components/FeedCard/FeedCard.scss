@@ -26,6 +26,8 @@
         margin: 8px 0px;
         color: var(--color-feed-card-text);
         font-size: 15px;
+        line-break: anywhere;
+        white-space: pre-line;
     }
 
     &__attachments {
@@ -61,7 +63,7 @@
     }
 
     &__attachments::-webkit-scrollbar-thumb {
-        border: 5px solid white;
+        border: 5px solid var(--color-feed-card-background);
         border-radius: 9999px;
         background-color: lightgray;
     }
@@ -74,7 +76,7 @@
 
     &__buttons {
         display: flex;
-        gap: 5px;
+        gap: 10px;
     }
 
     &__button {
@@ -85,11 +87,11 @@
         filter: var(--current-theme-invert-value);
 
         &__liked {
-            fill: red;
+            filter: none;
         }
 
-        &__unliked {
-            fill: black;
+        &__edit {
+            width: 20px;
         }
     }
 
