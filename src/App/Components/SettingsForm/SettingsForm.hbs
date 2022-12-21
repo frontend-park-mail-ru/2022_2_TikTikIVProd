@@ -15,12 +15,11 @@
         <div class="settings-input-with-title__title">
             {{textar.title}}
         </div>
-        <textarea class="settings-input-with-title__input" name="{{textar.name}}" id="{{textar.id}}" rows="{{textar.rows}}">{{lookup ../../this.data textar.id}}</textarea>
+        <textarea class="settings-input-with-title__input" name="{{textar.name}}" id="{{textar.id}}"
+            rows="{{textar.rows}}">{{lookup ../../this.data textar.id}}</textarea>
         <div id="{{textar.id}}-msg" class="settings-input-with-title__error-msg"></div>
     </div>
     {{/each}}
-    <button class="settings-group__button settings-group__button--small" data-action="submit">
-        ok
-    </button>
+    <button class="settings-group__button settings-group__button--small" data-action="submit">Применить</button>
 </div>
 {{/each}}

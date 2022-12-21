@@ -714,7 +714,6 @@ const config: IConfig = {
 
     },
     default_img: '../src/img/default_avatar.png',
-
 }
 
 export default config;
