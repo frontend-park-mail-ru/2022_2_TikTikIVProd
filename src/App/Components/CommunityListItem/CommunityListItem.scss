@@ -40,6 +40,16 @@
         cursor: pointer;
         color: var(--color-profile-name);
     }
+
+    &__description {
+        font-size: 14px;
+        cursor: pointer;
+        color: var(--color-profile-name);
+        white-space: nowrap;
+        width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 .community-list-item-button {
