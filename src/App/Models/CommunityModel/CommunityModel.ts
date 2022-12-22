@@ -42,7 +42,7 @@ class CommunityModel extends IModel {
             avatar: json.avatar_id === 0 ?
                 '../src/img/default_avatar.png'
                 :
-                `${config.host}${config.api.image.url}/${json.avatar_id}`,
+                config.host + `${config.api.image.url.replace('{:id}', json.avatar_id)}`,
             create_date: json.create_date,
             description: json.description,
             id: json.id,

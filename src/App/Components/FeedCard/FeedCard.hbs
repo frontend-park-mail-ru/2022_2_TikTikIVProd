@@ -17,7 +17,7 @@
     <div class="feed-card__content"> {{text}}</div>
     <div class="feed-card__attachments">
         {{#each attachments as |attachment|}}
-        <img src="{{attachment}}" alt="image" class="feed-card__picture" />
+        <img src="{{attachment.src}}" alt="image" class="feed-card__picture" />
         {{/each}}
     </div>
     <div class="feed-card__footer">

@@ -88,7 +88,11 @@ class UserModel extends IModel {
             nick_name: json.nick_name,
             email: json.email,
             id: json.id,
-            avatar: json.avatar === 0 ? '../src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${json.avatar}`,
+            avatar: json.avatar === 0 
+            ? 
+            '../src/img/default_avatar.png' 
+            : 
+            config.host + `${config.api.image.url.replace('{:id}', json.avatar)}`,
         };
     }
 
@@ -258,7 +262,10 @@ class UserModel extends IModel {
             Object.keys(newData).forEach(key => {
                 if (key === 'avatar') {
                     const id = newData[key] ?? 0;
-                    newCurrentUser[key] = id !== 0 ? `${config.host}${config.api.image.url}/${id}` : '../src/img/default_avatar.png';
+                    newCurrentUser[key] = id === 0 
+                    ? 
+                    '../src/img/default_avatar.png'
+                    : config.host + `${config.api.image.url.replace('{:id}', id.toString())}`;
                     return;
                 }
                 newCurrentUser[key] = newData[key];

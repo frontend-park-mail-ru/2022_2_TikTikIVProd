@@ -1,15 +1,17 @@
-import config from '../../Configs/Config';
-import MessengerModel, { IDialog, IMessage } from '../../Models/MessengerModel/MessengerModel';
+import MessengerModel, { IDialog, IMessage, IMessageNew } from '../../Models/MessengerModel/MessengerModel';
 import UserModel, { IUser } from '../../Models/UserModel/UserModel';
 import EventDispatcher from '../../Modules/EventDispatcher/EventDispatcher';
 import router from '../../Router/Router';
 import paths from '../../Router/RouterPaths';
 import dateParser from '../../Utils/DateParser/DateParser';
 import ChatView from '../../Views/ChatView/ChatView';
-import MessengerView from '../../Views/MessengerView/MessengerView';
+import AttachmentsUploadController from '../AttachmentsUploadController/AttachmentsUploadController';
 import IController from '../IController/IController';
-import { IDialogData } from '../MessengerController/MessengerController';
 
+export interface IChatData {
+    byUserId ?: number | string,
+    byDialogId ?: number | string,
+}
 
 export interface IMessageData {
     user: {
@@ -32,49 +34,139 @@ export interface IChatNavbar {
 class ChatController extends
     IController<ChatView, { user: UserModel, messenger: MessengerModel }> {
 
-    private currentDialogId: string | number | undefined;
-    private userID: string | number | undefined;
-    private emptyChat: boolean | undefined;
+    private dialogId: string | number | undefined;
+    private userId: string | number | undefined;
+    private isEmptyChat: boolean | undefined;
 
+    private msgAttachments: AttachmentsUploadController;
     constructor(
         view: ChatView, model: { user: UserModel, messenger: MessengerModel }) {
         super(view, model);
 
-        this.emptyChat = undefined;
-        this.currentDialogId = undefined;
-        this.userID = undefined;
+        this.isEmptyChat = undefined;
+        this.dialogId = undefined;
+        this.userId = undefined;
+        this.msgAttachments = new AttachmentsUploadController();
 
         this.view.bindClick(this.handleClick.bind(this));
         this.view.bindKeyClick(this.handleKeyClick.bind(this));
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
     }
 
-    private sendMessage() : void {
-        if (this.emptyChat) {
-            if (!this.userID) return;
-            const text = this.view.getNewMessage();
-            this.model.messenger.initChat(text, this.userID)
-                .then((data: IMessage) => {
-                    this.currentDialogId = data.dialog_id;
-                    this.emptyChat = false;
-                    this.model.messenger.createChatEventListener(
-                        this.currentDialogId,
-                        {
-                            onmessage: this.handleMessages.bind(this),
-                        },
-                    );
-                    this.handleMessages(data);
-                    this.view.clearNewMsgForm();
-                });
-        } else {
-            const cid = this.model.user.getCurrentUser()?.id;
-            if (!cid) return;
-            if (!this.currentDialogId) return;
-            if (!this.userID) return;
-            const text = this.view.getNewMessage();
-            this.model.messenger.sendMessage(this.currentDialogId, text, cid, this.userID)
-            this.view.clearNewMsgForm();
+    public async mountComponent(opts?: IChatData) {
+        if (!opts) {
+            router.showUnknownPage();
+            return;
         }
+
+        if (!this.isMounted) {
+            this.view.clearChat();
+            this.view.show(this.msgAttachments.getElement());
+            this.isMounted = true;
+
+            if (opts.byDialogId) {
+                this.dialogId = opts.byDialogId;
+                this.setProfileData();
+                this.model.messenger.getDialog(this.dialogId)
+                    .then((data) => {
+                        this.fillDialog(data);
+                        this.isEmptyChat = false;
+                        this.model.messenger.createChatEventListener(
+                            data.dialog_id,
+                            {
+                                onmessage: this.handleMessages.bind(this)
+                            }
+                        );
+                    })
+                    .catch((data) => {
+                        router.showUnknownPage();
+                        return;
+                    });
+                return;
+            }
+
+            if (opts.byUserId) {
+                this.userId = opts.byUserId;
+                this.setProfileData();
+                this.model.messenger.checkChatExist(this.userId)
+                    .then((data) => {
+                        console.log('exists');
+                        
+                        this.isEmptyChat = false;
+                        this.fillDialog(data);
+                        this.dialogId = data.dialog_id;
+                        this.model.messenger.createChatEventListener(
+                            data.dialog_id,
+                            {
+                                onmessage: this.handleMessages.bind(this)
+                            }
+                        );
+                    })
+                    .catch(data => {
+                        console.log('new');
+
+                        this.isEmptyChat = true;
+                    });
+                return;
+            }
+        }
+    }
+
+    public unmountComponent(): void {
+        if (this.isMounted) {
+            this.view.hide();
+            this.isMounted = false;
+
+            if (this.dialogId) {
+                this.model.messenger.removeChatEventListener(this.dialogId);
+            }
+
+            this.dialogId = undefined;
+            this.isEmptyChat = undefined;
+            this.userId = undefined;
+        }
+    }
+
+    private async sendMessage() {
+        const attachmens = await this.msgAttachments.submitAttachments();
+
+        const text = this.view.getNewMessage();
+
+        const message: IMessageNew = {
+            body: text,
+            receiver_id: Number(this.userId),
+            dialog_id: Number(this.dialogId),
+            attachments: attachmens,
+            // sticker: 0,
+        };
+
+        if (this.isEmptyChat) {
+            this.initNewDialog(message);
+            return;
+        }
+
+        if (!this.dialogId) return;
+        if (!this.userId) return;
+        this.model.messenger.sendMessage(message);
+        this.view.clearNewMsgForm();
+    }
+
+    private initNewDialog(message: IMessageNew): void {
+        this.model.messenger.initChat(message)
+            .then((data: IMessage) => {
+                console.log('inited new chat ', data);
+                
+                this.dialogId = data.dialog_id;
+                this.isEmptyChat = false;
+                this.model.messenger.createChatEventListener(
+                    this.dialogId,
+                    {
+                        onmessage: this.handleMessages.bind(this),
+                    },
+                );
+                this.handleMessages(data);
+                this.view.clearNewMsgForm();
+            });
     }
 
     private handleKeyClick(e: KeyboardEvent): void {
@@ -99,12 +191,10 @@ class ChatController extends
         const target = <HTMLElement>e.target;
         const action =
             (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
-        switch (action) {
-            default: {
-                // // console.log('No action: ', action);
-                return;
-            }
+        console.log(action);
 
+        switch (action) {
+            default: return;
             case 'back': {
                 router.goToPath(paths.messenger);
                 return;
@@ -112,95 +202,35 @@ class ChatController extends
 
             case 'user_profile': {
                 const user_id = (<HTMLElement>target.closest('[data-user_id]'))?.dataset['user_id'];
-                console.log(user_id);
-
                 if (!user_id) return;
-
                 let url = `${paths.userProfie}`;
                 url = url.replace('{:number}', user_id);
-
                 router.goToPath(url);
                 return;
             }
 
             case 'send': {
-               this.sendMessage();
-               return;
+                this.sendMessage();
+                return;
+            }
+
+            case 'add_attachment': {
+                this.msgAttachments.addAttachment();
+                return;
             }
         }
     }
 
     private fillDialog(data: IDialog): void {
-        if (data.messages) {
-            this.handleMessages(data.messages);
-            return;
-        }
+        if (!data.messages) return;
+        this.handleMessages(data.messages);
     }
 
-    public async mountComponent(
-        opts?: { userId?: string | number, dialogId?: string | number }) {
-        if (!opts) {
-            router.showUnknownPage();
-            return
-        }
-
-        if (!this.isMounted) {
-            this.view.clearChat();
-            this.view.show();
-            this.isMounted = true;
-
-            if (opts.dialogId) {
-                const dialogId = opts.dialogId;
-
-                this.currentDialogId = dialogId;
-
-                this.model.messenger.getDialog(dialogId)
-                    .then((data) => {
-                        this.fillDialog(data);
-                        this.emptyChat = false;
-                        this.model.messenger.createChatEventListener(
-                            data.dialog_id,
-                            {
-                                onmessage: this.handleMessages.bind(this)
-                            }
-                        );
-                    })
-                    .catch((data) => {
-                        router.showUnknownPage();
-                        return;
-                    });
-                this.setProfileData();
-                return;
-            }
-
-            if (opts.userId) {
-                this.userID = opts.userId;
-
-                this.model.messenger.checkChatExist(opts.userId)
-                    .then((data) => {
-                        this.emptyChat = false;
-                        this.fillDialog(data);
-                        this.currentDialogId = data.dialog_id;
-                        this.model.messenger.createChatEventListener(
-                            data.dialog_id,
-                            {
-                                onmessage: this.handleMessages.bind(this)
-                            }
-                        );
-                    })
-                    .catch(data => {
-                        this.emptyChat = true;
-                    });
-                this.setProfileData();
-                return;
-            }
-        }
-    }
-
+   
+    
     private async setProfileData() {
-        const user = await this.model.user.getUser(this.userID ?? '-1');
+        const user = await this.model.user.getUser(this.userId ?? '-1');
         if (!user) return;
-
         const data: IChatNavbar = {
             avatar: user.avatar ?? '../src/img/default_avatar.png',
             first_name: user.first_name ?? 'Капи',
@@ -211,19 +241,15 @@ class ChatController extends
     }
 
     private async handleMessages(data: IMessage | IMessage[]) {
-
         if (!Array.isArray(data)) {
-            const ndata: IMessage[] = [];
-            ndata.push(data);
+            const ndata: IMessage[] = [data];
             data = ndata;
         }
 
         const msgs: IMessageData[] = [];
         for (let i = 0; i < data.length; i++) {
             const item = data[i];
-
             const user = await this.model.user.getUser(item.sender_id);
-
             const formatted: IMessageData = {
                 user: {
                     avatar: user.avatar ?? '../src/img/default_avatar.png',
@@ -234,26 +260,9 @@ class ChatController extends
                 text: item.body ?? 'Здесь было сообщение...',
                 date: dateParser(item.created_at),
             };
-
             msgs.push(formatted);
         }
-
         this.view.pushMessages(msgs);
-    }
-
-    public unmountComponent(): void {
-        if (this.isMounted) {
-            this.view.hide();
-            this.isMounted = false;
-
-            if (this.currentDialogId) {
-                this.model.messenger.removeChatEventListener(this.currentDialogId);
-            }
-
-            this.currentDialogId = undefined;
-            this.emptyChat = undefined;
-            this.userID = undefined;
-        }
     }
 }
 

@@ -32,6 +32,10 @@ class ChatView extends IView {
         // this.navbar.innerHTML = chatNavbarTemplate({});
         this.footer.innerHTML = messageCreateTemplate({});
         this.parent.appendChild(this.element);
+        const attachments = this.footer.querySelector('.message-create__attachments');
+        if(!attachments) return;
+        attachments.appendChild(opts);
+
     }
     
     public bindKeyClick(callback : Function) : void {

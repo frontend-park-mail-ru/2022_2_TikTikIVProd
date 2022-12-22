@@ -1,4 +1,4 @@
-import ImageUploadModel from "../../Models/ImageUploadModel/ImageUploadModel";
+import ImageUploadModel from "../../Models/ImageModel/ImageModel";
 import UserModel, { IProfileSettings } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import validateInput from "../../Utils/Validators/InputValidator/InputValidator";

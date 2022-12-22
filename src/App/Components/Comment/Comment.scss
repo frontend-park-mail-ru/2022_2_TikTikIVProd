@@ -6,10 +6,12 @@
     outline: 2px solid var(--color-feed-card-border);
     outline-offset: -2px;
     border-radius: 10px;
+    gap: 10px;
 
     &__wrapper{
         display: flex;
         flex-direction: column;
+        gap: 10px;
     }
 
     &__content {
@@ -17,6 +19,7 @@
         margin: 8px 0px;
         color: var(--color-feed-card-text);
         font-size: 15px;
+        word-wrap: break-word;
     }
     
     &__date{
@@ -63,7 +66,7 @@
     }
 
     &__name{
-
+        display: flex;
         color: var(--color-feed-card-author-name);
         font-size: 16px;
         font-weight: bolder;

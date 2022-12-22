@@ -139,8 +139,9 @@ const config: IConfig = {
                 },
             },
         },
+
         image: {
-            url: '/image',
+            url: '/attachment/{:id}',
             method: REQUEST_TYPE.GET,
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
@@ -158,7 +159,7 @@ const config: IConfig = {
         },
 
         imageUpload: {
-            url: '/image/upload',
+            url: '/attachment/image/upload',
             method: REQUEST_TYPE.POST,
             headers: {
                 // 'Content-Type': 'multipart/form-data',
@@ -175,7 +176,24 @@ const config: IConfig = {
                 },
             },
         },
-
+        fileUpload: {
+            url: '/attachment/file/upload',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                // 'Content-Type': 'multipart/form-data',
+            },
+            statuses: {
+                success: {
+                    '200': 'Картинка загружена'
+                },
+                failure: {
+                    '401': 'No cookie',
+                    '400': 'No csrf',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
 
         post: {
             url: '/post/{:id}',

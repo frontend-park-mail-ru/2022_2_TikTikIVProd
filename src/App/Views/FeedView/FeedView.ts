@@ -132,7 +132,9 @@ class FeedView extends IView {
     }
 
     public deletePost(id: number | string): void {
-        const feed = this.cards.querySelector(`[id="${id}"]`);
+        const feed = this.cards.querySelector(`[data-feed_card_id="${id}"]`);
+        console.log(feed);
+        
         if (!feed) {
             return;
         }
@@ -153,9 +155,21 @@ class FeedView extends IView {
         this.cards.removeChild(oldCard);
     }
 
-    public showFeedCardCreation(user: IUser, exsData?: IFeedData, community_id?: string | number | undefined): void {
-        this.overlay.innerHTML = feedCardCreationTemplate({ user: user, data: exsData, community_id: community_id });
+    public showFeedCardCreation(user: IUser, attachmentsElement : HTMLElement, exsData?: IFeedData, community_id?: string | number | undefined): void {
+        this.overlay.innerHTML = feedCardCreationTemplate({
+            user: user,
+            data: exsData,
+            community_id: community_id
+        });
         this.overlay.style.visibility = 'visible';
+
+        // 
+        const attachments = this.overlay.querySelector('.feed-card-create__attachments');
+        if(!attachments) return;
+
+        attachments.appendChild(attachmentsElement);
+        //
+
     }
 
     public hideFeedCardCreation(): void {
@@ -207,7 +221,7 @@ class FeedView extends IView {
 
     public hideCommentsForFeedCard(postId: number | string): void {
         const commentSection = this.cards.querySelector(`.comment-section[data-feed_card_id="${postId}"]`);
-        if(!commentSection) return;
+        if (!commentSection) return;
         this.cards.removeChild(commentSection);
     }
 
@@ -216,15 +230,15 @@ class FeedView extends IView {
         return textar.value;
     }
 
-    public clearCommentCreation(postId : number | string) : void {
+    public clearCommentCreation(postId: number | string): void {
         const textar = <HTMLTextAreaElement>this.cards.querySelector(`.comment-create[data-post_id="${postId}"] textarea`);
         textar.value = '';
     }
 
-    public removeComment(postId : number | string, commentId : number | string ): void {
+    public removeComment(postId: number | string, commentId: number | string): void {
         const comments = <HTMLElement>this.cards.querySelector(`.comment-section[data-feed_card_id="${postId}"] .comment-section__comments`);
         const comment = comments.querySelector(`.comment[data-id="${commentId}"][data-post_id="${postId}"]`);
-        if(!comment) return;
+        if (!comment) return;
         comments.removeChild(comment);
     }
 }

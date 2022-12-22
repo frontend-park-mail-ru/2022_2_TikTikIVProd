@@ -1,11 +1,14 @@
 import config from "../../Configs/Config";
 import FeedModel, { IFeedData, IFeedNewPost, IFeedType, INewComment } from "../../Models/FeedModel/FeedModel";
+import ImageUploadModel, { IImage } from "../../Models/ImageModel/ImageModel";
 import { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
 import { checkScrollEnd } from "../../Utils/Scrollbar/CheckPosition/CheckPosition";
 import throttle from "../../Utils/Throttle/Throttle";
+import AttachmentsUploadView from "../../Views/AttachmentsUploadView/AttachmentsUploadView";
 import FeedView from "../../Views/FeedView/FeedView";
+import AttachmentsUploadController from "../AttachmentsUploadController/AttachmentsUploadController";
 import IController from "../IController/IController";
 
 class FeedController extends IController<FeedView, FeedModel> {
@@ -16,15 +19,14 @@ class FeedController extends IController<FeedView, FeedModel> {
     // NEW!!!!!
     private feedType: IFeedType;
     //
+    private newPostAttachmentsController: AttachmentsUploadController;
 
     constructor(view: FeedView, model: FeedModel) {
         super(view, model);
-
         this.currentPage = 0;
-
-        //
         this.feedType = {};
-        //
+
+        this.newPostAttachmentsController = new AttachmentsUploadController();
 
         this.view.bindScrollEvent(throttle(this.handleScroll.bind(this), 250));
         this.view.bindResizeEvent(throttle(this.handleScroll.bind(this), 250));
@@ -55,53 +57,55 @@ class FeedController extends IController<FeedView, FeedModel> {
             })
     }
 
-    private submitNewFeedCard(): void {
+    private async submitNewFeedCard() {
+
         const content = this.view.getNewPostData();
-        if (content.text.length < 1) return;
+        if (content.text.length < 1 ) return Promise.reject('empty');
+
+        //
+        const imgs = await this.newPostAttachmentsController.submitAttachments();
+        //&& imgs.length < 1
 
         const feedCardData: IFeedNewPost = {
-            images: [],
+            attachments: imgs,
             message: content.text,
             community_id: content.community_id ?? 0,
         };
 
-        this.model.sendNewFeed(feedCardData)
-            .then(feedCard => {
-                this.view.hideFeedCardCreation();
-                this.view.pushContentToFeed(feedCard, this.user.id);
-            })
-            .catch(msg => {
-                // TODO Post create show err to view
-            });
+        const feedCard = await this.model.sendNewFeed(feedCardData)
+        this.view.hideFeedCardCreation();
+        this.view.pushContentToFeed(feedCard, this.user.id);
+        return Promise.resolve();
     }
 
     private submitEditedFeedCard(): void {
         const content = this.view.getEditedPostData();
         if (!content.id || !content.text || content.text.length < 1) return;
+        this.model.getPost(content.id)
+            .then(oldData => {
+                let newData = oldData;
+                newData.text = content.text ?? '';
+                this.model.sendEditedFeed(newData)
+                    .then(feedCard => {
+                        this.view.hideFeedCardCreation();
+                        this.view.changePost(feedCard);
+                    })
 
-        const feedCardData: IFeedNewPost = {
-            id: Number(content.id), // TODO errors
-            message: content.text,
-
-            images: [], // TODO
-            community_id: content.community_id ?? 0,
-        };
-
-        this.model.sendEditedFeed(feedCardData)
-            .then(feedCard => {
-                this.view.hideFeedCardCreation();
-                this.view.changePost(feedCard);
             })
+
             .catch(msg => {
                 console.log(msg);
                 // TODO Post create show err to view
             });
+
+
     }
 
     private deletePost(id: number | string): void {
         this.model.deletePost(id)
             .then(() => {
                 this.view.deletePost(id);
+                this.view.hideCommentsForFeedCard(id);
                 console.log('delete');
 
             })
@@ -187,7 +191,13 @@ class FeedController extends IController<FeedView, FeedModel> {
                     return;
                 }
                 case 'sumbit_new_post': {
-                    this.submitNewFeedCard();
+                    this.submitNewFeedCard()
+                        .then((msg) => {
+                            console.log('submitted', msg);
+                        })
+                        .catch((err) => {
+                            console.log('err', err);
+                        });
                     return;
                 }
                 case 'submit_search': {
@@ -197,7 +207,10 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'create_feed': {
-                    this.view.showFeedCardCreation(this.user, undefined, this.feedType?.group?.id);
+
+                    this.newPostAttachmentsController.flush();
+
+                    this.view.showFeedCardCreation(this.user, this.newPostAttachmentsController.getElement(), undefined, this.feedType?.group?.id);
                     return;
                 }
 
@@ -250,7 +263,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                     this.model.getPost(cardId)
                         .then(feedCard => {
-                            this.view.showFeedCardCreation(this.user, feedCard, feedCard.community_id);
+                            this.view.showFeedCardCreation(this.user, this.newPostAttachmentsController.getElement(), feedCard, feedCard.community_id);
                         })
                         .catch(msg => {
                             // console.log('edit open, err');
@@ -265,14 +278,11 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'profile_page': {
-                    if (data) {
-
-                        // TODO убрать отсюда
-
-                        let url = Object.assign({}, config.api.userProfile).url;
-                        url = url.replace('{:id}', data.toString());
-                        router.goToPath(url);
-                    }
+                    if (!data) return;
+                    // TODO убрать отсюда
+                    let url = Object.assign({}, config.api.userProfile).url;
+                    url = url.replace('{:id}', data.toString());
+                    router.goToPath(url);
                     return;
                 }
 
@@ -292,38 +302,24 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                 case 'send_comment': {
                     if (!cardId) return;
-                    const text = this.view.getNewCommentData(cardId);
-                    const newComment: INewComment = {
-                        message: text,
-                        post_id: Number(cardId),
-                    };
-                    console.log(newComment);
-
-                    this.model.addComment(cardId, newComment)
-                        .then(comment => {
-                            console.log(comment);
-                            this.view.pushCommentToFeedCard(cardId, this.user.id, comment);
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
+                    this.sendNewComment(cardId);
                     return;
                 }
 
                 case 'comment_delete': {
                     const commentId = (<HTMLElement>target.closest('.comment'))?.dataset['id'];
                     if (!commentId || !cardId) return;
-                    this.model.deleteComment(commentId)
-                        .then(() => {
-                            this.view.removeComment(cardId, commentId);
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
+                    this.deleteComment(cardId, commentId);
                     return;
                 }
 
                 case 'comment_edit': {
+                    console.log('edit');
+                    return;
+                }
+
+                case 'add_image': {
+                    this.newPostAttachmentsController.addAttachment();
                     return;
                 }
 
@@ -367,6 +363,34 @@ class FeedController extends IController<FeedView, FeedModel> {
 
     private closeComments(postId: number | string): void {
 
+    }
+
+    private deleteComment(cardId: number | string, commentId: number | string): void {
+        this.model.deleteComment(commentId)
+            .then(() => {
+                this.view.removeComment(cardId, commentId);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    private sendNewComment(cardId: number | string): void {
+        const text = this.view.getNewCommentData(cardId);
+        const newComment: INewComment = {
+            message: text,
+            post_id: Number(cardId),
+        };
+        console.log(newComment);
+
+        this.model.addComment(cardId, newComment)
+            .then(comment => {
+                console.log(comment);
+                this.view.pushCommentToFeedCard(cardId, this.user.id, comment);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 }
 
