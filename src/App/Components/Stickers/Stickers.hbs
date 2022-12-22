@@ -1,0 +1,12 @@
+<div class="stickers">
+    <div class="block-name">Стикеры</div>
+    <div class="stickers-block">
+        {{#if stickers}}
+            {{#each stickers as |sticker|}}
+                <img src="{{sticker.src}}" class="stickers-block__sticker" data-sticker_id="{{sticker.id}}" data-action="sticker_item">
+            {{/each}}
+        {{else}}
+            No stickers
+        {{/if}}
+    </div>
+</div>

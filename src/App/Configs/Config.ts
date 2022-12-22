@@ -726,8 +726,21 @@ const config: IConfig = {
                 },
                 failure: failureDefaultStatuses,
             },
-        }
+        },
 
+        stickers: {
+            url: '/stickers',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Стикеры получены',
+                },
+                failure: failureDefaultStatuses,
+            },
+        }
 
 
     },
