@@ -1,3 +1,4 @@
+import config from '../../Configs/Config';
 import MessengerModel, { IDialog, IMessage, IMessageNew } from '../../Models/MessengerModel/MessengerModel';
 import UserModel, { IUser } from '../../Models/UserModel/UserModel';
 import EventDispatcher from '../../Modules/EventDispatcher/EventDispatcher';
@@ -9,8 +10,8 @@ import AttachmentsUploadController from '../AttachmentsUploadController/Attachme
 import IController from '../IController/IController';
 
 export interface IChatData {
-    byUserId ?: number | string,
-    byDialogId ?: number | string,
+    byUserId?: number | string,
+    byDialogId?: number | string,
 }
 
 export interface IMessageData {
@@ -57,8 +58,8 @@ class ChatController extends
         if (!opts) {
             router.showUnknownPage();
             return;
-        }
 
+        }
         if (!this.isMounted) {
             this.view.clearChat();
             this.view.show(this.msgAttachments.getElement());
@@ -91,7 +92,7 @@ class ChatController extends
                 this.model.messenger.checkChatExist(this.userId)
                     .then((data) => {
                         console.log('exists');
-                        
+
                         this.isEmptyChat = false;
                         this.fillDialog(data);
                         this.dialogId = data.dialog_id;
@@ -131,6 +132,8 @@ class ChatController extends
         const attachmens = await this.msgAttachments.submitAttachments();
 
         const text = this.view.getNewMessage();
+        if (text.replace('\n', ' ').trim() === '')
+            return;
 
         const message: IMessageNew = {
             body: text,
@@ -155,7 +158,7 @@ class ChatController extends
         this.model.messenger.initChat(message)
             .then((data: IMessage) => {
                 console.log('inited new chat ', data);
-                
+
                 this.dialogId = data.dialog_id;
                 this.isEmptyChat = false;
                 this.model.messenger.createChatEventListener(
@@ -170,19 +173,17 @@ class ChatController extends
     }
 
     private handleKeyClick(e: KeyboardEvent): void {
-        const target = <HTMLElement>e.target;
-        const action =
-            (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
-
-        e.preventDefault();
-        if (!e.ctrlKey) return;
-
-        switch (e.key) {
-            default: return;
-            case 'Enter': {
-                this.sendMessage();
-                return;
+        if (e.key === 'Enter' && e.ctrlKey) {
+            e.preventDefault();
+            const currentMessage = document.querySelector('textarea');
+            if (currentMessage !== null && currentMessage !== undefined) {
+                currentMessage.value += '\n';
             }
+        }
+        else if (e.key === 'Enter') {
+            e.preventDefault();
+            this.sendMessage();
+            return;
         }
     }
 
@@ -191,7 +192,6 @@ class ChatController extends
         const target = <HTMLElement>e.target;
         const action =
             (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
-        console.log(action);
 
         switch (action) {
             default: return;
@@ -218,6 +218,13 @@ class ChatController extends
                 this.msgAttachments.addAttachment();
                 return;
             }
+            case 'smile': {
+                // ОБРАБОТКА СМАЙЛОВ
+                const currentMessage = document.querySelector('textarea');
+                if (currentMessage !== null && currentMessage !== undefined) {
+                    currentMessage.value += target.innerText;
+                }
+            }
         }
     }
 
@@ -226,13 +233,13 @@ class ChatController extends
         this.handleMessages(data.messages);
     }
 
-   
-    
+
+
     private async setProfileData() {
         const user = await this.model.user.getUser(this.userId ?? '-1');
         if (!user) return;
         const data: IChatNavbar = {
-            avatar: user.avatar ?? '../src/img/default_avatar.png',
+            avatar: user.avatar ?? config.default_img,
             first_name: user.first_name ?? 'Капи',
             last_name: user.last_name ?? 'Неопознаный',
             id: user.id ?? '',
@@ -252,7 +259,7 @@ class ChatController extends
             const user = await this.model.user.getUser(item.sender_id);
             const formatted: IMessageData = {
                 user: {
-                    avatar: user.avatar ?? '../src/img/default_avatar.png',
+                    avatar: user.avatar ?? config.default_img,
                     first_name: user.first_name ?? 'Капи',
                     last_name: user.last_name ?? 'Неопознаный',
                     id: user.id ?? 0,

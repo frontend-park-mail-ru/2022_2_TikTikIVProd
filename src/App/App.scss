@@ -17,4 +17,11 @@ body {
 
     // tablet menu height
     --tablet-menu-height: 40px;
+
+
+    // Какая-то проблема с textarea, элемент не пробрасывает родительский шрифт
+    textarea {
+        font-family: Helvetica, Arial, sans-serif;
+        resize: none;
+    }
 }

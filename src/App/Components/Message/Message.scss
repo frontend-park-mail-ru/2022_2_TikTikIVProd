@@ -27,6 +27,8 @@
     &__text {
         color: var(--coloor-chat-message-text);
         font-size: 14px;
+        line-break: anywhere;
+        white-space: pre-line;
     }
 
     &__attachments {}
@@ -45,11 +47,14 @@
 
     &__avatar {
         border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -khtml-border-radius: 50%;
+        -moz-border-radius: 50%;
         height: 30px;
         width: 30px;
         object-fit: cover;
-        background-color: gray;
-        outline: 1px solid darken($color: gray, $amount: 10);
+        // background-color: gray;
+        border: 1px solid darken($color: gray, $amount: 10);
         outline-offset: -1px;
         cursor: pointer;
     }

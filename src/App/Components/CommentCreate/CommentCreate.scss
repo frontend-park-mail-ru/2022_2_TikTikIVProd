@@ -4,7 +4,7 @@
     gap: 8px;
     padding: 10px 15px;
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--color-feed-card-background);
     width: 100%;
 
     &__tools {
@@ -22,12 +22,11 @@
 
     &__textarea {
         min-height: 80px;
-        resize: vertical;
 
         padding: 5px 8px;
 
         border-radius: 10px;
-        outline: 2px solid var(--color-chat-message-create-border);
+        border: 2px solid var(--color-chat-message-create-border);
         outline-offset: -2px;
 
         font-size: 14px;

@@ -3,9 +3,10 @@
     grid-template-columns: min-content auto min-content;
     gap: 8px;
     padding: 10px 15px;
-    box-shadow: 0px -5px 10px rgb(0 0 0 / 15%);
+    border-top: 1px solid var(--color-chat-message-create-border);
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    background-color: var(--color-chat-background);
 
     &__tools {
         display: flex;
@@ -21,14 +22,13 @@
     }
 
     &__textarea {
+        display: inline-block;
         min-height: 80px;
-        resize: vertical;
 
         padding: 5px 8px;
 
         border-radius: 10px;
-        outline: 2px solid var(--color-chat-message-create-border);
-        outline-offset: -2px;
+        border: 2px solid var(--color-chat-message-create-border);
 
         font-size: 14px;
 
@@ -85,10 +85,6 @@
         &:hover {
             transform: scale(1.05);
         }
-
-        &:active {
-            transform: scale(0.95);
-        }
     }
 
     &__icon {
@@ -109,6 +105,24 @@
 }
 
 
+// ВНИМАНИЕ: Данная комбинация используется со стилями из смайлов
+.message-create-button__smiles:hover {
+    & .smiles {
+        // opacity: 1;
+        display: block;
+    }
+}
+
+// ВНИМАНИЕ: Данная комбинация используется со стилями из смайлов
+.message-create-button__smiles {
+    & .smiles {
+        bottom: 20px;
+    }
+
+    & .smiles:hover {
+        display: block;
+    }
+}
 
 
 

@@ -38,12 +38,15 @@ export interface IConfig {
     host: string;
     api: {
         [index: string]: IApiItem;
-    }
+    },
+    default_img: string,
 }
 
 const config: IConfig = {
+    host: 'http://writesend.online/api',
+    // host: 'http://89.208.197.127/api',
     // host: 'http://89.208.197.127:8080',
-    host: 'http://127.0.0.1:8080',
+    // host: 'http://127.0.0.1:8080',
     // host: 'http://localhost:8080',
     api: {
         logout: {
@@ -727,8 +730,8 @@ const config: IConfig = {
 
 
 
-    }
-
+    },
+    default_img: '../src/img/default_avatar.png',
 }
 
 export default config;

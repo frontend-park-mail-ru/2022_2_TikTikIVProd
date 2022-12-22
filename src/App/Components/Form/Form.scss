@@ -7,7 +7,7 @@
 
   padding: 8% 15%;
 
-  outline: 2px solid var(--color-form-border);
+  border: 2px solid var(--color-form-border);
   outline-offset: -2px;
   border-radius: 10px;
 
@@ -62,7 +62,7 @@
   }
 
   &__button:focus {
-    outline: 2px solid var(--color-button-border-focus);
+    border: 2px solid var(--color-button-border-focus);
     outline-offset: -2px;
     box-shadow: 0 3px 5px 1px var(--color-lighter-gray);
   }
@@ -78,7 +78,7 @@
   }
 
   &__link {
-    margin-top: 5px;
+    margin-top: 10px;
     text-decoration: none;
     color: var(--color-link-value);
     font-size: 16px;
@@ -114,11 +114,12 @@
   &__input {
     padding: 10px 20px;
     border: none;
-    outline: 2px solid var(--color-input-border);
+    border: 2px solid var(--color-input-border);
     outline-offset: -2px;
     border-radius: 8px;
     font-size: 16px;
     color: inherit;
+    background-color: var(--color-feed-card-background);
   }
 
   &__input:disabled {
