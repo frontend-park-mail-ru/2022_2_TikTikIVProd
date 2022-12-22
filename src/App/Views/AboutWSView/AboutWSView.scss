@@ -2,6 +2,8 @@
     overflow: auto;
     height: 100%;
 
+    padding-bottom: 20px;
+
     /* DEMO-SPECIFIC STYLES */
     .typewriter h1 {
         display: block;
@@ -59,7 +61,7 @@
 
     .info-flex {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         flex-wrap: wrap;
         margin: 40px;
     }
@@ -108,11 +110,6 @@
         }
 
     }
-
-    .info-block:hover {
-        transform: scale(1.1);
-    }
-
 
     .description {
         margin: 25px;
