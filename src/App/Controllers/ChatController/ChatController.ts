@@ -15,14 +15,8 @@ export interface IChatData {
 }
 
 export interface IMessageData {
-    user: {
-        first_name: string;
-        last_name: string;
-        avatar: string;
-        id: string | number;
-    };
-    text: string;
-    date: string;
+    user: IUser,
+    msg: IMessage,
 }
 
 export interface IChatNavbar {
@@ -139,6 +133,7 @@ class ChatController extends
             body: text,
             receiver_id: Number(this.userId),
             dialog_id: Number(this.dialogId),
+            sender_id: this.model.user.getCurrentUser()?.id ?? 0,
             attachments: attachmens,
             // sticker: 0,
         };
@@ -253,20 +248,22 @@ class ChatController extends
             data = ndata;
         }
 
-        const msgs: IMessageData[] = [];
+        const msgs = [];
         for (let i = 0; i < data.length; i++) {
             const item = data[i];
             const user = await this.model.user.getUser(item.sender_id);
-            const formatted: IMessageData = {
-                user: {
-                    avatar: user.avatar ?? config.default_img,
-                    first_name: user.first_name ?? 'Капи',
-                    last_name: user.last_name ?? 'Неопознаный',
-                    id: user.id ?? 0,
-                },
-                text: item.body ?? 'Здесь было сообщение...',
-                date: dateParser(item.created_at),
-            };
+            const formatted = { msg: item, user: user };
+            // : IMessageData = {
+            //     user: {
+            //         avatar: user.avatar ?? '../src/img/default_avatar.png',
+            //         first_name: user.first_name ?? 'Капи',
+            //         last_name: user.last_name ?? 'Неопознаный',
+            //         id: user.id ?? 0,
+            //     },
+            //     text: item.body ?? 'Здесь было сообщение...',
+            //     date: dateParser(item.created_at),
+            // };
+
             msgs.push(formatted);
         }
         this.view.pushMessages(msgs);

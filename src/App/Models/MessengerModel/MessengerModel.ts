@@ -1,5 +1,6 @@
 import ajax, { checkResponseStatus } from "../../Ajax/Ajax";
 import config from "../../Configs/Config";
+import dateParser from "../../Utils/DateParser/DateParser";
 import ImageUploadModel, { IImage } from "../ImageModel/ImageModel";
 import IModel from "../IModel/IModel"
 
@@ -28,6 +29,7 @@ export interface IDialog {
 export interface IMessageNew {
     dialog_id: number;
     receiver_id: number;
+    sender_id ?: number;
     attachments: IImage[];
     sticker?: number,
     body?: string;
@@ -41,11 +43,11 @@ class MessengerModel extends IModel {
         this.websockets = new Map<string, WebSocket>();//= [];
     }
 
-    private parseMessage(json: any): IMessage {
+    static parseMessage(json: any): IMessage {
         return {
             id: json.id,
             body: json.body,
-            created_at: json.created_at,
+            created_at: dateParser(json.created_at),
             dialog_id: json.dialog_id,
             receiver_id: json.receiver_id,
             sender_id: json.sender_id,
@@ -56,7 +58,7 @@ class MessengerModel extends IModel {
 
     private parseMessages(json: any): IMessage[] {
         return json.map((rawMsg: any) => {
-            return this.parseMessage(rawMsg);
+            return MessengerModel.parseMessage(rawMsg);
         });
     }
 
@@ -110,7 +112,6 @@ class MessengerModel extends IModel {
         const _ = await ajax(conf);
 
         const newSocket = new WebSocket("ws://" + host + "/ws/" + chatId);
-        console.log('socket inited');
         
         if (opts) {
             if (opts.onclose) {
@@ -129,10 +130,8 @@ class MessengerModel extends IModel {
                         const _callback = callback;
                         return (evt: MessageEvent<any>) => {
                             try {
-                                const msg: IMessage = JSON.parse(evt.data);
+                                const msg: IMessage = MessengerModel.parseMessage(JSON.parse(evt.data));//JSON.parse(evt.data);
                                 _callback(msg); //_chatId, 
-                                // // console.log(msg);
-
                             } catch (error) {
                                 console.log(error);
                             }
@@ -153,7 +152,7 @@ class MessengerModel extends IModel {
     public async initChat(message: IMessageNew) {
         const response = await ajax(config.api.chatSend, JSON.stringify(message));
         await checkResponseStatus(response, config.api.chatSend);
-        const msgData = this.parseMessage(response.parsedBody.body);
+        const msgData = MessengerModel.parseMessage(response.parsedBody.body);
         return Promise.resolve(msgData);
     }
 
