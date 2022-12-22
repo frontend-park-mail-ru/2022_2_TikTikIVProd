@@ -1,15 +1,13 @@
 import config from "../../Configs/Config";
 import FeedModel, { IFeedData, IFeedNewPost, IFeedType, INewComment } from "../../Models/FeedModel/FeedModel";
-import ImageUploadModel, { IImage } from "../../Models/ImageModel/ImageModel";
 import { IUser } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
 import debounce from "../../Utils/Debounce/Debounce";
 import { checkScrollEnd } from "../../Utils/Scrollbar/CheckPosition/CheckPosition";
 import throttle from "../../Utils/Throttle/Throttle";
-import AttachmentsUploadView from "../../Views/AttachmentsUploadView/AttachmentsUploadView";
 import FeedView from "../../Views/FeedView/FeedView";
-import AttachmentsUploadController from "../AttachmentsUploadController/AttachmentsUploadController";
+import AttachmentsController from "../AttachmentsController/AttachmentsController";
 import IController from "../IController/IController";
 
 class FeedController extends IController<FeedView, FeedModel> {
@@ -20,14 +18,14 @@ class FeedController extends IController<FeedView, FeedModel> {
     // NEW!!!!!
     private feedType: IFeedType;
     //
-    private newPostAttachmentsController: AttachmentsUploadController;
+    private newPostAttachmentsController: AttachmentsController;
 
     constructor(view: FeedView, model: FeedModel) {
         super(view, model);
         this.currentPage = 0;
         this.feedType = {};
 
-        this.newPostAttachmentsController = new AttachmentsUploadController();
+        this.newPostAttachmentsController = new AttachmentsController();
 
         this.view.bindScrollEvent(throttle(this.handleScroll.bind(this), 250));
         this.view.bindResizeEvent(throttle(this.handleScroll.bind(this), 250));
@@ -87,32 +85,24 @@ class FeedController extends IController<FeedView, FeedModel> {
 
     }
 
-    private submitEditedFeedCard(): void {
-        const content = this.view.getEditedPostData();
+    private async submitEditedFeedCard() {
+        let content = this.view.getEditedPostData();
         if (content.message.replace('\n', ' ').trim() === '') {
             this.view.showErrNewFeedTextEmpty();
             return;
         }
         this.view.hideErrNewFeedTextEmpty();
-
-        // this.model.getPost(content.id)
-        //     .then(oldData => {
-        //         let newData = oldData;
-        //         newData.text = content.text ?? '';
+        content.attachments = await this.newPostAttachmentsController.submitAttachments();
         this.model.sendEditedFeed(content)
             .then(feedCard => {
                 this.view.hideFeedCardCreation();
                 this.view.changePost(feedCard);
             })
-
-            // })
-
             .catch(msg => {
                 console.log(msg);
                 // TODO Post create show err to view
             });
-
-
+            return Promise.resolve();
     }
 
     private deletePost(id: number | string): void {
@@ -274,6 +264,9 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                     this.model.getPost(cardId)
                         .then(feedCard => {
+                            //!!!!!!!!
+                            this.newPostAttachmentsController.loadAttachments(feedCard.attachments);
+                            //!!!!!!!!!
                             this.view.showFeedCardCreation(this.user, this.newPostAttachmentsController.getElement(), feedCard, feedCard.community_id);
                         })
                         .catch(msg => {

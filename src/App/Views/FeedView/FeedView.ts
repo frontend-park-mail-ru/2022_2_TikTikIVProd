@@ -110,6 +110,7 @@ class FeedView extends IView {
             id: Number(id), 
             message: text, 
             community_id: community_id ?  Number(community_id) : 0,
+            attachments: [],
         };
     }
 

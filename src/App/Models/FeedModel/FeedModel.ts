@@ -74,7 +74,7 @@ export interface IFeedCardEditData {
     id: number;
     message: string;
     community_id: number,
-    // attachments: IImage[],
+    attachments: IImage[],
 }
 
 /**
