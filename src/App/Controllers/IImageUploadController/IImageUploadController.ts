@@ -1,4 +1,4 @@
-import ImageUploadModel from '../../Models/ImageUploadModel/ImageUploadModel';
+import ImageUploadModel, { IImage } from '../../Models/ImageModel/ImageModel';
 import IView from '../../Views/IView/IView';
 import IController from '../IController/IController';
 
@@ -25,37 +25,39 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
                 this.imgsStore.set(key, { file: imgs[0], uploaded: false });
                 this.loadImagePreview(key);
                 if (this.autoUpload) {
-                    // console.log('auto upload');
                     this.uploadImage(key);
                 }
             }
         }
     }
 
-    public uploadImage(url: string) {
-        const img = this.imgsStore.get(url);
-        if (!img) {
-            // console.log('No img ', url);
-            return;
+    public async uploadAll() {
+        const imgs: IImage[] = [];
+
+        for (const url of this.imgsStore.keys()) {
+            const img = await this.uploadImage(url);
+            if(!img) return Promise.reject();
+            imgs.push(img);
         }
 
-        if (img.uploaded) {
-            return;
-        }
+        return Promise.resolve(imgs);
+    }
 
-        const data = new FormData();
-        data.append('image', img.file);
-        // console.log(data);
+    public async uploadImage(url: string) {
+        const localImg = this.imgsStore.get(url);
+        if (!localImg || localImg.uploaded) return Promise.resolve();
 
-        this.model.uploadImage(data)
-            .then(({ id }) => {
-                img.uploaded = true;
-                this.onSucceccUpload(id.toString());
-            })
-            .catch(err => {
-                // console.log(err);
-                this.onFailUpload(url);
-            });
+        const fd = new FormData();
+        fd.append('Attachment', localImg.file);
+        try {
+            const remoteImg = await this.model.uploadImage(fd);
+            localImg.uploaded = true;
+            this.onSucceccUpload(remoteImg);
+            return Promise.resolve(remoteImg);
+        } catch (err) {
+            this.onFailUpload(url);
+            return Promise.reject();
+        };
     }
 
     public removeOters(url: string) {
@@ -76,7 +78,7 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
 
             // Copy all besides deleted
             for (let i = 0; i <= this.virtInput.files.length - 1; i++)
-                if (this.virtInput.files[i] !== img.file){
+                if (this.virtInput.files[i] !== img.file) {
                     dt.items.add(this.virtInput.files[i]);
                 }
             // Replace
@@ -102,7 +104,7 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
 
     abstract loadImagePreview(url: string): void;
     abstract loadImageMock(): void;
-    abstract onSucceccUpload(url: string): void;
+    abstract onSucceccUpload(img: IImage): void;
     abstract onFailUpload(url: string): void;
 }
 
