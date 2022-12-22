@@ -740,9 +740,21 @@ const config: IConfig = {
                 },
                 failure: failureDefaultStatuses,
             },
+        },
+
+        stickerById: {
+            url: '/sticker/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Стикер получен',
+                },
+                failure: failureDefaultStatuses,
+            },
         }
-
-
     },
     default_img: '../src/img/default_avatar.png',
 }

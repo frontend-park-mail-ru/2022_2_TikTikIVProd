@@ -22,7 +22,7 @@ import "../../Components/Comment/Comment.scss";
 import commentCreationTemplate from "../../Components/CommentCreate/CommentCreate.hbs";
 import "../../Components/CommentCreate/CommentCreate.scss";
 
-import { IComment, IFeedData } from "../../Models/FeedModel/FeedModel";
+import { IComment, IEditComment, IFeedCardEditData, IFeedData } from "../../Models/FeedModel/FeedModel";
 import IView from "../IView/IView";
 import { IUser } from "../../Models/UserModel/UserModel"
 
@@ -98,18 +98,20 @@ class FeedView extends IView {
     }
 
 
-    public getEditedPostData(): { id: string | undefined, text: string | undefined, community_id: number | undefined } {
+    public getEditedPostData(): IFeedCardEditData {
 
         const form = this.overlay.querySelector('.feed-card-create');
-        if (!form) {
-            // console.log('Post create no form');
-            return { id: undefined, text: undefined, community_id: undefined };
-        }
+        if (!form) throw new Error('cant get feed card creation form');
 
         const id = form?.id;
         const text = (<HTMLTextAreaElement>form.querySelector('.feed-card-create__text')).value;
         const community_id = (<HTMLElement>form)?.dataset['community_id'];
-        return { id: id, text: text, community_id: community_id ? Number(community_id) : undefined };
+        return { 
+            id: Number(id), 
+            message: text, 
+            community_id: community_id ?  Number(community_id) : 0,
+            attachments: [],
+        };
     }
 
     public getNewPostData(): { text: string, community_id: number | undefined } {
@@ -179,12 +181,12 @@ class FeedView extends IView {
     }
 
     public changePost(data: IFeedData): void {
-        const oldCard = this.cards.querySelector(`[id="${data.id}"]`);
+        const oldCard = this.cards.querySelector(`[data-feed_card_id="${data.id}"]`);
         if (!oldCard) {
             return;
         }
         const parser = new DOMParser();
-        const newCard = parser.parseFromString(feedCardTemplate(Object.assign(data, { showTools: true })), 'text/html').querySelector('.feed-card');
+        const newCard = parser.parseFromString(feedCardTemplate(Object.assign(data, { showTools: true, isLiked: data.isLiked, isLikedIcon: data.isLiked })), 'text/html').querySelector('.feed-card');
         if (!newCard) {
             return;
         }
@@ -247,7 +249,7 @@ class FeedView extends IView {
 
         const createArea = newCommentSection.querySelector('.comment-section__creation');
         if (!createArea) return;
-        createArea.innerHTML = commentCreationTemplate({ postId });
+        createArea.innerHTML = commentCreationTemplate({ postId: postId, comment: undefined });
 
         const feedCard = this.cards.querySelector(`[data-feed_card_id="${postId}"]`);
         if (!feedCard) return;
@@ -263,10 +265,80 @@ class FeedView extends IView {
         this.currentOpenedCommentId = postId;
     }
 
+    public changeEditedComment(currentUserId: number | string, data: IComment): void {
+        const commentsSection = this.cards.querySelector(`.comment-section[data-feed_card_id="${data.post_id}"] .comment-section__comment`);
+        if (!commentsSection) return;
+
+        const oldComment = commentsSection.querySelector(`.comment[data-post_id="${data.post_id}" data-id="${data.id}]`);
+        if (!oldComment) return;
+
+        this.currentOpenedCommentId = data.post_id;
+
+        const temp = document.createElement('template');
+        temp.innerHTML = commentTemplate(Object.assign(data, { showTools: data.user_id === currentUserId }));
+
+        const newComment = temp.querySelector('.comment');
+        if (!newComment) return;
+
+        commentsSection.insertBefore(newComment, oldComment);
+        commentsSection.removeChild(oldComment);
+    }
+
+    public editComment(commentId: number | string): void {
+        const comment = this.cards.querySelector(`.comment[data-id="${commentId}"]`);
+        if (!comment) {
+            console.log('no comm');
+            return;
+        }
+        
+        const postId = (<HTMLElement>comment).dataset['post_id'];
+        if (!postId) {
+            console.log('no post id');
+            return;
+        }
+        const text = (<HTMLElement>comment.querySelector('.comment__content')).innerText;
+
+        const creationFormContainer = comment.closest('.comment-section')?.querySelector('.comment-section__creation');
+        if(!creationFormContainer) {
+            console.log('no form cont');
+            return;
+        }
+
+        const creationFormOld = creationFormContainer.querySelector('.comment-create');
+        if (!creationFormOld) {
+            console.log('no old cr form');
+            return;
+        }
+
+        const parser = new DOMParser();
+        const creationFormNew = parser.parseFromString(commentCreationTemplate({ postId: postId, comment: { text: text, id: commentId } }), 'text/html').querySelector('.comment-create');
+        if (!creationFormNew) {
+            console.log('no new cr form');
+            return;
+        }
+
+
+        creationFormContainer.insertBefore(creationFormNew, creationFormOld);
+        creationFormContainer.removeChild(creationFormOld);
+    }
+
     public hideCommentsForFeedCard(postId: number | string): void {
         const commentSection = this.cards.querySelector(`.comment-section[data-feed_card_id="${postId}"]`);
         if (!commentSection) return;
         this.cards.removeChild(commentSection);
+    }
+
+    public getEditedCommentData(postId: number | string): IEditComment {
+        const commentCreate = <HTMLTextAreaElement>this.cards.querySelector(`.comment-create[data-post_id="${postId}"]`);
+
+        const text = (<HTMLTextAreaElement>commentCreate.querySelector('textarea')).value;
+        const id = commentCreate.dataset['comment_id'] ?? '0';
+        const data: IEditComment = {
+            post_id: Number(postId),
+            message: text,
+            id: Number(id),
+        }
+        return data;
     }
 
     public getNewCommentData(postId: number | string): string {

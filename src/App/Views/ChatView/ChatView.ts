@@ -64,7 +64,7 @@ class ChatView extends IView {
     public pushMessages(msgs: IMessageData[]): void {
         msgs.forEach(msg => {
             if(msg.msg.sticker.toString() !== '0') {
-                msg.msg = Object.assign(msg.msg, {sticker_src: config.host + `${config.api.image.url.replace('{:id}', msg.msg.sticker.toString())}`})
+                msg.msg = Object.assign(msg.msg, {sticker_src: config.host + `${config.api.stickerById.url.replace('{:id}', msg.msg.sticker.toString())}`})
                 this.pushSticker(msg);
             } else {
                 this.pushMessage(msg);

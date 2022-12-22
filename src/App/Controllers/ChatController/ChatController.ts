@@ -7,7 +7,7 @@ import router from '../../Router/Router';
 import paths from '../../Router/RouterPaths';
 import dateParser from '../../Utils/DateParser/DateParser';
 import ChatView from '../../Views/ChatView/ChatView';
-import AttachmentsUploadController from '../AttachmentsUploadController/AttachmentsUploadController';
+import AttachmentsController from '../AttachmentsController/AttachmentsController';
 import IController from '../IController/IController';
 import IImageUploadController from '../IImageUploadController/IImageUploadController';
 
@@ -37,7 +37,7 @@ class ChatController extends
 
     private stickers: IImage[] | undefined;
 
-    private msgAttachments: AttachmentsUploadController;
+    private msgAttachments: AttachmentsController;
     constructor(
         view: ChatView, model: { user: UserModel, messenger: MessengerModel }) {
         super(view, model);
@@ -45,7 +45,7 @@ class ChatController extends
         this.isEmptyChat = undefined;
         this.dialogId = undefined;
         this.userId = undefined;
-        this.msgAttachments = new AttachmentsUploadController();
+        this.msgAttachments = new AttachmentsController();
         this.stickers = undefined;
 
         this.view.bindClick(this.handleClick.bind(this));

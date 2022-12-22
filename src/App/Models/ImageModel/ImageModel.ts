@@ -13,6 +13,20 @@ class ImageUploadModel extends IModel {
         super();
     }
 
+    static parseStickers(json: any) : IImage[] {
+        if(!json) return [];
+        
+        const stickers: IImage[] = [];
+        json.forEach((element: any) => {
+            stickers.push({
+                id: element.id,
+                src: config.host+`${config.api.stickerById.url.replace('{:id}', element.id)}`,
+                type: 'image',
+            });
+        });
+        return stickers;
+    }
+
     static parseImages(json: any): IImage[] {
         if(!json) return [];
         
@@ -54,10 +68,20 @@ class ImageUploadModel extends IModel {
         return Promise.resolve(img);
     }
 
+    static async stickerById(id: number | string) {
+        const conf = Object.assign(config.api.stickerById);
+        conf.url = conf.url.replace('{:id}', Number(id));
+
+        const response = await ajax(config.api.stickerById);
+        await checkResponseStatus(response, config.api.stickerById);
+        const sticker = ImageUploadModel.parseStickers(response.parsedBody.body)[0];
+        return Promise.resolve(sticker);
+    }
+
     static async getStickers() {
         const response = await ajax(config.api.stickers);
         await checkResponseStatus(response, config.api.stickers);
-        const stickers = ImageUploadModel.parseImages(response.parsedBody.body);
+        const stickers = ImageUploadModel.parseStickers(response.parsedBody.body);
         return Promise.resolve(stickers);
     }
 };

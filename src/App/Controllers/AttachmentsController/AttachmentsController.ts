@@ -1,14 +1,13 @@
 import ImageUploadModel, { IImage } from "../../Models/ImageModel/ImageModel";
-import UserModel from "../../Models/UserModel/UserModel";
-import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import IImageUploadController from "../IImageUploadController/IImageUploadController";
-import AttachmentsUploadView from "../../Views/AttachmentsUploadView/AttachmentsUploadView"
+import AttachmentsView from "../../Views/AttachmentsView/AttachmentsView"
 
-class AttachmentsUploadController extends IImageUploadController<AttachmentsUploadView> {
-
+class AttachmentsController extends IImageUploadController<AttachmentsView> {
+    private attachmentsStore: Map<string, IImage>
     constructor() {
-        super(new AttachmentsUploadView(document.createElement('template')), new ImageUploadModel());
+        super(new AttachmentsView(document.createElement('template')), new ImageUploadModel());
         this.view.bindClick(this.handleClick.bind(this));
+        this.attachmentsStore = new Map<string, IImage>;
     }
 
     private handleClick(e: Event): void {
@@ -17,15 +16,13 @@ class AttachmentsUploadController extends IImageUploadController<AttachmentsUplo
         const action = target.dataset['action'];
         const src = (<HTMLElement>target.closest('.attachment'))?.dataset['attachment_src'];
         switch (action) {
-            default: {
-                console.log(action);
-                return;
-            }
+            default: return;
             case 'attachment__remove': {
                 if (!src) {
-                    console.log('Cant remove, no sc');
+                    console.log('Cant remove attachment, no scr url');
                     return;
                 }
+
                 this.removeAttachment(src, target);
                 return;
             }
@@ -45,22 +42,49 @@ class AttachmentsUploadController extends IImageUploadController<AttachmentsUplo
         this.openFileDialog();
     }
 
+    public loadAttachmentsByID(ids: string[]) {
+        this.loadAttachments(ImageUploadModel.parseImages(JSON.stringify(ids)));
+    }
+
+    public loadAttachments(imgs: IImage[]) {
+        imgs.forEach(img => {
+            this.attachmentsStore.set(img.src, img);
+            this.view.addPreview(img.src);
+        });
+    }
+
     public removeAttachment(src: string, target?: HTMLElement): void {
         this.view.removePreview(src, target);
-        this.remove(src);
+        if (this.attachmentsStore.has(src)) {
+            // For uploaded
+            this.attachmentsStore.delete(src);
+        } else {
+            // For not uploaded
+            this.remove(src);
+        }
     }
 
     public async submitAttachments() {
+        // Upload new
+        let imgs: IImage[] = [...this.attachmentsStore.values()];
+        console.log('has imgs: ', imgs);
+
         try {
-            const imgs = await this.uploadAll();
-            console.log('all uploaded');
-            this.flush(); // !!!!!
-            this.view.clear();
-            return Promise.resolve(imgs);
+            const newImages = await this.uploadAll();
+            console.log('all new attachments uploaded');
+            this.flush(); // !!!!! Clear blob obj
+            imgs = imgs.concat(newImages);
+            console.log('has imgs: ', imgs);
+
+
         } catch (err) {
             console.log(err);
             return Promise.reject(err);
         }
+
+        this.attachmentsStore.clear(); //!!!!
+        this.view.clear();
+        return Promise.resolve(imgs);
     }
 
 
@@ -83,4 +107,4 @@ class AttachmentsUploadController extends IImageUploadController<AttachmentsUplo
     }
 }
 
-export default AttachmentsUploadController;
+export default AttachmentsController;

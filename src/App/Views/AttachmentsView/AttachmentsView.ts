@@ -1,12 +1,12 @@
 import IView from "../IView/IView";
 
-import attachmentUploadFieldTemplate from "./AttachmentsUploadView.hbs"
-import "./AttachmentsUploadView.scss"
+import attachmentUploadFieldTemplate from "./AttachmentsView.hbs"
+import "./AttachmentsView.scss"
 
 import attachmentTemplate from "../../Components/Attachment/Attachment.hbs"
 import "../../Components/Attachment/Attachment.scss"
 
-class AttachmentsUploadView extends IView {
+class AttachmentsView extends IView {
     constructor(parent: HTMLElement) {
         super(parent, attachmentUploadFieldTemplate({}), '.attachments-container');
     }
@@ -43,4 +43,4 @@ class AttachmentsUploadView extends IView {
 
 }
 
-export default AttachmentsUploadView;
+export default AttachmentsView;
