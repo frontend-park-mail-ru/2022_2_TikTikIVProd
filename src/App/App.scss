@@ -24,4 +24,53 @@ body {
         font-family: Helvetica, Arial, sans-serif;
         resize: none;
     }
+
+    // УДАЛЕНИЕ PLACEHOLDER ПРИ ФОКУСЕ
+    input:focus::-webkit-input-placeholder {
+        /* WebKit browsers */
+        color: transparent;
+    }
+
+    input:focus:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: transparent;
+    }
+
+    input:focus::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: transparent;
+    }
+
+    input:focus:-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: transparent;
+    }
+
+    input:focus::placeholder {
+        color: transparent;
+    }
+
+    textarea:focus::-webkit-input-placeholder {
+        /* WebKit browsers */
+        color: transparent;
+    }
+
+    textarea:focus:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: transparent;
+    }
+
+    textarea:focus::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: transparent;
+    }
+
+    textarea:focus:-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: transparent;
+    }
+
+    textarea:focus::placeholder {
+        color: transparent;
+    }
 }
