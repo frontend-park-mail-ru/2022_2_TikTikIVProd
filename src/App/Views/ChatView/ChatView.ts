@@ -36,6 +36,10 @@ class ChatView extends IView {
         const smiles = smilesTemplate();
         this.footer.innerHTML = messageCreateTemplate({ smiles });
         this.parent.appendChild(this.element);
+        const attachments = this.footer.querySelector('.message-create__attachments');
+        if(!attachments) return;
+        attachments.appendChild(opts);
+
     }
 
     public bindKeyClick(callback: Function): void {

@@ -192,10 +192,24 @@ class FeedView extends IView {
         this.cards.removeChild(oldCard);
     }
 
-    public showFeedCardCreation(user: IUser, exsData?: IFeedData, community_id?: string | number | undefined): void {
+    public showFeedCardCreation(user: IUser, attachmentsElement: HTMLElement, exsData?: IFeedData, community_id?: string | number | undefined): void {
         const smiles = smilesTemplate();
-        this.overlay.innerHTML = feedCardCreationTemplate({ user: user, data: exsData, community_id: community_id, smiles: smiles });
+        this.overlay.innerHTML = feedCardCreationTemplate({
+            user: user,
+            data: exsData,
+            community_id: community_id,
+            smiles: smiles
+        });
+
         this.overlay.style.visibility = 'visible';
+
+        // 
+        const attachments = this.overlay.querySelector('.feed-card-create__attachments');
+        if (!attachments) return;
+
+        attachments.appendChild(attachmentsElement);
+        //
+
     }
 
     public hideFeedCardCreation(): void {

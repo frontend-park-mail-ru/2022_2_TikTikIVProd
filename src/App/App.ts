@@ -30,7 +30,7 @@ import FooterController from "./Controllers/FooterController/FooterController";
 import UserModel from "./Models/UserModel/UserModel";
 import FeedModel from "./Models/FeedModel/FeedModel";
 import MessengerModel from "./Models/MessengerModel/MessengerModel";
-import ImageUploadModel from "./Models/ImageUploadModel/ImageUploadModel";
+import ImageUploadModel from "./Models/ImageModel/ImageModel";
 
 
 import ProfileController from "./Controllers/ProfileController/ProfileController";
@@ -349,7 +349,7 @@ class App {
                 }
 
                 const userId = data[0];
-                this.chatController.mountComponent({ userId: userId });
+                this.chatController.mountComponent({ byUserId: userId.toString() });
             })
             .catch(() => {
                 router.goToPath(paths.signinPage);

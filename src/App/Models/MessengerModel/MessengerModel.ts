@@ -1,5 +1,6 @@
 import ajax, { checkResponseStatus } from "../../Ajax/Ajax";
 import config from "../../Configs/Config";
+import ImageUploadModel, { IImage } from "../ImageModel/ImageModel";
 import IModel from "../IModel/IModel"
 
 // Message
@@ -9,7 +10,10 @@ export interface IMessage {
     dialog_id: number;
     id: number;
     receiver_id: number;
-    sender_id: number
+    sender_id: number;
+    attachments: IImage[];
+
+    sticker: number;
 }
 
 // GET Dialogs
@@ -22,9 +26,11 @@ export interface IDialog {
 
 // send new msg
 export interface IMessageNew {
-    body: string;
     dialog_id: number;
     receiver_id: number;
+    attachments: IImage[];
+    sticker?: number,
+    body?: string;
 }
 
 class MessengerModel extends IModel {
@@ -43,6 +49,8 @@ class MessengerModel extends IModel {
             dialog_id: json.dialog_id,
             receiver_id: json.receiver_id,
             sender_id: json.sender_id,
+            attachments: ImageUploadModel.parseImages(json.attachments),
+            sticker: json.sticker,
         };
     }
 
@@ -102,7 +110,8 @@ class MessengerModel extends IModel {
         const _ = await ajax(conf);
 
         const newSocket = new WebSocket("ws://" + host + "/ws/" + chatId);
-
+        console.log('socket inited');
+        
         if (opts) {
             if (opts.onclose) {
                 newSocket.onclose = (function (this: any, chatId: string | number, callback: Function) {
@@ -141,22 +150,17 @@ class MessengerModel extends IModel {
         this.websockets.delete(chatId.toString());
     }
 
-    public async initChat(msg: string, userId: string | number) {
-        const response = await ajax(config.api.chatSend, JSON.stringify({ body: msg, receiver_id: Number(userId) }));
+    public async initChat(message: IMessageNew) {
+        const response = await ajax(config.api.chatSend, JSON.stringify(message));
         await checkResponseStatus(response, config.api.chatSend);
         const msgData = this.parseMessage(response.parsedBody.body);
         return Promise.resolve(msgData);
     }
 
-    public sendMessage(dialogId: string | number, text: string, sender_id: string | number, receiver_id: string | number) {
-        const ws = this.websockets.get(dialogId.toString());
+    public sendMessage(message: IMessageNew) {
+        const ws = this.websockets.get(message.dialog_id.toString());
         if (!ws) return;
-
-        ws.send(JSON.stringify({
-            body: text,
-            sender_id: Number(sender_id),
-            receiver_id: Number(receiver_id),
-        }));
+        ws.send(JSON.stringify(message));
     }
 
     public async checkChatExist(userId: string | number) {

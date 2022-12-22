@@ -2,6 +2,7 @@ import config, { IApiItem } from "../../Configs/Config";
 import ajax, { checkResponseStatus } from "../../Ajax/Ajax";
 import IModel from "../IModel/IModel"
 import dateParser from "../../Utils/DateParser/DateParser";
+import ImageUploadModel, { IImage } from "../ImageModel/ImageModel";
 
 export interface INewComment {
     message: string;
@@ -25,7 +26,6 @@ export interface IFeedType {
     group?: { id: string | number },
     // Если пустой, то общий фид
 }
-
 
 /**
  * Интерфейс данных, содержащихся в посте в ленте
@@ -54,16 +54,15 @@ export interface IFeedData {
     text: string;
     likes: number;
     isLiked: string;
-    attachments: { src: string }[];
+    attachments: IImage[];
     community_id: number,
 }
 
 export interface IFeedNewPost {
-    images: { src: string }[];
     message: string;
-    id?: number; //TODO
 
     community_id: number,
+    attachments: IImage[],
 }
 
 /**
@@ -78,7 +77,12 @@ class FeedModel extends IModel {
 
     private parseComment(json: any): IComment {
         return {
-            avatar_id: json.avatar_id === 0 ? config.default_img : `${config.host}${config.api.image.url}/${json.avatar_id}`,
+            avatar_id: json.avatar_id === 0
+                ?
+                config.default_img
+                :
+                config.host + `${config.api.image.url.replace('{:id}', json.avatar_id)}`,
+
             create_date: dateParser(json.create_date),
             id: json.id,
             message: json.message,
@@ -100,7 +104,10 @@ class FeedModel extends IModel {
             id: json.id,
             author: {
                 url: '',
-                avatar: json.avatar_id === 0 ? config.default_img : `${config.host}${config.api.image.url}/${json.avatar_id}`,
+                avatar: json.avatar_id === 0
+                    ? config.default_img
+                    :
+                    config.host + `${config.api.image.url.replace('{:id}', json.avatar_id)}`,
                 first_name: json.user_first_name,
                 last_name: json.user_last_name,
                 id: json.user_id,
@@ -109,7 +116,8 @@ class FeedModel extends IModel {
             text: json.message,
             likes: json.count_likes,
             isLiked: json.is_liked ? "liked" : "unliked",
-            attachments: json.attachment ? json.attachments.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }) : [],
+            attachments: ImageUploadModel.parseImages(json.attachments),
+
             community_id: json.community_id,
         };
     }
@@ -146,7 +154,7 @@ class FeedModel extends IModel {
         return Promise.resolve(feedCards);
     }
 
-    public async sendEditedFeed(data: IFeedNewPost) {
+    public async sendEditedFeed(data: IFeedData) {
         const response = await ajax(config.api.postEdit, JSON.stringify(data));
         await checkResponseStatus(response, config.api.postEdit);
         const feedCard = this.parseFeedCard(response.parsedBody.body);

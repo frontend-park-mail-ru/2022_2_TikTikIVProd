@@ -12,6 +12,17 @@ class ImageUploadModel extends IModel {
         super();
     }
 
+    static parseImages(json: any): IImage[] {
+        const attachments: IImage[] = [];
+        json.forEach((element: any) => {
+            attachments.push({
+                id: element.id,
+                src: config.host+`${config.api.image.url.replace('{:id}', element.id)}`
+            });
+        });
+        return attachments;
+    }
+
     // public async getImage(id: string | number) {
 
     //     let conf = Object.assign({}, config.api.image);
@@ -33,7 +44,7 @@ class ImageUploadModel extends IModel {
         await checkResponseStatus(response, config.api.imageUpload);
         const img: IImage = {
             id: response.parsedBody.body.id,
-            src: config.host + config.api.image.url + '/' + response.parsedBody.body.id,
+            src: config.host + `${config.api.image.url.replace('{:id}', response.parsedBody.body.id)}`,
         };
         return Promise.resolve(img);
     }
