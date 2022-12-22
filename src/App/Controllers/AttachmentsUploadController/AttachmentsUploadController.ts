@@ -51,9 +51,16 @@ class AttachmentsUploadController extends IImageUploadController<AttachmentsUplo
     }
 
     public async submitAttachments() {
-        const imgs = await this.uploadAll();
-        this.view.clear();
-        return Promise.resolve(imgs);
+        try {
+            const imgs = await this.uploadAll();
+            console.log('all uploaded');
+            this.flush(); // !!!!!
+            this.view.clear();
+            return Promise.resolve(imgs);
+        } catch (err) {
+            console.log(err);
+            return Promise.reject(err);
+        }
     }
 
 

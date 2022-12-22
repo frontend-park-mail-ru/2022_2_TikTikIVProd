@@ -44,6 +44,10 @@
         width: 0;
         height: 0;
     }
+
+    &--err {
+        border: 2px solid red;
+    }
 }
 
 .message-create-button {
