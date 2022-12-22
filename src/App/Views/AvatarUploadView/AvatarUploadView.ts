@@ -8,13 +8,15 @@ class AvatarUploadView extends IView {
     public preview: HTMLImageElement;
     private tools: HTMLElement;
 
-    constructor(parent: HTMLElement) {
-        super(parent, avatarUploadTemplate({}), '.avatar-upload__wrapper');
-        // // console.log(this.element);
-
+    constructor() {
+        super(document.createElement('template'), avatarUploadTemplate({}), '.avatar-upload__wrapper');
         this.mock = <HTMLElement>this.element.querySelector('.avatar-upload-mock');
         this.preview = <HTMLImageElement>this.element.querySelector('.avatar-upload__preview');
         this.tools = <HTMLElement>this.element.querySelector('.avatar-upload__tools');
+    }
+
+    public getElement() : HTMLElement {
+        return this.element;
     }
 
     public bindClick(callback: Function): void {

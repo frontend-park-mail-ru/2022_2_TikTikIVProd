@@ -89,18 +89,23 @@ class FeedController extends IController<FeedView, FeedModel> {
 
     private submitEditedFeedCard(): void {
         const content = this.view.getEditedPostData();
-        if (!content.id || !content.text || content.text.length < 1) return;
-        this.model.getPost(content.id)
-            .then(oldData => {
-                let newData = oldData;
-                newData.text = content.text ?? '';
-                this.model.sendEditedFeed(newData)
-                    .then(feedCard => {
-                        this.view.hideFeedCardCreation();
-                        this.view.changePost(feedCard);
-                    })
+        if (content.message.replace('\n', ' ').trim() === '') {
+            this.view.showErrNewFeedTextEmpty();
+            return;
+        }
+        this.view.hideErrNewFeedTextEmpty();
 
+        // this.model.getPost(content.id)
+        //     .then(oldData => {
+        //         let newData = oldData;
+        //         newData.text = content.text ?? '';
+        this.model.sendEditedFeed(content)
+            .then(feedCard => {
+                this.view.hideFeedCardCreation();
+                this.view.changePost(feedCard);
             })
+
+            // })
 
             .catch(msg => {
                 console.log(msg);
@@ -320,7 +325,19 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'comment_edit': {
-                    console.log('edit');
+                    console.log('comment_edit');
+                    const commentId = (<HTMLElement>target.closest('.comment'))?.dataset['id'];
+                    console.log(cardId, commentId);
+
+                    if (!commentId || !cardId) return;
+                    this.editComment(commentId);
+                    return;
+                }
+
+                case 'submit_edited_comment': {
+                    console.log('submit_edited_comment');
+                    if (!cardId) return;
+                    this.sendEditedComment(cardId);
                     return;
                 }
 
@@ -344,6 +361,10 @@ class FeedController extends IController<FeedView, FeedModel> {
         }
     }
 
+    private editComment(commentId: number | string): void {
+        this.view.editComment(commentId);
+    }
+
     private handleKeyClick(event: KeyboardEvent): void {
         if (event.key === 'Enter' && event.ctrlKey) {
             event.preventDefault();
@@ -365,7 +386,7 @@ class FeedController extends IController<FeedView, FeedModel> {
             };
             console.log(newComment);
 
-            this.model.addComment(cardId, newComment)
+            this.model.addComment(newComment)
                 .then(comment => {
                     console.log(comment);
                     this.view.pushCommentToFeedCard(cardId, this.user.id, comment);
@@ -426,18 +447,30 @@ class FeedController extends IController<FeedView, FeedModel> {
             });
     }
 
+
+    private sendEditedComment(cardId: number | string) {
+        const data = this.view.getEditedCommentData(cardId);
+        this.model.editComment(data)
+            .then(comment => {
+                console.log(comment);
+                this.view.changeEditedComment(this.user.id, comment);
+                this.view.clearCommentCreation(comment.post_id);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
     private sendNewComment(cardId: number | string): void {
         const text = this.view.getNewCommentData(cardId);
         const newComment: INewComment = {
             message: text,
             post_id: Number(cardId),
         };
-        console.log(newComment);
-
-        this.model.addComment(cardId, newComment)
+        this.model.addComment(newComment)
             .then(comment => {
                 console.log(comment);
                 this.view.pushCommentToFeedCard(cardId, this.user.id, comment);
+                this.view.clearCommentCreation(comment.post_id);
             })
             .catch(err => {
                 console.log(err);

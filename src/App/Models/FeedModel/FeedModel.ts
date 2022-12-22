@@ -9,6 +9,12 @@ export interface INewComment {
     post_id: number;
 }
 
+export interface IEditComment {
+    message: string;
+    post_id: number;
+    id: number;
+}
+
 export interface IComment {
     avatar_id: string,
     create_date: string;
@@ -60,9 +66,15 @@ export interface IFeedData {
 
 export interface IFeedNewPost {
     message: string;
-
     community_id: number,
     attachments: IImage[],
+}
+
+export interface IFeedCardEditData {
+    id: number;
+    message: string;
+    community_id: number,
+    // attachments: IImage[],
 }
 
 /**
@@ -154,7 +166,7 @@ class FeedModel extends IModel {
         return Promise.resolve(feedCards);
     }
 
-    public async sendEditedFeed(data: IFeedData) {
+    public async sendEditedFeed(data: IFeedCardEditData) {
         const response = await ajax(config.api.postEdit, JSON.stringify(data));
         await checkResponseStatus(response, config.api.postEdit);
         const feedCard = this.parseFeedCard(response.parsedBody.body);
@@ -219,10 +231,10 @@ class FeedModel extends IModel {
     }
 
 
-    public async addComment(postID: number | string, content: INewComment) {
+    public async addComment(data: INewComment) {
         let conf = Object.assign({}, config.api.addComment);
-        conf.url = conf.url.replace('{:id}', postID.toString());
-        let response = await ajax(conf, JSON.stringify(content));
+        conf.url = conf.url.replace('{:id}', data.post_id.toString());
+        let response = await ajax(conf, JSON.stringify(data));
         await checkResponseStatus(response, conf);
         const comment = this.parseComment(response.parsedBody.body);
         return Promise.resolve(comment);
@@ -243,6 +255,15 @@ class FeedModel extends IModel {
         await checkResponseStatus(response, conf);
         const comments: IComment[] = this.parseComments(response.parsedBody.body);
         return Promise.resolve(comments);
+    } 
+    
+    public async editComment(data: IEditComment) {
+        let conf = Object.assign({}, config.api.editComment);
+        conf.url = conf.url.replace('{:id}', data.post_id.toString());
+        let response = await ajax(conf, JSON.stringify(data));
+        await checkResponseStatus(response, conf);
+        const comment = this.parseComment(response.parsedBody.body);
+        return Promise.resolve(comment);
     }
 }
 

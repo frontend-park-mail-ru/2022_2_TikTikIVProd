@@ -6,14 +6,17 @@ import IImageUploadController from "../IImageUploadController/IImageUploadContro
 
 class AvatarUploadController extends IImageUploadController<AvatarUploadView> {
     private userModel : UserModel;
-
-    constructor(view: AvatarUploadView, models: {images: ImageUploadModel, user: UserModel}) {
-        super(view, models.images);
-        this.userModel = models.user;
+    constructor(model: UserModel) {
+        super(new AvatarUploadView(), new ImageUploadModel());
+        this.userModel = model;
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         this.view.bindClick(this.handleClick.bind(this));
     }
 
+    public getElement() : HTMLElement {
+        return this.view.getElement();
+    }
+    
     public handleClick(e: Event): void {
         const target = <HTMLElement>e.target;
         const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];

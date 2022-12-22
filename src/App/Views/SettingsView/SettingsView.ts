@@ -7,6 +7,7 @@ import "./SettingsView.scss"
 import settingsFormTemplate from "../../Components/SettingsForm/SettingsForm.hbs"
 import "../../Components/SettingsForm/SettingsForm.scss"
 import AvatarUploadView from "../AvatarUploadView/AvatarUploadView";
+import { IUser } from "../../Models/UserModel/UserModel";
 
 /**
  * Отображение для настроек пользователя
@@ -26,12 +27,13 @@ class SettingsView extends IView{
      * @param  {?any} opts - Аргументы
      * @return {void}
      */
-    public show(opts?: any): void {
-        // TODO avatar upload;
+    public show(opts?: {user: IUser, avatarUploadElement: HTMLElement}): void {
+        if(!opts) return;
         this.element.innerHTML = '';
-
-        this.element.innerHTML += settingsFormTemplate({data: opts, config: settingsViewConfig});
-
+        const tmp = document.createElement('template');
+        tmp.innerHTML += settingsFormTemplate({data: opts.user, config: settingsViewConfig});
+        this.element.appendChild(opts.avatarUploadElement);
+        this.element.appendChild(tmp.content);
         this.parent.appendChild(this.element);
     }
     
