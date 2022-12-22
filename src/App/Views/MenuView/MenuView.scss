@@ -78,6 +78,17 @@
         background-color: var(--color-menu-item-background-hover);
     }
 
+    @media screen and (max-device-width: 700px),
+    screen and (max-width: 700px) {
+        &:hover {
+            background-color: none;
+        }
+
+        &:focus {
+            background-color: var(--color-menu-item-background-hover);
+        }
+    }
+
     &--active {
         color: var(--color-menu-item-text-active);
     }

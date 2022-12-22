@@ -48,6 +48,10 @@
     &--err {
         border: 2px solid red;
     }
+
+    &__attachments {
+        margin-top: 5px;
+    }
 }
 
 .message-create-button {

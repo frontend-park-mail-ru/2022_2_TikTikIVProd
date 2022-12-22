@@ -11,8 +11,8 @@ import IController from "../IController/IController";
  * @extends {IController}
  * @param  {CommunityView} view Объект вида компонента сообщества
  */
-class CommunityController extends IController<CommunityView, {community: CommunityModel, user : UserModel}> {
-    constructor(view: CommunityView, models:  {community: CommunityModel, user : UserModel}) {
+class CommunityController extends IController<CommunityView, { community: CommunityModel, user: UserModel }> {
+    constructor(view: CommunityView, models: { community: CommunityModel, user: UserModel }) {
         super(view, models);
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         this.view.bindClick(this.onClick.bind(this));
@@ -24,25 +24,25 @@ class CommunityController extends IController<CommunityView, {community: Communi
             this.isMounted = true;
         }
 
-        if(communityId){
+        if (communityId) {
             const currentUser = this.model.user.getCurrentUser();
-            
-            this.model.community.get(communityId)
-            .then(communityData => {
-                let navbarParams : ICommunityNavbaParams = {
-                    isAdmin: false,
-                    isMember: false,
-                };
 
-                if(currentUser) { 
-                    navbarParams.isAdmin = communityData.owner_id === currentUser.id ? true : false;
-                }
-                this.view.setCommunityData(communityData);
-                this.view.setCommunityNavbar(navbarParams);
-            })
-            .catch(msg => {
-                console.log(msg);
-            });
+            this.model.community.get(communityId)
+                .then(communityData => {
+                    let navbarParams: ICommunityNavbaParams = {
+                        isAdmin: false,
+                        isMember: false,
+                    };
+
+                    if (currentUser) {
+                        navbarParams.isAdmin = communityData.owner_id === currentUser.id ? true : false;
+                    }
+                    this.view.setCommunityData(communityData);
+                    this.view.setCommunityNavbar(navbarParams);
+                })
+                .catch(msg => {
+                    console.log(msg);
+                });
         }
     }
 
@@ -111,7 +111,7 @@ class CommunityController extends IController<CommunityView, {community: Communi
                     return;
                 }
 
-                let params: ICommunityEditData = Object.assign({id: Number(communityId)}, Object.fromEntries(data));
+                let params: ICommunityEditData = Object.assign({ id: Number(communityId) }, Object.fromEntries(data));
                 this.model.community.edit(params)
                     .then(communityData => {
                         this.view.setCommunityData(communityData);

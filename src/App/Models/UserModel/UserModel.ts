@@ -124,7 +124,7 @@ class UserModel extends IModel {
     public async signInUser(authData: IUserSignIn) {
         const response = await ajax(config.api.signin, JSON.stringify(authData));
         try {
-            await checkResponseStatus(response, config.api.signInUser);
+            await checkResponseStatus(response, config.api.signin);
             const userData = this.parseUser(response.parsedBody.body);
             this.currentUser = userData;
         }
@@ -132,6 +132,9 @@ class UserModel extends IModel {
             this.currentUser = null;
         }
         EventDispatcher.emit('user-changed', this.currentUser);
+
+        if (this.currentUser === null)
+            return Promise.reject(response.parsedBody.message);
     }
 
     /**
@@ -143,7 +146,7 @@ class UserModel extends IModel {
     public async signUpUser(user: IUserSignUp) {
         const response = await ajax(config.api.signup, JSON.stringify(user));
         try {
-            await checkResponseStatus(response, config.api.signUpUser);
+            await checkResponseStatus(response, config.api.signup);
             const userData = this.parseUser(response.parsedBody.body);
             this.currentUser = userData;
         }
@@ -151,6 +154,9 @@ class UserModel extends IModel {
             this.currentUser = null;
         }
         EventDispatcher.emit('user-changed', this.currentUser);
+
+        if (this.currentUser === null)
+            return Promise.reject(response.parsedBody.message);
     }
 
     public async getUser(id: number | string) {

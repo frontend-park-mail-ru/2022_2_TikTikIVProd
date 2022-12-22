@@ -36,5 +36,7 @@
     &__description {
         font-size: 14px;
         color: var(--color-profile-name);
+        word-break: break-word;
+        padding-right: 10px;
     }
 }

@@ -41,6 +41,8 @@
         overflow-x: hidden;
         overflow-y: overlay;
 
+        padding-bottom: var(--big-gap-beetween-blocks);
+
         @media screen and (max-device-width:799px) {
             &::-webkit-scrollbar {
                 display: none;

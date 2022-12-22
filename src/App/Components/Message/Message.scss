@@ -31,7 +31,16 @@
         white-space: pre-line;
     }
 
-    &__attachments {}
+    &__attachments {
+        &__img {
+            width: 50%;
+
+            @media screen and (max-device-width: 800px),
+            screen and (max-width: 800px) {
+                width: 100%;
+            }
+        }
+    }
 }
 
 .author-message {
@@ -53,7 +62,7 @@
         height: 30px;
         width: 30px;
         object-fit: cover;
-        // background-color: gray;
+        background-color: var(--color-profile-img-background);
         border: 1px solid darken($color: gray, $amount: 10);
         outline-offset: -1px;
         cursor: pointer;

@@ -80,7 +80,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
         const feedCard = await this.model.sendNewFeed(feedCardData)
         this.view.hideFeedCardCreation();
-        this.view.pushContentToFeed(feedCard, this.user.id);
+        this.view.pushContentToFeedUp(feedCard, this.user.id);
         return Promise.resolve();
 
     }
@@ -102,7 +102,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                 console.log(msg);
                 // TODO Post create show err to view
             });
-            return Promise.resolve();
+        return Promise.resolve();
     }
 
     private deletePost(id: number | string): void {
@@ -341,9 +341,18 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                 case 'smile': {
                     // ОБРАБОТКА СМАЙЛОВ
-                    const currentMessage = document.querySelector('textarea');
-                    if (currentMessage !== null && currentMessage !== undefined) {
-                        currentMessage.value += target.innerText;
+                    const overlay = document.getElementsByClassName("feed-card-create")[0];
+                    if (overlay !== undefined && overlay !== null) {
+                        const currentMessage = overlay.querySelector('textarea');
+                        if (currentMessage !== null && currentMessage !== undefined) {
+                            currentMessage.value += target.innerText;
+                        }
+                    }
+                    else {
+                        const currentMessage = document.querySelector('textarea');
+                        if (currentMessage !== null && currentMessage !== undefined) {
+                            currentMessage.value += target.innerText;
+                        }
                     }
                 }
 
@@ -359,39 +368,62 @@ class FeedController extends IController<FeedView, FeedModel> {
     }
 
     private handleKeyClick(event: KeyboardEvent): void {
+        const overlay = document.getElementsByClassName("feed-card-create")[0];
         if (event.key === 'Enter' && event.ctrlKey) {
             event.preventDefault();
-            const currentMessage = document.querySelector('textarea');
-            if (currentMessage !== null && currentMessage !== undefined) {
-                currentMessage.value += '\n';
+            if (overlay !== undefined && overlay !== null) {
+                const currentMessage = overlay.querySelector('textarea');
+                if (currentMessage !== null && currentMessage !== undefined) {
+                    currentMessage.value += '\n';
+                }
+            }
+            else {
+                const currentMessage = document.querySelector('textarea');
+                if (currentMessage !== null && currentMessage !== undefined) {
+                    currentMessage.value += '\n';
+                }
             }
         }
         else if (event.key === 'Enter') {
             event.preventDefault();
-            const currentMessage = document.querySelector('textarea');
-            if (currentMessage === null || currentMessage === undefined) return;
-            const cardId = (<HTMLElement>currentMessage.closest("[data-feed_card_id"))?.dataset['feed_card_id'];
-            if (!cardId) return;
-            const text = this.view.getNewCommentData(cardId);
-            const newComment: INewComment = {
-                message: text,
-                post_id: Number(cardId),
-            };
-            console.log(newComment);
-
-            this.model.addComment(newComment)
-                .then(comment => {
-                    console.log(comment);
-                    this.view.pushCommentToFeedCard(cardId, this.user.id, comment);
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-            return;
+            if (overlay !== undefined && overlay !== null) {
+                if (overlay.querySelector('[data-action="sumbit_edited_post"]')) {
+                    this.submitEditedFeedCard();
+                }
+                else {
+                    this.submitNewFeedCard()
+                        .then((msg) => {
+                            console.log('submitted', msg);
+                        })
+                        .catch((err) => {
+                            console.log('err', err);
+                        });
+                }
+            }
+            else {
+                const currentMessage = document.querySelector('textarea');
+                if (currentMessage === null || currentMessage === undefined) return;
+                const cardId = (<HTMLElement>currentMessage.closest("[data-feed_card_id"))?.dataset['feed_card_id'];
+                if (!cardId) return;
+                const text = this.view.getNewCommentData(cardId);
+                const newComment: INewComment = {
+                    message: text,
+                    post_id: Number(cardId),
+                };
+                this.model.addComment(cardId, newComment)
+                    .then(comment => {
+                        console.log(comment);
+                        this.view.pushCommentToFeedCard(cardId, this.user.id, comment);
+                        const area = document.querySelector("textarea");
+                        if (area !== null) area.value = "";
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
         }
         else if (event.key === "Esc" || event.key === "Escape") {
             this.view.hideFeedCardCreation();
-            return;
         }
     }
 
