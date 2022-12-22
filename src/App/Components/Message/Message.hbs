@@ -3,14 +3,16 @@
     <div class="message__wrapper">
         <div class="author-message__name"  data-action="user_profile" data-user_id="{{user.id}}">{{user.first_name}} {{user.last_name}}</div>
         <div class="message__date">
-            {{date}}
+            {{msg.created_at}}
         </div>
         <div class="message__content">
             <div class="message__text">
-                {{text}}
+                {{msg.body}}
             </div>
             <div class="message__attachments">
-
+                {{#each msg.attachments as |attachment|}}
+                    <img src="{{attachment.src}}" alt="" style="height: 50px;">
+                {{/each}}
             </div>
         </div>
     </div>

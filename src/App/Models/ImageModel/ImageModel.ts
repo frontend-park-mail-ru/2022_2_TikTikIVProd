@@ -13,6 +13,8 @@ class ImageUploadModel extends IModel {
     }
 
     static parseImages(json: any): IImage[] {
+        if(!json) return [];
+        
         const attachments: IImage[] = [];
         json.forEach((element: any) => {
             attachments.push({
