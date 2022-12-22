@@ -38,11 +38,12 @@
     &__buttons {
         display: flex;
         gap: 5px;
+        margin-left: 10px;
     }
 
     &__button {
         object-fit: contain;
-        width: 25px;
+        width: 20px;
         height: auto;
         cursor: pointer;
         filter: var(--current-theme-invert-value);

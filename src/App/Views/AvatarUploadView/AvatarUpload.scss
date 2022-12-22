@@ -12,6 +12,8 @@
     background-color: var(--color-feed-card-background);
     border-radius: 10px;
 
+    cursor: pointer;
+
     &__wrapper {
         height: min-content;
         width: 100%;

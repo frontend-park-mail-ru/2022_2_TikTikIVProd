@@ -32,7 +32,7 @@ $scrollbar-width: 8px;
     }
 
     &__content::-webkit-scrollbar {
-        width: calc(2 * $scrollbar-padding + $scrollbar-width);
+        width: 15px; //calc(2 * $scrollbar-padding + $scrollbar-width);
     }
 
     &__content::-webkit-scrollbar-track {
@@ -40,7 +40,8 @@ $scrollbar-width: 8px;
     }
 
     &__content::-webkit-scrollbar-thumb {
-        border: $scrollbar-padding solid white;
+        // border: $scrollbar-padding solid var(--color-chat-background);
+        border: 5px solid var(--color-feed-card-background);
         border-radius: 9999px;
         background-color: lightgray;
     }

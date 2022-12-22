@@ -13,8 +13,7 @@
             </div>
             <div class="message__attachments">
                 {{#each msg.attachments as |attachment|}}
-                {{log attachment}}
-                <img src="{{attachment.src}}" alt="" style="height: 50px;">
+                <img class="message__attachments__img" src="{{attachment.src}}" alt="">
                 {{/each}}
             </div>
         </div>
