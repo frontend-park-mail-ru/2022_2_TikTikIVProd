@@ -132,6 +132,9 @@ class UserModel extends IModel {
             this.currentUser = null;
         }
         EventDispatcher.emit('user-changed', this.currentUser);
+
+        if (this.currentUser === null)
+            return Promise.reject(response.parsedBody.message);
     }
 
     /**
@@ -151,6 +154,9 @@ class UserModel extends IModel {
             this.currentUser = null;
         }
         EventDispatcher.emit('user-changed', this.currentUser);
+
+        if (this.currentUser === null)
+            return Promise.reject(response.parsedBody.message);
     }
 
     public async getUser(id: number | string) {
