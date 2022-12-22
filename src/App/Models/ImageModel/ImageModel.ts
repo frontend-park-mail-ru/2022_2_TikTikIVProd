@@ -53,6 +53,13 @@ class ImageUploadModel extends IModel {
         };
         return Promise.resolve(img);
     }
+
+    static async getStickers() {
+        const response = await ajax(config.api.stickers);
+        await checkResponseStatus(response, config.api.stickers);
+        const stickers = ImageUploadModel.parseImages(response.parsedBody.body);
+        return Promise.resolve(stickers);
+    }
 };
 
 export default ImageUploadModel;

@@ -18,6 +18,11 @@ import { IDialog, IMessage } from "../../Models/MessengerModel/MessengerModel";
 import { IDialogData } from "../../Controllers/MessengerController/MessengerController";
 import { IChatNavbar, IMessageData } from "../../Controllers/ChatController/ChatController";
 
+import stickersTemplate from "../../Components/Stickers/Stickers.hbs"
+import "../../Components/Stickers/Stickers.scss"
+import ImageUploadModel, { IImage } from "../../Models/ImageModel/ImageModel";
+import config from "../../Configs/Config";
+
 class ChatView extends IView {
     private messagesList: HTMLElement;
     private navbar: HTMLElement;
@@ -31,15 +36,21 @@ class ChatView extends IView {
         this.footer = <HTMLElement>this.element.querySelector('.chat__footer');
     }
 
-    public show(opts?: any): void {
+    public updateStickers(stickers: IImage[]): void {
+    }
+
+    public show(opts?: { attachmets: HTMLElement, stickers: IImage[] | undefined }): void {
         // this.navbar.innerHTML = chatNavbarTemplate({});
         const smiles = smilesTemplate();
-        this.footer.innerHTML = messageCreateTemplate({ smiles });
+        const stickers = stickersTemplate({ stickers: opts?.stickers });
+        this.footer.innerHTML = messageCreateTemplate({ smiles: smiles, stickers: stickers });
         this.parent.appendChild(this.element);
-        const attachments = this.footer.querySelector('.message-create__attachments');
-        if (!attachments) return;
-        attachments.appendChild(opts);
 
+        if (opts && opts.attachmets) {
+            const attachments = this.footer.querySelector('.message-create__attachments');
+            if (!attachments) return;
+            attachments.appendChild(opts.attachmets);
+        }
     }
 
     public bindKeyClick(callback: Function): void {
@@ -51,10 +62,22 @@ class ChatView extends IView {
     }
 
     public pushMessages(msgs: IMessageData[]): void {
-        msgs.forEach(msg => this.pushMessage(msg));
+        msgs.forEach(msg => {
+            if(msg.msg.sticker.toString() !== '0') {
+                msg.msg = Object.assign(msg.msg, {sticker_src: config.host + `${config.api.image.url.replace('{:id}', msg.msg.sticker.toString())}`})
+                this.pushSticker(msg);
+            } else {
+                this.pushMessage(msg);
+            }                
+        });
     }
 
     public pushMessage(msg: IMessageData): void {
+        this.messagesList.innerHTML += messageTemplate(msg);
+        this.scrollToEnd();
+    }
+
+    public pushSticker(msg: IMessageData): void {
         this.messagesList.innerHTML += messageTemplate(msg);
         this.scrollToEnd();
     }

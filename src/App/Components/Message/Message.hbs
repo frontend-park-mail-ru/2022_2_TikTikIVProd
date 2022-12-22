@@ -8,15 +8,19 @@
             {{msg.created_at}}
         </div>
         <div class="message__content">
+            {{#if msg.sticker_src}}
+            <img src="{{msg.sticker_src}}" alt="" style="width: 100px; border: 2px solid gray; border-radius: 15px">
+            {{else}}
+
             <div class="message__text">
                 {{msg.body}}
             </div>
             <div class="message__attachments">
                 {{#each msg.attachments as |attachment|}}
-                {{log attachment}}
                 <img src="{{attachment.src}}" alt="" style="height: 50px;">
                 {{/each}}
             </div>
+            {{/if}}
         </div>
     </div>
 </div>

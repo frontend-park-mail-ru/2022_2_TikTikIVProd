@@ -1,4 +1,5 @@
 import config from '../../Configs/Config';
+import ImageUploadModel, { IImage } from '../../Models/ImageModel/ImageModel';
 import MessengerModel, { IDialog, IMessage, IMessageNew } from '../../Models/MessengerModel/MessengerModel';
 import UserModel, { IUser } from '../../Models/UserModel/UserModel';
 import EventDispatcher from '../../Modules/EventDispatcher/EventDispatcher';
@@ -8,6 +9,7 @@ import dateParser from '../../Utils/DateParser/DateParser';
 import ChatView from '../../Views/ChatView/ChatView';
 import AttachmentsUploadController from '../AttachmentsUploadController/AttachmentsUploadController';
 import IController from '../IController/IController';
+import IImageUploadController from '../IImageUploadController/IImageUploadController';
 
 export interface IChatData {
     byUserId?: number | string,
@@ -33,6 +35,8 @@ class ChatController extends
     private userId: string | number | undefined;
     private isEmptyChat: boolean | undefined;
 
+    private stickers: IImage[] | undefined;
+
     private msgAttachments: AttachmentsUploadController;
     constructor(
         view: ChatView, model: { user: UserModel, messenger: MessengerModel }) {
@@ -42,10 +46,17 @@ class ChatController extends
         this.dialogId = undefined;
         this.userId = undefined;
         this.msgAttachments = new AttachmentsUploadController();
+        this.stickers = undefined;
 
         this.view.bindClick(this.handleClick.bind(this));
         this.view.bindKeyClick(this.handleKeyClick.bind(this));
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
+    }
+
+    private async updateStickers() {
+        const stickers = await ImageUploadModel.getStickers();
+        this.stickers = stickers;
+        return Promise.resolve();
     }
 
     public async mountComponent(opts?: IChatData) {
@@ -56,7 +67,12 @@ class ChatController extends
         }
         if (!this.isMounted) {
             this.view.clearChat();
-            this.view.show(this.msgAttachments.getElement());
+
+            if(!this.stickers) {
+                await this.updateStickers();
+            }
+
+            this.view.show({attachmets: this.msgAttachments.getElement(), stickers: this.stickers});
             this.isMounted = true;
 
             if (opts.byDialogId) {
@@ -229,7 +245,46 @@ class ChatController extends
                     currentMessage.value += target.innerText;
                 }
             }
+            case 'sticker_item': {
+                // ОБРАБОТКА стикеров
+                if (!this.stickers) {
+                    this.updateStickers()
+                        .catch(err => {
+                            console.log(err);
+                        });
+                }
+                
+                const stickerId = target.dataset['sticker_id'];
+                if(!stickerId) {
+                    console.log('no sticker');
+                    return;
+                }
+
+                this.sendSticker(stickerId);
+            }
         }
+    }
+
+    private sendSticker(stickerId : number | string) {
+        const message: IMessageNew = {
+            receiver_id: Number(this.userId),
+            dialog_id: Number(this.dialogId),
+            sender_id: this.model.user.getCurrentUser()?.id ?? 0,
+            attachments: [],
+            sticker: Number(stickerId),
+        };
+
+        if (this.isEmptyChat) {
+            this.initNewDialog(message);
+            return;
+        }
+
+        console.log('Dialog exists');
+
+        if (!this.dialogId) return;
+        if (!this.userId) return;
+        this.model.messenger.sendMessage(message);
+        console.log('msg sended to ws');
     }
 
     private fillDialog(data: IDialog): void {
@@ -261,20 +316,7 @@ class ChatController extends
         for (let i = 0; i < data.length; i++) {
             const item = data[i];
             const user = await this.model.user.getUser(item.sender_id);
-            console.log('ws new msg handled ', item);
-
             const formatted = { msg: item, user: user };
-            // : IMessageData = {
-            //     user: {
-            //         avatar: user.avatar ?? '../src/img/default_avatar.png',
-            //         first_name: user.first_name ?? 'Капи',
-            //         last_name: user.last_name ?? 'Неопознаный',
-            //         id: user.id ?? 0,
-            //     },
-            //     text: item.body ?? 'Здесь было сообщение...',
-            //     date: dateParser(item.created_at),
-            // };
-
             msgs.push(formatted);
         }
         this.view.pushMessages(msgs);

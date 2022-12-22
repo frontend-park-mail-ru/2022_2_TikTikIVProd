@@ -115,6 +115,13 @@
         // opacity: 1;
         display: block;
     }
+
+    /// George
+    /// 
+    & .stickers {
+        // opacity: 1;
+        display: block;
+    }
 }
 
 // ВНИМАНИЕ: Данная комбинация используется со стилями из смайлов
@@ -124,6 +131,16 @@
     }
 
     & .smiles:hover {
+        display: block;
+    }
+
+    ///George
+    /// 
+    & .stickers {
+        bottom: 20px;
+    }
+
+    & .stickers:hover {
         display: block;
     }
 }
