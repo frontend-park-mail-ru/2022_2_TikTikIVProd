@@ -37,7 +37,7 @@ class ChatView extends IView {
         this.footer.innerHTML = messageCreateTemplate({ smiles });
         this.parent.appendChild(this.element);
         const attachments = this.footer.querySelector('.message-create__attachments');
-        if(!attachments) return;
+        if (!attachments) return;
         attachments.appendChild(opts);
 
     }
@@ -78,6 +78,14 @@ class ChatView extends IView {
 
     public clearNewMsgForm(): void {
         (<HTMLTextAreaElement>this.footer.querySelector('textarea')).value = '';
+    }
+
+    public showErrEmptyNewMessage(): void {
+        (<HTMLTextAreaElement>this.footer.querySelector('textarea')).classList.add('message-create--err');
+    }
+
+    public hideErrEmptyNewMessage(): void {
+        (<HTMLTextAreaElement>this.footer.querySelector('textarea')).classList.remove('message-create--err');
     }
 }
 

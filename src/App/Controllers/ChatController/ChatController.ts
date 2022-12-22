@@ -123,11 +123,16 @@ class ChatController extends
     }
 
     private async sendMessage() {
-        const attachmens = await this.msgAttachments.submitAttachments();
-
         const text = this.view.getNewMessage();
-        if (text.replace('\n', ' ').trim() === '')
+        if (text.replace('\n', ' ').trim() === '') {
+            this.view.showErrEmptyNewMessage();
             return;
+        }
+
+        this.view.hideErrEmptyNewMessage();
+        const attachmens = await this.msgAttachments.submitAttachments();
+        console.log('all att uploaded', attachmens);
+
 
         const message: IMessageNew = {
             body: text,
@@ -143,9 +148,13 @@ class ChatController extends
             return;
         }
 
+        console.log('Dialog exists');
+
         if (!this.dialogId) return;
         if (!this.userId) return;
         this.model.messenger.sendMessage(message);
+        console.log('msg sended to ws');
+
         this.view.clearNewMsgForm();
     }
 
@@ -252,6 +261,8 @@ class ChatController extends
         for (let i = 0; i < data.length; i++) {
             const item = data[i];
             const user = await this.model.user.getUser(item.sender_id);
+            console.log('ws new msg handled ', item);
+
             const formatted = { msg: item, user: user };
             // : IMessageData = {
             //     user: {

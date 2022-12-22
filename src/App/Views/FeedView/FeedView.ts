@@ -285,6 +285,16 @@ class FeedView extends IView {
         if (!comment) return;
         comments.removeChild(comment);
     }
+
+    public showErrNewFeedTextEmpty(): void {
+        const textar = <HTMLTextAreaElement>this.overlay.querySelector('.feed-card-create')?.querySelector('.feed-card-create__text');
+        textar.classList.add('feed-card-create--err');
+    }
+
+    public hideErrNewFeedTextEmpty(): void {
+        const textar = <HTMLTextAreaElement>this.overlay.querySelector('.feed-card-create')?.querySelector('.feed-card-create__text');
+        textar.classList.remove('feed-card-create--err');
+    }
 }
 
 export default FeedView;

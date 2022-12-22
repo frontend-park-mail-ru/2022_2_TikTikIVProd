@@ -29,7 +29,7 @@ export interface IDialog {
 export interface IMessageNew {
     dialog_id: number;
     receiver_id: number;
-    sender_id ?: number;
+    sender_id?: number;
     attachments: IImage[];
     sticker?: number,
     body?: string;
@@ -112,7 +112,7 @@ class MessengerModel extends IModel {
         const _ = await ajax(conf);
 
         const newSocket = new WebSocket("ws://" + host + "/ws/" + chatId);
-        
+
         if (opts) {
             if (opts.onclose) {
                 newSocket.onclose = (function (this: any, chatId: string | number, callback: Function) {
@@ -158,7 +158,12 @@ class MessengerModel extends IModel {
 
     public sendMessage(message: IMessageNew) {
         const ws = this.websockets.get(message.dialog_id.toString());
-        if (!ws) return;
+        if (!ws) {
+            console.log('no ws for chat id=', message.dialog_id);
+            return;
+        }
+        console.log('JSON msg: ', JSON.stringify(message));
+
         ws.send(JSON.stringify(message));
     }
 

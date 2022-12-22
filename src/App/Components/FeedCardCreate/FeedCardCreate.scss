@@ -55,6 +55,10 @@
             flex-direction: row;
         }
     }
+
+    &--err{
+        border: 2px solid red;
+    }
 }
 
 .feed-card-create-button {

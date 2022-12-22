@@ -35,8 +35,13 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
         const imgs: IImage[] = [];
 
         for (const url of this.imgsStore.keys()) {
+            console.log('att to upload: ', url);
+            
             const img = await this.uploadImage(url);
+            
             if(!img) return Promise.reject();
+            console.log('att succ');
+
             imgs.push(img);
         }
 
@@ -45,6 +50,10 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
 
     public async uploadImage(url: string) {
         const localImg = this.imgsStore.get(url);
+        console.log('store: ', this.imgsStore);
+        
+        console.log('target' , localImg);
+        
         if (!localImg || localImg.uploaded) return Promise.resolve();
 
         const fd = new FormData();

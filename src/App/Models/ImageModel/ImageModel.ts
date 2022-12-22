@@ -4,6 +4,7 @@ import IModel from "../IModel/IModel";
 
 export interface IImage {
     id: string | number;
+    type: 'image';
     src: string;
 }
 
@@ -19,7 +20,8 @@ class ImageUploadModel extends IModel {
         json.forEach((element: any) => {
             attachments.push({
                 id: element.id,
-                src: config.host+`${config.api.image.url.replace('{:id}', element.id)}`
+                src: config.host+`${config.api.image.url.replace('{:id}', element.id)}`,
+                type: 'image',
             });
         });
         return attachments;
@@ -47,6 +49,7 @@ class ImageUploadModel extends IModel {
         const img: IImage = {
             id: response.parsedBody.body.id,
             src: config.host + `${config.api.image.url.replace('{:id}', response.parsedBody.body.id)}`,
+            type: 'image',
         };
         return Promise.resolve(img);
     }
