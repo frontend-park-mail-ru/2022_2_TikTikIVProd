@@ -6,7 +6,7 @@
     width: 100%;
     overflow: scroll;
 
-    &::-webkit-scrollbar{
+    &::-webkit-scrollbar {
         width: 0;
         height: 0;
     }
@@ -21,14 +21,19 @@
     &__cards {
         display: flex;
         flex-direction: column;
-        gap: var(--gap-beetween-blocks);
+        gap: var(--big-gap-beetween-blocks);
+
+        @media screen and (max-device-width: 800px),
+        screen and (max-width: 800px) {
+            gap: var(--gap-beetween-blocks);
+        }
 
 
         width: auto;
         height: 100%;
 
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: overlay;
 
         @media screen and (max-device-width:799px) {
 
@@ -46,7 +51,7 @@
 
 
     &__cards::-webkit-scrollbar {
-        width: 18px;
+        width: 15px;
     }
 
     &__cards::-webkit-scrollbar-track {
@@ -54,7 +59,7 @@
     }
 
     &__cards::-webkit-scrollbar-thumb {
-        border: 5px solid var(--color-root-background);
+        border: 5px solid var(--color-feed-card-background);
         border-radius: 9999px;
         background-color: lightgray;
         min-height: 30px;

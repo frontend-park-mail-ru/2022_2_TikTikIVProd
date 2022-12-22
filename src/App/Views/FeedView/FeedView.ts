@@ -1,23 +1,26 @@
-import feedCardTemplate from "../../Components/FeedCard/FeedCard.hbs"
-import "../../Components/FeedCard/FeedCard.scss"
+import feedCardTemplate from "../../Components/FeedCard/FeedCard.hbs";
+import "../../Components/FeedCard/FeedCard.scss";
 
-import feedCardCreationTemplate from "../../Components/FeedCardCreate/FeedCardCreate.hbs"
-import "../../Components/FeedCardCreate/FeedCardCreate.scss"
+import feedCardCreationTemplate from "../../Components/FeedCardCreate/FeedCardCreate.hbs";
+import "../../Components/FeedCardCreate/FeedCardCreate.scss";
 
-import feedNavbarTemplate from "../../Components/FeedNavbar/FeedNavbar.hbs"
-import "../../Components/FeedNavbar/FeedNavbar.scss"
+import smilesTemplate from "../../Components/Smiles/Smiles.hbs";
+import "../../Components/Smiles/Smiles.scss";
 
-import feedTemplate from "./FeedView.hbs"
-import "./FeedView.scss"
+import feedNavbarTemplate from "../../Components/FeedNavbar/FeedNavbar.hbs";
+import "../../Components/FeedNavbar/FeedNavbar.scss";
 
-import commentSectionTemplate from "../../Components/CommentSection/CommentSection.hbs"
-import "../../Components/CommentSection/CommentSection.scss"
+import feedTemplate from "./FeedView.hbs";
+import "./FeedView.scss";
 
-import commentTemplate from "../../Components/Comment/Comment.hbs"
-import "../../Components/Comment/Comment.scss"
+import commentSectionTemplate from "../../Components/CommentSection/CommentSection.hbs";
+import "../../Components/CommentSection/CommentSection.scss";
 
-import commentCreationTemplate from "../../Components/CommentCreate/CommentCreate.hbs"
-import "../../Components/CommentCreate/CommentCreate.scss"
+import commentTemplate from "../../Components/Comment/Comment.hbs";
+import "../../Components/Comment/Comment.scss";
+
+import commentCreationTemplate from "../../Components/CommentCreate/CommentCreate.hbs";
+import "../../Components/CommentCreate/CommentCreate.scss";
 
 import { IComment, IFeedData } from "../../Models/FeedModel/FeedModel";
 import IView from "../IView/IView";
@@ -33,6 +36,8 @@ class FeedView extends IView {
     private navbar: HTMLElement;
     private cards: HTMLElement;
     private overlay: HTMLElement;
+    private currentOpenedCommentId: string | number;
+
 
     constructor(parent: HTMLElement) {
         super(parent, feedTemplate({}), '.feed');
@@ -42,6 +47,8 @@ class FeedView extends IView {
 
         const observer = new MutationObserver(this.checkFeedCards.bind(this));
         observer.observe(this.cards, { childList: true });
+
+        this.currentOpenedCommentId = -1;
     }
 
 
@@ -79,6 +86,11 @@ class FeedView extends IView {
         this.element.addEventListener('click', callback.bind(this));
     }
 
+    public bindKeyClick(callback: Function): void {
+        this.element.addEventListener('keydown', callback.bind(this));
+    }
+
+
     // Specific
 
     public clearFeed(): void {
@@ -114,15 +126,41 @@ class FeedView extends IView {
     }
 
     /**
-     * Функция отрисовки контента (постов) в ленте новостей
+     * Функция отрисовки контента (постов) в ленте новостей снизу
      * @param  {IFeedData[]} data - Данные о постах
      * @return {void}
      */
     public pushContentToFeed(data: IFeedData | IFeedData[], currentUserId: number): void {
         // TODO
         const f = (item: IFeedData) => {
-            const card = feedCardTemplate(currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true }));
+
+            let tempItem = item.isLiked === 'liked' ? Object.assign(item, { isLikedIcon: true }) : item;
+            tempItem = currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true })
+
+            const card = feedCardTemplate(tempItem);
             this.cards.innerHTML += card;
+        }
+        if (Array.isArray(data)) {
+            data.forEach((item) => f(item));
+        } else {
+            f(data);
+        }
+    }
+
+    /**
+     * Функция отрисовки контента (постов) в ленте новостей сверху
+     * @param  {IFeedData[]} data - Данные о постах
+     * @return {void}
+     */
+    public pushContentToFeedUp(data: IFeedData | IFeedData[], currentUserId: number): void {
+        // TODO
+        const f = (item: IFeedData) => {
+
+            let tempItem = item.isLiked === 'liked' ? Object.assign(item, { isLikedIcon: true }) : item;
+            tempItem = currentUserId !== item.author.id ? item : Object.assign(item, { showTools: true })
+
+            const card = feedCardTemplate(tempItem);
+            this.cards.innerHTML = card + this.cards.innerHTML;
         }
         if (Array.isArray(data)) {
             data.forEach((item) => f(item));
@@ -133,11 +171,10 @@ class FeedView extends IView {
 
     public deletePost(id: number | string): void {
         const feed = this.cards.querySelector(`[data-feed_card_id="${id}"]`);
-        console.log(feed);
-        
         if (!feed) {
             return;
         }
+        this.hideCommentsForFeedCard(id);
         this.cards.removeChild(feed);
     }
 
@@ -155,17 +192,20 @@ class FeedView extends IView {
         this.cards.removeChild(oldCard);
     }
 
-    public showFeedCardCreation(user: IUser, attachmentsElement : HTMLElement, exsData?: IFeedData, community_id?: string | number | undefined): void {
+    public showFeedCardCreation(user: IUser, attachmentsElement: HTMLElement, exsData?: IFeedData, community_id?: string | number | undefined): void {
+        const smiles = smilesTemplate();
         this.overlay.innerHTML = feedCardCreationTemplate({
             user: user,
             data: exsData,
-            community_id: community_id
+            community_id: community_id,
+            smiles: smiles
         });
+
         this.overlay.style.visibility = 'visible';
 
         // 
         const attachments = this.overlay.querySelector('.feed-card-create__attachments');
-        if(!attachments) return;
+        if (!attachments) return;
 
         attachments.appendChild(attachmentsElement);
         //
@@ -212,11 +252,15 @@ class FeedView extends IView {
         const feedCard = this.cards.querySelector(`[data-feed_card_id="${postId}"]`);
         if (!feedCard) return;
 
+        this.hideCommentsForFeedCard(this.currentOpenedCommentId);
+
         feedCard.parentNode?.insertBefore(newCommentSection, feedCard.nextSibling);
 
         comments.forEach(comment => {
             this.pushCommentToFeedCard(postId, currentUserId, comment);
         });
+
+        this.currentOpenedCommentId = postId;
     }
 
     public hideCommentsForFeedCard(postId: number | string): void {

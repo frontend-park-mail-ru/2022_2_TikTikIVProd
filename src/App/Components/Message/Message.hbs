@@ -1,7 +1,9 @@
 <div class="message">
-    <img src="{{user.avatar}}" class="author-message__avatar" alt="" data-action="user_profile" data-user_id="{{user.id}}">
+    <img src="{{user.avatar}}" class="author-message__avatar" alt="" data-action="user_profile"
+        data-user_id="{{user.id}}">
     <div class="message__wrapper">
-        <div class="author-message__name"  data-action="user_profile" data-user_id="{{user.id}}">{{user.first_name}} {{user.last_name}}</div>
+        <div class="author-message__name" data-action="user_profile" data-user_id="{{user.id}}">{{user.first_name}}
+            {{user.last_name}}</div>
         <div class="message__date">
             {{msg.created_at}}
         </div>
@@ -11,7 +13,7 @@
             </div>
             <div class="message__attachments">
                 {{#each msg.attachments as |attachment|}}
-                    <img src="{{attachment.src}}" alt="" style="height: 50px;">
+                <img src="{{attachment.src}}" alt="" style="height: 50px;">
                 {{/each}}
             </div>
         </div>

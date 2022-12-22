@@ -16,14 +16,17 @@
         z-index: 100;
 
         @media screen and (max-device-width: 700px),
-                screen and (max-width: 700px) {
+        screen and (max-width: 700px) {
+            position: fixed;
             flex-direction: row;
             width: 100vw;
             background: var(--color-feed-card-background);
             justify-content: space-between;
             height: var(--phone-menu-height);
             border-top: 1px solid var(--color-menu-border);
-            box-shadow: 0px -5px 10px rgb(0 0 0 / 15%);
+
+            bottom: 0;
+            left: 0;
         }
 
         // @media screen and (max-width: 700px) {
@@ -62,6 +65,7 @@
         object-fit: contain;
         height: 20px;
         width: 25px;
+        filter: contrast(var(--contrast-left-menu__icon));
     }
 
     &__text {

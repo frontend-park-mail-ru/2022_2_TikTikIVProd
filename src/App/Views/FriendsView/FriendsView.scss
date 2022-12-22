@@ -5,9 +5,9 @@
     display: grid;
     grid-template-rows: min-content auto;
     gap: 10px;
-    
-    overflow:hidden;
-    
+
+    overflow: hidden;
+
     padding-bottom: 10px;
 
     &__navbar {
@@ -24,46 +24,46 @@
         height: 100%;
 
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: overlay;
     }
 
-    &__content::-webkit-scrollbar{
+    &__content::-webkit-scrollbar {
         width: 15px;
-    } 
+    }
 
-    &__content::-webkit-scrollbar-track{
+    &__content::-webkit-scrollbar-track {
         background-color: inherit;
     }
 
-    &__content::-webkit-scrollbar-thumb{
+    &__content::-webkit-scrollbar-thumb {
         background-color: lightgray;
-        border: 5px solid var(--color-root-background);
+        border: 5px solid var(--color-feed-card-background);
         border-radius: 9999px;
-    } 
+    }
 
     &--hide {
         display: none !important;
     }
 }
 
-.friend-mock{
+.friend-mock {
     display: flex;
     gap: 15px;
     justify-content: center;
     align-items: center;
 
     height: min-content;
-  
+
     padding: 20px 25px;
-  
+
     &__icon {
-      object-fit: cover;
-      width: 80px;
+        object-fit: cover;
+        width: 80px;
     }
-  
+
     &__text {
-      font-size: 18px;
-      color: #b4b4b4;
-      font-weight: bolder;
+        font-size: 18px;
+        color: #b4b4b4;
+        font-weight: bolder;
     }
-  }
+}

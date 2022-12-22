@@ -40,7 +40,7 @@ class CommunityModel extends IModel {
     private parseCommunity(json: any): ICommunityData {
         return {
             avatar: json.avatar_id === 0 ?
-                '../src/img/default_avatar.png'
+                config.default_img
                 :
                 config.host + `${config.api.image.url.replace('{:id}', json.avatar_id)}`,
             create_date: json.create_date,

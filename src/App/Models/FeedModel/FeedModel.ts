@@ -79,9 +79,10 @@ class FeedModel extends IModel {
         return {
             avatar_id: json.avatar_id === 0
                 ?
-                './src/img/default_avatar.png'
+                config.default_img
                 :
                 config.host + `${config.api.image.url.replace('{:id}', json.avatar_id)}`,
+
             create_date: dateParser(json.create_date),
             id: json.id,
             message: json.message,
@@ -104,7 +105,7 @@ class FeedModel extends IModel {
             author: {
                 url: '',
                 avatar: json.avatar_id === 0
-                    ? './src/img/default_avatar.png'
+                    ? config.default_img
                     :
                     config.host + `${config.api.image.url.replace('{:id}', json.avatar_id)}`,
                 first_name: json.user_first_name,
@@ -116,6 +117,7 @@ class FeedModel extends IModel {
             likes: json.count_likes,
             isLiked: json.is_liked ? "liked" : "unliked",
             attachments: ImageUploadModel.parseImages(json.attachments),
+
             community_id: json.community_id,
         };
     }

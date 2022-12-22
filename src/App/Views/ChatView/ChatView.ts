@@ -1,15 +1,18 @@
 import IView from "../IView/IView";
-import messengerViewTemplate from "./ChatView.hbs"
-import "./ChatView.scss"
+import messengerViewTemplate from "./ChatView.hbs";
+import "./ChatView.scss";
 
-import messageCreateTemplate from "../../Components/MessageCreate/MessageCreate.hbs"
-import "../../Components/MessageCreate/MessageCreate.scss"
+import messageCreateTemplate from "../../Components/MessageCreate/MessageCreate.hbs";
+import "../../Components/MessageCreate/MessageCreate.scss";
 
-import messageTemplate from "../../Components/Message/Message.hbs"
-import "../../Components/Message/Message.scss"
+import smilesTemplate from "../../Components/Smiles/Smiles.hbs";
+import "../../Components/Smiles/Smiles.scss";
 
-import chatNavbarTemplate from "../../Components/ChatNavbar/ChatNavbar.hbs"
-import "../../Components/ChatNavbar/ChatNavbar.scss"
+import messageTemplate from "../../Components/Message/Message.hbs";
+import "../../Components/Message/Message.scss";
+
+import chatNavbarTemplate from "../../Components/ChatNavbar/ChatNavbar.hbs";
+import "../../Components/ChatNavbar/ChatNavbar.scss";
 
 import { IDialog, IMessage } from "../../Models/MessengerModel/MessengerModel";
 import { IDialogData } from "../../Controllers/MessengerController/MessengerController";
@@ -30,16 +33,17 @@ class ChatView extends IView {
 
     public show(opts?: any): void {
         // this.navbar.innerHTML = chatNavbarTemplate({});
-        this.footer.innerHTML = messageCreateTemplate({});
+        const smiles = smilesTemplate();
+        this.footer.innerHTML = messageCreateTemplate({ smiles });
         this.parent.appendChild(this.element);
         const attachments = this.footer.querySelector('.message-create__attachments');
         if(!attachments) return;
         attachments.appendChild(opts);
 
     }
-    
-    public bindKeyClick(callback : Function) : void {
-        this.element.addEventListener('keyup', callback.bind(this));
+
+    public bindKeyClick(callback: Function): void {
+        this.element.addEventListener('keydown', callback.bind(this));
     }
 
     public bindClick(callback: Function): void {
@@ -55,16 +59,16 @@ class ChatView extends IView {
         this.scrollToEnd();
     }
 
-    public clearChat() : void {
+    public clearChat(): void {
         this.messagesList.innerHTML = '';
     }
 
-    public getNewMessage() : string {
-        const text = (<HTMLTextAreaElement>this.footer.querySelector('textarea')).value;
+    public getNewMessage(): string {
+        const text = (<HTMLTextAreaElement>this.footer.querySelector('textarea')).value.trim();
         return text;
     }
 
-    private scrollToEnd() : void{
+    private scrollToEnd(): void {
         this.messagesList.scrollTop = this.messagesList.scrollHeight - this.messagesList.clientHeight;
     }
 
@@ -72,7 +76,7 @@ class ChatView extends IView {
         this.navbar.innerHTML = chatNavbarTemplate(data);
     }
 
-    public clearNewMsgForm() : void {
+    public clearNewMsgForm(): void {
         (<HTMLTextAreaElement>this.footer.querySelector('textarea')).value = '';
     }
 }
