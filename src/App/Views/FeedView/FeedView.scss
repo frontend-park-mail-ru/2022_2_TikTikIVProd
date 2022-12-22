@@ -21,7 +21,12 @@
     &__cards {
         display: flex;
         flex-direction: column;
-        gap: var(--gap-beetween-blocks);
+        gap: var(--big-gap-beetween-blocks);
+
+        @media screen and (max-device-width: 800px),
+        screen and (max-width: 800px) {
+            gap: var(--gap-beetween-blocks);
+        }
 
 
         width: auto;
