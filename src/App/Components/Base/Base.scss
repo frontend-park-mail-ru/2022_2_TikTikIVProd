@@ -19,7 +19,7 @@
 
     &__footer {
         width: 100%;
-        position: absolute;
+        position: fixed;
         bottom: 0;
         background-color: var(--color-footer-background);
     }
@@ -90,11 +90,11 @@
         width: 100%;
 
         @media screen and (max-width:700px) {
-            height: calc(100% - var(--tablet-menu-height) - 10px);
+            height: calc(100% - var(--tablet-menu-height));
         }
 
         @media screen and (max-device-width:700px) {
-            height: calc(100% - var(--phone-menu-height) - 10px);
+            height: calc(100% - var(--phone-menu-height));
         }
 
 
