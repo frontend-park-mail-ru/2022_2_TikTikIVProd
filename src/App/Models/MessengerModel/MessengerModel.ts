@@ -104,7 +104,7 @@ class MessengerModel extends IModel {
             return;
         }
 
-        let host = `${config.host}`.replace('http://', '');
+        let host = `${config.host}`.replace('https://', '');
 
         let conf = Object.assign({}, config.api.initws);
         conf.url = conf.url.replace('{:id}', chatId.toString());
