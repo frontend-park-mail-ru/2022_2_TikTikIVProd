@@ -33,11 +33,11 @@ export default async function ajax(params: IParamsProps, body?: string | FormDat
             mainHeaders.append('X-CSRF-Token', csrfToken);
         }
         // console.log(csrfToken);
-        
+
     }
 
     // console.log(mainHeaders.keys, mainHeaders.values);
-    
+
     /** Основной запрос в сеть */
     let response = await fetch(`${config.host}${params.url}`,
         {
@@ -45,7 +45,7 @@ export default async function ajax(params: IParamsProps, body?: string | FormDat
             headers: mainHeaders,
             body: body,
             credentials: 'include',
-            
+
         }
     );
 
@@ -63,7 +63,7 @@ export default async function ajax(params: IParamsProps, body?: string | FormDat
 }
 
 
-export async function checkResponseStatus(response : IResponse, conf : IApiItem) {
+export async function checkResponseStatus(response: IResponse, conf: IApiItem) {
     if (response.status.toString() in conf.statuses.success) {
         return Promise.resolve();
     }
@@ -77,5 +77,5 @@ export async function checkResponseStatus(response : IResponse, conf : IApiItem)
 
     return Promise.reject({
         msg: 'Неожиданная ошибка',
-    });    
+    });
 }

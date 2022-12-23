@@ -109,7 +109,7 @@ class UserModel extends IModel {
      */
     public async logoutUser() {
         const response = await ajax(config.api.logout);
-        await checkResponseStatus(response, config.api.logoutUser);
+        await checkResponseStatus(response, config.api.logout);
         this.currentUser = null;
         EventDispatcher.emit('user-changed', this.currentUser);
         EventDispatcher.subscribe('user-update', this.updateUserData.bind(this));
@@ -183,7 +183,6 @@ class UserModel extends IModel {
      */
     public async authUserByCookie() {
         const response = await ajax(config.api.auth);
-
         try {
             await checkResponseStatus(response, config.api.auth);
             const userData = this.parseUser(response.parsedBody.body);
