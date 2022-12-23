@@ -1,23 +1,24 @@
 import config from '../../Configs/Config';
-import MessengerModel, { IDialog, IMessage } from '../../Models/MessengerModel/MessengerModel';
+import ImageUploadModel, { IImage } from '../../Models/ImageModel/ImageModel';
+import MessengerModel, { IDialog, IMessage, IMessageNew } from '../../Models/MessengerModel/MessengerModel';
 import UserModel, { IUser } from '../../Models/UserModel/UserModel';
 import EventDispatcher from '../../Modules/EventDispatcher/EventDispatcher';
 import router from '../../Router/Router';
 import paths from '../../Router/RouterPaths';
+import dateParser from '../../Utils/DateParser/DateParser';
 import ChatView from '../../Views/ChatView/ChatView';
-import MessengerView from '../../Views/MessengerView/MessengerView';
+import AttachmentsController from '../AttachmentsController/AttachmentsController';
 import IController from '../IController/IController';
-import { IDialogData } from '../MessengerController/MessengerController';
+import IImageUploadController from '../IImageUploadController/IImageUploadController';
 
+export interface IChatData {
+    byUserId?: number | string,
+    byDialogId?: number | string,
+}
 
 export interface IMessageData {
-    user: {
-        first_name: string;
-        last_name: string;
-        avatar: string;
-    };
-    text: string;
-    date: string;
+    user: IUser,
+    msg: IMessage,
 }
 
 export interface IChatNavbar {
@@ -30,148 +31,57 @@ export interface IChatNavbar {
 class ChatController extends
     IController<ChatView, { user: UserModel, messenger: MessengerModel }> {
 
-    private currentDialogId: string | number | undefined;
-    private userID: string | number | undefined;
-    private emptyChat: boolean | undefined;
+    private dialogId: string | number | undefined;
+    private userId: string | number | undefined;
+    private isEmptyChat: boolean | undefined;
 
+    private stickers: IImage[] | undefined;
+
+    private msgAttachments: AttachmentsController;
     constructor(
         view: ChatView, model: { user: UserModel, messenger: MessengerModel }) {
         super(view, model);
 
-        this.emptyChat = undefined;
-        this.currentDialogId = undefined;
-        this.userID = undefined;
+        this.isEmptyChat = undefined;
+        this.dialogId = undefined;
+        this.userId = undefined;
+        this.msgAttachments = new AttachmentsController();
+        this.stickers = undefined;
 
         this.view.bindClick(this.handleClick.bind(this));
+        this.view.bindKeyClick(this.handleKeyClick.bind(this));
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
     }
 
-    private handleClick(e: Event): void {
-        e.preventDefault();
-        const target = <HTMLElement>e.target;
-        const action =
-            (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
-        switch (action) {
-            default: {
-                // // console.log('No action: ', action);
-                return;
-            }
-
-            case 'back':{
-                router.goToPath(paths.messenger);
-                return;
-            }
-            
-            case 'user_profile':{
-                const user_id = (<HTMLElement>target.closest('[data-user_id]'))?.dataset['user_id'];
-                console.log(user_id);
-                
-                if(!user_id) return;
-
-                let url = `${paths.userProfie}`;
-                url = url.replace('{:number}', user_id);
-
-                router.goToPath(url);
-                return;
-            }
-
-            case 'send': {
-                // // console.log('send');
-
-                if (this.emptyChat) {
-                    // // console.log('Empty chat');
-
-                    if (!this.userID) {
-                        // console.log('USer id is null');
-                        return;
-                    }
-
-                    const text = this.view.getNewMessage();
-                    this.model.messenger.initChat(text, this.userID)
-                        .then((data: IMessage) => {
-                            // // console.log('Init chat succ');
-
-                            this.currentDialogId = data.dialog_id;
-                            this.emptyChat = false;
-
-                            this.model.messenger.createChatEventListener(
-                                this.currentDialogId,
-                                {
-                                    onmessage: this.handleMessages.bind(this),
-                                },
-                            );
-
-                            this.handleMessages(data);
-                            this.view.clearNewMsgForm();
-                        })
-                        .catch(data => {
-                            // console.log('init chat err');
-
-                            // console.log(data);
-                        });
-                } else {
-
-                    const cid = this.model.user.getCurrentUser()?.id;
-                    if (!cid) {
-                        return;
-                    }
-
-                    if (!this.currentDialogId) {
-                        return;
-                    }
-
-                    if (!this.userID) {
-                        return;
-                    }
-
-                    const text = this.view.getNewMessage();
-                    // // console.log('text');
-
-                    this.model.messenger.sendMessage(this.currentDialogId, text, cid, this.userID)
-                    this.view.clearNewMsgForm();
-                }
-            }
-        }
+    private async updateStickers() {
+        const stickers = await ImageUploadModel.getStickers();
+        this.stickers = stickers;
+        return Promise.resolve();
     }
 
-    private fillDialog(data: IDialog): void {
-        // // console.log(data);
-
-        // this.model.messenger.createChatEventListener(
-        // data.dialog_id, { onmessage: this.view.pushMessage.bind(this) });
-
-        if (data.messages) {
-            this.handleMessages(data.messages);
-
-            return;
-        }
-        // // console.log('Empty chat');
-    }
-
-    public async mountComponent(
-        opts?: { userId?: string | number, dialogId?: string | number }) {
+    public async mountComponent(opts?: IChatData) {
         if (!opts) {
             router.showUnknownPage();
-            return
-        }
+            return;
 
+        }
         if (!this.isMounted) {
             this.view.clearChat();
-            this.view.show();
+
+            if (!this.stickers) {
+                await this.updateStickers();
+            }
+
+            this.view.show({ attachmets: this.msgAttachments.getElement(), stickers: this.stickers });
             this.isMounted = true;
 
-            if (opts.dialogId) {
-                // // console.log('Chat: mode: dialog');
-
-                const dialogId = opts.dialogId;
-
-                this.currentDialogId = dialogId;
-
-                this.model.messenger.getDialog(dialogId)
+            if (opts.byDialogId) {
+                this.dialogId = opts.byDialogId;
+                this.setProfileData();
+                this.model.messenger.getDialog(this.dialogId)
                     .then((data) => {
-                        // // console.log('Chat: mode: dialog', data);
                         this.fillDialog(data);
-                        this.emptyChat = false;
+                        this.isEmptyChat = false;
                         this.model.messenger.createChatEventListener(
                             data.dialog_id,
                             {
@@ -180,23 +90,22 @@ class ChatController extends
                         );
                     })
                     .catch((data) => {
-                        // console.log('Error getting chat by chat id');
-                        // this.emptyChat = true;
                         router.showUnknownPage();
                         return;
                     });
-                this.setProfileData();
                 return;
             }
 
-            if (opts.userId) {
-                this.userID = opts.userId;
-
-                this.model.messenger.checkChatExist(opts.userId)
+            if (opts.byUserId) {
+                this.userId = opts.byUserId;
+                this.setProfileData();
+                this.model.messenger.checkChatExist(this.userId)
                     .then((data) => {
-                        this.emptyChat = false;
+                        console.log('exists');
+
+                        this.isEmptyChat = false;
                         this.fillDialog(data);
-                        this.currentDialogId = data.dialog_id;
+                        this.dialogId = data.dialog_id;
                         this.model.messenger.createChatEventListener(
                             data.dialog_id,
                             {
@@ -205,22 +114,191 @@ class ChatController extends
                         );
                     })
                     .catch(data => {
-                        // // console.log(data);
-                        this.emptyChat = true;
+                        console.log('new');
+
+                        this.isEmptyChat = true;
                     });
-                this.setProfileData();
                 return;
             }
-            // console.log('Mount chat err');
         }
     }
 
-    private async setProfileData() {
-        const user = await this.model.user.getUser(this.userID ?? '-1');
-        if(!user) return;
+    public unmountComponent(): void {
+        if (this.isMounted) {
+            this.view.hide();
+            this.isMounted = false;
 
-        const data : IChatNavbar = {
-            avatar: user.avatar ?? '../src/img/default_avatar.png',
+            if (this.dialogId) {
+                this.model.messenger.removeChatEventListener(this.dialogId);
+            }
+
+            this.dialogId = undefined;
+            this.isEmptyChat = undefined;
+            this.userId = undefined;
+        }
+    }
+
+    private async sendMessage() {
+        let text = this.view.getNewMessage();
+        const attachmens = await this.msgAttachments.submitAttachments();
+
+        if (text.replace('\n', ' ').trim() === '') {
+            if (attachmens.length === 0) {
+                return;
+            }
+            text = ""
+        }
+
+
+        const message: IMessageNew = {
+            body: text,
+            receiver_id: Number(this.userId),
+            dialog_id: Number(this.dialogId),
+            sender_id: this.model.user.getCurrentUser()?.id ?? 0,
+            attachments: attachmens,
+            // sticker: 0,
+        };
+
+        if (this.isEmptyChat) {
+            this.initNewDialog(message);
+            return;
+        }
+
+        console.log('Dialog exists');
+
+        if (!this.dialogId) return;
+        if (!this.userId) return;
+        this.model.messenger.sendMessage(message);
+        console.log('msg sended to ws');
+
+        this.view.clearNewMsgForm();
+    }
+
+    private initNewDialog(message: IMessageNew): void {
+        this.model.messenger.initChat(message)
+            .then((data: IMessage) => {
+                console.log('inited new chat ', data);
+
+                this.dialogId = data.dialog_id;
+                this.isEmptyChat = false;
+                this.model.messenger.createChatEventListener(
+                    this.dialogId,
+                    {
+                        onmessage: this.handleMessages.bind(this),
+                    },
+                );
+                this.handleMessages(data);
+                this.view.clearNewMsgForm();
+            });
+    }
+
+    private handleKeyClick(e: KeyboardEvent): void {
+        if (e.key === 'Enter' && e.ctrlKey) {
+            e.preventDefault();
+            const currentMessage = document.querySelector('textarea');
+            if (currentMessage !== null && currentMessage !== undefined) {
+                currentMessage.value += '\n';
+            }
+        }
+        else if (e.key === 'Enter') {
+            e.preventDefault();
+            this.sendMessage();
+            return;
+        }
+    }
+
+    private handleClick(e: Event): void {
+        e.preventDefault();
+        const target = <HTMLElement>e.target;
+        const action =
+            (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
+
+        switch (action) {
+            default: return;
+            case 'back': {
+                router.goToPath(paths.messenger);
+                return;
+            }
+
+            case 'user_profile': {
+                const user_id = (<HTMLElement>target.closest('[data-user_id]'))?.dataset['user_id'];
+                if (!user_id) return;
+                let url = `${paths.userProfie}`;
+                url = url.replace('{:number}', user_id);
+                router.goToPath(url);
+                return;
+            }
+
+            case 'send': {
+                this.sendMessage();
+                return;
+            }
+
+            case 'add_attachment': {
+                this.msgAttachments.addAttachment();
+                return;
+            }
+            case 'smile': {
+                // ОБРАБОТКА СМАЙЛОВ
+                const currentMessage = document.querySelector('textarea');
+                if (currentMessage !== null && currentMessage !== undefined) {
+                    currentMessage.value += target.innerText;
+                }
+            }
+            case 'sticker_item': {
+                // ОБРАБОТКА стикеров
+                if (!this.stickers) {
+                    this.updateStickers()
+                        .catch(err => {
+                            console.log(err);
+                        });
+                }
+
+                const stickerId = target.dataset['sticker_id'];
+                if (!stickerId) {
+                    console.log('no sticker');
+                    return;
+                }
+
+                this.sendSticker(stickerId);
+            }
+        }
+    }
+
+    private sendSticker(stickerId: number | string) {
+        const message: IMessageNew = {
+            receiver_id: Number(this.userId),
+            dialog_id: Number(this.dialogId),
+            sender_id: this.model.user.getCurrentUser()?.id ?? 0,
+            attachments: [],
+            sticker: Number(stickerId),
+        };
+
+        if (this.isEmptyChat) {
+            this.initNewDialog(message);
+            return;
+        }
+
+        console.log('Dialog exists');
+
+        if (!this.dialogId) return;
+        if (!this.userId) return;
+        this.model.messenger.sendMessage(message);
+        console.log('msg sended to ws');
+    }
+
+    private fillDialog(data: IDialog): void {
+        if (!data.messages) return;
+        this.handleMessages(data.messages);
+    }
+
+
+
+    private async setProfileData() {
+        const user = await this.model.user.getUser(this.userId ?? '-1');
+        if (!user) return;
+        const data: IChatNavbar = {
+            avatar: user.avatar ?? config.default_img,
             first_name: user.first_name ?? 'Капи',
             last_name: user.last_name ?? 'Неопознаный',
             id: user.id ?? '',
@@ -229,48 +307,19 @@ class ChatController extends
     }
 
     private async handleMessages(data: IMessage | IMessage[]) {
-
         if (!Array.isArray(data)) {
-            const ndata: IMessage[] = [];
-            ndata.push(data);
+            const ndata: IMessage[] = [data];
             data = ndata;
         }
 
-        const msgs: IMessageData[] = [];
+        const msgs = [];
         for (let i = 0; i < data.length; i++) {
             const item = data[i];
-
             const user = await this.model.user.getUser(item.sender_id);
-
-            const formatted: IMessageData = {
-                user: {
-                    avatar: user.avatar ?? '../src/img/default_avatar.png',
-                    first_name: user.first_name ?? 'Капи',
-                    last_name: user.last_name ?? 'Неопознаный',
-                },
-                text: item.body ?? 'Здесь было сообщение...',
-                date: `${new Date(item.created_at).toJSON().slice(0, 10).replace(/-/g, '/')}`,
-            };
-
+            const formatted = { msg: item, user: user };
             msgs.push(formatted);
         }
-
         this.view.pushMessages(msgs);
-    }
-
-    public unmountComponent(): void {
-        if (this.isMounted) {
-            this.view.hide();
-            this.isMounted = false;
-
-            if (this.currentDialogId) {
-                this.model.messenger.removeChatEventListener(this.currentDialogId);
-            }
-
-            this.currentDialogId = undefined;
-            this.emptyChat = undefined;
-            this.userID = undefined;
-        }
     }
 }
 

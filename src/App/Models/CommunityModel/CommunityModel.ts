@@ -1,4 +1,4 @@
-import ajax from "../../Ajax/Ajax";
+import ajax, { checkResponseStatus } from "../../Ajax/Ajax";
 import config from "../../Configs/Config";
 import IModel from "../IModel/IModel"
 
@@ -26,6 +26,7 @@ export interface ICommunityEditData {
     owner_id?: number;
     id?: number;
 }
+
 /**
  * Модель сообществ 
  * @category Models 
@@ -36,215 +37,71 @@ class CommunityModel extends IModel {
         super();
     }
 
-    public async create(data: ICommunityCreateData) {
-        const response = await ajax(config.api.communitiesCreate, JSON.stringify(data));
+    private parseCommunity(json: any): ICommunityData {
+        return {
+            avatar: json.avatar_id === 0 ?
+                config.default_img
+                :
+                config.host + `${config.api.image.url.replace('{:id}', json.avatar_id)}`,
+            create_date: json.create_date,
+            description: json.description,
+            id: json.id,
+            name: json.name,
+            owner_id: json.owner_id,
+        };
+    }
 
-        if (response.status.toString() in config.api.communitiesCreate.statuses.success) {
-            const community = response.parsedBody.body;
-            const data: ICommunityData = {
-                avatar: community.avatar_id === 0 ?
-                    '../src/img/default_avatar.png'
-                    :
-                    `${config.host}${config.api.image.url}/${community.avatar_id}`,
-                create_date: community.create_date,
-                description: community.description,
-                id: community.id,
-                name: community.name,
-                owner_id: community.owner_id,
-            };
-
-            return Promise.resolve(data);
-        }
-
-        if (response.status.toString() in config.api.communitiesCreate.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.communitiesCreate.statuses.failure;
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.signin.statuses.failure[keyStatus],
-                body: response.parsedBody
-            })
-        }
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
+    private parseCommunities(json: any): ICommunityData[] {
+        return json.map((rawCommunity: any) => {
+            return this.parseCommunity(rawCommunity);
         });
     }
 
-    public async delete(communityId: number | string) {
+    public async create(data: ICommunityCreateData) {
+        const response = await ajax(config.api.communitiesCreate, JSON.stringify(data));
+        await checkResponseStatus(response, config.api.communitiesCreate);
+        const communityData = this.parseCommunity(response.parsedBody.body);
+        return Promise.resolve(communityData);
+    }
 
+    public async delete(communityId: number | string) {
         let conf = config.api.communitiesDelete;
         conf.url = conf.url.replace('{:id}', communityId.toLocaleString());
-
         const response = await ajax(conf);
-
-        if (response.status.toString() in config.api.communitiesDelete.statuses.success) {
-            return Promise.resolve();
-        }
-
-        if (response.status.toString() in config.api.communitiesDelete.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.communitiesDelete.statuses.failure;
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.signin.statuses.failure[keyStatus],
-                body: response.parsedBody
-            })
-        }
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-        });
+        await checkResponseStatus(response, conf);
+        return Promise.resolve();
     }
 
     public async edit(data: ICommunityEditData) {
         const response = await ajax(config.api.communitiesEdit, JSON.stringify(data));
-
-        if (response.status.toString() in config.api.communitiesEdit.statuses.success) {
-            const community = response.parsedBody.body;
-            const data: ICommunityData = {
-                avatar: community.avatar_id === 0 ?
-                    '../src/img/default_avatar.png'
-                    :
-                    `${config.host}${config.api.image.url}/${community.avatar_id}`,
-                create_date: community.create_date,
-                description: community.description,
-                id: community.id,
-                name: community.name,
-                owner_id: community.owner_id,
-            };
-
-            return Promise.resolve(data);
-        }
-
-        if (response.status.toString() in config.api.communitiesEdit.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.communitiesEdit.statuses.failure;
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.signin.statuses.failure[keyStatus],
-                body: response.parsedBody
-            })
-        }
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-        });
+        await checkResponseStatus(response, config.api.communitiesEdit);
+        const communityData = this.parseCommunity(response.parsedBody.body);
+        return Promise.resolve(communityData);
     }
 
     public async getAll() {
         const response = await ajax(config.api.communitiesAll);
-
-        if (response.status.toString() in config.api.communitiesAll.statuses.success) {
-            let data: ICommunityData[] = response.parsedBody.body.map((community: any) => {
-                const item: ICommunityData = {
-                    avatar: community.avatar_id === 0 ?
-                        '../src/img/default_avatar.png'
-                        :
-                        `${config.host}${config.api.image.url}/${community.avatar_id}`,
-                    create_date: community.create_date,
-                    description: community.description,
-                    id: community.id,
-                    name: community.name,
-                    owner_id: community.owner_id,
-                };
-                return item;
-            });
-
-            return Promise.resolve(data);
-        }
-
-        if (response.status.toString() in config.api.communitiesAll.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.communitiesEdit.statuses.failure;
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.signin.statuses.failure[keyStatus],
-                body: response.parsedBody,
-            })
-        }
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-        });
+        await checkResponseStatus(response, config.api.communitiesAll);
+        const communitiesData = this.parseCommunities(response.parsedBody.body);
+        return Promise.resolve(communitiesData);
     }
 
     public async get(communityId: number | string) {
         let conf = Object.assign({}, config.api.communitiesGet);
         conf.url = conf.url.replace('{:id}', communityId.toString());
-
         const response = await ajax(conf);
-
-        if (response.status.toString() in config.api.communitiesGet.statuses.success) {
-            const community = response.parsedBody.body;
-            let data: ICommunityData = {
-                avatar: community.avatar_id === 0 ?
-                    '../src/img/default_avatar.png'
-                    :
-                    `${config.host}${config.api.image.url}/${community.avatar_id}`,
-                create_date: community.create_date,
-                description: community.description,
-                id: community.id,
-                name: community.name,
-                owner_id: community.owner_id,
-            };
-
-            return Promise.resolve(data);
-        }
-
-        if (response.status.toString() in config.api.communitiesAll.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.communitiesEdit.statuses.failure;
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.signin.statuses.failure[keyStatus],
-                body: response.parsedBody,
-            })
-        }
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-        });
+        await checkResponseStatus(response, conf);
+        const communityData = this.parseCommunity(response.parsedBody.body);
+        return Promise.resolve(communityData);
     }
 
     public async findCommunities(searchQuery: string) {
         let conf = Object.assign({}, config.api.communitiesSearch);
         conf.url = conf.url.replace('{:name}', searchQuery);
-
         const response = await ajax(conf);
-
-        if (response.status.toString() in config.api.communitiesSearch.statuses.success) {
-            let communities: ICommunityData[] = response.parsedBody.body.map((rawCommunity: any) => {
-                return {
-                    avatar: rawCommunity.avatar_id === 0 ?
-                        '../src/img/default_avatar.png'
-                        :
-                        `${config.host}${config.api.image.url}/${rawCommunity.avatar_id}`,
-                    create_date: rawCommunity.create_date,
-                    description: rawCommunity.description,
-                    id: rawCommunity.id,
-                    name: rawCommunity.name,
-                    owner_id: rawCommunity.owner_id,
-                }
-            })
-
-            return Promise.resolve(communities);
-        }
-        if (response.status.toString() in config.api.communitiesSearch.statuses.failure) {
-            const keyStatus = response.status.toString() as keyof typeof config.api.communitiesSearch.statuses.failure;
-
-            return Promise.reject({
-                status: response.status,
-                msg: config.api.communitiesSearch.statuses.failure[keyStatus],
-                body: response.parsedBody
-            });
-        }
-
-        return Promise.reject({
-            status: response.status,
-            msg: 'Неожиданная ошибка',
-            body: response.parsedBody,
-        });
+        await checkResponseStatus(response, conf);
+        const communitiesData = this.parseCommunities(response.parsedBody.body);
+        return Promise.resolve(communitiesData);
     }
 };
 

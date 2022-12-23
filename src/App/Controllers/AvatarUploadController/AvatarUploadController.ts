@@ -1,4 +1,4 @@
-import ImageUploadModel from "../../Models/ImageUploadModel/ImageUploadModel";
+import ImageUploadModel, { IImage } from "../../Models/ImageModel/ImageModel";
 import UserModel from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import AvatarUploadView from "../../Views/AvatarUploadView/AvatarUploadView";
@@ -6,20 +6,22 @@ import IImageUploadController from "../IImageUploadController/IImageUploadContro
 
 class AvatarUploadController extends IImageUploadController<AvatarUploadView> {
     private userModel : UserModel;
-
-    constructor(view: AvatarUploadView, models: {images: ImageUploadModel, user: UserModel}) {
-        super(view, models.images);
-        this.userModel = models.user;
+    constructor(model: UserModel) {
+        super(new AvatarUploadView(), new ImageUploadModel());
+        this.userModel = model;
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         this.view.bindClick(this.handleClick.bind(this));
     }
 
+    public getElement() : HTMLElement {
+        return this.view.getElement();
+    }
+    
     public handleClick(e: Event): void {
         const target = <HTMLElement>e.target;
         const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
         const src = (<HTMLImageElement>target.closest('.avatar-upload')?.querySelector('.avatar-upload__preview'))?.src;
 
-        // console.log(src);
         switch (action) {
             default: return;
             case 'choose': {
@@ -28,7 +30,6 @@ class AvatarUploadController extends IImageUploadController<AvatarUploadView> {
             }
             case 'upload': {
                 if (!src) {
-                    // console.log('no src');
                     return;
                 }
                 this.uploadImage(src);
@@ -57,21 +58,16 @@ class AvatarUploadController extends IImageUploadController<AvatarUploadView> {
         this.view.hideTools();
     }
 
-    public onSucceccUpload(avatarRemoveId: string): void {
-        // console.log('succ');
-        this.userModel.updateUserData({avatar: Number(avatarRemoveId)})
+    public onSucceccUpload(remoteImg: IImage): void {
+        this.userModel.updateUserData({avatar: Number(remoteImg.id)})
         .then(() => {
-            // console.log('user updated');
             this.loadImageMock();
         })
         .catch((data)=>{
-            // console.log(data);
-            // console.log('user not upd');
         });
     }
 
     public onFailUpload(url: string): void {
-        // console.log('fail');
     }
 }
 

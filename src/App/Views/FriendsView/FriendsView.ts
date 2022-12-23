@@ -1,18 +1,18 @@
 import IView from "../IView/IView";
 
-import friendsViewTemplate from "./FriendsView.hbs"
-import "./FriendsView.scss"
+import friendsViewTemplate from "./FriendsView.hbs";
+import "./FriendsView.scss";
 
-import friendTemplate from "../../Components/Friend/Friend.hbs"
-import "../../Components/Friend/Friend.scss"
+import friendTemplate from "../../Components/Friend/Friend.hbs";
+import "../../Components/Friend/Friend.scss";
 
-import friendNavbarTemplate from "../../Components/FriendsNavbar/FriendsNavbar.hbs"
-import "../../Components/FriendsNavbar/FriendsNavbar.scss"
+import friendNavbarTemplate from "../../Components/FriendsNavbar/FriendsNavbar.hbs";
+import "../../Components/FriendsNavbar/FriendsNavbar.scss";
 
 import { IUser } from "../../Models/UserModel/UserModel";
 
 class FriendsView extends IView {
-    private frinedNavbar : HTMLElement;
+    private frinedNavbar: HTMLElement;
     private friendList: HTMLElement;
 
     constructor(parent: HTMLElement) {
@@ -33,11 +33,11 @@ class FriendsView extends IView {
         }
     }
 
-    public bindSearchChange(callback : Function) : void {
+    public bindSearchChange(callback: Function): void {
         this.frinedNavbar.querySelector('input')?.addEventListener('input', callback.bind(this));
     }
 
-    public changeUserFriendshipStatus(user : IUser, isFriend: boolean) : void {
+    public changeUserFriendshipStatus(user: IUser, isFriend: boolean): void {
 
         const oldItem = this.friendList.querySelector(`[id="${user.id}"]`);
         if (!oldItem) {
@@ -45,24 +45,24 @@ class FriendsView extends IView {
         }
         const parser = new DOMParser();
         const newItem = parser.parseFromString(friendTemplate(Object.assign(user, { isCurent: false, isFriend: isFriend })), 'text/html').querySelector('.friend');
-        if(!newItem) {
+        if (!newItem) {
             return;
         }
         this.friendList.insertBefore(newItem, oldItem);
         this.friendList.removeChild(oldItem);
     }
 
-    public showMock(msg : string) : void { 
-        const mock =  this.element.querySelector('.friend-mock');
-        if(!mock) return;
+    public showMock(msg: string): void {
+        const mock = this.element.querySelector('.friend-mock');
+        if (!mock) return;
         mock.classList.remove('friends--hide');
         (<HTMLDivElement>mock.querySelector('.friend-mock__text')).innerText = msg;
     }
 
-    public hideMock() : void {
+    public hideMock(): void {
 
-        const mock =  this.element.querySelector('.friend-mock');
-        if(!mock) return;
+        const mock = this.element.querySelector('.friend-mock');
+        if (!mock) return;
         mock.classList.add('friends--hide');
     }
 
@@ -74,13 +74,20 @@ class FriendsView extends IView {
         this.friendList.innerHTML = '';
     }
 
+    public clearInput(): void {
+        const input = this.frinedNavbar.querySelector('input');
+        if (input !== null && input !== undefined) {
+            input.value = '';
+        }
+    }
+
     public fillList(users: any[]): void {
         users.forEach(user => {
             this.friendList.innerHTML += friendTemplate(user);
         });
     }
 
-    public getSearchData() : string { 
+    public getSearchData(): string {
         const name = this.frinedNavbar.querySelector('input')?.value;
         return name ?? '';
     }

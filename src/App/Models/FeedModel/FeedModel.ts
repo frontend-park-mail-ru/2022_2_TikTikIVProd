@@ -1,32 +1,37 @@
 import config, { IApiItem } from "../../Configs/Config";
-import ajax from "../../Ajax/Ajax";
+import ajax, { checkResponseStatus } from "../../Ajax/Ajax";
 import IModel from "../IModel/IModel"
 import dateParser from "../../Utils/DateParser/DateParser";
+import ImageUploadModel, { IImage } from "../ImageModel/ImageModel";
 
-// export type UserFeed = {
-//     userId: number,
-// };
+export interface INewComment {
+    message: string;
+    post_id: number;
+}
 
-// function isUserFeed(object: any): object is UserFeed {
-//     return 'userId' in object;
-// }
+export interface IEditComment {
+    message: string;
+    post_id: number;
+    id: number;
+}
 
-// export type AllFeed = {
-//     [Key in any]: never; // Пустой объект
-// };
+export interface IComment {
+    avatar_id: string,
+    create_date: string;
+    id: number;
+    message: string;
+    post_id: number;
+    user_first_name: string;
+    user_id: number;
+    user_last_name: string;
+}
 
-// function isAllFeed(object: any): object is AllFeed {
-//     return Object.keys(object).length == 0;
-// }
-
-// export type FeedType = UserFeed | AllFeed;
 
 export interface IFeedType {
     user?: { id: string | number },
     group?: { id: string | number },
     // Если пустой, то общий фид
 }
-
 
 /**
  * Интерфейс данных, содержащихся в посте в ленте
@@ -55,22 +60,21 @@ export interface IFeedData {
     text: string;
     likes: number;
     isLiked: string;
-    attachments: { src: string }[];
+    attachments: IImage[];
     community_id: number,
 }
 
 export interface IFeedNewPost {
-    images: { src: string }[];
     message: string;
-
-    user_id: number; // TODO
-    user_first_name: string; // TODO
-    user_last_name: string; // TODO
-
-    create_date: string; // TODO
-    id: number; //TODO
-
     community_id: number,
+    attachments: IImage[],
+}
+
+export interface IFeedCardEditData {
+    id: number;
+    message: string;
+    community_id: number,
+    attachments: IImage[],
 }
 
 /**
@@ -83,161 +87,105 @@ class FeedModel extends IModel {
         super();
     }
 
+    private parseComment(json: any): IComment {
+        return {
+            avatar_id: json.avatar_id === 0
+                ?
+                config.default_img
+                :
+                config.host + `${config.api.image.url.replace('{:id}', json.avatar_id)}`,
+
+            create_date: dateParser(json.create_date),
+            id: json.id,
+            message: json.message,
+            post_id: json.post_id,
+            user_first_name: json.user_first_name,
+            user_id: json.user_id,
+            user_last_name: json.user_last_name,
+        }
+    }
+
+    private parseComments(json: any): IComment[] {
+        return json.map((rawComment: any) => {
+            return this.parseComment(rawComment);
+        });
+    }
+
+    private parseFeedCard(json: any): IFeedData {
+        return {
+            id: json.id,
+            author: {
+                url: '',
+                avatar: json.avatar_id === 0
+                    ? config.default_img
+                    :
+                    config.host + `${config.api.image.url.replace('{:id}', json.avatar_id)}`,
+                first_name: json.user_first_name,
+                last_name: json.user_last_name,
+                id: json.user_id,
+            },
+            date: dateParser(json.create_date),
+            text: json.message,
+            likes: json.count_likes,
+            isLiked: json.is_liked ? "liked" : "unliked",
+            attachments: ImageUploadModel.parseImages(json.attachments),
+
+            community_id: json.community_id,
+        };
+    }
+
+    private parseFeedCards(json: any): IFeedData[] {
+        return json.map((rawFeedCard: any) => {
+            return this.parseFeedCard(rawFeedCard);
+        });
+    }
+
     public async deletePost(id: number | string) {
         let conf = Object.assign({}, config.api.postDelete);
         conf.url = conf.url.replace('{:id}', id.toString());
         const response = await ajax(conf);
-        if (response.status.toString() in conf.statuses.success) {
-            return Promise.resolve({ status: response.status, body: response.parsedBody });
-        }
-
-        if (response.status.toString() in conf.statuses.failure) {
-            return Promise.reject({ status: response.status, body: response.parsedBody });
-        }
-
-        if (response.status.toString() in conf.statuses.success) {
-            return Promise.resolve({ status: response.status, body: response.parsedBody });
-        }
+        await checkResponseStatus(response, conf);
+        return Promise.resolve();
     }
 
     public async getPost(id: number | string) {
         let conf = Object.assign({}, config.api.post);
         conf.url = conf.url.replace('{:id}', id.toString());
         const response = await ajax(conf);
-
-        if (response.status.toString() in conf.statuses.success) {
-            const feedPost = response.parsedBody.body;
-            const feed: IFeedData = {
-                id: feedPost.id,
-                author: {
-                    url: '',
-                    avatar: feedPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${feedPost.avatar_id}`,
-                    first_name: feedPost.user_first_name,
-                    last_name: feedPost.user_last_name,
-                    id: feedPost.user_id,
-                },
-                date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
-                text: feedPost.message,
-                likes: feedPost.count_likes,
-                isLiked: feedPost.is_liked ? "liked" : "unliked",
-                attachments: feedPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
-                community_id: feedPost.community_id,
-            }
-
-            return Promise.resolve(feed);
-        }
-        // // console.log(response);
-        return Promise.reject();
+        await checkResponseStatus(response, conf);
+        const feedCard = this.parseFeedCard(response.parsedBody.body);
+        return Promise.resolve(feedCard);
     }
 
     public async getUserPosts(userId: string) {
         let conf = Object.assign({}, config.api.userPosts);
         conf.url = conf.url.replace("{:id}", userId);
         const response = await ajax(conf);
-
-        let responseBody: any = response.parsedBody.body.map((feedPost: any) => {
-            return {
-                id: feedPost.id,
-                author: {
-                    url: '',
-                    avatar: feedPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${feedPost.avatar_id}`,
-                    first_name: feedPost.user_first_name,
-                    last_name: feedPost.user_last_name,
-                },
-                date: `${new Date(feedPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
-                text: feedPost.message,
-                isLiked: feedPost.is_liked ? "liked" : "unliked",
-                likes: feedPost.likes__count,
-                attachments: feedPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
-            }
-        });
-
-        const result = {
-            status: response.status,
-            body: responseBody,
-        };
-
-        if (response.status in config.api.image.statuses.success) {
-            return Promise.resolve(result);
-        }
-        else {
-            return Promise.reject(result);
-        }
+        await checkResponseStatus(response, conf);
+        const feedCards = this.parseFeedCards(response.parsedBody.body);
+        return Promise.resolve(feedCards);
     }
 
-    public async sendEditedFeed(data: IFeedNewPost) {
+    public async sendEditedFeed(data: IFeedCardEditData) {
         const response = await ajax(config.api.postEdit, JSON.stringify(data));
-
-        if (response.status.toString() in config.api.postCreate.statuses.success) {
-            const rawPost = response.parsedBody.body;
-            const data: IFeedData = {
-                id: rawPost.id,
-                author: {
-                    id: rawPost.user_id,
-                    url: '',
-                    avatar: rawPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawPost.avatar_id}`,
-                    first_name: rawPost.user_first_name,
-                    last_name: rawPost.user_last_name,
-                },
-                date: `${new Date(rawPost.create_date).toJSON().slice(0, 10).replace(/-/g, '/')}`,
-                text: rawPost.message,
-                likes: rawPost.count_likes,
-                isLiked: rawPost.is_liked ? "liked" : "unliked",
-                attachments: rawPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
-                community_id: rawPost.community_id,
-            };
-            return Promise.resolve(data);
-        }
-
-        if (response.status.toString() in config.api.postCreate.statuses.failure) {
-            const keyCode = response.status.toString() as keyof typeof config.api.postCreate.statuses.failure;
-            // // console.log(keyCode, config.api.postCreate.statuses.failure[keyCode]);
-            return Promise.reject({});
-        }
-
-        // // console.log('Create post err');
-        return Promise.reject({});
+        await checkResponseStatus(response, config.api.postEdit);
+        const feedCard = this.parseFeedCard(response.parsedBody.body);
+        return Promise.resolve(feedCard);
     }
 
     public async sendNewFeed(data: IFeedNewPost) {
         const response = await ajax(config.api.postCreate, JSON.stringify(data));
-
-        if (response.status.toString() in config.api.postCreate.statuses.success) {
-            const rawPost = response.parsedBody.body;
-            const data: IFeedData = {
-                id: rawPost.id,
-                author: {
-                    id: rawPost.user_id,
-                    url: '',
-                    avatar: rawPost.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawPost.avatar_id}`,
-                    first_name: rawPost.user_first_name,
-                    last_name: rawPost.user_last_name,
-                },
-                date: dateParser(rawPost.create_date),
-                text: rawPost.message,
-                likes: rawPost.count_likes,
-                isLiked: rawPost.is_liked ? "liked" : "unliked",
-                attachments: rawPost.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
-                community_id: rawPost.community_id,
-            };
-            return Promise.resolve(data);
-        }
-
-        if (response.status.toString() in config.api.postCreate.statuses.failure) {
-            const keyCode = response.status.toString() as keyof typeof config.api.postCreate.statuses.failure;
-            // // console.log(keyCode, config.api.postCreate.statuses.failure[keyCode]);
-            return Promise.reject({});
-        }
-
-        // // console.log('Create post err');
-        return Promise.reject({});
+        await checkResponseStatus(response, config.api.postCreate);
+        const feedCard = this.parseFeedCard(response.parsedBody.body);
+        return Promise.resolve(feedCard);
     }
+
     /**
      * Функция получения постов ленты с сервера
      * @async
      * @return {Promise}
      */
-    public async getFeeds(feedType: IFeedType): Promise<{ status: number, feeds: IFeedData[] }> {
+    public async getFeeds(feedType: IFeedType) {
         let conf = Object.assign({}, config.api.feed); // Весь фид
 
         if (feedType.user) { // Посты пользователя
@@ -249,33 +197,11 @@ class FeedModel extends IModel {
             conf = Object.assign({}, config.api.communitiesPosts);
             conf.url = conf.url.replace('{:id}', feedType.group.id.toString());
         }
-        // if(feedType.group){} // TODO
 
         let response = await ajax(conf);
-
-        if (response.status in config.api.image.statuses.success) {
-            let feeds: IFeedData[] = response.parsedBody.body.map((rawFeed: any) => {
-                return {
-                    id: rawFeed.id,
-                    author: {
-                        id: rawFeed.user_id,
-                        url: '',
-                        avatar: rawFeed.avatar_id === 0 ? './src/img/default_avatar.png' : `${config.host}${config.api.image.url}/${rawFeed.avatar_id}`,
-                        first_name: rawFeed.user_first_name,
-                        last_name: rawFeed.user_last_name,
-                    },
-                    date: dateParser(rawFeed.create_date),
-                    text: rawFeed.message,
-                    likes: rawFeed.count_likes,
-                    isLiked: rawFeed.is_liked ? "liked" : "unliked",
-                    attachments: rawFeed.images.map((elem: any) => { return `${config.host}${config.api.image.url}/${elem.id}` }),
-                }
-            });
-            return Promise.resolve({ status: response.status, feeds: feeds });
-        }
-        else {
-            return Promise.reject({ status: response.status, feeds: [] });
-        }
+        await checkResponseStatus(response, conf);
+        const feedCards = this.parseFeedCards(response.parsedBody.body);
+        return Promise.resolve(feedCards);
     }
 
     /**
@@ -284,18 +210,12 @@ class FeedModel extends IModel {
      * @return {Promise}
      */
     public async likePost(postId: string) {
+        console.log("deb testing");
         let conf = Object.assign({}, config.api.postLike);
         conf.url = conf.url.replace('{:id}', postId);
-
-
         let response = await ajax(conf);
-
-        if (response.status in config.api.postLike.statuses.success) {
-            return Promise.resolve({ status: response.status });
-        }
-        else {
-            return Promise.reject({ status: response.status });
-        }
+        await checkResponseStatus(response, conf);
+        return Promise.resolve();
     }
 
     /**
@@ -306,15 +226,45 @@ class FeedModel extends IModel {
     public async unlikePost(postId: string) {
         let conf = Object.assign({}, config.api.postUnlike);
         conf.url = conf.url.replace('{:id}', postId);
-
         let response = await ajax(conf);
+        await checkResponseStatus(response, conf);
+        return Promise.resolve();
+    }
 
-        if (response.status in config.api.postLike.statuses.success) {
-            return Promise.resolve({ status: response.status });
-        }
-        else {
-            return Promise.reject({ status: response.status });
-        }
+
+    public async addComment(data: INewComment) {
+        let conf = Object.assign({}, config.api.addComment);
+        conf.url = conf.url.replace('{:id}', data.post_id.toString());
+        let response = await ajax(conf, JSON.stringify(data));
+        await checkResponseStatus(response, conf);
+        const comment = this.parseComment(response.parsedBody.body);
+        return Promise.resolve(comment);
+    }
+
+    public async deleteComment(commentID: number | string) {
+        let conf = Object.assign({}, config.api.deleteComment);
+        conf.url = conf.url.replace('{:id}', commentID.toString());
+        let response = await ajax(conf);
+        await checkResponseStatus(response, conf);
+        return Promise.resolve();
+    }
+
+    public async getComments(postID: number | string) {
+        let conf = Object.assign({}, config.api.getComments);
+        conf.url = conf.url.replace('{:id}', postID.toString());
+        let response = await ajax(conf);
+        await checkResponseStatus(response, conf);
+        const comments: IComment[] = this.parseComments(response.parsedBody.body);
+        return Promise.resolve(comments);
+    }
+
+    public async editComment(data: IEditComment) {
+        let conf = Object.assign({}, config.api.editComment);
+        conf.url = conf.url.replace('{:id}', data.post_id.toString());
+        let response = await ajax(conf, JSON.stringify(data));
+        await checkResponseStatus(response, conf);
+        const comment = this.parseComment(response.parsedBody.body);
+        return Promise.resolve(comment);
     }
 }
 

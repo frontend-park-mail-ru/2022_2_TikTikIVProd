@@ -1,12 +1,15 @@
 <div class="feed-navbar">
     <div class="feed-navbar-search">
-        <input type="text" class="feed-navbar-search__input" placeholder="Поиск по записям...">
+        <input type="text" class="feed-navbar-search__input"
+            placeholder="Поиск по записям находится в процессе разработки">
         <img src="../src/img/search_icon.svg" class="feed-navbar-search__icon" data-action="submit_search">
     </div>
+    {{#if showCreationButton}}
     <button class="feed-navbar-button" data-action="create_feed">
         <img class="feed-navbar-button__icon" src="../src/img/plus_icon.svg" alt="">
         <div class="feed-navbar-button__text">
             Новая
         </div>
     </button>
+    {{/if}}
 </div>

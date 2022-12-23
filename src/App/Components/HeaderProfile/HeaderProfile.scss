@@ -2,9 +2,12 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  outline: 2px solid var(--color-button-background);
+  border: 2px solid var(--color-button-background);
   outline-offset: -2px;
   border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -khtml-border-radius: 8px;
+  -moz-border-radius: 8px;
   padding: 3px 10px;
   text-decoration: none;
   cursor: pointer;
@@ -16,6 +19,7 @@
 
     border: 2px solid inherit;
     border-radius: 50%;
+    background-color: var(--color-profile-img-background);
   }
 
   &__name {
@@ -30,13 +34,16 @@
 .header-item-settings {
   display: flex;
   align-items: center;
-  
-  outline: 2px solid var(--color-button-background);
+
+  border: 2px solid var(--color-button-background);
   outline-offset: -2px;
   border-radius: 8px;
-  
+  -webkit-border-radius: 8px;
+  -khtml-border-radius: 8px;
+  -moz-border-radius: 8px;
+
   padding: 5px;
-  
+
   cursor: pointer;
 
   &__icon {

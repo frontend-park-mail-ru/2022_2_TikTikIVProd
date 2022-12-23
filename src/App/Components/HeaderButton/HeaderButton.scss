@@ -1,11 +1,11 @@
 .header-item-button {
   height: min-content;
-  
+
   display: flex;
   align-items: center;
 
   border: none;
-  outline: 2px solid var(--color-button-background);
+  border: 2px solid var(--color-button-background);
   outline-offset: -2px;
   border-radius: 10px;
 

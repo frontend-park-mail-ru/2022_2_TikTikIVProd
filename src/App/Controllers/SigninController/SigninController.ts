@@ -56,11 +56,9 @@ class SigninController extends IController<SigninView, UserModel> {
                 password: data.get('password') || '',
             };
 
-            this.model.signInUser(user).then(({ status, body, msg }) => {
-                // console.log('signin success');
-                
+            this.model.signInUser(user).then(() => {
                 router.goToPath(paths.feedPage);
-            }).catch(({ status, body, msg }) => {
+            }).catch((msg) => {
                 this.view.showErrorMsg('email', msg);
             });
         }

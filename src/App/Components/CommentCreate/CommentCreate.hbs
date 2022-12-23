@@ -1,0 +1,32 @@
+<div class="comment-create" data-post_id="{{postId}}" data-comment_id="{{comment.id}}">
+    <div class="comment-create__tools">
+        {{!-- <button class="comment-create-button comment-create-button--small" data-action="photo">
+            <img class="comment-create-button__icon" src="../src/img/camera_icon.svg" alt="">
+        </button>
+        <button class="comment-create-button comment-create-button--small" data-action="sticker">
+            <img class="comment-create-button__icon" src="../src/img/image_icon.svg" alt="">
+        </button>
+        <button class="comment-create-button comment-create-button--small" data-action="smile">
+            <img class="comment-create-button__icon" src="../src/img/smile_icon.svg" alt="">
+        </button> --}}
+    </div>
+
+    <div class="comment-create__form">
+        <textarea class="comment-create__textarea">{{#if comment}}{{comment.text}}{{/if}}</textarea>
+        <div class="comment-create__attachments"></div>
+    </div>
+
+    <div class="comment-create__tools">
+        <button class="comment-create-button comment-create-button--big"
+            data-action="{{#if comment}}submit_edited_comment{{else}}send_comment{{/if}}">
+            <img class="comment-create-button__icon" src="../src/img/send_icon.svg" alt="">
+            <div class="comment-create-button__text">
+                {{#if comment}}
+                Сохранить
+                {{else}}
+                Отправить
+                {{/if}}
+            </div>
+        </button>
+    </div>
+</div>

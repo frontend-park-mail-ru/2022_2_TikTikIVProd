@@ -1,0 +1,23 @@
+<div class="comment" data-post_id="{{post_id}}" data-user_id="{{user_id}}" data-id="{{id}}">
+    <img src="{{avatar_id}}" alt="" class="comment-user__avatar">
+    <div class="comment-wrapper">
+        <div class="comment__header">
+            <div class="comment-user__name">
+                {{user_first_name}} {{user_last_name}}
+            </div>
+            {{#if showTools}}
+            <div class="comment__buttons">
+                {{!-- <img src="../src/img/pen_icon.svg" alt="" class="comment__button" data-action="comment_edit" />
+                --}}
+                <img src="../src/img/trash_icon.svg" alt="" class="comment__button" data-action="comment_delete" />
+            </div>
+            {{/if}}
+        </div>
+        <div class="comment__date">
+            {{create_date}}
+        </div>
+        <div class="comment__content">
+            {{message}}
+        </div>
+    </div>
+</div>

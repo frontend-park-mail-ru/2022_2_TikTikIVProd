@@ -10,6 +10,7 @@
   --color-form-title: #6f6f6f;
   --color-form-background: #ffffff;
   --color-form-border: #ebebeb;
+  --color-form-text: #000000;
 
   --color-input-disabled: #d8d8d8;
   --color-input-title: #6f6f6f;
@@ -82,5 +83,7 @@
 
   --color-feed-card-create-text-background: #ffffff;
   --color-feed-card-create-text: #000000;
+
+  --contrast-left-menu__icon: 1;
 
 }

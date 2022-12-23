@@ -1,14 +1,19 @@
 <div class="message-create">
     <div class="message-create__tools">
-        <button class="message-create-button message-create-button--small" data-action="photo">
+        <button class="message-create-button message-create-button--small message-create-button__smiles">
+            <img class="message-create-button__icon" src="../src/img/smile_icon.svg" alt="">
+            {{{smiles}}}
+        </button>
+
+        <button class="message-create-button message-create-button--small message-create-button__smiles">
+            <img class="message-create-button__icon" src="../src/img/sticker_icon.svg" alt="">
+            {{{stickers}}}
+        </button>
+
+        <button class="message-create-button message-create-button--small" data-action="add_attachment">
             <img class="message-create-button__icon" src="../src/img/camera_icon.svg" alt="">
         </button>
-        <button class="message-create-button message-create-button--small" data-action="sticker">
-            <img class="message-create-button__icon" src="../src/img/image_icon.svg" alt="">
-        </button>
-        <button class="message-create-button message-create-button--small" data-action="smile">
-            <img class="message-create-button__icon" src="../src/img/smile_icon.svg" alt="">
-        </button>
+
     </div>
 
     <div class="message-create__form">

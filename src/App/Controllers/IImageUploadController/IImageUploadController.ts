@@ -1,4 +1,4 @@
-import ImageUploadModel from '../../Models/ImageUploadModel/ImageUploadModel';
+import ImageUploadModel, { IImage } from '../../Models/ImageModel/ImageModel';
 import IView from '../../Views/IView/IView';
 import IController from '../IController/IController';
 
@@ -25,45 +25,48 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
                 this.imgsStore.set(key, { file: imgs[0], uploaded: false });
                 this.loadImagePreview(key);
                 if (this.autoUpload) {
-                    // console.log('auto upload');
                     this.uploadImage(key);
                 }
             }
         }
     }
 
-    public uploadImage(url: string) {
-        const img = this.imgsStore.get(url);
-        if (!img) {
-            // console.log('No img ', url);
-            return;
+    public async uploadAll() {
+        const imgs: IImage[] = [];
+
+        for (const url of this.imgsStore.keys()) {
+            console.log('att to upload: ', url);
+            
+            const img = await this.uploadImage(url);
+            
+            if(!img) return Promise.reject();
+            console.log('att succ');
+
+            imgs.push(img);
         }
 
-        if (img.uploaded) {
-            return;
-        }
+        return Promise.resolve(imgs);
+    }
 
+    public async uploadImage(url: string) {
+        const localImg = this.imgsStore.get(url);
+        console.log('store: ', this.imgsStore);
+        
+        console.log('target' , localImg);
+        
+        if (!localImg || localImg.uploaded) return Promise.resolve();
 
-        // let dt  = new DataTransfer();
-        // dt.items.add(img.file);
-        // let file_list = dt.files;
-        // const inpt = document.createElement('input');
-        // inpt.type = 'file';
-        // inpt.files = dt.files;
-
-        const data = new FormData();
-        data.append('image', img.file);
-        // console.log(data);
-
-        this.model.uploadImage(data)
-            .then(({ id }) => {
-                img.uploaded = true;
-                this.onSucceccUpload(id.toString());
-            })
-            .catch(err => {
-                // console.log(err);
-                this.onFailUpload(url);
-            });
+        const fd = new FormData();
+        fd.append('Attachment', localImg.file);
+        try {
+            const remoteImg = await this.model.uploadImage(fd);
+            localImg.uploaded = true;
+            this.onSucceccUpload(remoteImg);
+            return Promise.resolve(remoteImg);
+        } catch (err) {
+            this.onFailUpload(url);
+            return Promise.reject();
+        };
     }
 
     public removeOters(url: string) {
@@ -84,7 +87,7 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
 
             // Copy all besides deleted
             for (let i = 0; i <= this.virtInput.files.length - 1; i++)
-                if (this.virtInput.files[i] !== img.file){
+                if (this.virtInput.files[i] !== img.file) {
                     dt.items.add(this.virtInput.files[i]);
                 }
             // Replace
@@ -110,108 +113,8 @@ abstract class IImageUploadController<tView extends IView> extends IController<t
 
     abstract loadImagePreview(url: string): void;
     abstract loadImageMock(): void;
-    abstract onSucceccUpload(url: string): void;
+    abstract onSucceccUpload(img: IImage): void;
     abstract onFailUpload(url: string): void;
 }
 
 export default IImageUploadController;
-
-// import ImageUploadModel from
-// '../../Models/ImageUploadModel/ImageUploadModel'; import IController from
-// '../IController/IController'; import IImageUploadView from
-// '../../Views/IImageUploadView/IImageUploadView';
-
-// class ImageUploadController<tView extends IImageUploadView> extends
-// IController<tView, ImageUploadModel> {
-//     private virtInput: HTMLInputElement;
-//     private localURL: string | undefined;
-//     private img: Blob | undefined;
-
-//     constructor(view: tView, model: ImageUploadModel) {
-//         super(view, model);
-
-//         this.virtInput = document.createElement('input');
-//         this.virtInput.type = 'file';
-//         this.virtInput.accept = 'image/*';
-//         this.virtInput.onchange = () => {
-//             const imgs = this.virtInput.files;
-//             if (imgs) {
-//                 this.free();
-//                 this.img = imgs[0];
-//                 this.localURL = URL.createObjectURL(this.img);
-
-//                 this.view.showPreview(this.localURL);
-//                 this.view.hideMock();
-//             }
-//         }
-
-//         this.view.bindClick(this.handleClick.bind(this));
-//     }
-
-//     public free(): void {
-//         if (this.localURL) {
-//             URL.revokeObjectURL(this.localURL);
-//             this.localURL = undefined;
-//         }
-//         if (this.img) {
-//             this.img = undefined;
-//         }
-//     }
-
-
-//     public uploadImage() {
-//         if (!this.localURL || !this.img) {
-//             return;// Promise.reject();
-//         }
-
-//         const data = new FormData();
-//         data.append("image", this.img);
-
-//         this.model.uploadImage(data)
-//             .then(() => {
-//                 this.free();
-
-//                 this.view.showPreview(this.localURL);
-//                 this.view.hideMock();
-
-
-//                 // return Promise.resolve();
-//             })
-//             .catch(data => {
-//                 // console.log(data);
-
-
-//                 this.view.hidePreview(this.localURL);
-//                 this.view.showMock();
-//                 // return Promise.reject();
-//             });
-//     }
-
-//     public clearImage() : void {
-//         this.free();
-//         this.view.hidePreview(this.localURL);
-//         this.view.showMock();
-//     }
-
-//     private handleClick(e: Event): void {
-//         const action =
-//         (<HTMLElement>(<HTMLElement>e.target).closest('[data-action]')).dataset['action'];
-//         switch (action) {
-//             default: {
-//                 return;
-//             }
-//             case 'choose': {
-//                 this.virtInput.dispatchEvent(new MouseEvent('click'));
-//                 return;
-//             }
-//             case 'upload': {
-//                 this.uploadImage();
-//             }
-//             case 'clear': {
-//                 this.clearImage();
-//             }
-//         }
-//     }
-// }
-
-// export default ImageUploadController;

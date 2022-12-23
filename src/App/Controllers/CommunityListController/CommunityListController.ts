@@ -3,6 +3,7 @@ import UserModel from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import router from "../../Router/Router";
 import paths from "../../Router/RouterPaths";
+import throttle from "../../Utils/Throttle/Throttle";
 import validateInput from "../../Utils/Validators/InputValidator/InputValidator";
 import CommunityListView from "../../Views/CommunityListView/CommunityListView";
 import IController from "../IController/IController";
@@ -14,10 +15,35 @@ import IController from "../IController/IController";
  * @param  {CommunityListView} view Объект вида компонента сообщества
  */
 class CommunityListController extends IController<CommunityListView, { community: CommunityModel, user: UserModel }> {
+    private ignoreSearch: boolean;
     constructor(view: CommunityListView, models: { community: CommunityModel, user: UserModel }) {
         super(view, models);
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
         this.view.bindClick(this.onClick.bind(this));
+        this.view.bindSearchChange(throttle(this.handleSearchChange.bind(this), 1000));
+    }
+
+    private handleSearchChange(e: Event): void {
+        const searchQuery = this.view.getSearchData().replace(/\s+/g, ' ').trim().replace(" ", "+");
+        this.searchCommunities(searchQuery);
+    }
+
+
+    private searchCommunities(name: string): void {
+        if (name.length < 1) {
+            this.updateList();
+            return;
+        }
+
+        this.model.community.findCommunities(name)
+            .then(communitiesData => {
+                this.view.clearList(); //TODO
+                this.view.fillList(communitiesData);
+            })
+            .catch(msg => {
+                console.log(msg);
+            })
+        return;
     }
 
     private onClick(e: Event): void {
@@ -74,28 +100,27 @@ class CommunityListController extends IController<CommunityListView, { community
 
                 this.view.lockForm();
                 this.model.community.create(params)
-                    .then(data => {
+                    .then(communityData => {
                         this.view.unlockForm();
                         this.view.hideCommunityCreationForm();
                     })
-                    .catch(data => {
+                    .catch(msg => {
                         this.view.unlockForm();
-                        console.log('err ', data);
+                        console.log('err ', msg);
                     });
 
                 return;
             }
             case 'submit_search': {
                 const name = this.view.getSearchData().replace(/\s+/g, ' ').trim().replace(" ", "+");
-                console.log(name);
                 if (name.length < 1) return;
                 this.model.community.findCommunities(name)
-                    .then(communities => {
+                    .then(communitiesData => {
                         this.view.clearList(); //TODO
-                        this.view.fillList(communities);
+                        this.view.fillList(communitiesData);
                     })
-                    .catch(err => {
-                        console.log(err);
+                    .catch(msg => {
+                        console.log(msg);
                     })
                 return;
             }
@@ -120,12 +145,12 @@ class CommunityListController extends IController<CommunityListView, { community
 
     public updateList() {
         this.model.community.getAll()
-            .then((data) => {
+            .then(communitiesData => {
                 this.view.clearList(); //TODO
-                this.view.fillList(data);
+                this.view.fillList(communitiesData);
             })
-            .catch((resp) => {
-                console.log('Friends err: ', resp);
+            .catch(msg => {
+                console.log('Friends err: ', msg);
             });
     }
 
@@ -134,6 +159,7 @@ class CommunityListController extends IController<CommunityListView, { community
             this.view.show();
             this.isMounted = true;
             this.updateList();
+            this.view.clearInput();
         }
     }
 }

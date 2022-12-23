@@ -18,8 +18,6 @@ class FriendsController extends IController<FriendsView, UserModel> {
     }
 
     private handleSearchChange(e: Event): void {
-        console.log('eve');
-
         const searchQuery = this.view.getSearchData();
         this.searchUsers(searchQuery);
     }
@@ -31,10 +29,10 @@ class FriendsController extends IController<FriendsView, UserModel> {
             return;
         }
         this.ignoreSearch = false;
-        
+
         this.model.findUsers(name)
             .then(users => {
-                if(this.ignoreSearch) return;
+                if (this.ignoreSearch) return;
 
                 const currentUserId = this.model.getCurrentUser()?.id;
                 if (!currentUserId) return;
@@ -43,7 +41,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
                     .then(friends => {
                         users.forEach(user => {
                             user.isCurrent = user.id === currentUserId ? 1 : 0;
-                            user.isFriend = friends.users.find(friend => friend.id === user.id) ? 1 : 0;
+                            user.isFriend = friends.find(friend => friend.id === user.id) ? 1 : 0;
                         });
                         this.view.clearList(); //TODO
                         this.view.fillList(users);
@@ -131,7 +129,7 @@ class FriendsController extends IController<FriendsView, UserModel> {
         if (!currentUserId) return;
 
         this.model.getFriends(currentUserId)
-            .then(({ users }) => {
+            .then(users => {
                 users.forEach(user => {
                     user.isFriend = 1;
                     user.isCurrent = 0;
@@ -146,6 +144,8 @@ class FriendsController extends IController<FriendsView, UserModel> {
             this.view.show();
             this.isMounted = true;
             this.updateFriendsList();
+            this.view.clearList();
+            this.view.clearInput();
         }
     }
 

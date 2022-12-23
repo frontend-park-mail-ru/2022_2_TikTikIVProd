@@ -9,10 +9,12 @@
 
     padding: 15px 20px;
 
-    background-color: white;
+    background-color: var(--color-feed-card-background);
     border-radius: 10px;
 
-    &__wrapper{
+    cursor: pointer;
+
+    &__wrapper {
         height: min-content;
         width: 100%;
         display: flex;
@@ -21,8 +23,9 @@
 
     &__choose {
         width: fit-content;
-        height: fit-content;;
-        outline: 2px dashed black;
+        height: fit-content;
+        ;
+        border: 2px dashed black;
         border-radius: 10px;
         overflow: hidden;
     }
@@ -33,7 +36,7 @@
         max-height: 150px;
     }
 
-    &__tools{
+    &__tools {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
@@ -98,7 +101,7 @@
         font-size: 16px;
 
         @media screen and (max-width: 300px) {
-                display: none;
+            display: none;
         }
     }
 

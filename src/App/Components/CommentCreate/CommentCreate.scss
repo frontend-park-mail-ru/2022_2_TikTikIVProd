@@ -1,0 +1,108 @@
+.comment-create {
+    display: grid;
+    grid-template-columns: min-content auto min-content;
+    gap: 8px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    background-color: var(--color-feed-card-background);
+    width: 100%;
+
+    &__tools {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        min-width: 100px;
+        // max-width: 100%;
+    }
+
+    &__textarea {
+        min-height: 80px;
+
+        padding: 5px 8px;
+
+        border-radius: 10px;
+        border: 2px solid var(--color-chat-message-create-border);
+        outline-offset: -2px;
+
+        font-size: 14px;
+
+        background-color: var(--color-chat-message-create-background);
+        color: var(--color-chat-message-create-text);
+    }
+
+    &__textarea:focus {
+        outline-color: var(--color-chat-message-create-border-focus);
+    }
+
+    &__textarea::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+}
+
+.comment-create-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: min-content;
+
+    cursor: pointer;
+
+    border: none;
+    outline: none;
+    border-radius: 8px;
+
+    &--big {
+        background-color: var(--color-button-background);
+        padding: 4px 8px;
+
+
+        &:hover {
+            background-color: #24dc83;
+        }
+
+        &:active {
+            background-color: #24B66F;
+        }
+
+        @media screen and (max-device-width:799px) {
+            width: 10%;
+            min-width: min-content;
+            max-width: 150px;
+            padding: 12px;
+        }
+    }
+
+    &--small {
+        background-color: inherit;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+
+    &__icon {
+        object-fit: contain;
+        width: 20px;
+    }
+
+    &__text {
+        color: var(--color-button-value);
+        text-overflow: ellipsis;
+        font-weight: bolder;
+        font-size: 14px;
+
+        @media screen and (max-device-width:799px) {
+            display: none;
+        }
+    }
+}

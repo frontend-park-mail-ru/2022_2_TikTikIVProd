@@ -50,8 +50,19 @@ class CommunityListView extends IView {
         this.element.addEventListener('click', callback.bind(this));
     }
 
+    public bindSearchChange(callback: Function): void {
+        this.navbar.querySelector('input')?.addEventListener('input', callback.bind(this));
+    }
+
     public clearList(): void {
         this.communitiesList.innerHTML = '';
+    }
+
+    public clearInput(): void {
+        const input = this.navbar.querySelector('input');
+        if (input !== null && input !== undefined) {
+            input.value = '';
+        }
     }
 
     public fillList(data: ICommunityData[]): void {

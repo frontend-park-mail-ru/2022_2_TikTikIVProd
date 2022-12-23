@@ -1,0 +1,29 @@
+.comment-section {
+    display: flex;
+    flex-direction: column;
+
+    padding: 0 25px;
+    height: 400px;
+    gap: 10px;
+
+    @media screen and (max-device-width: 700px) {
+        gap: 5px;
+    }
+
+    &__comments {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        gap: 10px;
+    }
+
+    &__creation {
+        display: flex;
+    }
+
+    &--hide {
+        display: none !important;
+    }
+}

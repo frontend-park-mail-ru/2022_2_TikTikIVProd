@@ -38,11 +38,14 @@ export interface IConfig {
     host: string;
     api: {
         [index: string]: IApiItem;
-    }
+    },
+    default_img: string,
 }
 
 const config: IConfig = {
-    host: 'http://89.208.197.127:8080',
+    host: 'https://writesend.online/api',
+    // host: 'http://89.208.197.127/api',
+    // host: 'http://89.208.197.127:8080',
     // host: 'http://127.0.0.1:8080',
     // host: 'http://localhost:8080',
     api: {
@@ -67,7 +70,7 @@ const config: IConfig = {
             },
             statuses: {
                 success: {
-                    '200': 'Успешно'
+                    '200': 'Успешно',
                 },
                 failure: failureDefaultStatuses,
             },
@@ -130,7 +133,7 @@ const config: IConfig = {
             },
             statuses: {
                 success: {
-                    '201': 'Получение постов успешно'
+                    '200': 'Получение постов успешно'
                 },
                 failure: {
                     '400': 'Неверный запрос',
@@ -139,8 +142,9 @@ const config: IConfig = {
                 },
             },
         },
+
         image: {
-            url: '/image',
+            url: '/attachment/{:id}',
             method: REQUEST_TYPE.GET,
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
@@ -158,7 +162,7 @@ const config: IConfig = {
         },
 
         imageUpload: {
-            url: '/image/upload',
+            url: '/attachment/image/upload',
             method: REQUEST_TYPE.POST,
             headers: {
                 // 'Content-Type': 'multipart/form-data',
@@ -175,7 +179,24 @@ const config: IConfig = {
                 },
             },
         },
-
+        fileUpload: {
+            url: '/attachment/file/upload',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                // 'Content-Type': 'multipart/form-data',
+            },
+            statuses: {
+                success: {
+                    '200': 'Картинка загружена'
+                },
+                failure: {
+                    '401': 'No cookie',
+                    '400': 'No csrf',
+                    '405': 'Неверный HTTP метод',
+                    '500': 'Ошибка сервера',
+                },
+            },
+        },
 
         post: {
             url: '/post/{:id}',
@@ -327,7 +348,7 @@ const config: IConfig = {
             },
             statuses: {
                 success: {
-                    '200': 'Удаление поста успешно'
+                    '204': 'Удаление поста успешно'
                 },
                 failure: {
                     '405': 'Неверный HTTP метод',
@@ -521,7 +542,7 @@ const config: IConfig = {
             },
             statuses: {
                 success: {
-                    '200': 'Сообщение отправлено'
+                    '400': 'Сообщение отправлено'
                 },
                 failure: {
                     '400': 'Неверный запрос',
@@ -641,8 +662,101 @@ const config: IConfig = {
                 }, failureDefaultStatuses),
             },
         },
-    }
 
+
+        // Comments
+        getComments: {
+
+            url: '/post/{:id}/comments',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Комментарии получены'
+                },
+                failure: Object.assign({
+                    '404': 'Комментарии не найдены',
+                }, failureDefaultStatuses),
+            },
+        },
+
+        deleteComment: {
+
+            url: '/post/comment/{:id}',
+            method: REQUEST_TYPE.DELETE,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Комментарий удалён'
+                },
+                failure: Object.assign({
+                    '404': 'Комментарий не найден',
+                }, failureDefaultStatuses),
+            },
+        },
+        addComment: {
+
+            url: '/post/comment/add',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Комментарий создан'
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
+
+        editComment: {
+
+            url: '/post/comment/edit',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Комментарий изменён',
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
+
+        stickers: {
+            url: '/stickers',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Стикеры получены',
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
+
+        stickerById: {
+            url: '/sticker/{:id}',
+            method: REQUEST_TYPE.GET,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '200': 'Стикер получен',
+                },
+                failure: failureDefaultStatuses,
+            },
+        }
+    },
+    default_img: '../src/img/default_avatar.png',
 }
 
 export default config;

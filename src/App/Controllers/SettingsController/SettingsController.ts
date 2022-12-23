@@ -1,8 +1,6 @@
-import ImageUploadModel from "../../Models/ImageUploadModel/ImageUploadModel";
 import UserModel, { IProfileSettings } from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import validateInput from "../../Utils/Validators/InputValidator/InputValidator";
-import AvatarUploadView from "../../Views/AvatarUploadView/AvatarUploadView";
 import SettingsView from "../../Views/SettingsView/SettingsView";
 import AvatarUploadController from "../AvatarUploadController/AvatarUploadController";
 import IController from "../IController/IController";
@@ -14,30 +12,18 @@ import IController from "../IController/IController";
  * @param  {SettingsView} view Объект вида компонента настроек пользователя
  * @param {UserModel} model Модель пользователя
  */
-class SettingsController extends IController<SettingsView, {user: UserModel, images: ImageUploadModel}> {
-    // private avatarUploadController : AvatarUploadController;
+class SettingsController extends IController<SettingsView, UserModel> {
+    private avatarUploadController : AvatarUploadController;
 
-    constructor(view: SettingsView, models:  {user: UserModel, images: ImageUploadModel}) {
-        super(view, models);
+    constructor(view: SettingsView, model: UserModel) {
+        super(view, model);
 
-        // this.avatarUploadController = new AvatarUploadController(this.view.getAvatarUploadView(), this.model.images);
+        this.avatarUploadController = new AvatarUploadController(this.model);
 
         this.view.bindClick(this.handleClick.bind(this));
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
     }
 
-    private test() {
-        // // console.log(this.view.getAvatarUploadView().view.preview);
-        // // console.log(this.view.)
-    }
-
-    public unmountComponent(): void {
-        if (this.isMounted) {
-            // this.avatarUploadController.unmountComponent();
-            this.view.hide();
-            this.isMounted = false;
-        }
-    }
     /**
      * Функция установки компонента.
      * @override
@@ -45,17 +31,13 @@ class SettingsController extends IController<SettingsView, {user: UserModel, ima
      */
     public mountComponent(): void {
         if (!this.isMounted) {
-            const user = this.model.user.getCurrentUser();
+            const user = this.model.getCurrentUser();
             if (!user) {
-                // console.log('Settings contr error no user');
                 return;
             }
-
-            //
-            // this.avatarUploadController.mountComponent();
-            //
-
-            this.view.show(user);
+            console.log('mount');
+            
+            this.view.show({user: user, avatarUploadElement: this.avatarUploadController.getElement()});
             this.isMounted = true;
         }
     }
@@ -94,7 +76,7 @@ class SettingsController extends IController<SettingsView, {user: UserModel, ima
                     }
 
                     let params: IProfileSettings = Object.fromEntries(data);
-                    this.model.user.updateUserData(params)
+                    this.model.updateUserData(params)
                         .catch(data => {
                             // console.log(data, ' fail');
                         });

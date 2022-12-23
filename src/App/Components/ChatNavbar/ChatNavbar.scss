@@ -16,9 +16,12 @@
         width: 40px;
 
         background-color: lightgray;
-        outline: 1px solid darkgray;
+        border: 1px solid darkgray;
         outline-offset: -1px;
         border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -khtml-border-radius: 50%;
+        -moz-border-radius: 50%;
         cursor: pointer;
     }
 
@@ -35,7 +38,7 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    gap: 5px;
+    gap: var(--big-gap-beetween-blocks);
 
     &__icon {
         object-fit: cover;

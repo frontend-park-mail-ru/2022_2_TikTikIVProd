@@ -15,22 +15,24 @@ $scrollbar-width: 8px;
 
     &__navbar {
         padding: 5px 10px;
-        box-shadow: 0px 5px 10px rgb(0 0 0 / 15%);
+        border-bottom: 1px solid var(--color-chat-message-create-border)
     }
 
     &__content {
         display: flex;
         flex-direction: column;
+        // TODO colum reverse
 
         max-height: 100%;
         overflow-x: hidden;
         overflow-y: scroll;
         gap: 12px;
-        padding: 5px 10px;
+        padding: var(--big-gap-beetween-blocks);
+        margin: var(--big-gap-beetween-blocks);
     }
 
     &__content::-webkit-scrollbar {
-        width: calc(2 * $scrollbar-padding + $scrollbar-width);
+        width: 15px; //calc(2 * $scrollbar-padding + $scrollbar-width);
     }
 
     &__content::-webkit-scrollbar-track {
@@ -38,7 +40,8 @@ $scrollbar-width: 8px;
     }
 
     &__content::-webkit-scrollbar-thumb {
-        border: $scrollbar-padding solid white;
+        // border: $scrollbar-padding solid var(--color-chat-background);
+        border: 5px solid var(--color-feed-card-background);
         border-radius: 9999px;
         background-color: lightgray;
     }

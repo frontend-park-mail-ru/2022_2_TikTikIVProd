@@ -2,6 +2,8 @@
     overflow: auto;
     height: 100%;
 
+    padding-bottom: 20px;
+
     /* DEMO-SPECIFIC STYLES */
     .typewriter h1 {
         display: block;
@@ -25,8 +27,8 @@
         /* Gives that scrolling effect as the typing happens */
         letter-spacing: .15em;
         /* Adjust as needed */
-        animation: typing 3.5s steps(30, end),
-        blink-caret .5s step-end infinite;
+        animation: typing 3s steps(12, end),
+        blink-caret 1s step-end infinite;
     }
 
     .typewriter-wrapper {
@@ -59,9 +61,9 @@
 
     .info-flex {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         flex-wrap: wrap;
-        margin: 50px;
+        margin: 40px;
     }
 
     .info-block {
@@ -106,8 +108,8 @@
             width: 100%;
             height: 60px;
         }
-    }
 
+    }
 
     .description {
         margin: 25px;

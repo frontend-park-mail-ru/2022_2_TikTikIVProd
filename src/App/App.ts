@@ -30,7 +30,6 @@ import FooterController from "./Controllers/FooterController/FooterController";
 import UserModel from "./Models/UserModel/UserModel";
 import FeedModel from "./Models/FeedModel/FeedModel";
 import MessengerModel from "./Models/MessengerModel/MessengerModel";
-import ImageUploadModel from "./Models/ImageUploadModel/ImageUploadModel";
 
 
 import ProfileController from "./Controllers/ProfileController/ProfileController";
@@ -48,16 +47,15 @@ import MessengerView from "./Views/MessengerView/MessengerView";
 
 import ChatView from "./Views/ChatView/ChatView";
 import ChatController from "./Controllers/ChatController/ChatController";
-import AvatarUploadView from "./Views/AvatarUploadView/AvatarUploadView";
-import AvatarUploadController from "./Controllers/AvatarUploadController/AvatarUploadController";
+
 import CommunityListView from "./Views/CommunityListView/CommunityListView";
 import CommunityView from "./Views/CommunityView/CommunityView";
 import CommunityModel from "./Models/CommunityModel/CommunityModel";
 import CommunityListController from "./Controllers/CommunityListController/CommunityListController";
 import CommunityController from "./Controllers/CommunityController/CommunityController";
+
 import AboutWSView from "./Views/AboutWSView/AboutWSView";
 import AboutWSController from "./Controllers/AboutWSController/AboutWSController";
-
 
 /**
  * Приложение Write&Send
@@ -77,7 +75,6 @@ class App {
     private friendsView: FriendsView;
     private messengerView: MessengerView;
     private chatView: ChatView;
-    private avatarUploadView: AvatarUploadView;
     private communityListView: CommunityListView;
     private communityView: CommunityView;
     private aboutWSView: AboutWSView;
@@ -86,7 +83,6 @@ class App {
     private userModel: UserModel;
     private feedModel: FeedModel;
     private messengerModel: MessengerModel;
-    private imagesModel: ImageUploadModel;
     private communityModel: CommunityModel;
 
     // Controllers
@@ -102,7 +98,6 @@ class App {
     private friendsController: FriendsController;
     private messengerController: MessengerController;
     private chatController: ChatController;
-    private avatarUploadController: AvatarUploadController;
     private communityListController: CommunityListController;
     private communityController: CommunityController;
     private aboutWSController: AboutWSController;
@@ -289,7 +284,6 @@ class App {
                 // mount
                 this.headerController.mountComponent();
                 this.menuController.mountComponent();
-                this.avatarUploadController.mountComponent();
                 this.settingsController.mountComponent();
             })
             .catch(() => {
@@ -315,7 +309,7 @@ class App {
 
     private handleMessenger(): void {
         this.userModel.authUserByCookie()
-            .then(({ status, body }) => {
+            .then(() => {
                 EventDispatcher.emit('unmount-all');
                 EventDispatcher.emit('redirect', paths.messenger);
                 // mount
@@ -347,7 +341,7 @@ class App {
                 }
 
                 const userId = data[0];
-                this.chatController.mountComponent({ userId: userId });
+                this.chatController.mountComponent({ byUserId: userId.toString() });
             })
             .catch(() => {
                 router.goToPath(paths.signinPage);
@@ -408,6 +402,7 @@ class App {
         EventDispatcher.emit('redirect', paths.feedPage);
         // mount
         this.headerController.mountComponent();
+        this.headerView.changeHeaderItem('signupButton');
         this.aboutWSController.mountComponent();
         this.footerController.mountComponent();
     }
@@ -444,7 +439,6 @@ class App {
         this.friendsView = new FriendsView(this.content);
         this.messengerView = new MessengerView(this.content);
         this.chatView = new ChatView(this.content);
-        this.avatarUploadView = new AvatarUploadView(this.content);
         this.communityListView = new CommunityListView(this.content);
         this.communityView = new CommunityView(this.content);
         this.aboutWSView = new AboutWSView(this.content);
@@ -459,7 +453,6 @@ class App {
         this.userModel = new UserModel();
         this.feedModel = new FeedModel();
         this.messengerModel = new MessengerModel();
-        this.imagesModel = new ImageUploadModel();
         this.communityModel = new CommunityModel();
     }
 
@@ -481,11 +474,10 @@ class App {
         this.pageNotFoundController =
             new PageNotFoundController(this.pageNotFoundView);
         this.profileController = new ProfileController(this.profileView, this.userModel);
-        this.settingsController = new SettingsController(this.settingsView, { user: this.userModel, images: this.imagesModel });
+        this.settingsController = new SettingsController(this.settingsView, this.userModel);
         this.friendsController = new FriendsController(this.friendsView, this.userModel);
         this.messengerController = new MessengerController(this.messengerView, { user: this.userModel, messenger: this.messengerModel });
         this.chatController = new ChatController(this.chatView, { user: this.userModel, messenger: this.messengerModel });
-        this.avatarUploadController = new AvatarUploadController(this.avatarUploadView, { images: this.imagesModel, user: this.userModel });
         this.communityListController = new CommunityListController(this.communityListView, { community: this.communityModel, user: this.userModel });
         this.communityController = new CommunityController(this.communityView, { community: this.communityModel, user: this.userModel });
         this.aboutWSController = new AboutWSController(this.aboutWSView);
@@ -512,51 +504,6 @@ class App {
         router.addRule(paths.communities, this.handleCommunities.bind(this));
         router.addRule(paths.community, this.handleCommunityPage.bind(this));
         router.addRule(paths.aboutWS, this.handleAboutWS.bind(this));
-    }
-
-    /**
-     * Функция изменения цветовой темы приложения
-     * @param {string} themeName - Название цветовой темы
-     * @return {void}
-     */
-    private setColorTheme(themeName: string): void {
-        document.documentElement.setAttribute('theme', themeName);
-    }
-
-    /**
-     * Функция получения цветовой схемы системы
-     * @return {string}
-     */
-    private getPreferedColorTheme(): string {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            // Dark
-            return 'dark';
-        } else {
-            // Light
-            return 'light';
-        }
-    }
-
-    /**
-     * Функция реакции на событие изменения цветовой схемы системы
-     * @return {void}
-     */
-    private handlePreferedColorThemeChange(): void {
-        this.setColorTheme(this.getPreferedColorTheme());
-    }
-
-    /**
-     * Функция запуска прослушивания события изменения системной цветовой темы
-     * @return {void}
-     */
-    private initPrefferedColorTheme(): void {
-        if (!window.matchMedia) {
-            // // console.log('Браузер не поддерживает matchMedia');
-            return;
-        }
-        window.matchMedia('(prefers-color-scheme: dark)')
-            .addEventListener(
-                'change', this.handlePreferedColorThemeChange.bind(this));
     }
 }
 

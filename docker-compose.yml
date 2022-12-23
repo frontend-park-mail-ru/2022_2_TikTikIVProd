@@ -1,17 +1,48 @@
+# services:
 web:
-  image: nginx
-  volumes:
-    - ./nginx/new_conf.d:/etc/nginx/conf.d
-    - ./:/etc/nginx/templates/app
-    - ./build:/etc/nginx/templates/app/build
-    - ./src:/etc/nginx/templates/app/src
-  ports:
-    - "80:80"
-    # - "7000:80"
-    # - "5500:80"
-  environment:
-    - NGINX_HOST=foobar.com
-    - NGINX_PORT=80=
+    image: nginx
+    # container_name: web
+    volumes:
+        - ./nginx/new_conf.d:/etc/nginx/conf.d
+        - ./:/etc/nginx/templates/app
+        - ./build:/etc/nginx/templates/app/build
+        - ./src:/etc/nginx/templates/app/src
+
+        # Ключи для https
+        - /etc/letsencrypt/live/writesend.online/fullchain.pem:/etc/letsencrypt/live/writesend.online/fullchain.pem
+        - /etc/letsencrypt/live/writesend.online/privkey.pem:/etc/letsencrypt/live/writesend.online/privkey.pem
+        # - www-html:/var/www/html
+        # - etc-letsencrypt:/etc/letsencrypt
+    ports:
+        - "80:80"
+        - "443:443"
+        # - "7002:80"
+        # - "5500:80"
+    environment:
+        - NGINX_HOST=foobar.com
+        - NGINX_PORT=80=
+
+#         networks:
+#             - app
+
+#     certbot:
+#         image: certbot/certbot
+#         depends_on:
+#             - web
+#         container_name: certbot
+#         volumes:
+#             - etc-letsencrypt:/etc/letsencrypt
+#             - www-html:/var/www/html
+#         command: certonly --webroot --webroot-path=/var/www/html --email dkostev68@bk.ru --agree-tos --no-eff-email -d writesend.online
+
+# volumes:
+#     www-html:
+#     etc-letsencrypt:
+
+
+# networks:
+#     app:
+#         driver: bridge
 
 # ---- OLD
 # web:
