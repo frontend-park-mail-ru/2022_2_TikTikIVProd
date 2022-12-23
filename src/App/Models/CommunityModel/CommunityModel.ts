@@ -16,6 +16,8 @@ export interface ICommunityData {
     id: number;
     name: string;
     owner_id: number;
+    count_subs: number;
+    is_subscriber: boolean;
 }
 
 // TODO check fields
@@ -48,6 +50,8 @@ class CommunityModel extends IModel {
             id: json.id,
             name: json.name,
             owner_id: json.owner_id,
+            count_subs: json.count_subs,
+            is_subscriber: json.is_subscriber,
         };
     }
 
@@ -102,6 +106,22 @@ class CommunityModel extends IModel {
         await checkResponseStatus(response, conf);
         const communitiesData = this.parseCommunities(response.parsedBody.body);
         return Promise.resolve(communitiesData);
+    }
+
+    public async joinCommutity(commId: number | string) {
+        let conf = Object.assign({}, config.api.communitiesJoin);
+        conf.url = conf.url.replace('{:id}', commId.toString());
+        const response = await ajax(conf);
+        await checkResponseStatus(response, conf);
+        return Promise.resolve();
+    }
+
+    public async leaveCommutity(commId: number | string) {
+        let conf = Object.assign({}, config.api.communitiesLeave);
+        conf.url = conf.url.replace('{:id}', commId.toString());
+        const response = await ajax(conf);
+        await checkResponseStatus(response, conf);
+        return Promise.resolve();
     }
 };
 

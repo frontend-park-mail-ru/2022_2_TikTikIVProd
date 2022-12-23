@@ -1,8 +1,9 @@
-import CommunityModel, { ICommunityEditData } from "../../Models/CommunityModel/CommunityModel";
+import CommunityModel, { ICommunityData, ICommunityEditData } from "../../Models/CommunityModel/CommunityModel";
 import UserModel from "../../Models/UserModel/UserModel";
 import EventDispatcher from "../../Modules/EventDispatcher/EventDispatcher";
 import validateInput from "../../Utils/Validators/InputValidator/InputValidator";
 import CommunityView, { ICommunityNavbaParams } from "../../Views/CommunityView/CommunityView";
+import CommunityAvatarUploadController from "../CommunityAvatarUploadController/CommunityAvatarUploadController";
 import IController from "../IController/IController";
 
 /**
@@ -12,10 +13,41 @@ import IController from "../IController/IController";
  * @param  {CommunityView} view Объект вида компонента сообщества
  */
 class CommunityController extends IController<CommunityView, { community: CommunityModel, user: UserModel }> {
+    private avatarUploadController : CommunityAvatarUploadController;
+    private commId : number;
     constructor(view: CommunityView, models: { community: CommunityModel, user: UserModel }) {
         super(view, models);
+        this.commId = 0;
+        this.avatarUploadController = new CommunityAvatarUploadController(this.model.community);
+
         EventDispatcher.subscribe('unmount-all', this.unmountComponent.bind(this));
+        EventDispatcher.subscribe('community_avatar_changed', this.redrawCommunityData.bind(this));
+        EventDispatcher.subscribe('community_avatar_changed', this.view.hideOverlay.bind(this));
+
         this.view.bindClick(this.onClick.bind(this));
+    }
+
+    private redrawCommunityData() : void {
+        this.model.community.get(this.commId)
+        .then((communityData : ICommunityData) => {
+            const currentUser = this.model.user.getCurrentUser();
+
+            let navbarParams: ICommunityNavbaParams = {
+                isAdmin: false,
+                isMember: false,
+            };
+
+            if (currentUser) {
+                navbarParams.isAdmin = communityData.owner_id === currentUser.id ? true : false;
+            }
+
+            navbarParams.isMember = communityData.is_subscriber;
+            this.view.setCommunityData(communityData);
+            this.view.setCommunityNavbar(navbarParams);
+        })
+        .catch(msg => {
+            console.log(msg);
+        });
     }
 
     public mountComponent(communityId?: string | number): void {
@@ -25,24 +57,9 @@ class CommunityController extends IController<CommunityView, { community: Commun
         }
 
         if (communityId) {
-            const currentUser = this.model.user.getCurrentUser();
-
-            this.model.community.get(communityId)
-                .then(communityData => {
-                    let navbarParams: ICommunityNavbaParams = {
-                        isAdmin: false,
-                        isMember: false,
-                    };
-
-                    if (currentUser) {
-                        navbarParams.isAdmin = communityData.owner_id === currentUser.id ? true : false;
-                    }
-                    this.view.setCommunityData(communityData);
-                    this.view.setCommunityNavbar(navbarParams);
-                })
-                .catch(msg => {
-                    console.log(msg);
-                });
+            this.commId = Number(communityId);
+            this.avatarUploadController.setCommunityId(communityId);
+            this.redrawCommunityData();
         }
     }
 
@@ -70,7 +87,6 @@ class CommunityController extends IController<CommunityView, { community: Commun
     private onClick(e: Event) {
         e.preventDefault();
         const target = <HTMLElement>e.target;
-        const communityId = (<HTMLElement>target.closest('.community')?.querySelector('[data-community_id]'))?.dataset['community_id'];
         const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
 
         if (target.classList.contains('community__overlay')) {
@@ -81,20 +97,30 @@ class CommunityController extends IController<CommunityView, { community: Commun
         switch (action) {
             default: return;
             case 'join': {
-                if (!communityId) return;
-                // TODO
+                this.model.community.joinCommutity(this.commId)
+                    .then(() => {
+                        this.redrawCommunityData();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
                 return;
             }
             case 'left': {
-                if (!communityId) return;
-                //TODO
+
+                this.model.community.leaveCommutity(this.commId)
+                    .then(() => {
+                        this.redrawCommunityData();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
                 return;
             }
             case 'settings': {
-                if (!communityId) return;
-                const data = this.model.community.get(communityId)
+                const data = this.model.community.get(this.commId)
                     .then(communityData => {
-                        this.view.showOverlaySettings(communityData);
+                        this.view.showOverlaySettings(communityData, this.avatarUploadController.getElement());
                     })
                     .catch(msg => {
                         console.log(msg);
@@ -111,11 +137,11 @@ class CommunityController extends IController<CommunityView, { community: Commun
                     return;
                 }
 
-                let params: ICommunityEditData = Object.assign({ id: Number(communityId) }, Object.fromEntries(data));
+                let params: ICommunityEditData = Object.assign({ id: Number(this.commId) }, Object.fromEntries(data));
                 this.model.community.edit(params)
                     .then(communityData => {
-                        this.view.setCommunityData(communityData);
                         this.view.hideOverlay();
+                        this.redrawCommunityData();
                     })
                     .catch(msg => {
                         console.log(msg, ' fail');

@@ -67,7 +67,7 @@ class CommunityListView extends IView {
 
     public fillList(data: ICommunityData[]): void {
         data.forEach(item => {
-            this.communitiesList.innerHTML += communityListItemTemplate(Object.assign(item, { isMember: true }));
+            this.communitiesList.innerHTML += communityListItemTemplate(item);
         });
     }
 
@@ -131,6 +131,22 @@ class CommunityListView extends IView {
         return name ?? '';
     }
 
+    public updateCommunity(communityData: ICommunityData): void {
+        const communityElem = this.communitiesList.querySelector(`.community-list-item[data-community_id="${communityData.id}"]`);
+        if (!communityElem) return;
+        
+        const container = communityElem.parentElement;
+        if(!container) return;
+
+        const tmp = document.createElement('template');
+        tmp.innerHTML = communityListItemTemplate(communityData);
+
+        const newCommunityElem = tmp.content.querySelector('.community-list-item');
+        if(!newCommunityElem) return;
+
+        container.insertBefore(newCommunityElem, communityElem);
+        container.removeChild(communityElem);
+    }
 }
 
 export default CommunityListView; 

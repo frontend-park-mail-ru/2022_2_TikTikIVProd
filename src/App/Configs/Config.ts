@@ -36,6 +36,7 @@ export interface IApiItem {
 
 export interface IConfig {
     host: string;
+    chatWS: string;
     api: {
         [index: string]: IApiItem;
     },
@@ -48,6 +49,7 @@ const config: IConfig = {
     // host: 'http://89.208.197.127:8080',
     // host: 'http://127.0.0.1:8080',
     // host: 'http://localhost:8080',
+    chatWS: 'wss://writesend.online/api/ws/{:chat_id}',
     api: {
         logout: {
             url: '/logout',
@@ -754,7 +756,35 @@ const config: IConfig = {
                 },
                 failure: failureDefaultStatuses,
             },
-        }
+        },
+
+        communitiesJoin: {
+            url: '/communities/join/{:id}',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Вступление успешно',
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
+
+        communitiesLeave: {
+            url: '/communities/leave/{:id}',
+            method: REQUEST_TYPE.POST,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            statuses: {
+                success: {
+                    '204': 'Выход успешно',
+                },
+                failure: failureDefaultStatuses,
+            },
+        },
     },
     default_img: '../src/img/default_avatar.png',
 }

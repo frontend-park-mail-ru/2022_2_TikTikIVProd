@@ -110,9 +110,9 @@ class MessengerModel extends IModel {
         conf.url = conf.url.replace('{:id}', chatId.toString());
 
         const _ = await ajax(conf);
-
-        const newSocket = new WebSocket("wss://" + host + "/ws/" + chatId);
-
+        const wsURL = `${config.chatWS}`
+            .replace('{:chat_id}', chatId.toString());
+        const newSocket = new WebSocket(wsURL);
         if (opts) {
             if (opts.onclose) {
                 newSocket.onclose = (function (this: any, chatId: string | number, callback: Function) {
