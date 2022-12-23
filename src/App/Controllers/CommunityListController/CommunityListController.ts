@@ -49,7 +49,7 @@ class CommunityListController extends IController<CommunityListView, { community
     private onClick(e: Event): void {
         e.preventDefault();
         const target = <HTMLElement>e.target;
-        const communityId = (<HTMLElement>target.closest('.community-list-item'))?.id;
+        const communityId = (<HTMLElement>target.closest('.community-list-item'))?.dataset['community_id'];
         const action = (<HTMLElement>target.closest('[data-action]'))?.dataset['action'];
 
         if (target.classList.contains('communities__overlay')) {
@@ -70,11 +70,37 @@ class CommunityListController extends IController<CommunityListView, { community
 
             case 'join': {
                 // TODO
+                if (!communityId) return;
+                this.model.community.joinCommutity(communityId)
+                    .then(() => {
+                        this.model.community.get(communityId)
+                        .then(communityData => {
+                            this.view.updateCommunity(communityData);
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+
                 return;
             }
 
             case 'left': {
                 // TODO
+                if (!communityId) return;
+
+                this.model.community.leaveCommutity(communityId)
+                    .then(() => {
+                        this.model.community.get(communityId)
+                        .then(communityData => {
+                            this.view.updateCommunity(communityData);
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+
+
                 return;
             }
 
