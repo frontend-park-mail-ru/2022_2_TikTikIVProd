@@ -60,17 +60,18 @@ class FeedController extends IController<FeedView, FeedModel> {
 
     private async submitNewFeedCard() {
 
-        const content = this.view.getNewPostData();
+        let content = this.view.getNewPostData();
+        const imgs = await this.newPostAttachmentsController.submitAttachments();
+
         if (content.text.replace('\n', ' ').trim() === '') {
-            this.view.showErrNewFeedTextEmpty();
-            return Promise.reject('empty');
+            if (imgs.length === 0) {
+                this.view.showErrNewFeedTextEmpty();
+                return Promise.reject('empty');
+            }
+            content.text = " ";
         }
 
         this.view.hideErrNewFeedTextEmpty();
-
-        //
-        const imgs = await this.newPostAttachmentsController.submitAttachments();
-        //&& imgs.length < 1
 
         const feedCardData: IFeedNewPost = {
             attachments: imgs,
