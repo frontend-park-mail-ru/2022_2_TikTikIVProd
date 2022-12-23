@@ -14,7 +14,8 @@ web:
         # - www-html:/var/www/html
         # - etc-letsencrypt:/etc/letsencrypt
     ports:
-        - "80:80"
+        # - "80:80"
+        - "443:443"
         # - "7002:80"
         # - "5500:80"
     environment:
