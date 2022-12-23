@@ -9,8 +9,7 @@ web:
         - ./src:/etc/nginx/templates/app/src
 
         # Ключи для https
-        - /etc/letsencrypt/live/writesend.online/fullchain.pem:/etc/letsencrypt/live/writesend.online/fullchain.pem
-        - /etc/letsencrypt/live/writesend.online/privkey.pem:/etc/letsencrypt/live/writesend.online/privkey.pem
+        - /etc/letsencrypt/live/writesend.online:/etc/letsencrypt/live/writesend.online
         # - www-html:/var/www/html
         # - etc-letsencrypt:/etc/letsencrypt
     ports:
