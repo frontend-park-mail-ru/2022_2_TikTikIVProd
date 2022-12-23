@@ -210,6 +210,7 @@ class FeedModel extends IModel {
      * @return {Promise}
      */
     public async likePost(postId: string) {
+        console.log("deb testing");
         let conf = Object.assign({}, config.api.postLike);
         conf.url = conf.url.replace('{:id}', postId);
         let response = await ajax(conf);
@@ -255,8 +256,8 @@ class FeedModel extends IModel {
         await checkResponseStatus(response, conf);
         const comments: IComment[] = this.parseComments(response.parsedBody.body);
         return Promise.resolve(comments);
-    } 
-    
+    }
+
     public async editComment(data: IEditComment) {
         let conf = Object.assign({}, config.api.editComment);
         conf.url = conf.url.replace('{:id}', data.post_id.toString());

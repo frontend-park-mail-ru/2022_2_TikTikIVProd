@@ -77,15 +77,8 @@ $scrollbar-width: 8px;
 
     height: 100%;
 
-    padding: 20px 25px;
-
     position: absolute;
     width: 100%;
-
-    &__icon {
-        object-fit: cover;
-        width: 80px;
-    }
 
     &__text {
         font-size: 18px;

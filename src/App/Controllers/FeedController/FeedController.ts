@@ -228,7 +228,7 @@ class FeedController extends IController<FeedView, FeedModel> {
 
                     const button = <HTMLImageElement>target;
 
-                    debounce(this.model.likePost, 500);
+                    // debounce(this.model.likePost, 500);
 
                     if (target.classList.contains('feed-card__button__unliked')) {
                         this.model.likePost(cardId)
