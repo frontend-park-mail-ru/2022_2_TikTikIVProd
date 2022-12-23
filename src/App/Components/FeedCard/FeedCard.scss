@@ -51,6 +51,11 @@
         -webkit-border-radius: 10px;
         -khtml-border-radius: 10px;
         -moz-border-radius: 10px;
+
+        @media screen and (max-device-width: 800px),
+        screen and (max-width: 800px) {
+            width: 95%;
+        }
     }
 
     &__attachments::-webkit-scrollbar {

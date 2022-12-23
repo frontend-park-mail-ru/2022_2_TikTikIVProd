@@ -1,5 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 
 const publicPath = path.resolve(__dirname, './public/');
 const srcPath = path.resolve(__dirname, './src/');
@@ -32,7 +35,7 @@ module.exports = {
             },
             {
                 test: /\.css/,
-                use: ['style-loader', 'css-loader'],
+                use: [MiniCssExtractPlugin.loader, 'style-loader', 'css-loader'],
             },
         ]
     },
@@ -41,6 +44,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: path.resolve(publicPath, 'index.html'),
         }),
+        new MiniCssExtractPlugin({ filename: "[name].css" }),
+        new FixStyleOnlyEntriesPlugin(),
+        new OptimizeCSSAssetsPlugin({})
     ],
     resolve: {
         alias: {
