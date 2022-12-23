@@ -75,13 +75,14 @@
 
     &__footer {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         margin-top: 5px;
     }
 
     &__buttons {
         display: flex;
         gap: 10px;
+        justify-content: flex-end;
     }
 
     &__button {
@@ -90,10 +91,6 @@
         height: auto;
         cursor: pointer;
         filter: var(--current-theme-invert-value);
-
-        &__liked {
-            filter: none;
-        }
 
         &__edit {
             width: 20px;
@@ -138,10 +135,19 @@
     }
 }
 
-.feed-card-likes {
+.feed-card__likes-button {
     display: flex;
     gap: 5px;
     align-items: center;
+    background: var(--color-feed-card-likes);
+
+    &-liked {
+        background-color: rgba(255, 0, 0, 0.707);
+    }
+
+    border-radius: 25px;
+    padding: 5px 10px;
+    cursor: pointer;
 
     &__icon {
         object-fit: contain;
@@ -149,7 +155,12 @@
     }
 
     &__count {
-        color: var(--color-feed-card-likes);
+        color: black;
         font-size: 13px;
+        filter: var(--current-theme-invert-value);
     }
+}
+
+.feed-card-likes:hover .feed-card__button {
+    transform: scale(1.05);
 }

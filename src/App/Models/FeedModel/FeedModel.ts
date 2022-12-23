@@ -61,6 +61,7 @@ export interface IFeedData {
     likes: number;
     isLiked: string;
     attachments: IImage[];
+    commentsCount: number;
     community_id: number,
 }
 
@@ -129,6 +130,7 @@ class FeedModel extends IModel {
             likes: json.count_likes,
             isLiked: json.is_liked ? "liked" : "unliked",
             attachments: ImageUploadModel.parseImages(json.attachments),
+            commentsCount: json.count_comments,
 
             community_id: json.community_id,
         };

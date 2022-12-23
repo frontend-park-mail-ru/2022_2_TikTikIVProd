@@ -23,14 +23,24 @@
         {{/each}}
     </div>
     <div class="feed-card__footer">
-        <div class="feed-card-likes">
-            <div id="feed-card-likes__count-{{id}}" class="feed-card-likes__count">{{likes}}</div>
-            <div class="feed-card-likes__count">likes</div>
-        </div>
         <div class="feed-card__buttons">
-            <img src={{#if isLikedIcon}}"../src/img/like_filled_icon.svg"{{else}}"../src/img/like_icon.svg"{{/if}}
-                alt="like-button" class="feed-card__button feed-card__button__{{isLiked}}" data-action="like" />
-            <img src="../src/img/comment_icon.svg" alt="" class="feed-card__button" data-action="comment" />
+
+            <div class="feed-card__likes-button  feed-card__likes-button-{{isLiked}}" data-action="like">
+
+                <div id="feed-card__likes-button__count-{{id}}" class="feed-card__likes-button__count"
+                    data-action="like">
+                    {{likes}}
+                </div>
+                <img src="../src/img/like_icon.svg" alt="like-button" class="feed-card__button" data-action="like" />
+            </div>
+
+            <div class="feed-card__likes-button" data-action="comment">
+                <div id="feed-card-comments__count-{{id}}" class="feed-card__likes-button__count" data-action="comment">
+                    {{commentsCount}}
+                </div>
+                <img src="../src/img/comment_icon.svg" alt="" class="feed-card__button" data-action="comment" />
+            </div>
+
             {{!-- <img src="../src/img/link_icon.svg" alt="" class="feed-card__button" data-action="share" /> --}}
         </div>
     </div>
