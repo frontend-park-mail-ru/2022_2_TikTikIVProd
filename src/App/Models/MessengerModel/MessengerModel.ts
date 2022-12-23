@@ -111,7 +111,7 @@ class MessengerModel extends IModel {
 
         const _ = await ajax(conf);
 
-        const newSocket = new WebSocket("ws://" + host + "/ws/" + chatId);
+        const newSocket = new WebSocket("wss://" + host + "/ws/" + chatId);
 
         if (opts) {
             if (opts.onclose) {
