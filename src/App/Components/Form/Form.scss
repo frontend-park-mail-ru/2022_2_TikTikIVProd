@@ -8,7 +8,6 @@
   padding: 8% 15%;
 
   border: 2px solid var(--color-form-border);
-  outline-offset: -2px;
   border-radius: 10px;
 
   background-color: var(--color-form-background);
@@ -64,7 +63,6 @@
 
   &__button:focus {
     border: 2px solid var(--color-button-border-focus);
-    outline-offset: -2px;
     box-shadow: 0 3px 5px 1px var(--color-lighter-gray);
   }
 
@@ -116,7 +114,6 @@
     padding: 10px 20px;
     border: none;
     border: 2px solid var(--color-input-border);
-    outline-offset: -2px;
     border-radius: 8px;
     font-size: 16px;
     color: inherit;
@@ -128,8 +125,7 @@
   }
 
   &__input:focus {
-    border-style: none;
-    outline-color: var(--color-input-border-focus);
+    border-color: var(--color-input-border-focus);
   }
 
   &__error-msg {
@@ -141,7 +137,7 @@
   &--error {
     input {
       color: var(--color-input-value-error);
-      outline-color: var(--color-input-border-error);
+      border-color: var(--color-input-border-error);
     }
 
     .input-with-title__error-msg {
@@ -151,6 +147,6 @@
 
   &--error:focus {
     color: var(--color-input-value-error);
-    outline-color: var(--color-input-border-focus-error);
+    border-color: var(--color-input-border-focus-error);
   }
 }
