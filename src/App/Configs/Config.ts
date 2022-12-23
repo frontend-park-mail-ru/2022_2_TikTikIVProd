@@ -36,7 +36,7 @@ export interface IApiItem {
 
 export interface IConfig {
     host: string;
-    chatWS : string;
+    chatWS: string;
     api: {
         [index: string]: IApiItem;
     },
@@ -44,12 +44,12 @@ export interface IConfig {
 }
 
 const config: IConfig = {
-    // host: 'https://writesend.online/api',
+    host: 'https://writesend.online/api',
     // host: 'http://89.208.197.127/api',
     // host: 'http://89.208.197.127:8080',
-    host: 'http://127.0.0.1:8080',
+    // host: 'http://127.0.0.1:8080',
     // host: 'http://localhost:8080',
-    chatWS: 'ws://127.0.0.1:8080/ws/{:chat_id}',
+    chatWS: 'wss://writesend.online/api/ws/{:chat_id}',
     api: {
         logout: {
             url: '/logout',

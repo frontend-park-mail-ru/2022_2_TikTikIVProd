@@ -68,11 +68,11 @@ class ChatController extends
         if (!this.isMounted) {
             this.view.clearChat();
 
-            if(!this.stickers) {
+            if (!this.stickers) {
                 await this.updateStickers();
             }
 
-            this.view.show({attachmets: this.msgAttachments.getElement(), stickers: this.stickers});
+            this.view.show({ attachmets: this.msgAttachments.getElement(), stickers: this.stickers });
             this.isMounted = true;
 
             if (opts.byDialogId) {
@@ -139,15 +139,15 @@ class ChatController extends
     }
 
     private async sendMessage() {
-        const text = this.view.getNewMessage();
-        if (text.replace('\n', ' ').trim() === '') {
-            this.view.showErrEmptyNewMessage();
-            return;
-        }
-
-        this.view.hideErrEmptyNewMessage();
+        let text = this.view.getNewMessage();
         const attachmens = await this.msgAttachments.submitAttachments();
-        console.log('all att uploaded', attachmens);
+
+        if (text.replace('\n', ' ').trim() === '') {
+            if (attachmens.length === 0) {
+                return;
+            }
+            text = ""
+        }
 
 
         const message: IMessageNew = {
@@ -253,9 +253,9 @@ class ChatController extends
                             console.log(err);
                         });
                 }
-                
+
                 const stickerId = target.dataset['sticker_id'];
-                if(!stickerId) {
+                if (!stickerId) {
                     console.log('no sticker');
                     return;
                 }
@@ -265,7 +265,7 @@ class ChatController extends
         }
     }
 
-    private sendSticker(stickerId : number | string) {
+    private sendSticker(stickerId: number | string) {
         const message: IMessageNew = {
             receiver_id: Number(this.userId),
             dialog_id: Number(this.dialogId),
