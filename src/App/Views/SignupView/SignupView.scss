@@ -11,4 +11,11 @@
     &::-webkit-scrollbar {
         width: 10px;
     }
+
+    @media screen and (max-device-height:700px),
+    screen and (max-height:700px) {
+        .input-with-title__title {
+            display: none;
+        }
+    }
 }
