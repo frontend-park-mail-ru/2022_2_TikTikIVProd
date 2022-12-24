@@ -57,7 +57,7 @@ import { IValidationResult } from "../../Utils/Validators/InputValidator/InputVa
         const data = new Map<string, string>();
         signupViewConfig.inputs.forEach((input) => {
             const html = <HTMLInputElement>this.element.querySelector('#' + input.id);
-            data.set(input.id, html.value);
+            data.set(input.id, html.value.trim());
         });
         return data;
     }
