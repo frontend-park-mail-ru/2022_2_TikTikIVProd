@@ -84,12 +84,6 @@ export interface IFeedCardEditData {
  * @extends {IModel}
  */
 class FeedModel extends IModel {
-    private likeThrottleVar: boolean = true;
-    private toggleLikeThrottleVar() {
-        this.likeThrottleVar = false;
-        setTimeout(() => this.likeThrottleVar = true, 250);
-    }
-
     constructor() {
         super();
     }
@@ -218,19 +212,12 @@ class FeedModel extends IModel {
      * @return {Promise}
      */
     public async likePost(postId: string) {
-        if (this.likeThrottleVar === true) {
-            let conf = Object.assign({}, config.api.postLike);
-            conf.url = conf.url.replace('{:id}', postId);
-            let response = await ajax(conf);
-            await checkResponseStatus(response, conf);
+        let conf = Object.assign({}, config.api.postLike);
+        conf.url = conf.url.replace('{:id}', postId);
+        let response = await ajax(conf);
+        await checkResponseStatus(response, conf);
 
-            this.toggleLikeThrottleVar();
-
-            return Promise.resolve();
-        }
-        else {
-            return Promise.reject("Throttle: " + this.likeThrottleVar);
-        }
+        return Promise.resolve();
     }
 
     /**
@@ -239,20 +226,13 @@ class FeedModel extends IModel {
      * @return {Promise}
      */
     public async unlikePost(postId: string) {
-        if (this.likeThrottleVar === true) {
+        let conf = Object.assign({}, config.api.postUnlike);
+        conf.url = conf.url.replace('{:id}', postId);
+        let response = await ajax(conf);
+        await checkResponseStatus(response, conf);
 
-            let conf = Object.assign({}, config.api.postUnlike);
-            conf.url = conf.url.replace('{:id}', postId);
-            let response = await ajax(conf);
-            await checkResponseStatus(response, conf);
 
-            this.toggleLikeThrottleVar();
-
-            return Promise.resolve();
-        }
-        else {
-            return Promise.reject("Throttle: " + this.likeThrottleVar);
-        }
+        return Promise.resolve();
     }
 
 
