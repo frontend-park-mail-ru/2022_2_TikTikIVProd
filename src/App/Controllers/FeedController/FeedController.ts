@@ -240,7 +240,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                                 if (likesCountElement !== null) {
                                     likesCountElement.innerText = String(Number(likesCountElement.innerText) + 1);
                                 }
-                            });
+                            }).catch(console.log);
                     }
 
                     if (button.classList.contains('feed-card__likes-button-liked')) {
@@ -253,7 +253,7 @@ class FeedController extends IController<FeedView, FeedModel> {
                                         likesCountElement.innerText = String(Number(likesCountElement.innerText) - 1);
                                     }
                                 }
-                            });
+                            }).catch(console.log);;
                     }
 
                     return;

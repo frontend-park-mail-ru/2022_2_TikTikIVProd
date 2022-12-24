@@ -74,9 +74,9 @@ class CommunityListController extends IController<CommunityListView, { community
                 this.model.community.joinCommutity(communityId)
                     .then(() => {
                         this.model.community.get(communityId)
-                        .then(communityData => {
-                            this.view.updateCommunity(communityData);
-                        })
+                            .then(communityData => {
+                                this.view.updateCommunity(communityData);
+                            })
                     })
                     .catch(err => {
                         console.log(err);
@@ -92,9 +92,9 @@ class CommunityListController extends IController<CommunityListView, { community
                 this.model.community.leaveCommutity(communityId)
                     .then(() => {
                         this.model.community.get(communityId)
-                        .then(communityData => {
-                            this.view.updateCommunity(communityData);
-                        })
+                            .then(communityData => {
+                                this.view.updateCommunity(communityData);
+                            })
                     })
                     .catch(err => {
                         console.log(err);

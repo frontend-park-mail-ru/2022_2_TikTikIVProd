@@ -84,6 +84,12 @@ export interface IFeedCardEditData {
  * @extends {IModel}
  */
 class FeedModel extends IModel {
+    private likeThrottleVar: boolean = true;
+    private toggleLikeThrottleVar() {
+        this.likeThrottleVar = false;
+        setTimeout(() => this.likeThrottleVar = true, 250);
+    }
+
     constructor() {
         super();
     }
@@ -212,12 +218,19 @@ class FeedModel extends IModel {
      * @return {Promise}
      */
     public async likePost(postId: string) {
-        console.log("deb testing");
-        let conf = Object.assign({}, config.api.postLike);
-        conf.url = conf.url.replace('{:id}', postId);
-        let response = await ajax(conf);
-        await checkResponseStatus(response, conf);
-        return Promise.resolve();
+        if (this.likeThrottleVar === true) {
+            let conf = Object.assign({}, config.api.postLike);
+            conf.url = conf.url.replace('{:id}', postId);
+            let response = await ajax(conf);
+            await checkResponseStatus(response, conf);
+
+            this.toggleLikeThrottleVar();
+
+            return Promise.resolve();
+        }
+        else {
+            return Promise.reject("Throttle: " + this.likeThrottleVar);
+        }
     }
 
     /**
@@ -226,11 +239,20 @@ class FeedModel extends IModel {
      * @return {Promise}
      */
     public async unlikePost(postId: string) {
-        let conf = Object.assign({}, config.api.postUnlike);
-        conf.url = conf.url.replace('{:id}', postId);
-        let response = await ajax(conf);
-        await checkResponseStatus(response, conf);
-        return Promise.resolve();
+        if (this.likeThrottleVar === true) {
+
+            let conf = Object.assign({}, config.api.postUnlike);
+            conf.url = conf.url.replace('{:id}', postId);
+            let response = await ajax(conf);
+            await checkResponseStatus(response, conf);
+
+            this.toggleLikeThrottleVar();
+
+            return Promise.resolve();
+        }
+        else {
+            return Promise.reject("Throttle: " + this.likeThrottleVar);
+        }
     }
 
 
