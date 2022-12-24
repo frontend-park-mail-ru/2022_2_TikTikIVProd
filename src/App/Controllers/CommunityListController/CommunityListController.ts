@@ -38,7 +38,7 @@ class CommunityListController extends IController<CommunityListView, { community
         this.model.community.findCommunities(name)
             .then(communitiesData => {
                 this.view.clearList(); //TODO
-                this.view.fillList(communitiesData);
+                this.view.fillList(communitiesData, this.model.user.getCurrentUser()?.id);
             })
             .catch(msg => {
                 console.log(msg);
@@ -75,7 +75,7 @@ class CommunityListController extends IController<CommunityListView, { community
                     .then(() => {
                         this.model.community.get(communityId)
                         .then(communityData => {
-                            this.view.updateCommunity(communityData);
+                            this.view.updateCommunity(communityData, this.model.user.getCurrentUser()?.id);
                         })
                     })
                     .catch(err => {
@@ -93,7 +93,7 @@ class CommunityListController extends IController<CommunityListView, { community
                     .then(() => {
                         this.model.community.get(communityId)
                         .then(communityData => {
-                            this.view.updateCommunity(communityData);
+                            this.view.updateCommunity(communityData, this.model.user.getCurrentUser()?.id);
                         })
                     })
                     .catch(err => {
@@ -129,6 +129,7 @@ class CommunityListController extends IController<CommunityListView, { community
                     .then(communityData => {
                         this.view.unlockForm();
                         this.view.hideCommunityCreationForm();
+                        this.view.pushCommunity(communityData, this.model.user.getCurrentUser()?.id);
                     })
                     .catch(msg => {
                         this.view.unlockForm();
@@ -143,7 +144,7 @@ class CommunityListController extends IController<CommunityListView, { community
                 this.model.community.findCommunities(name)
                     .then(communitiesData => {
                         this.view.clearList(); //TODO
-                        this.view.fillList(communitiesData);
+                        this.view.fillList(communitiesData, this.model.user.getCurrentUser()?.id);
                     })
                     .catch(msg => {
                         console.log(msg);
@@ -173,7 +174,7 @@ class CommunityListController extends IController<CommunityListView, { community
         this.model.community.getAll()
             .then(communitiesData => {
                 this.view.clearList(); //TODO
-                this.view.fillList(communitiesData);
+                this.view.fillList(communitiesData, this.model.user.getCurrentUser()?.id);
             })
             .catch(msg => {
                 console.log('Friends err: ', msg);
