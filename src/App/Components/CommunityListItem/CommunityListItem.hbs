@@ -5,6 +5,7 @@
         <div class="community-list-item__description" data-action="community">{{description}}</div>
         {{!-- <div class="community-list-item__subscribers" data-action="community">{{subscribers}}</div> --}}
         <div class="community-list-item__tools">
+            {{#if notOwner}}
             {{#if is_subscriber}}
             <button class="community-list-item-button community-list-item-button--red" data-action="left">
                 <img class="community-list-item-button__icon" src="../src/img/x_icon.svg" alt="">
@@ -19,6 +20,7 @@
                     Вступить
                 </div>
             </button>
+            {{/if}}
             {{/if}}
         </div>
     </div>

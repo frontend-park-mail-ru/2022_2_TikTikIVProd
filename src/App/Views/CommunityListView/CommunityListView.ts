@@ -65,9 +65,15 @@ class CommunityListView extends IView {
         }
     }
 
-    public fillList(data: ICommunityData[]): void {
+    public pushCommunity(data: ICommunityData, currentUserId : number | string | null | undefined) : void {
+        const tmp = document.createElement('template');
+        tmp.innerHTML = communityListItemTemplate(Object.assign(data, {notOwner: currentUserId !== data.owner_id}));
+        this.communitiesList.prepend(tmp.content);
+    }
+
+    public fillList(data: ICommunityData[], currentUserId: number | string | null | undefined): void {
         data.forEach(item => {
-            this.communitiesList.innerHTML += communityListItemTemplate(item);
+            this.communitiesList.innerHTML += communityListItemTemplate(Object.assign(item, {notOwner: currentUserId !== item.owner_id}));
         });
     }
 
@@ -91,11 +97,7 @@ class CommunityListView extends IView {
     }
 
     public hideErrorMsg(id: string): void {
-        console.log(id);
-
         const inpt = <HTMLElement>this.element.querySelector('#' + id)?.closest('.input-with-title');
-        console.log(inpt);
-
         if (!inpt) {
             return;
         }
@@ -114,16 +116,11 @@ class CommunityListView extends IView {
     }
 
     public lockForm(): void {
-
-        console.log(<HTMLFieldSetElement>this.overlay.querySelector('fieldset'));
         (<HTMLFieldSetElement>this.overlay.querySelector('fieldset')).disabled = true;
     }
 
     public unlockForm(): void {
-
-        console.log(<HTMLFieldSetElement>this.overlay.querySelector('fieldset'));
         (<HTMLFieldSetElement>this.overlay.querySelector('fieldset')).disabled = false;
-
     }
 
     public getSearchData(): string {
@@ -131,7 +128,7 @@ class CommunityListView extends IView {
         return name ?? '';
     }
 
-    public updateCommunity(communityData: ICommunityData): void {
+    public updateCommunity(communityData: ICommunityData, currentUserId : number | string | null | undefined): void {
         const communityElem = this.communitiesList.querySelector(`.community-list-item[data-community_id="${communityData.id}"]`);
         if (!communityElem) return;
         
@@ -139,7 +136,7 @@ class CommunityListView extends IView {
         if(!container) return;
 
         const tmp = document.createElement('template');
-        tmp.innerHTML = communityListItemTemplate(communityData);
+        tmp.innerHTML = communityListItemTemplate(Object.assign(communityData, {notOwner: currentUserId !== communityData.owner_id}));
 
         const newCommunityElem = tmp.content.querySelector('.community-list-item');
         if(!newCommunityElem) return;
