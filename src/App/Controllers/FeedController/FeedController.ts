@@ -11,6 +11,12 @@ import AttachmentsController from "../AttachmentsController/AttachmentsControlle
 import IController from "../IController/IController";
 
 class FeedController extends IController<FeedView, FeedModel> {
+    private likeThrottleVar: boolean = true;
+    private toggleLikeThrottleVar() {
+        this.likeThrottleVar = false;
+        setTimeout(() => this.likeThrottleVar = true, 250);
+    }
+
     private user: IUser; // TODO delete
     // private currentFeedType: FeedType;
     private currentPage: number;
@@ -224,38 +230,42 @@ class FeedController extends IController<FeedView, FeedModel> {
                 }
 
                 case 'like': {
-                    if (!cardId) return;
-                    const button = <HTMLElement>target.closest('.feed-card__likes-button');
-                    const likesCountElement = document.getElementById(`feed-card__likes-button__count-${cardId}`);
-                    console.log(likesCountElement?.innerText);
+                    if (this.likeThrottleVar === true) {
+
+                        if (!cardId) return;
+                        const button = <HTMLElement>target.closest('.feed-card__likes-button');
+                        const likesCountElement = document.getElementById(`feed-card__likes-button__count-${cardId}`);
+                        console.log(likesCountElement?.innerText);
 
 
-                    // debounce(this.model.likePost, 500);
+                        // debounce(this.model.likePost, 500);
 
-                    if (button.classList.contains('feed-card__likes-button-unliked')) {
-                        this.model.likePost(cardId)
-                            .then(() => {
-                                button.classList.add("feed-card__likes-button-liked");
-                                button.classList.remove("feed-card__likes-button-unliked")
-                                if (likesCountElement !== null) {
-                                    likesCountElement.innerText = String(Number(likesCountElement.innerText) + 1);
-                                }
-                            });
-                    }
+                        this.toggleLikeThrottleVar();
 
-                    if (button.classList.contains('feed-card__likes-button-liked')) {
-                        this.model.unlikePost(cardId)
-                            .then(() => {
-                                button.classList.add("feed-card__likes-button-unliked");
-                                button.classList.remove("feed-card__likes-button-liked")
-                                if (likesCountElement !== null) {
-                                    if (likesCountElement.innerText !== "0") {
-                                        likesCountElement.innerText = String(Number(likesCountElement.innerText) - 1);
+                        if (button.classList.contains('feed-card__likes-button-unliked')) {
+                            this.model.likePost(cardId)
+                                .then(() => {
+                                    button.classList.add("feed-card__likes-button-liked");
+                                    button.classList.remove("feed-card__likes-button-unliked")
+                                    if (likesCountElement !== null) {
+                                        likesCountElement.innerText = String(Number(likesCountElement.innerText) + 1);
                                     }
-                                }
-                            });
-                    }
+                                }).catch(console.log);
+                        }
 
+                        if (button.classList.contains('feed-card__likes-button-liked')) {
+                            this.model.unlikePost(cardId)
+                                .then(() => {
+                                    button.classList.add("feed-card__likes-button-unliked");
+                                    button.classList.remove("feed-card__likes-button-liked")
+                                    if (likesCountElement !== null) {
+                                        if (likesCountElement.innerText !== "0") {
+                                            likesCountElement.innerText = String(Number(likesCountElement.innerText) - 1);
+                                        }
+                                    }
+                                }).catch(console.log);;
+                        }
+                    }
                     return;
                 }
 
