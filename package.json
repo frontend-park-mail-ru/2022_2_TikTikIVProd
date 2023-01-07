@@ -47,5 +47,5 @@
         "sass-loader": "^13.1.0",
         "webpack-fix-style-only-entries": "^0.6.1"
     },
-    "browserslist": ["last 10 chrome versions"]
+    "browserslist": ["ChromeAndroid > 99", "iOS >= 13.2"]
 }
